@@ -15,7 +15,7 @@ namespace RE360.API.Repositories
             _mapper = mapper;
             _context = context;
         }
-        public async Task<PropertyLocationViewModel> SavePropertyLocation(PropertyLocationViewModel model)
+        public async Task<APIResponseModel> SavePropertyLocation(PropertyLocationViewModel model)
         {
             try
             {
@@ -31,16 +31,17 @@ namespace RE360.API.Repositories
                 }
                 _context.SaveChanges();
                 var propertyLocationVM = _mapper.Map<PropertyLocationViewModel>(propertyLocation);
-                return propertyLocationVM;
-            }
-            catch (Exception)
-            {
 
-                throw;
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = propertyLocationVM };
+
+            }
+            catch (Exception ex)
+            {
+                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
             }
         }
 
-        public async Task<List<ClientDetailViewModel>> SaveClientDetail(List<ClientDetailViewModel> model)
+        public async Task<APIResponseModel> SaveClientDetail(List<ClientDetailViewModel> model)
         {
             try
             {
@@ -60,16 +61,16 @@ namespace RE360.API.Repositories
                 _context.SaveChanges();
 
                 var clientDetailVM = _mapper.Map<List<ClientDetailViewModel>>(clientDetail);
-                return clientDetailVM;
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = clientDetailVM };
+                
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
             }
         }
 
-        public async Task<LegalDetailViewModel> SaveLegalDetail(LegalDetailViewModel model)
+        public async Task<APIResponseModel> SaveLegalDetail(LegalDetailViewModel model)
         {
             try
             {
@@ -85,16 +86,17 @@ namespace RE360.API.Repositories
                 }
                 _context.SaveChanges();
                 var legalDetailVM = _mapper.Map<LegalDetailViewModel>(legalDetail);
-                return legalDetailVM;
-            }
-            catch (Exception)
-            {
 
-                throw;
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = legalDetailVM };
+               
+            }
+            catch (Exception ex)
+            {
+                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
             }
         }
 
-        public async Task<ParticularDetailViewModel> SaveParticularDetail(ParticularDetailViewModel model)
+        public async Task<APIResponseModel> SaveParticularDetail(ParticularDetailViewModel model)
         {
             try
             {
@@ -111,16 +113,16 @@ namespace RE360.API.Repositories
                 _context.SaveChanges();
 
                 var particularDetailVM = _mapper.Map<ParticularDetailViewModel>(particularDetail);
-                return particularDetailVM;
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = particularDetailVM };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
             }
         }
 
-        public async Task<SolicitorDetailViewModel> SaveSolicitorDetail(SolicitorDetailViewModel model)
+        public async Task<APIResponseModel> SaveSolicitorDetail(SolicitorDetailViewModel model)
         {
             try
             {
@@ -137,16 +139,15 @@ namespace RE360.API.Repositories
                 _context.SaveChanges();
 
                 var solicitorDetailVM = _mapper.Map<SolicitorDetailViewModel>(solicitorDetail);
-                return solicitorDetailVM;
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = solicitorDetailVM };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
             }
         }
 
-        public async Task<ContractViewModel> SaveContractDetailRate(ContractViewModel model)
+        public async Task<APIResponseModel> SaveContractDetailRate(ContractViewModel model)
         {
             try
             {
@@ -182,16 +183,15 @@ namespace RE360.API.Repositories
 
                 var contractRateVM = _mapper.Map<ContractRateViewModel>(contractRate);
                 model.ContractRateViewModel = contractRateVM;
-                return model;
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = model };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
             }
         }
 
-        public async Task<EstimatesViewModel> SaveEstimates(EstimatesViewModel model)
+        public async Task<APIResponseModel> SaveEstimates(EstimatesViewModel model)
         {
             try
             {
@@ -207,16 +207,15 @@ namespace RE360.API.Repositories
                 _context.SaveChanges();
 
                 var estimatesVM = _mapper.Map<EstimatesViewModel>(estimates);
-                return estimatesVM;
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = estimatesVM };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
             }
         }
 
-        public async Task<ExecutionViewModel> SaveExecution(ExecutionViewModel model)
+        public async Task<APIResponseModel> SaveExecution(ExecutionViewModel model)
         {
             try
             {
@@ -232,16 +231,15 @@ namespace RE360.API.Repositories
                 _context.SaveChanges();
 
                 var executionVM = _mapper.Map<ExecutionViewModel>(execution);
-                return executionVM;
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = executionVM };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
             }
         }
 
-        public async Task<MethodOfSaleViewModel> SaveMethodOfSale(MethodOfSaleViewModel model)
+        public async Task<APIResponseModel> SaveMethodOfSale(MethodOfSaleViewModel model)
         {
             try
             {
@@ -258,15 +256,14 @@ namespace RE360.API.Repositories
                 _context.SaveChanges();
 
                 var methodOfSaleVM = _mapper.Map<MethodOfSaleViewModel>(methodOfSale);
-                return methodOfSaleVM;
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = methodOfSaleVM };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
             }
         }
-        public async Task<PriorAgencyMarketingViewModel> SavePriorAgencyMarketing(PriorAgencyMarketingViewModel model)
+        public async Task<APIResponseModel> SavePriorAgencyMarketing(PriorAgencyMarketingViewModel model)
         {
             try
             {
@@ -282,16 +279,15 @@ namespace RE360.API.Repositories
                 _context.SaveChanges();
 
                 var priorAgencyMarketingVM = _mapper.Map<PriorAgencyMarketingViewModel>(priorAgencyMarketing);
-                return priorAgencyMarketingVM;
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = priorAgencyMarketingVM };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
             }
         }
 
-        public async Task<TenancyDetailViewModel> SaveTenancyDetail(TenancyDetailViewModel model)
+        public async Task<APIResponseModel> SaveTenancyDetail(TenancyDetailViewModel model)
         {
             try
             {
@@ -307,16 +303,15 @@ namespace RE360.API.Repositories
                 _context.SaveChanges();
 
                 var tenancyDetailVM = _mapper.Map<TenancyDetailViewModel>(tenancyDetail);
-                return tenancyDetailVM;
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = tenancyDetailVM };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
             }
         }
 
-        public async Task<PropertyViewModel> SavePropertyInformation(PropertyViewModel model)
+        public async Task<APIResponseModel> SavePropertyInformation(PropertyViewModel model)
         {
             try
             {
@@ -344,12 +339,11 @@ namespace RE360.API.Repositories
 
                 var propertyInformationDetailVM = _mapper.Map<PropertyInformationDetailViewModel>(propertyInformationDetail);
                 model.PropertyInformationDetailViewModel = propertyInformationDetailVM;
-                return model;
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = model };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
             }
         }
     }
