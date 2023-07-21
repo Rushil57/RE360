@@ -25,9 +25,9 @@ namespace RE360.API.Models
         public decimal? AprxFloorArea { get; set; }
         public bool IsVerified { get;}
         public bool IsNonVerified { get; }
-        public string? LandArea { get; set; }
-        public bool IsSqm { get; set; }
-        public bool IsHectare { get; set; }
+        //public string? LandArea { get; set; }
+        //public bool IsSqm { get; set; }
+        //public bool IsHectare { get; set; }
         public string? AprxYearBuilt { get; set; }
         public string? Zoning { get; set; }
 

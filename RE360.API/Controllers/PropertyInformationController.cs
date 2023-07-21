@@ -15,111 +15,120 @@ namespace RE360.API.Controllers
                 _propertyInformationRepository= propertyInformationRepository;
         }
 
-        [HttpPost]
-        [Route("SavePropertyLocation")]
-        public async Task<IActionResult> SavePropertyLocation([FromBody] PropertyLocationViewModel model)
+        [HttpGet]
+        [Route("GetListingAddressByPID")]
+        public async Task<IActionResult> GetListingAddressByPID(int id)
         {
 
-            var result = await _propertyInformationRepository.SavePropertyLocation(model);
+            var result = await _propertyInformationRepository.GetListingAddressByPID(id);
             return Ok(result);
         }
 
         [HttpPost]
-        [Route("SaveClientDetail")]
-        public async Task<IActionResult> SaveClientDetail([FromBody] List<ClientDetailViewModel> model)
+        [Route("AddListingAddress")]
+        public async Task<IActionResult> AddListingAddress([FromBody] ListingAddressViewModel model)
         {
 
-            var result = await _propertyInformationRepository.SaveClientDetail(model);
+            var result = await _propertyInformationRepository.AddListingAddress(model);
             return Ok(result);
         }
 
         [HttpPost]
-        [Route("SaveLegalDetail")]
-        public async Task<IActionResult> SaveLegalDetail([FromBody] LegalDetailViewModel model)
+        [Route("AddClientDetail")]
+        public async Task<IActionResult> AddClientDetail([FromBody] List<ClientDetailViewModel> model)
         {
 
-            var result = await _propertyInformationRepository.SaveLegalDetail(model);
+            var result = await _propertyInformationRepository.AddClientDetail(model);
             return Ok(result);
         }
 
         [HttpPost]
-        [Route("SaveParticularDetail")]
-        public async Task<IActionResult> SaveParticularDetail([FromBody] ParticularDetailViewModel model)
+        [Route("AddLegalDetail")]
+        public async Task<IActionResult> AddLegalDetail([FromBody] LegalDetailViewModel model)
         {
 
-            var result = await _propertyInformationRepository.SaveParticularDetail(model);
+            var result = await _propertyInformationRepository.AddLegalDetail(model);
             return Ok(result);
         }
 
         [HttpPost]
-        [Route("SaveSolicitorDetail")]
-        public async Task<IActionResult> SaveSolicitorDetail([FromBody] SolicitorDetailViewModel model)
+        [Route("AddParticularDetail")]
+        public async Task<IActionResult> AddParticularDetail([FromBody] ParticularDetailViewModel model)
         {
 
-            var result = await _propertyInformationRepository.SaveSolicitorDetail(model);
+            var result = await _propertyInformationRepository.AddParticularDetail(model);
             return Ok(result);
         }
 
         [HttpPost]
-        [Route("SaveContractDetailRate")]
-        public async Task<IActionResult> SaveContractDetailRate([FromBody] ContractViewModel model)
+        [Route("AddSolicitorDetail")]
+        public async Task<IActionResult> AddSolicitorDetail([FromBody] SolicitorDetailViewModel model)
         {
 
-            var result = await _propertyInformationRepository.SaveContractDetailRate(model);
+            var result = await _propertyInformationRepository.AddSolicitorDetail(model);
             return Ok(result);
         }
 
         [HttpPost]
-        [Route("SaveEstimates")]
-        public async Task<IActionResult> SaveEstimates([FromBody] EstimatesViewModel model)
+        [Route("AddContractDetailRate")]
+        public async Task<IActionResult> AddContractDetailRate([FromBody] ContractViewModel model)
         {
 
-            var result = await _propertyInformationRepository.SaveEstimates(model);
+            var result = await _propertyInformationRepository.AddContractDetailRate(model);
             return Ok(result);
         }
 
         [HttpPost]
-        [Route("SaveExecution")]
-        public async Task<IActionResult> SaveExecution([FromBody] ExecutionViewModel model)
+        [Route("AddEstimates")]
+        public async Task<IActionResult> AddEstimates([FromBody] EstimatesViewModel model)
         {
 
-            var result = await _propertyInformationRepository.SaveExecution(model);
+            var result = await _propertyInformationRepository.AddEstimates(model);
             return Ok(result);
         }
 
         [HttpPost]
-        [Route("SaveMethodOfSale")]
-        public async Task<IActionResult> SaveMethodOfSale([FromBody] MethodOfSaleViewModel model)
+        [Route("AddExecution")]
+        public async Task<IActionResult> AddExecution([FromBody] ExecutionViewModel model)
         {
 
-            var result = await _propertyInformationRepository.SaveMethodOfSale(model);
+            var result = await _propertyInformationRepository.AddExecution(model);
             return Ok(result);
         }
 
         [HttpPost]
-        [Route("SavePriorAgencyMarketing")]
-        public async Task<IActionResult> SavePriorAgencyMarketing([FromBody] PriorAgencyMarketingViewModel model)
+        [Route("AddMethodOfSale")]
+        public async Task<IActionResult> AddMethodOfSale([FromBody] MethodOfSaleViewModel model)
         {
 
-            var result = await _propertyInformationRepository.SavePriorAgencyMarketing(model);
+            var result = await _propertyInformationRepository.AddMethodOfSale(model);
             return Ok(result);
         }
 
         [HttpPost]
-        [Route("SaveTenancyDetail")]
-        public async Task<IActionResult> SaveTenancyDetail([FromBody] TenancyDetailViewModel model)
+        [Route("AddPriorAgencyMarketing")]
+        public async Task<IActionResult> AddPriorAgencyMarketing([FromBody] PriorAgencyMarketingViewModel model)
         {
 
-            var result = await _propertyInformationRepository.SaveTenancyDetail(model);
+            var result = await _propertyInformationRepository.AddPriorAgencyMarketing(model);
             return Ok(result);
         }
 
         [HttpPost]
-        [Route("SavePropertyInformation")]
-        public async Task<IActionResult> SavePropertyInformation([FromBody] PropertyViewModel model)
+        [Route("AddTenancyDetail")]
+        public async Task<IActionResult> AddTenancyDetail([FromBody] TenancyDetailViewModel model)
         {
 
-            var result = await _propertyInformationRepository.SavePropertyInformation(model);
+            var result = await _propertyInformationRepository.AddTenancyDetail(model);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("AddPropertyInformation")]
+        public async Task<IActionResult> AddPropertyInformation([FromBody] PropertyViewModel model)
+        {
+
+            var result = await _propertyInformationRepository.AddPropertyInformation(model);
             return Ok(result);
         }
     }

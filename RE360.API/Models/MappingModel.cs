@@ -8,8 +8,8 @@ namespace RE360.API.Models
         public MappingModel()
         {
             // Add as many of these lines as you need to map your objects
-            CreateMap<PropertyLocation, PropertyLocationViewModel>();
-            CreateMap<PropertyLocationViewModel, PropertyLocation>();
+            CreateMap<ListingAddress, ListingAddressViewModel>();
+            CreateMap<ListingAddressViewModel, ListingAddress>();
 
             CreateMap<ClientDetail, ClientDetailViewModel>();
             CreateMap<ClientDetailViewModel, ClientDetail>();

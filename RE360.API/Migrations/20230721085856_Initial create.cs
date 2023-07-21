@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RE360.API.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialDB : Migration
+    public partial class Initialcreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -65,19 +65,23 @@ namespace RE360.API.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PID = table.Column<int>(type: "int", nullable: false),
+                    IsIndividual = table.Column<bool>(type: "bit", nullable: false),
+                    IsCompanyTrust = table.Column<bool>(type: "bit", nullable: false),
+                    CompanyTrustName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SurName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsSameAsListingAddress = table.Column<bool>(type: "bit", nullable: false),
                     PostCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Home = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Mobile = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Business = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CompanyTrust = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Position = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsGSTRegistered = table.Column<bool>(type: "bit", nullable: false),
-                    GSTNumber = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    GSTNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContactPerson = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Position = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -109,9 +113,9 @@ namespace RE360.API.Migrations
                     PID = table.Column<int>(type: "int", nullable: false),
                     Water = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Council = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    IsPA = table.Column<bool>(type: "bit", nullable: false),
-                    IsPQ = table.Column<bool>(type: "bit", nullable: false),
-                    PQValue = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
+                    IsPerAnnum = table.Column<bool>(type: "bit", nullable: false),
+                    IsPerQuarter = table.Column<bool>(type: "bit", nullable: false),
+                    OtherValue = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -162,20 +166,41 @@ namespace RE360.API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PID = table.Column<int>(type: "int", nullable: false),
                     TitleTypeID = table.Column<int>(type: "int", nullable: false),
-                    LOT = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DP = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LotNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DepositedPlan = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TitleIdentifier = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsPropertyUnitTitle = table.Column<bool>(type: "bit", nullable: false),
                     RegisteredOwner = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AdditionalDetails = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LandValue = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     ImprovementValue = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     RateableValue = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    RatingValuationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    RatingValuationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LandArea = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsSqm = table.Column<bool>(type: "bit", nullable: false),
+                    IsHectare = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_LegalDetail", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ListingAddress",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Suburb = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PostCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StreetNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StreetName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ListingAddress", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -199,7 +224,9 @@ namespace RE360.API.Migrations
                     DeadLineDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeadLineTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsMortgageeSale = table.Column<bool>(type: "bit", nullable: false),
-                    IsAsIs = table.Column<bool>(type: "bit", nullable: false)
+                    IsAsIs = table.Column<bool>(type: "bit", nullable: false),
+                    IsAuctionUnlessSoldPrior = table.Column<bool>(type: "bit", nullable: false),
+                    IsTenderUnlessSoldPrior = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -227,9 +254,6 @@ namespace RE360.API.Migrations
                     IsHomeLandPackage = table.Column<bool>(type: "bit", nullable: false),
                     IsNewConstruction = table.Column<bool>(type: "bit", nullable: false),
                     AprxFloorArea = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    LandArea = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsSqm = table.Column<bool>(type: "bit", nullable: false),
-                    IsHectare = table.Column<bool>(type: "bit", nullable: false),
                     AprxYearBuilt = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Zoning = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -246,9 +270,9 @@ namespace RE360.API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PID = table.Column<int>(type: "int", nullable: false),
                     AgencyName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AgencyPeriod = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AgencyExpiredDate = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AgencyName1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AgencyPeriod1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AgencyExpiredDate1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AgencySum = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     InitialFee = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     CommissionOnInitial = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
@@ -314,24 +338,6 @@ namespace RE360.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PropertyLocation",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Suburb = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PostCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StreetNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Street = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AgentName = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PropertyLocation", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "SolicitorDetail",
                 columns: table => new
                 {
@@ -363,7 +369,8 @@ namespace RE360.API.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TenancyDetails = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    TenancyDetails = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsToBeAdvised = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -601,6 +608,9 @@ namespace RE360.API.Migrations
                 name: "LegalDetail");
 
             migrationBuilder.DropTable(
+                name: "ListingAddress");
+
+            migrationBuilder.DropTable(
                 name: "MethodOfSale");
 
             migrationBuilder.DropTable(
@@ -617,9 +627,6 @@ namespace RE360.API.Migrations
 
             migrationBuilder.DropTable(
                 name: "PropertyInformationDetail");
-
-            migrationBuilder.DropTable(
-                name: "PropertyLocation");
 
             migrationBuilder.DropTable(
                 name: "SignaturesOfClient");

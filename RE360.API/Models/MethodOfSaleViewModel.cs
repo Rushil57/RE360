@@ -24,5 +24,7 @@ namespace RE360.API.Models
         public string? DeadLineTime { get; set; }
         public bool IsMortgageeSale { get; set; }
         public bool IsAsIs { get; set; }
+        public bool IsAuctionUnlessSoldPrior { get; set; }
+        public bool IsTenderUnlessSoldPrior { get; set; }
     }
 }

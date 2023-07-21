@@ -1,7 +1,12 @@
-﻿namespace RE360.API.DBModels
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace RE360.API.DBModels
 {
     public class MethodOfSale
     {
+        [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         public int PID { get; set; }
         public int AgencyTypeID { get; set; }
@@ -19,6 +24,8 @@
         public string? DeadLineTime { get; set; }
         public bool IsMortgageeSale { get; set; }
         public bool IsAsIs { get; set; }
+        public bool IsAuctionUnlessSoldPrior { get; set;}
+        public bool IsTenderUnlessSoldPrior { get; set; }
 
     }
 }

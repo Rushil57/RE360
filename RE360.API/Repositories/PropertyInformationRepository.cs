@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using RE360.API.Auth;
 using RE360.API.DBModels;
 using RE360.API.Domain;
@@ -15,22 +16,22 @@ namespace RE360.API.Repositories
             _mapper = mapper;
             _context = context;
         }
-        public async Task<APIResponseModel> SavePropertyLocation(PropertyLocationViewModel model)
+        public async Task<APIResponseModel> AddListingAddress(ListingAddressViewModel model)
         {
             try
             {
-                var propertyLocation = _mapper.Map<PropertyLocation>(model);
+                var propertyLocation = _mapper.Map<ListingAddress>(model);
 
                 if (propertyLocation.ID > 0)
                 {
-                    _context.PropertyLocation.Update(propertyLocation);
+                    _context.ListingAddress.Update(propertyLocation);
                 }
                 else
                 {
-                    _context.PropertyLocation.Add(propertyLocation);
+                    _context.ListingAddress.Add(propertyLocation);
                 }
                 _context.SaveChanges();
-                var propertyLocationVM = _mapper.Map<PropertyLocationViewModel>(propertyLocation);
+                var propertyLocationVM = _mapper.Map<ListingAddressViewModel>(propertyLocation);
 
                 return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = propertyLocationVM };
 
@@ -41,7 +42,7 @@ namespace RE360.API.Repositories
             }
         }
 
-        public async Task<APIResponseModel> SaveClientDetail(List<ClientDetailViewModel> model)
+        public async Task<APIResponseModel> AddClientDetail(List<ClientDetailViewModel> model)
         {
             try
             {
@@ -70,7 +71,7 @@ namespace RE360.API.Repositories
             }
         }
 
-        public async Task<APIResponseModel> SaveLegalDetail(LegalDetailViewModel model)
+        public async Task<APIResponseModel> AddLegalDetail(LegalDetailViewModel model)
         {
             try
             {
@@ -96,7 +97,7 @@ namespace RE360.API.Repositories
             }
         }
 
-        public async Task<APIResponseModel> SaveParticularDetail(ParticularDetailViewModel model)
+        public async Task<APIResponseModel> AddParticularDetail(ParticularDetailViewModel model)
         {
             try
             {
@@ -122,7 +123,7 @@ namespace RE360.API.Repositories
             }
         }
 
-        public async Task<APIResponseModel> SaveSolicitorDetail(SolicitorDetailViewModel model)
+        public async Task<APIResponseModel> AddSolicitorDetail(SolicitorDetailViewModel model)
         {
             try
             {
@@ -147,7 +148,7 @@ namespace RE360.API.Repositories
             }
         }
 
-        public async Task<APIResponseModel> SaveContractDetailRate(ContractViewModel model)
+        public async Task<APIResponseModel> AddContractDetailRate(ContractViewModel model)
         {
             try
             {
@@ -191,7 +192,7 @@ namespace RE360.API.Repositories
             }
         }
 
-        public async Task<APIResponseModel> SaveEstimates(EstimatesViewModel model)
+        public async Task<APIResponseModel> AddEstimates(EstimatesViewModel model)
         {
             try
             {
@@ -215,7 +216,7 @@ namespace RE360.API.Repositories
             }
         }
 
-        public async Task<APIResponseModel> SaveExecution(ExecutionViewModel model)
+        public async Task<APIResponseModel> AddExecution(ExecutionViewModel model)
         {
             try
             {
@@ -239,7 +240,7 @@ namespace RE360.API.Repositories
             }
         }
 
-        public async Task<APIResponseModel> SaveMethodOfSale(MethodOfSaleViewModel model)
+        public async Task<APIResponseModel> AddMethodOfSale(MethodOfSaleViewModel model)
         {
             try
             {
@@ -263,7 +264,7 @@ namespace RE360.API.Repositories
                 return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
             }
         }
-        public async Task<APIResponseModel> SavePriorAgencyMarketing(PriorAgencyMarketingViewModel model)
+        public async Task<APIResponseModel> AddPriorAgencyMarketing(PriorAgencyMarketingViewModel model)
         {
             try
             {
@@ -287,7 +288,7 @@ namespace RE360.API.Repositories
             }
         }
 
-        public async Task<APIResponseModel> SaveTenancyDetail(TenancyDetailViewModel model)
+        public async Task<APIResponseModel> AddTenancyDetail(TenancyDetailViewModel model)
         {
             try
             {
@@ -311,15 +312,28 @@ namespace RE360.API.Repositories
             }
         }
 
-        public async Task<APIResponseModel> SavePropertyInformation(PropertyViewModel model)
+        public async Task<APIResponseModel> AddPropertyInformation(PropertyViewModel model)
         {
             try
             {
                 var propertyInformationViewModel = model.PropertyInformationViewModel;
                 var propertyInformation = _mapper.Map<List<PropertyInformation>>(propertyInformationViewModel);
+                var ID = propertyInformation[0].ID;
+                if (ID > 0)
+                {
+                    var PID = propertyInformation[0].PID;
+                    var propertyInformationList = _context.PropertyInformation.Where(x => x.PID == PID).ToList();
+                    if (propertyInformationList.Count > 0)
+                    {
+                        _context.PropertyInformation.RemoveRange(propertyInformationList);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+
+                propertyInformation= propertyInformation.Where(x=>x.ID == 0).ToList();
 
                 _context.PropertyInformation.AddRange(propertyInformation);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 var propertyInformationVM = _mapper.Map<List<PropertyInformationViewModel>>(propertyInformation);
 
@@ -344,6 +358,54 @@ namespace RE360.API.Repositories
             catch (Exception ex)
             {
                 return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
+            }
+        }
+
+        public async Task<APIResponseModel> GetListingAddressByPID(int id)
+        {
+            try
+            {
+                var balance = (from l in _context.ListingAddress
+                               join cd in _context.ContractDetail on l.ID equals cd.PID
+                               join cr in _context.ContractRate on cd.PID equals cr.PID
+                               join est in _context.Estimates on cr.PID equals est.PID
+                               join exe in _context.Execution on est.PID equals exe.PID
+                               join ld in _context.LegalDetail on exe.PID equals ld.PID
+                               join mos in _context.MethodOfSale on ld.PID equals mos.PID
+                               join pd in _context.ParticularDetail on mos.PID equals pd.PID
+                               join pam in _context.PriorAgencyMarketing on pd.PID equals pam.PID
+                               join pi in _context.PropertyInformation on pam.PID equals pi.PID
+                               join pid in _context.PropertyInformationDetail on pi.PID equals pid.PID
+                               join sd in _context.SolicitorDetail on pid.PID equals sd.PID
+                               join td in _context.TenancyDetail on sd.PID equals td.PID
+                               where l.ID == id
+                               select new
+                               {
+                                   listingAddress = l,
+                                   clientDetail = _context.ClientDetail.Where(x => x.PID == id).ToList(),
+                                   contractDetail = cd,
+                                   contractRate = cr,
+                                   estimates = est,
+                                   execution = exe,
+                                   legalDetail = ld,
+                                   methodOfSale = mos,
+                                   particularDetail = pd,
+                                   priorAgencyMarketing = pam,
+                                   propertyInformation = pi,
+                                   propertyInformationDetail = pid,
+                                   solicitorDetail = sd,
+                                   tenancyDetail = td
+
+                               }).FirstOrDefault();
+
+
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = balance };
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
             }
         }
     }

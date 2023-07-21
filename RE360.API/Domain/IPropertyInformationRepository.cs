@@ -5,19 +5,20 @@ namespace RE360.API.Domain
 {
     public interface IPropertyInformationRepository
     {
-        Task<APIResponseModel> SavePropertyLocation(PropertyLocationViewModel model);
-        Task<APIResponseModel> SaveClientDetail(List<ClientDetailViewModel> model);
-        Task<APIResponseModel> SaveLegalDetail(LegalDetailViewModel model);
-        Task<APIResponseModel> SaveParticularDetail(ParticularDetailViewModel model);
-        Task<APIResponseModel> SaveSolicitorDetail(SolicitorDetailViewModel model);
-        Task<APIResponseModel> SaveContractDetailRate(ContractViewModel model);
-        Task<APIResponseModel> SaveEstimates(EstimatesViewModel model);
-        Task<APIResponseModel> SaveExecution(ExecutionViewModel model);
-        Task<APIResponseModel> SaveMethodOfSale(MethodOfSaleViewModel model);
-        Task<APIResponseModel> SavePriorAgencyMarketing(PriorAgencyMarketingViewModel model);
-        Task<APIResponseModel> SaveTenancyDetail(TenancyDetailViewModel model);
+        Task<APIResponseModel> GetListingAddressByPID(int id);
+        Task<APIResponseModel> AddListingAddress(ListingAddressViewModel model);
+        Task<APIResponseModel> AddClientDetail(List<ClientDetailViewModel> model);
+        Task<APIResponseModel> AddLegalDetail(LegalDetailViewModel model);
+        Task<APIResponseModel> AddParticularDetail(ParticularDetailViewModel model);
+        Task<APIResponseModel> AddSolicitorDetail(SolicitorDetailViewModel model);
+        Task<APIResponseModel> AddContractDetailRate(ContractViewModel model);
+        Task<APIResponseModel> AddEstimates(EstimatesViewModel model);
+        Task<APIResponseModel> AddExecution(ExecutionViewModel model);
+        Task<APIResponseModel> AddMethodOfSale(MethodOfSaleViewModel model);
+        Task<APIResponseModel> AddPriorAgencyMarketing(PriorAgencyMarketingViewModel model);
+        Task<APIResponseModel> AddTenancyDetail(TenancyDetailViewModel model);
 
-        Task<APIResponseModel> SavePropertyInformation(PropertyViewModel model);
+        Task<APIResponseModel> AddPropertyInformation(PropertyViewModel model);
 
 
     }

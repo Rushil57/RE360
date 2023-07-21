@@ -11,8 +11,8 @@ namespace RE360.API.Models
         public int PID { get; set; }
         public decimal? Water { get; set; }
         public decimal? Council { get; set; }
-        public bool IsPA { get; set; }
-        public bool IsPQ { get; set; }
-        public decimal? PQValue { get; set; }
+        public bool IsPerAnnum { get; set; }
+        public bool IsPerQuarter { get; set; }
+        public decimal? OtherValue { get; set; }
     }
 }

@@ -17,5 +17,6 @@ namespace RE360.API.Models
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public string? TenancyDetails { get; set; }
+        public bool IsToBeAdvised { get; set; }
     }
 }

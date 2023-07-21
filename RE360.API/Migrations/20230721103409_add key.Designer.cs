@@ -12,8 +12,8 @@ using RE360.API.Auth;
 namespace RE360.API.Migrations
 {
     [DbContext(typeof(RE360AppDbContext))]
-    [Migration("20230719135144_InitialDB")]
-    partial class InitialDB
+    [Migration("20230721103409_add key")]
+    partial class addkey
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -261,7 +261,10 @@ namespace RE360.API.Migrations
                     b.Property<string>("Business")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CompanyTrust")
+                    b.Property<string>("CompanyTrustName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactPerson")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -276,7 +279,16 @@ namespace RE360.API.Migrations
                     b.Property<string>("Home")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsCompanyTrust")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsGSTRegistered")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsIndividual")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSameAsListingAddress")
                         .HasColumnType("bit");
 
                     b.Property<string>("Mobile")
@@ -338,17 +350,17 @@ namespace RE360.API.Migrations
                     b.Property<decimal?>("Council")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<bool>("IsPA")
+                    b.Property<bool>("IsPerAnnum")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsPQ")
+                    b.Property<bool>("IsPerQuarter")
                         .HasColumnType("bit");
+
+                    b.Property<decimal?>("OtherValue")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("PID")
                         .HasColumnType("int");
-
-                    b.Property<decimal?>("PQValue")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("Water")
                         .HasColumnType("decimal(18,2)");
@@ -431,20 +443,29 @@ namespace RE360.API.Migrations
                     b.Property<string>("AdditionalDetails")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DP")
+                    b.Property<string>("DepositedPlan")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("ImprovementValue")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<bool>("IsHectare")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsPropertyUnitTitle")
                         .HasColumnType("bit");
 
-                    b.Property<string>("LOT")
+                    b.Property<bool>("IsSqm")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LandArea")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("LandValue")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("LotNo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PID")
                         .HasColumnType("int");
@@ -458,7 +479,7 @@ namespace RE360.API.Migrations
                     b.Property<string>("RegisteredOwner")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("TitleIdentifier")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TitleTypeID")
@@ -467,6 +488,37 @@ namespace RE360.API.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("LegalDetail");
+                });
+
+            modelBuilder.Entity("RE360.API.DBModels.ListingAddress", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StreetName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StreetNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Suburb")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Unit")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("ListingAddress");
                 });
 
             modelBuilder.Entity("RE360.API.DBModels.MethodOfSale", b =>
@@ -501,7 +553,13 @@ namespace RE360.API.Migrations
                     b.Property<bool>("IsAsIs")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsAuctionUnlessSoldPrior")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsMortgageeSale")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsTenderUnlessSoldPrior")
                         .HasColumnType("bit");
 
                     b.Property<int>("MethodOfSaleID")
@@ -562,20 +620,11 @@ namespace RE360.API.Migrations
                     b.Property<string>("Garages")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsHectare")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsHomeLandPackage")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsNewConstruction")
                         .HasColumnType("bit");
-
-                    b.Property<bool>("IsSqm")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LandArea")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LivingRooms")
                         .HasColumnType("nvarchar(max)");
@@ -611,16 +660,16 @@ namespace RE360.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<string>("AgencyExpiredDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AgencyExpiredDate1")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("AgencyName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AgencyName1")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AgencyPeriod")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AgencyPeriod1")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("AgencySum")
@@ -759,37 +808,6 @@ namespace RE360.API.Migrations
                     b.ToTable("PropertyInformationDetail");
                 });
 
-            modelBuilder.Entity("RE360.API.DBModels.PropertyLocation", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("AgentName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PostCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Street")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StreetNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Suburb")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Unit")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("PropertyLocation");
-                });
-
             modelBuilder.Entity("RE360.API.DBModels.SignaturesOfClient", b =>
                 {
                     b.Property<int>("ID")
@@ -860,6 +878,9 @@ namespace RE360.API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsTananted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsToBeAdvised")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsVacant")

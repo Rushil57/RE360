@@ -7,11 +7,15 @@ namespace RE360.API.Auth
 {
 	public class RE360AppDbContext : IdentityDbContext<ApplicationUser>
 	{
-		public RE360AppDbContext(DbContextOptions<RE360AppDbContext> options) : base(options)
+        public RE360AppDbContext()
+        {
+        }
+
+        public RE360AppDbContext(DbContextOptions<RE360AppDbContext> options) : base(options)
 		{
 		}
 
-        public DbSet<PropertyLocation> PropertyLocation { get; set; }
+        public DbSet<ListingAddress> ListingAddress { get; set; }
         public DbSet<ClientDetail> ClientDetail { get; set; }
         public DbSet<SolicitorDetail> SolicitorDetail { get; set; }
         public DbSet<ParticularDetail> ParticularDetail { get; set; }
