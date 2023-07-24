@@ -19,6 +19,7 @@ namespace RE360.API.Domain
         Task<APIResponseModel> AddTenancyDetail(TenancyDetailViewModel model);
 
         Task<APIResponseModel> AddPropertyInformation(PropertyViewModel model);
+        Task<APIResponseModel> GetListingAddressList();
 
 
     }

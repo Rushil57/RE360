@@ -64,7 +64,7 @@ namespace RE360.API.Repositories
 
                 var clientDetailVM = _mapper.Map<List<ClientDetailViewModel>>(clientDetail);
                 return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = clientDetailVM };
-                
+
             }
             catch (Exception ex)
             {
@@ -90,7 +90,7 @@ namespace RE360.API.Repositories
                 var legalDetailVM = _mapper.Map<LegalDetailViewModel>(legalDetail);
 
                 return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = legalDetailVM };
-               
+
             }
             catch (Exception ex)
             {
@@ -332,7 +332,7 @@ namespace RE360.API.Repositories
                 }
                 foreach (var item in propertyInformation)
                 {
-                    item.ID= 0;
+                    item.ID = 0;
                 }
 
                 _context.PropertyInformation.AddRange(propertyInformation);
@@ -368,7 +368,7 @@ namespace RE360.API.Repositories
         {
             try
             {
-                var balance = (from l in _context.ListingAddress
+                var listingAddressList = (from l in _context.ListingAddress
                                join cd in _context.ContractDetail on l.ID equals cd.PID
                                join cr in _context.ContractRate on cd.PID equals cr.PID
                                join est in _context.Estimates on cr.PID equals est.PID
@@ -402,13 +402,39 @@ namespace RE360.API.Repositories
                                }).FirstOrDefault();
 
 
-                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = balance };
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = listingAddressList };
 
             }
             catch (Exception ex)
             {
+                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
+            }
+        }
 
-                throw;
+        public async Task<APIResponseModel> GetListingAddressList()
+        {
+            try
+            {
+                var listingAddressList = (from a in _context.ListingAddress
+                                          join ca in _context.ClientDetail
+                                          on a.ID equals ca.PID into listAdd
+                                          from cd in listAdd.DefaultIfEmpty()
+                                          join e in _context.Execution 
+                                          on a.ID equals e.PID into cliDetail
+                                          from exe in cliDetail.DefaultIfEmpty()
+                                          select new
+                                          {
+                                              Id = a.ID,
+                                              address = a.Address + "," + a.Unit + " ," + a.Suburb + " ," + a.PostCode + " ," + a.StreetNumber + " ," + a.StreetName,
+                                              clientName = cd.CompanyTrustName != "" ? cd.CompanyTrustName : cd.Title + " " + cd.SurName + " " + cd.FirstName,
+                                              Date = exe.CreatedDate == null ? "In Progress" : exe.CreatedDate.ToString()
+                                          }).GroupBy(m => new { m.Id }).Select(group => group.First()).ToList();
+
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = listingAddressList };
+            }
+            catch (Exception ex)
+            {
+                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
             }
         }
     }

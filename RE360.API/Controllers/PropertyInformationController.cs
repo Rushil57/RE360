@@ -24,6 +24,15 @@ namespace RE360.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        [Route("GetListingAddressList")]
+        public async Task<IActionResult> GetListingAddressList()
+        {
+
+            var result = await _propertyInformationRepository.GetListingAddressList();
+            return Ok(result);
+        }
+
         [HttpPost]
         [Route("AddListingAddress")]
         public async Task<IActionResult> AddListingAddress([FromBody] ListingAddressViewModel model)
