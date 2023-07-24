@@ -9,7 +9,6 @@ namespace RE360.API.DBModels
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         public int PID { get; set; }
-        public string? AdditionalDisclosures { get; set; }
         public string? SignedOnBehalfOfTheAgent { get; set; }
 
         public DateTime? SignedOnBehalfOfTheAgentDate { get; set; }

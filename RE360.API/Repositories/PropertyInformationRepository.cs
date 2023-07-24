@@ -4,6 +4,7 @@ using RE360.API.Auth;
 using RE360.API.DBModels;
 using RE360.API.Domain;
 using RE360.API.Models;
+using System.Collections.Generic;
 
 namespace RE360.API.Repositories
 {
@@ -329,8 +330,10 @@ namespace RE360.API.Repositories
                         await _context.SaveChangesAsync();
                     }
                 }
-
-                propertyInformation= propertyInformation.Where(x=>x.ID == 0).ToList();
+                foreach (var item in propertyInformation)
+                {
+                    item.ID= 0;
+                }
 
                 _context.PropertyInformation.AddRange(propertyInformation);
                 await _context.SaveChangesAsync();

@@ -10,6 +10,7 @@ namespace RE360.API.DBModels
         public int ID { get; set; }
         public int PID { get; set; }
         public string? ExpensesToBeIncurred { get; set; }
+        public string? AdditionalDisclosures { get; set; }
         public decimal? ProviderDiscountCommission { get; set; }
         public decimal? AmountDiscountCommission { get; set; }
 

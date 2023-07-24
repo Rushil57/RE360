@@ -10,7 +10,6 @@ namespace RE360.API.Models
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "Please enter a value bigger than 0")]
         public int PID { get; set; }
-        public string? AdditionalDisclosures { get; set; }
         public string? SignedOnBehalfOfTheAgent { get; set; }
 
         public DateTime? SignedOnBehalfOfTheAgentDate { get; set; }
