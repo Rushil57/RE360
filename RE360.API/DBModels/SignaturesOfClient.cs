@@ -8,7 +8,7 @@ namespace RE360.API.DBModels
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
-        public int ExecutionId { get; set; }
+        public int PID { get; set; }
         public int ClientId { get; set; }
         public string? SignatureOfClientName { get; set; }
     }

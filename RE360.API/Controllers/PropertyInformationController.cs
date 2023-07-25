@@ -8,7 +8,7 @@ namespace RE360.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class PropertyInformationController : ControllerBase
     {
         private readonly IPropertyInformationRepository _propertyInformationRepository;
@@ -103,10 +103,19 @@ namespace RE360.API.Controllers
 
         [HttpPost]
         [Route("AddExecution")]
-        public async Task<IActionResult> AddExecution([FromBody] ExecutionViewModel model)
+        public async Task<IActionResult> AddExecution([FromForm] ExecutionViewModel model)
         {
 
             var result = await _propertyInformationRepository.AddExecution(model);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("AddExecutionDetails")]
+        public async Task<IActionResult> AddExecutionDetails([FromForm] SignaturesOfClientViewModel model)
+        {
+
+            var result = await _propertyInformationRepository.AddExecutionDetails(model);
             return Ok(result);
         }
 

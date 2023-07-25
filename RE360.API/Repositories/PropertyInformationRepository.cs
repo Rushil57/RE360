@@ -15,10 +15,12 @@ namespace RE360.API.Repositories
         private readonly IMapper _mapper;
         private readonly RE360AppDbContext _context;
         CommonMethod common;
-        public PropertyInformationRepository(IMapper mapper, RE360AppDbContext context = null)
+        private readonly IConfiguration _configuration;
+        public PropertyInformationRepository(IMapper mapper, RE360AppDbContext context = null, IConfiguration configuration = null)
         {
             _mapper = mapper;
             _context = context;
+            _configuration = configuration;
             common = new CommonMethod(context);
         }
         public async Task<APIResponseModel> AddListingAddress(ListingAddressViewModel model)
@@ -248,17 +250,24 @@ namespace RE360.API.Repositories
         {
             try
             {
-                //foreach (var item in model.SignaturesOfClient)
-                //{
-                //    if (item.SignatureClient != null)
-                //    {
-                //        if (item.SignatureClient.Length > 0)
-                //        {
-                //            item.SignatureOfClientName = await common.UploadBlobFile(item.SignatureClient, "images");
-                //        }
-                //    }
-                //}
-                var execution = _mapper.Map<Execution>(model);
+
+				if (model.SignedOnBehalfOfTheAgentFile != null)
+				{
+					if (model.SignedOnBehalfOfTheAgentFile.Length > 0)
+					{
+                        model.SignedOnBehalfOfTheAgent  = await common.UploadBlobFile(model.SignedOnBehalfOfTheAgentFile, "images");
+                    }
+				}
+
+				if (model.AgentToSignHereFile != null)
+				{
+					if (model.AgentToSignHereFile.Length > 0)
+					{
+                        model.AgentToSignHere = await common.UploadBlobFile(model.AgentToSignHereFile, "images");
+                    }
+				}
+
+				var execution = _mapper.Map<Execution>(model);
 
                 if (execution.ID > 0)
                 {
@@ -271,6 +280,14 @@ namespace RE360.API.Repositories
                
                 _context.SaveChanges();
 
+                if (!string.IsNullOrEmpty(execution.SignedOnBehalfOfTheAgent))
+                {
+                    execution.SignedOnBehalfOfTheAgent = _configuration["BlobStorageSettings:ImagesPath"].ToString() + execution.SignedOnBehalfOfTheAgent + _configuration["BlobStorageSettings:ImageToken"].ToString();
+                }
+                if (!string.IsNullOrEmpty(execution.AgentToSignHere))
+                {
+                    execution.AgentToSignHere = _configuration["BlobStorageSettings:ImagesPath"].ToString() + execution.AgentToSignHere + _configuration["BlobStorageSettings:ImageToken"].ToString();
+                }
                 var executionVM = _mapper.Map<ExecutionViewModel>(execution);
                 return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = executionVM };
             }
@@ -407,6 +424,9 @@ namespace RE360.API.Repositories
         {
             try
             {
+                var clientDetailsList = _context.ClientDetail.Where(x => x.PID == id).ToList();
+                var propertyInformationsList = _context.PropertyInformation.Where(x => x.PID == id).ToList();
+                var estimatesList = _context.Estimates.Where(x => x.PID == id).ToList();
 
                 var listingAddressList = (from l in _context.ListingAddress
                                           join cod in _context.ContractDetail
@@ -449,18 +469,18 @@ namespace RE360.API.Repositories
                                           select new
                                           {
                                               listingAddress = l,
-                                              clientDetail = _context.ClientDetail.Where(x => x.PID == id).ToList(),
+                                              clientDetail = clientDetailsList,
                                               solicitorDetail = sd,
                                               particularDetail = pd,
                                               legalDetail = ld,
                                               contractDetail = cd,
                                               contractRate = cr,
                                               methodOfSale = mos,
-                                              propertyInformation = _context.PropertyInformation.Where(x => x.PID == id).ToList(),
+                                              propertyInformation = propertyInformationsList,
                                               propertyInformationDetail = pid,
                                               tenancyDetail = td,
                                               priorAgencyMarketing = pam,
-                                              estimates = _context.Estimates.Where(x => x.PID == id).ToList(),
+                                              estimates = estimatesList,
                                               estimatesDetail= etd,
                                               execution = exe
                                           }).FirstOrDefault();
@@ -523,6 +543,46 @@ namespace RE360.API.Repositories
             catch (Exception ex)
             {
 
+                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
+            }
+        }
+
+        public async Task<APIResponseModel> AddExecutionDetails(SignaturesOfClientViewModel model)
+        {
+            try
+            {
+
+                if (model.SignatureClient != null)
+                {
+                    if (model.SignatureClient.Length > 0)
+                    {
+                        model.SignatureOfClientName = await common.UploadBlobFile(model.SignatureClient, "images");
+                    }
+                }
+
+                var signaturesOfClient = _mapper.Map<SignaturesOfClient>(model);
+
+                if (signaturesOfClient.ID > 0)
+                {
+                    _context.SignaturesOfClient.Update(signaturesOfClient);
+                }
+                else
+                {
+                    _context.SignaturesOfClient.Add(signaturesOfClient);
+                }
+
+                _context.SaveChanges();
+
+                if (!string.IsNullOrEmpty(signaturesOfClient.SignatureOfClientName))
+                {
+                    signaturesOfClient.SignatureOfClientName = _configuration["BlobStorageSettings:ImagesPath"].ToString() + signaturesOfClient.SignatureOfClientName + _configuration["BlobStorageSettings:ImageToken"].ToString();
+                }
+                
+                var signaturesOfClientViewModel = _mapper.Map<SignaturesOfClientViewModel>(signaturesOfClient);
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = signaturesOfClientViewModel };
+            }
+            catch (Exception ex)
+            {
                 return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
             }
         }

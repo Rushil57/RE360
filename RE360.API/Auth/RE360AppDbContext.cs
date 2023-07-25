@@ -31,6 +31,7 @@ namespace RE360.API.Auth
         public DbSet<PropertyInformationDetail> PropertyInformationDetail { get; set; }
         public DbSet<PropertyAttributeType> PropertyAttributeType { get; set; }
         public DbSet<EstimatesDetail> EstimatesDetail { get; set; }
+        public DbSet<SignaturesOfClient> SignaturesOfClient { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
 		{
