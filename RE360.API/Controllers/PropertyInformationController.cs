@@ -8,7 +8,7 @@ namespace RE360.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class PropertyInformationController : ControllerBase
     {
         private readonly IPropertyInformationRepository _propertyInformationRepository;
@@ -94,7 +94,7 @@ namespace RE360.API.Controllers
 
         [HttpPost]
         [Route("AddEstimates")]
-        public async Task<IActionResult> AddEstimates([FromBody] EstimatesViewModel model)
+        public async Task<IActionResult> AddEstimates([FromBody] EstimateViewModel model)
         {
 
             var result = await _propertyInformationRepository.AddEstimates(model);
@@ -143,6 +143,14 @@ namespace RE360.API.Controllers
         {
 
             var result = await _propertyInformationRepository.AddPropertyInformation(model);
+            return Ok(result);
+        }
+        [HttpGet]
+        [Route("DelteEstimateByID")]
+        public async Task<IActionResult> DelteEstimateByID(int id)
+        {
+
+            var result = await _propertyInformationRepository.DelteEstimateByID(id);
             return Ok(result);
         }
     }

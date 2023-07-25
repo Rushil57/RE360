@@ -6,6 +6,7 @@ using RE360.API.DBModels;
 using RE360.API.Domain;
 using RE360.API.Models;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace RE360.API.Repositories
 {
@@ -197,23 +198,45 @@ namespace RE360.API.Repositories
             }
         }
 
-        public async Task<APIResponseModel> AddEstimates(EstimatesViewModel model)
+        public async Task<APIResponseModel> AddEstimates(EstimateViewModel model)
         {
             try
             {
-                var estimates = _mapper.Map<Estimates>(model);
-                if (estimates.ID > 0)
+                EstimateViewModel estimateViewModel= new EstimateViewModel();
+                var estimateDetail= _mapper.Map<EstimatesDetail>(model.EstimatesDetail);
+                if(estimateDetail.ID > 0)
                 {
-                    _context.Estimates.Update(estimates);
+                    _context.EstimatesDetail.Update(estimateDetail);
                 }
                 else
                 {
-                    _context.Estimates.Add(estimates);
+                    _context.EstimatesDetail.Add(estimateDetail);
                 }
                 _context.SaveChanges();
 
-                var estimatesVM = _mapper.Map<EstimatesViewModel>(estimates);
-                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = estimatesVM };
+                estimateViewModel.EstimatesDetail = _mapper.Map<EstimatesDetailViewModel>(estimateDetail);
+
+                var estimates = _mapper.Map<List<Estimates>>(model.Estimates);
+                var estimate = estimates.Where(x => x.ID > 0).ToList();
+                if (estimate.Count > 0)
+                {
+                    _context.Estimates.UpdateRange(estimate);
+                    _context.SaveChanges();
+                    var listEstimate = _mapper.Map<List<EstimatesViewModel>>(estimate);
+                    estimateViewModel.Estimates.AddRange(listEstimate);
+                }
+
+                var estimateAdd = estimates.Where(x => x.ID== 0).ToList();
+
+                if (estimateAdd.Count > 0)
+                {
+                    _context.Estimates.AddRange(estimateAdd);
+                    _context.SaveChanges();
+                    var listEstimate= _mapper.Map<List<EstimatesViewModel>>(estimateAdd);
+                    estimateViewModel.Estimates.AddRange(listEstimate);
+                }
+
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = estimateViewModel };
             }
             catch (Exception ex)
             {
@@ -384,38 +407,63 @@ namespace RE360.API.Repositories
         {
             try
             {
-                var listingAddressList = (from l in _context.ListingAddress
-                               join cd in _context.ContractDetail on l.ID equals cd.PID
-                               join cr in _context.ContractRate on cd.PID equals cr.PID
-                               join est in _context.Estimates on cr.PID equals est.PID
-                               join exe in _context.Execution on est.PID equals exe.PID
-                               join ld in _context.LegalDetail on exe.PID equals ld.PID
-                               join mos in _context.MethodOfSale on ld.PID equals mos.PID
-                               join pd in _context.ParticularDetail on mos.PID equals pd.PID
-                               join pam in _context.PriorAgencyMarketing on pd.PID equals pam.PID
-                               join pi in _context.PropertyInformation on pam.PID equals pi.PID
-                               join pid in _context.PropertyInformationDetail on pi.PID equals pid.PID
-                               join sd in _context.SolicitorDetail on pid.PID equals sd.PID
-                               join td in _context.TenancyDetail on sd.PID equals td.PID
-                               where l.ID == id
-                               select new
-                               {
-                                   listingAddress = l,
-                                   clientDetail = _context.ClientDetail.Where(x => x.PID == id).ToList(),
-                                   contractDetail = cd,
-                                   contractRate = cr,
-                                   estimates = est,
-                                   execution = exe,
-                                   legalDetail = ld,
-                                   methodOfSale = mos,
-                                   particularDetail = pd,
-                                   priorAgencyMarketing = pam,
-                                   propertyInformation = pi,
-                                   propertyInformationDetail = pid,
-                                   solicitorDetail = sd,
-                                   tenancyDetail = td
 
-                               }).FirstOrDefault();
+                var listingAddressList = (from l in _context.ListingAddress
+                                          join cod in _context.ContractDetail
+                                          on l.ID equals cod.PID into contractdetail
+                                          from cd in contractdetail.DefaultIfEmpty()
+                                          join cor in _context.ContractRate
+                                          on l.ID equals cor.PID into contractRate
+                                          from cr in contractRate.DefaultIfEmpty()
+                                          join esti in _context.Estimates
+                                          on l.ID equals esti.PID into estimate
+                                          from est in estimate.DefaultIfEmpty()
+                                          join exec in _context.Execution
+                                          on l.ID equals exec.PID into execution
+                                          from exe in execution.DefaultIfEmpty()
+                                          join led in _context.LegalDetail
+                                          on l.ID equals led.PID into legalDetail
+                                          from ld in legalDetail.DefaultIfEmpty()
+                                          join meos in _context.MethodOfSale
+                                          on l.ID equals meos.PID into methodOfSale
+                                          from mos in methodOfSale.DefaultIfEmpty()
+                                          join pad in _context.ParticularDetail
+                                          on l.ID equals pad.PID into particularDetail
+                                          from pd in particularDetail.DefaultIfEmpty()
+                                          join pram in _context.PriorAgencyMarketing
+                                          on l.ID equals pram.PID into priorAgencyMarketing
+                                          from pam in priorAgencyMarketing.DefaultIfEmpty()
+                                          join prid in _context.PropertyInformationDetail
+                                          on l.ID equals prid.PID into propertyInformationDetail
+                                          from pid in propertyInformationDetail.DefaultIfEmpty()
+                                          join sod in _context.SolicitorDetail
+                                          on l.ID equals sod.PID into solicitorDetail
+                                          from sd in solicitorDetail.DefaultIfEmpty()
+                                          join ted in _context.TenancyDetail
+                                          on l.ID equals ted.PID into tenancyDetail
+                                          from td in tenancyDetail.DefaultIfEmpty()
+                                          join etdl in _context.EstimatesDetail
+                                          on l.ID equals etdl.PID into estimatesDetail
+                                          from etd in estimatesDetail.DefaultIfEmpty()
+                                          where l.ID == id
+                                          select new
+                                          {
+                                              listingAddress = l,
+                                              clientDetail = _context.ClientDetail.Where(x => x.PID == id).ToList(),
+                                              solicitorDetail = sd,
+                                              particularDetail = pd,
+                                              legalDetail = ld,
+                                              contractDetail = cd,
+                                              contractRate = cr,
+                                              methodOfSale = mos,
+                                              propertyInformation = _context.PropertyInformation.Where(x => x.PID == id).ToList(),
+                                              propertyInformationDetail = pid,
+                                              tenancyDetail = td,
+                                              priorAgencyMarketing = pam,
+                                              estimates = _context.Estimates.Where(x => x.PID == id).ToList(),
+                                              estimatesDetail= etd,
+                                              execution = exe
+                                          }).FirstOrDefault();
 
 
                 return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = listingAddressList };
@@ -452,6 +500,29 @@ namespace RE360.API.Repositories
             }
             catch (Exception ex)
             {
+                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
+            }
+        }
+
+        public async Task<APIResponseModel> DelteEstimateByID(int ID)
+        {
+            try
+            {
+                var execution = _context.Estimates.Where(x => x.ID == ID).FirstOrDefault();
+                if (execution != null)
+                {
+                    _context.Estimates.Remove(execution);
+                    _context.SaveChanges();
+                    return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success" };
+                }
+                else
+                {
+                    return new APIResponseModel { StatusCode = StatusCodes.Status400BadRequest, Message = "Please enter valid id." };
+                }
+            }
+            catch (Exception ex)
+            {
+
                 return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
             }
         }

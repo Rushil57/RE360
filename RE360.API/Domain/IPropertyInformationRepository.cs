@@ -12,7 +12,7 @@ namespace RE360.API.Domain
         Task<APIResponseModel> AddParticularDetail(ParticularDetailViewModel model);
         Task<APIResponseModel> AddSolicitorDetail(SolicitorDetailViewModel model);
         Task<APIResponseModel> AddContractDetailRate(ContractViewModel model);
-        Task<APIResponseModel> AddEstimates(EstimatesViewModel model);
+        Task<APIResponseModel> AddEstimates(EstimateViewModel model);
         Task<APIResponseModel> AddExecution(ExecutionViewModel model);
         Task<APIResponseModel> AddMethodOfSale(MethodOfSaleViewModel model);
         Task<APIResponseModel> AddPriorAgencyMarketing(PriorAgencyMarketingViewModel model);
@@ -20,7 +20,7 @@ namespace RE360.API.Domain
 
         Task<APIResponseModel> AddPropertyInformation(PropertyViewModel model);
         Task<APIResponseModel> GetPropertyList(Guid agentID);
-
+        Task<APIResponseModel> DelteEstimateByID(int ID);
 
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RE360.API.Auth;
 
@@ -11,9 +12,11 @@ using RE360.API.Auth;
 namespace RE360.API.Migrations
 {
     [DbContext(typeof(RE360AppDbContext))]
-    partial class RE360AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230725091032_add estimateDatabase")]
+    partial class addestimateDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

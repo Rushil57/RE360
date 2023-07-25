@@ -52,6 +52,9 @@ namespace RE360.API.Models
 
             CreateMap<PropertyInformationDetail, PropertyInformationDetailViewModel>();
             CreateMap<PropertyInformationDetailViewModel, PropertyInformationDetail>();
+
+            CreateMap<EstimatesDetail, EstimatesDetailViewModel>();
+            CreateMap<EstimatesDetailViewModel, EstimatesDetail>();
         }
     }
 }
