@@ -23,11 +23,9 @@ namespace RE360.API.DBModels
         public bool IsHomeLandPackage { get; set; }
         public bool IsNewConstruction { get; set; }
         public decimal? AprxFloorArea { get; set; }
-        public bool IsVerified { get;}
-        public bool IsNonVerified { get; }
-        //public string? LandArea { get; set; }
-        //public bool IsSqm { get; set; }
-        //public bool IsHectare { get; set; }
+        public bool IsVerified { get; set; }
+        public bool IsNonVerified { get; set; }
+       
         public string? AprxYearBuilt { get; set; }
         public string? Zoning { get; set; }
 

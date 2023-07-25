@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using RE360.API.Auth;
+using RE360.API.Common;
 using RE360.API.DBModels;
 using RE360.API.Domain;
 using RE360.API.Models;
@@ -12,10 +13,12 @@ namespace RE360.API.Repositories
     {
         private readonly IMapper _mapper;
         private readonly RE360AppDbContext _context;
+        CommonMethod common;
         public PropertyInformationRepository(IMapper mapper, RE360AppDbContext context = null)
         {
             _mapper = mapper;
             _context = context;
+            common = new CommonMethod(context);
         }
         public async Task<APIResponseModel> AddListingAddress(ListingAddressViewModel model)
         {
@@ -43,11 +46,11 @@ namespace RE360.API.Repositories
             }
         }
 
-        public async Task<APIResponseModel> AddClientDetail(List<ClientDetailViewModel> model)
+        public async Task<APIResponseModel> AddClientDetail(ClientDetailListViewModel model)
         {
             try
             {
-                var clientDetail = _mapper.Map<List<ClientDetail>>(model);
+                var clientDetail = _mapper.Map<List<ClientDetail>>(model.ClientDetails);
 
                 var addRange = clientDetail.Where(x => x.ID == 0).ToList();
                 var updateRange = clientDetail.Where(x => x.ID != 0).ToList();
@@ -63,7 +66,8 @@ namespace RE360.API.Repositories
                 _context.SaveChanges();
 
                 var clientDetailVM = _mapper.Map<List<ClientDetailViewModel>>(clientDetail);
-                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = clientDetailVM };
+                model.ClientDetails= clientDetailVM;
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = model };
 
             }
             catch (Exception ex)
@@ -221,7 +225,18 @@ namespace RE360.API.Repositories
         {
             try
             {
+                //foreach (var item in model.SignaturesOfClient)
+                //{
+                //    if (item.SignatureClient != null)
+                //    {
+                //        if (item.SignatureClient.Length > 0)
+                //        {
+                //            item.SignatureOfClientName = await common.UploadBlobFile(item.SignatureClient, "images");
+                //        }
+                //    }
+                //}
                 var execution = _mapper.Map<Execution>(model);
+
                 if (execution.ID > 0)
                 {
                     _context.Execution.Update(execution);
@@ -230,6 +245,7 @@ namespace RE360.API.Repositories
                 {
                     _context.Execution.Add(execution);
                 }
+               
                 _context.SaveChanges();
 
                 var executionVM = _mapper.Map<ExecutionViewModel>(execution);
@@ -411,7 +427,7 @@ namespace RE360.API.Repositories
             }
         }
 
-        public async Task<APIResponseModel> GetListingAddressList()
+        public async Task<APIResponseModel> GetPropertyList(Guid agentID)
         {
             try
             {
@@ -422,11 +438,13 @@ namespace RE360.API.Repositories
                                           join e in _context.Execution 
                                           on a.ID equals e.PID into cliDetail
                                           from exe in cliDetail.DefaultIfEmpty()
+                                          where (a.AgentID == agentID)
                                           select new
                                           {
                                               Id = a.ID,
                                               address = a.Address + "," + a.Unit + " ," + a.Suburb + " ," + a.PostCode + " ," + a.StreetNumber + " ," + a.StreetName,
-                                              clientName = cd.CompanyTrustName != "" ? cd.CompanyTrustName : cd.Title + " " + cd.SurName + " " + cd.FirstName,
+                                              clientName = cd.Title + " " + cd.SurName + " " + cd.FirstName,
+                                              companyTrustName= cd.CompanyTrustName,
                                               Date = exe.CreatedDate == null ? "In Progress" : exe.CreatedDate.ToString()
                                           }).GroupBy(m => new { m.Id }).Select(group => group.First()).ToList();
 

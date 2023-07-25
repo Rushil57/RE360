@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RE360.API.Domain;
 using RE360.API.Models;
@@ -7,6 +8,7 @@ namespace RE360.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class PropertyInformationController : ControllerBase
     {
         private readonly IPropertyInformationRepository _propertyInformationRepository;
@@ -25,11 +27,14 @@ namespace RE360.API.Controllers
         }
 
         [HttpGet]
-        [Route("GetListingAddressList")]
-        public async Task<IActionResult> GetListingAddressList()
+        [Route("GetPropertyList")]
+        public async Task<IActionResult> GetPropertyList(Guid agentID)
         {
-
-            var result = await _propertyInformationRepository.GetListingAddressList();
+            if(agentID==null || agentID==Guid.Empty) {
+                var error= new APIResponseModel { StatusCode = StatusCodes.Status400BadRequest, Message = "Please add agentid" };
+                return Ok(error);
+            }
+            var result = await _propertyInformationRepository.GetPropertyList(agentID);
             return Ok(result);
         }
 
@@ -44,7 +49,7 @@ namespace RE360.API.Controllers
 
         [HttpPost]
         [Route("AddClientDetail")]
-        public async Task<IActionResult> AddClientDetail([FromBody] List<ClientDetailViewModel> model)
+        public async Task<IActionResult> AddClientDetail([FromBody] ClientDetailListViewModel model)
         {
 
             var result = await _propertyInformationRepository.AddClientDetail(model);

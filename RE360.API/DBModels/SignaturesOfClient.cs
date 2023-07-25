@@ -10,6 +10,6 @@ namespace RE360.API.DBModels
         public int ID { get; set; }
         public int ExecutionId { get; set; }
         public int ClientId { get; set; }
-        public string? SignatureOfClient { get; set; }
+        public string? SignatureOfClientName { get; set; }
     }
 }

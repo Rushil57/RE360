@@ -1,8 +1,12 @@
-﻿namespace RE360.API.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace RE360.API.Models
 {
     public class ListingAddressViewModel
     {
         public int ID { get; set; }
+        [Required]
+        public Guid AgentID { get; set; }
         public string? Address { get; set; }
         public string? Unit { get; set; }
         public string? Suburb { get; set; }

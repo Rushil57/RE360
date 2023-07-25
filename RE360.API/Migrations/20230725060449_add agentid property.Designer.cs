@@ -12,8 +12,8 @@ using RE360.API.Auth;
 namespace RE360.API.Migrations
 {
     [DbContext(typeof(RE360AppDbContext))]
-    [Migration("20230721103409_add key")]
-    partial class addkey
+    [Migration("20230725060449_add agentid property")]
+    partial class addagentidproperty
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -378,6 +378,9 @@ namespace RE360.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<string>("AdditionalDisclosures")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal?>("AmountDiscountCommission")
                         .HasColumnType("decimal(18,2)");
 
@@ -406,14 +409,14 @@ namespace RE360.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<string>("AdditionalDisclosures")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("AgentToSignHere")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AgentToSignHereDate")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("PID")
                         .HasColumnType("int");
@@ -501,6 +504,9 @@ namespace RE360.API.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("AgentID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("PostCode")
                         .HasColumnType("nvarchar(max)");
 
@@ -529,16 +535,19 @@ namespace RE360.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<string>("AgencyOtherTypeRemark")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("AgencyTypeID")
                         .HasColumnType("int");
-
-                    b.Property<string>("AgencyTypeRemark")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("AuctionDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("AuctionTime")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AuctionVenue")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Auctioneer")
@@ -551,6 +560,9 @@ namespace RE360.API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsAsIs")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsAuctionOnSite")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsAuctionUnlessSoldPrior")
@@ -580,7 +592,7 @@ namespace RE360.API.Migrations
                     b.Property<string>("TenderTime")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Vanue")
+                    b.Property<string>("TenderVenue")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
@@ -624,6 +636,12 @@ namespace RE360.API.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsNewConstruction")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsNonVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsVerified")
                         .HasColumnType("bit");
 
                     b.Property<string>("LivingRooms")
@@ -675,31 +693,55 @@ namespace RE360.API.Migrations
                     b.Property<decimal?>("AgencySum")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal?>("CommissionOnBalance")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("CommissionOnInitial")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<decimal?>("EstimatedCommission")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal?>("InitialFee")
+                    b.Property<decimal?>("EstimatedCommissionIncGST")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("FirstlyFee")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("IsAppraisedValue")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsFlatCommission")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsIncGST")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsNonStandard")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPercentageOfTheSalePrice")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPlusGST")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsStandard")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsUnAppraisedClientAskingPrice")
                         .HasColumnType("bit");
 
-                    b.Property<decimal?>("OfThePurchasePrice")
+                    b.Property<decimal?>("OnTheFirst")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("PID")
                         .HasColumnType("int");
 
                     b.Property<decimal?>("SalePrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("Secondly")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("SecondlyTwo")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("Thirdly")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("WithMinimumCommission")
@@ -822,7 +864,7 @@ namespace RE360.API.Migrations
                     b.Property<int>("ExecutionId")
                         .HasColumnType("int");
 
-                    b.Property<string>("SignatureOfClient")
+                    b.Property<string>("SignatureOfClientName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");

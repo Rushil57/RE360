@@ -7,7 +7,7 @@ namespace RE360.API.Domain
     {
         Task<APIResponseModel> GetListingAddressByPID(int id);
         Task<APIResponseModel> AddListingAddress(ListingAddressViewModel model);
-        Task<APIResponseModel> AddClientDetail(List<ClientDetailViewModel> model);
+        Task<APIResponseModel> AddClientDetail(ClientDetailListViewModel model);
         Task<APIResponseModel> AddLegalDetail(LegalDetailViewModel model);
         Task<APIResponseModel> AddParticularDetail(ParticularDetailViewModel model);
         Task<APIResponseModel> AddSolicitorDetail(SolicitorDetailViewModel model);
@@ -19,7 +19,7 @@ namespace RE360.API.Domain
         Task<APIResponseModel> AddTenancyDetail(TenancyDetailViewModel model);
 
         Task<APIResponseModel> AddPropertyInformation(PropertyViewModel model);
-        Task<APIResponseModel> GetListingAddressList();
+        Task<APIResponseModel> GetPropertyList(Guid agentID);
 
 
     }

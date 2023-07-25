@@ -501,6 +501,9 @@ namespace RE360.API.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("AgentID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("PostCode")
                         .HasColumnType("nvarchar(max)");
 
@@ -539,6 +542,9 @@ namespace RE360.API.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("AuctionTime")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AuctionVenue")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Auctioneer")
@@ -586,9 +592,6 @@ namespace RE360.API.Migrations
                     b.Property<string>("TenderVenue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Vanue")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("ID");
 
                     b.ToTable("MethodOfSale");
@@ -630,6 +633,12 @@ namespace RE360.API.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsNewConstruction")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsNonVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsVerified")
                         .HasColumnType("bit");
 
                     b.Property<string>("LivingRooms")
@@ -852,7 +861,7 @@ namespace RE360.API.Migrations
                     b.Property<int>("ExecutionId")
                         .HasColumnType("int");
 
-                    b.Property<string>("SignatureOfClient")
+                    b.Property<string>("SignatureOfClientName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");

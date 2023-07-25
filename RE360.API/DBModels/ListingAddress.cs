@@ -8,6 +8,7 @@ namespace RE360.API.DBModels
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
+        public Guid AgentID { get; set; }
         public string? Address { get; set; }
         public string? Unit { get; set; }
         public string? Suburb { get; set; }

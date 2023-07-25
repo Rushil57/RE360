@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using System.Net;
 using System.Net.Mail;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace RE360.API.Common
 {
@@ -129,6 +131,30 @@ namespace RE360.API.Common
                 return Error;
             }
 
+        }
+
+        public async Task<string> UploadBlobFile(IFormFile files, string blobContainerName)
+        {
+            string fileName = "";
+            try
+            {
+                //var BlobContainerName = "userimages";
+                fileName = Path.GetRandomFileName().Replace(".", "") + Path.GetExtension(files.FileName).ToLowerInvariant();
+                CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(_configuration["BlobStorageSettings:BlobStorageConnStr"].ToString());
+                CloudBlobClient blobClient = cloudStorageAccount.CreateCloudBlobClient();
+                CloudBlobContainer container = blobClient.GetContainerReference(blobContainerName);
+                CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileName);
+                await using (var data = files.OpenReadStream())
+                {
+                    await blockBlob.UploadFromStreamAsync(data);
+                }
+                return fileName;
+            }
+            catch (Exception ex)
+            {
+                CommonDBHelper.ErrorLog("CommonMethod - UploadBlobFile", ex.Message, ex.StackTrace);
+                throw ex;
+            }
         }
 
     }

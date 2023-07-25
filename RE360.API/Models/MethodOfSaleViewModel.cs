@@ -16,7 +16,7 @@ namespace RE360.API.Models
         public string? PriceRemark { get; set; }
         public DateTime? AuctionDate { get; set; }
         public string? AuctionTime { get; set; }
-        public string? Vanue { get; set; }
+        public string? AuctionVenue { get; set; }
         public string? Auctioneer { get; set; }
         public DateTime? TenderDate { get; set; }
         public string? TenderTime { get; set; }

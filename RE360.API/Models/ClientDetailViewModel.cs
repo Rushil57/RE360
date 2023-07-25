@@ -27,4 +27,10 @@ namespace RE360.API.Models
         public string? Position { get; set; }
 
     }
+
+    public class ClientDetailListViewModel
+    {
+        public List<ClientDetailViewModel> ClientDetails { get; set; }
+    }
+
 }

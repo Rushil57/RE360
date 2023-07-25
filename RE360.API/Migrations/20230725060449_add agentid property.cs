@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RE360.API.Migrations
 {
     /// <inheritdoc />
-    public partial class Initialcreate : Migration
+    public partial class addagentidproperty : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -130,6 +130,7 @@ namespace RE360.API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PID = table.Column<int>(type: "int", nullable: false),
                     ExpensesToBeIncurred = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AdditionalDisclosures = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProviderDiscountCommission = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     AmountDiscountCommission = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     TickHereIfEstimate = table.Column<bool>(type: "bit", nullable: false)
@@ -146,8 +147,8 @@ namespace RE360.API.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PID = table.Column<int>(type: "int", nullable: false),
-                    AdditionalDisclosures = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SignedOnBehalfOfTheAgent = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     SignedOnBehalfOfTheAgentDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     SignedOnBehalfOfTheAgentTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AgentToSignHere = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -191,6 +192,7 @@ namespace RE360.API.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    AgentID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Suburb = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -211,13 +213,13 @@ namespace RE360.API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PID = table.Column<int>(type: "int", nullable: false),
                     AgencyTypeID = table.Column<int>(type: "int", nullable: false),
-                    AgencyTypeRemark = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AgencyOtherTypeRemark = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MethodOfSaleID = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     PriceRemark = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AuctionDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     AuctionTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Vanue = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AuctionVenue = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Auctioneer = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TenderDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TenderTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -226,7 +228,9 @@ namespace RE360.API.Migrations
                     IsMortgageeSale = table.Column<bool>(type: "bit", nullable: false),
                     IsAsIs = table.Column<bool>(type: "bit", nullable: false),
                     IsAuctionUnlessSoldPrior = table.Column<bool>(type: "bit", nullable: false),
-                    IsTenderUnlessSoldPrior = table.Column<bool>(type: "bit", nullable: false)
+                    IsTenderUnlessSoldPrior = table.Column<bool>(type: "bit", nullable: false),
+                    IsAuctionOnSite = table.Column<bool>(type: "bit", nullable: false),
+                    TenderVenue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -254,6 +258,8 @@ namespace RE360.API.Migrations
                     IsHomeLandPackage = table.Column<bool>(type: "bit", nullable: false),
                     IsNewConstruction = table.Column<bool>(type: "bit", nullable: false),
                     AprxFloorArea = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    IsVerified = table.Column<bool>(type: "bit", nullable: false),
+                    IsNonVerified = table.Column<bool>(type: "bit", nullable: false),
                     AprxYearBuilt = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Zoning = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -274,15 +280,23 @@ namespace RE360.API.Migrations
                     AgencyName1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AgencyExpiredDate1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AgencySum = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    InitialFee = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    CommissionOnInitial = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    OfThePurchasePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    CommissionOnBalance = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    IsPlusGST = table.Column<bool>(type: "bit", nullable: false),
+                    IsIncGST = table.Column<bool>(type: "bit", nullable: false),
+                    IsStandard = table.Column<bool>(type: "bit", nullable: false),
+                    IsNonStandard = table.Column<bool>(type: "bit", nullable: false),
+                    FirstlyFee = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Secondly = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    OnTheFirst = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Thirdly = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    SecondlyTwo = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     WithMinimumCommission = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    SalePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     EstimatedCommission = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    IsPercentageOfTheSalePrice = table.Column<bool>(type: "bit", nullable: false),
+                    IsFlatCommission = table.Column<bool>(type: "bit", nullable: false),
                     IsAppraisedValue = table.Column<bool>(type: "bit", nullable: false),
-                    IsUnAppraisedClientAskingPrice = table.Column<bool>(type: "bit", nullable: false)
+                    IsUnAppraisedClientAskingPrice = table.Column<bool>(type: "bit", nullable: false),
+                    SalePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    EstimatedCommissionIncGST = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -491,7 +505,7 @@ namespace RE360.API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ExecutionId = table.Column<int>(type: "int", nullable: false),
                     ClientId = table.Column<int>(type: "int", nullable: false),
-                    SignatureOfClient = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    SignatureOfClientName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
