@@ -22,6 +22,6 @@ namespace RE360.API.Domain
         Task<APIResponseModel> GetPropertyList(Guid agentID);
         Task<APIResponseModel> DelteEstimateByID(int ID);
         Task<APIResponseModel> AddExecutionDetails(SignaturesOfClientViewModel model);
-
+        Task<APIResponseModel> GetParticulars();
     }
 }

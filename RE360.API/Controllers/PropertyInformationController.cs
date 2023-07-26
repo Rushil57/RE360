@@ -162,5 +162,14 @@ namespace RE360.API.Controllers
             var result = await _propertyInformationRepository.DelteEstimateByID(id);
             return Ok(result);
         }
+
+        [HttpGet]
+        [Route("GetList")]
+        public async Task<IActionResult> GetParticulars()
+        {
+
+            var result = await _propertyInformationRepository.GetParticulars();
+            return Ok(result);
+        }
     }
 }

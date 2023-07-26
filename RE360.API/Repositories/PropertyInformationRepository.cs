@@ -7,6 +7,7 @@ using RE360.API.Domain;
 using RE360.API.Models;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 
 namespace RE360.API.Repositories
 {
@@ -598,6 +599,27 @@ namespace RE360.API.Repositories
             catch (Exception ex)
             {
                 return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
+            }
+        }
+
+        public async Task<APIResponseModel> GetParticulars()
+        {
+            try
+            {
+
+                var result = (from p in _context.PropertyAttributeType
+                              select new
+                              {
+                                  Name=p.Name,
+                                  list=p.PropertyAttribute.ToList()
+                              }).ToList();
+
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = result };
+            }
+            catch (Exception ex)
+            {
+
+                throw;
             }
         }
     }
