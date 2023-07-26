@@ -427,7 +427,23 @@ namespace RE360.API.Repositories
                 var clientDetailsList = _context.ClientDetail.Where(x => x.PID == id).ToList();
                 var propertyInformationsList = _context.PropertyInformation.Where(x => x.PID == id).ToList();
                 var estimatesList = _context.Estimates.Where(x => x.PID == id).ToList();
-
+                var SignaturesOfClientList = _context.SignaturesOfClient.Where(x => x.PID == id).ToList();
+                var execution = _context.Execution.Where(x => x.PID == id).FirstOrDefault();
+                if (execution != null)
+                {
+                    if (!string.IsNullOrEmpty(execution.SignedOnBehalfOfTheAgent))
+                    {
+                        execution.SignedOnBehalfOfTheAgent = _configuration["BlobStorageSettings:ImagesPath"].ToString() + execution.SignedOnBehalfOfTheAgent + _configuration["BlobStorageSettings:ImageToken"].ToString();
+                    }
+                    if (!string.IsNullOrEmpty(execution.AgentToSignHere))
+                    {
+                        execution.AgentToSignHere = _configuration["BlobStorageSettings:ImagesPath"].ToString() + execution.AgentToSignHere + _configuration["BlobStorageSettings:ImageToken"].ToString();
+                    }
+                }
+                foreach (var item in SignaturesOfClientList)
+                {
+                    item.SignatureOfClientName = _configuration["BlobStorageSettings:ImagesPath"].ToString() + item.SignatureOfClientName + _configuration["BlobStorageSettings:ImageToken"].ToString();
+                }
                 var listingAddressList = (from l in _context.ListingAddress
                                           join cod in _context.ContractDetail
                                           on l.ID equals cod.PID into contractdetail
@@ -438,9 +454,6 @@ namespace RE360.API.Repositories
                                           join esti in _context.Estimates
                                           on l.ID equals esti.PID into estimate
                                           from est in estimate.DefaultIfEmpty()
-                                          join exec in _context.Execution
-                                          on l.ID equals exec.PID into execution
-                                          from exe in execution.DefaultIfEmpty()
                                           join led in _context.LegalDetail
                                           on l.ID equals led.PID into legalDetail
                                           from ld in legalDetail.DefaultIfEmpty()
@@ -482,7 +495,8 @@ namespace RE360.API.Repositories
                                               priorAgencyMarketing = pam,
                                               estimates = estimatesList,
                                               estimatesDetail= etd,
-                                              execution = exe
+                                              execution = execution,
+                                              signaturesOfClient= SignaturesOfClientList
                                           }).FirstOrDefault();
 
 
