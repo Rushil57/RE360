@@ -132,24 +132,35 @@ namespace RE360.API.Repositories
             }
         }
 
-        public async Task<APIResponseModel> AddSolicitorDetail(SolicitorDetailViewModel model)
+        public async Task<APIResponseModel> AddSolicitorDetail(SolicitorDetailListViewModel model)
         {
             try
             {
-                var solicitorDetail = _mapper.Map<SolicitorDetail>(model);
+                var solicitorDetail = _mapper.Map<List<SolicitorDetail>>(model.SolicitorDetail);
 
-                if (solicitorDetail.ID > 0)
+                var updateList = solicitorDetail.Where(x => x.ID > 0).ToList();
+                model.SolicitorDetail = new List<SolicitorDetailViewModel>();
+                if (updateList.Count > 0)
                 {
-                    _context.SolicitorDetail.Update(solicitorDetail);
+                    _context.SolicitorDetail.UpdateRange(updateList);
+                    _context.SaveChanges();
+                    var update = _mapper.Map<List<SolicitorDetailViewModel>>(updateList);
+                    model.SolicitorDetail.AddRange(update);
                 }
-                else
-                {
-                    _context.SolicitorDetail.Add(solicitorDetail);
-                }
-                _context.SaveChanges();
 
-                var solicitorDetailVM = _mapper.Map<SolicitorDetailViewModel>(solicitorDetail);
-                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = solicitorDetailVM };
+                var addList = solicitorDetail.Where(x => x.ID == 0).ToList();
+
+                if (addList.Count > 0)
+                {
+                    _context.SolicitorDetail.AddRange(addList);
+                    _context.SaveChanges();
+                    var add = _mapper.Map<List<SolicitorDetailViewModel>>(addList);
+                    model.SolicitorDetail.AddRange(add);
+                }
+                
+
+                
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = model };
             }
             catch (Exception ex)
             {
@@ -428,7 +439,8 @@ namespace RE360.API.Repositories
                 var clientDetailsList = _context.ClientDetail.Where(x => x.PID == id).ToList();
                 var propertyInformationsList = _context.PropertyInformation.Where(x => x.PID == id).ToList();
                 var estimatesList = _context.Estimates.Where(x => x.PID == id).ToList();
-                var SignaturesOfClientList = _context.SignaturesOfClient.Where(x => x.PID == id).ToList();
+                var signaturesOfClientList = _context.SignaturesOfClient.Where(x => x.PID == id).ToList();
+                var solicitorList = _context.SolicitorDetail.Where(x => x.PID == id).ToList();
                 var execution = _context.Execution.Where(x => x.PID == id).FirstOrDefault();
                 if (execution != null)
                 {
@@ -441,7 +453,7 @@ namespace RE360.API.Repositories
                         execution.AgentToSignHere = _configuration["BlobStorageSettings:ImagesPath"].ToString() + execution.AgentToSignHere + _configuration["BlobStorageSettings:ImageToken"].ToString();
                     }
                 }
-                foreach (var item in SignaturesOfClientList)
+                foreach (var item in signaturesOfClientList)
                 {
                     item.SignatureOfClientName = _configuration["BlobStorageSettings:ImagesPath"].ToString() + item.SignatureOfClientName + _configuration["BlobStorageSettings:ImageToken"].ToString();
                 }
@@ -470,9 +482,6 @@ namespace RE360.API.Repositories
                                           join prid in _context.PropertyInformationDetail
                                           on l.ID equals prid.PID into propertyInformationDetail
                                           from pid in propertyInformationDetail.DefaultIfEmpty()
-                                          join sod in _context.SolicitorDetail
-                                          on l.ID equals sod.PID into solicitorDetail
-                                          from sd in solicitorDetail.DefaultIfEmpty()
                                           join ted in _context.TenancyDetail
                                           on l.ID equals ted.PID into tenancyDetail
                                           from td in tenancyDetail.DefaultIfEmpty()
@@ -484,7 +493,7 @@ namespace RE360.API.Repositories
                                           {
                                               listingAddress = l,
                                               clientDetail = clientDetailsList,
-                                              solicitorDetail = sd,
+                                              solicitorDetail = solicitorList,
                                               particularDetail = pd,
                                               legalDetail = ld,
                                               contractDetail = cd,
@@ -497,7 +506,7 @@ namespace RE360.API.Repositories
                                               estimates = estimatesList,
                                               estimatesDetail= etd,
                                               execution = execution,
-                                              signaturesOfClient= SignaturesOfClientList
+                                              executionDetail = signaturesOfClientList
                                           }).FirstOrDefault();
 
 
@@ -602,7 +611,7 @@ namespace RE360.API.Repositories
             }
         }
 
-        public async Task<APIResponseModel> GetParticulars()
+        public async Task<APIResponseModel> GetList()
         {
             try
             {

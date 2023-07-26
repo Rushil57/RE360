@@ -8,7 +8,7 @@ namespace RE360.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class PropertyInformationController : ControllerBase
     {
         private readonly IPropertyInformationRepository _propertyInformationRepository;
@@ -76,7 +76,7 @@ namespace RE360.API.Controllers
 
         [HttpPost]
         [Route("AddSolicitorDetail")]
-        public async Task<IActionResult> AddSolicitorDetail([FromBody] SolicitorDetailViewModel model)
+        public async Task<IActionResult> AddSolicitorDetail([FromBody] SolicitorDetailListViewModel model)
         {
 
             var result = await _propertyInformationRepository.AddSolicitorDetail(model);
@@ -165,10 +165,10 @@ namespace RE360.API.Controllers
 
         [HttpGet]
         [Route("GetList")]
-        public async Task<IActionResult> GetParticulars()
+        public async Task<IActionResult> GetList()
         {
 
-            var result = await _propertyInformationRepository.GetParticulars();
+            var result = await _propertyInformationRepository.GetList();
             return Ok(result);
         }
     }

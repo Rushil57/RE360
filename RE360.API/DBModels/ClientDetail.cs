@@ -16,8 +16,12 @@ namespace RE360.API.DBModels
         public string? SurName { get; set; }
         public string? FirstName { get; set; }
         public string? Address { get; set; }
-        public bool IsSameAsListingAddress { get; set; }
+        public string? Unit { get; set; }
+        public string? Suburb { get; set; }
         public string? PostCode { get; set; }
+        public string? StreetNumber { get; set; }
+        public string? StreetName { get; set; }
+        public bool IsSameAsListingAddress { get; set; }
         public string? Home { get; set; }
         public string? Mobile { get; set; }
         public string? Business { get; set; }

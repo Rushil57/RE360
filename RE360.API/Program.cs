@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using AutoMapper;
 using RE360.API.Models;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -97,6 +98,7 @@ app.UseSwagger();
 app.UseSwaggerUI(c => {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "RS360 API V1");
     c.RoutePrefix = string.Empty;
+    c.DefaultModelsExpandDepth(-1);
 });
 
 app.UseHttpsRedirection();
