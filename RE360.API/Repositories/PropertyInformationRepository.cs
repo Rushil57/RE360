@@ -287,6 +287,7 @@ namespace RE360.API.Repositories
                 }
                 else
                 {
+                    execution.CreatedDate = DateTime.Now;
                     _context.Execution.Add(execution);
                 }
                
