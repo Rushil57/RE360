@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RE360.API.Migrations;
 using RE360.API.Models;
 
 namespace RE360.API.Domain
@@ -16,12 +17,20 @@ namespace RE360.API.Domain
         Task<APIResponseModel> AddExecution(ExecutionViewModel model);
         Task<APIResponseModel> AddMethodOfSale(MethodOfSaleViewModel model);
         Task<APIResponseModel> AddPriorAgencyMarketing(PriorAgencyMarketingViewModel model);
+        Task<APIResponseModel> AddCalculationOfCommission(CalculationOfCommissionViewModel model);
+        
         Task<APIResponseModel> AddTenancyDetail(TenancyDetailViewModel model);
 
         Task<APIResponseModel> AddPropertyInformation(PropertyViewModel model);
         Task<APIResponseModel> GetPropertyList(Guid agentID);
         Task<APIResponseModel> DelteEstimateByID(int ID);
+
         Task<APIResponseModel> AddExecutionDetails(SignaturesOfClientViewModel model);
         Task<APIResponseModel> GetList();
+        Task<APIResponseModel> DeleteClientByID(int ID);
+        Task<APIResponseModel> DeleteSolicitorByID(int ID);
+        Task<APIResponseModel> DeletePropertyByID(int ID);
+        
+
     }
 }

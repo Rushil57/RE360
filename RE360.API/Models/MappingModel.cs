@@ -55,6 +55,9 @@ namespace RE360.API.Models
 
             CreateMap<EstimatesDetail, EstimatesDetailViewModel>();
             CreateMap<EstimatesDetailViewModel, EstimatesDetail>();
+
+            CreateMap<CalculationOfCommission, CalculationOfCommissionViewModel>();
+            CreateMap<CalculationOfCommissionViewModel, CalculationOfCommission>();
         }
     }
 }

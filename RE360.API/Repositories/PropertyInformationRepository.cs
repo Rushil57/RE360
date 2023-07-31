@@ -70,7 +70,7 @@ namespace RE360.API.Repositories
                 _context.SaveChanges();
 
                 var clientDetailVM = _mapper.Map<List<ClientDetailViewModel>>(clientDetail);
-                model.ClientDetails= clientDetailVM;
+                model.ClientDetails = clientDetailVM;
                 return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = model };
 
             }
@@ -157,9 +157,9 @@ namespace RE360.API.Repositories
                     var add = _mapper.Map<List<SolicitorDetailViewModel>>(addList);
                     model.SolicitorDetail.AddRange(add);
                 }
-                
 
-                
+
+
                 return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = model };
             }
             catch (Exception ex)
@@ -216,9 +216,9 @@ namespace RE360.API.Repositories
         {
             try
             {
-                EstimateViewModel estimateViewModel= new EstimateViewModel();
-                var estimateDetail= _mapper.Map<EstimatesDetail>(model.EstimatesDetail);
-                if(estimateDetail.ID > 0)
+                EstimateViewModel estimateViewModel = new EstimateViewModel();
+                var estimateDetail = _mapper.Map<EstimatesDetail>(model.EstimatesDetail);
+                if (estimateDetail.ID > 0)
                 {
                     _context.EstimatesDetail.Update(estimateDetail);
                 }
@@ -240,13 +240,13 @@ namespace RE360.API.Repositories
                     estimateViewModel.Estimates.AddRange(listEstimate);
                 }
 
-                var estimateAdd = estimates.Where(x => x.ID== 0).ToList();
+                var estimateAdd = estimates.Where(x => x.ID == 0).ToList();
 
                 if (estimateAdd.Count > 0)
                 {
                     _context.Estimates.AddRange(estimateAdd);
                     _context.SaveChanges();
-                    var listEstimate= _mapper.Map<List<EstimatesViewModel>>(estimateAdd);
+                    var listEstimate = _mapper.Map<List<EstimatesViewModel>>(estimateAdd);
                     estimateViewModel.Estimates.AddRange(listEstimate);
                 }
 
@@ -263,23 +263,23 @@ namespace RE360.API.Repositories
             try
             {
 
-				if (model.SignedOnBehalfOfTheAgentFile != null)
-				{
-					if (model.SignedOnBehalfOfTheAgentFile.Length > 0)
-					{
-                        model.SignedOnBehalfOfTheAgent  = await common.UploadBlobFile(model.SignedOnBehalfOfTheAgentFile, "images");
+                if (model.SignedOnBehalfOfTheAgentFile != null)
+                {
+                    if (model.SignedOnBehalfOfTheAgentFile.Length > 0)
+                    {
+                        model.SignedOnBehalfOfTheAgent = await common.UploadBlobFile(model.SignedOnBehalfOfTheAgentFile, "images");
                     }
-				}
+                }
 
-				if (model.AgentToSignHereFile != null)
-				{
-					if (model.AgentToSignHereFile.Length > 0)
-					{
+                if (model.AgentToSignHereFile != null)
+                {
+                    if (model.AgentToSignHereFile.Length > 0)
+                    {
                         model.AgentToSignHere = await common.UploadBlobFile(model.AgentToSignHereFile, "images");
                     }
-				}
+                }
 
-				var execution = _mapper.Map<Execution>(model);
+                var execution = _mapper.Map<Execution>(model);
 
                 if (execution.ID > 0)
                 {
@@ -290,7 +290,7 @@ namespace RE360.API.Repositories
                     execution.CreatedDate = DateTime.Now;
                     _context.Execution.Add(execution);
                 }
-               
+
                 _context.SaveChanges();
 
                 if (!string.IsNullOrEmpty(execution.SignedOnBehalfOfTheAgent))
@@ -351,6 +351,30 @@ namespace RE360.API.Repositories
 
                 var priorAgencyMarketingVM = _mapper.Map<PriorAgencyMarketingViewModel>(priorAgencyMarketing);
                 return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = priorAgencyMarketingVM };
+            }
+            catch (Exception ex)
+            {
+                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
+            }
+        }
+
+        public async Task<APIResponseModel> AddCalculationOfCommission(CalculationOfCommissionViewModel model)
+        {
+            try
+            {
+                var CalculationOfCommission = _mapper.Map<CalculationOfCommission>(model);
+                if (CalculationOfCommission.ID > 0)
+                {
+                    _context.CalculationOfCommission.Update(CalculationOfCommission);
+                }
+                else
+                {
+                    _context.CalculationOfCommission.Add(CalculationOfCommission);
+                }
+                _context.SaveChanges();
+
+                var CalculationOfCommissionVM = _mapper.Map<CalculationOfCommissionViewModel>(CalculationOfCommission);
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = CalculationOfCommissionVM };
             }
             catch (Exception ex)
             {
@@ -505,7 +529,7 @@ namespace RE360.API.Repositories
                                               tenancyDetail = td,
                                               priorAgencyMarketing = pam,
                                               estimates = estimatesList,
-                                              estimatesDetail= etd,
+                                              estimatesDetail = etd,
                                               execution = execution,
                                               executionDetail = signaturesOfClientList
                                           }).FirstOrDefault();
@@ -528,7 +552,7 @@ namespace RE360.API.Repositories
                                           join ca in _context.ClientDetail
                                           on a.ID equals ca.PID into listAdd
                                           from cd in listAdd.DefaultIfEmpty()
-                                          join e in _context.Execution 
+                                          join e in _context.Execution
                                           on a.ID equals e.PID into cliDetail
                                           from exe in cliDetail.DefaultIfEmpty()
                                           where (a.AgentID == agentID)
@@ -537,11 +561,11 @@ namespace RE360.API.Repositories
                                               Id = a.ID,
                                               address = a.Address + "," + a.Unit + " ," + a.Suburb + " ," + a.PostCode + " ," + a.StreetNumber + " ," + a.StreetName,
                                               clientName = cd.Title + " " + cd.SurName + " " + cd.FirstName,
-                                              companyTrustName= cd.CompanyTrustName,
+                                              companyTrustName = cd.CompanyTrustName,
                                               Date = exe.CreatedDate == null ? "In Progress" : exe.CreatedDate.ToString()
                                           }).GroupBy(m => new { m.Id }).Select(group => group.First()).ToList();
 
-                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = listingAddressList };
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = listingAddressList.OrderByDescending(o => o.Id) };
             }
             catch (Exception ex)
             {
@@ -602,7 +626,7 @@ namespace RE360.API.Repositories
                 {
                     signaturesOfClient.SignatureOfClientName = _configuration["BlobStorageSettings:ImagesPath"].ToString() + signaturesOfClient.SignatureOfClientName + _configuration["BlobStorageSettings:ImageToken"].ToString();
                 }
-                
+
                 var signaturesOfClientViewModel = _mapper.Map<SignaturesOfClientViewModel>(signaturesOfClient);
                 return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = signaturesOfClientViewModel };
             }
@@ -620,8 +644,8 @@ namespace RE360.API.Repositories
                 var result = (from p in _context.PropertyAttributeType
                               select new
                               {
-                                  Name=p.Name,
-                                  list=p.PropertyAttribute.ToList()
+                                  Name = p.Name,
+                                  list = p.PropertyAttribute.ToList()
                               }).ToList();
 
                 return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = result };
@@ -632,5 +656,91 @@ namespace RE360.API.Repositories
                 throw;
             }
         }
+
+        public async Task<APIResponseModel> DeleteClientByID(int ID)
+        {
+            try
+            {
+                var execution = _context.ClientDetail.Where(x => x.ID == ID).FirstOrDefault();
+                if (execution != null)
+                {
+                    _context.ClientDetail.Remove(execution);
+                    _context.SaveChanges();
+                    return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success" };
+                }
+                else
+                {
+                    return new APIResponseModel { StatusCode = StatusCodes.Status400BadRequest, Message = "Please enter valid id." };
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
+            }
+        }
+
+        public async Task<APIResponseModel> DeleteSolicitorByID(int ID)
+        {
+            try
+            {
+                var execution = _context.SolicitorDetail.Where(x => x.ID == ID).FirstOrDefault();
+                if (execution != null)
+                {
+                    _context.SolicitorDetail.Remove(execution);
+                    _context.SaveChanges();
+                    return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success" };
+                }
+                else
+                {
+                    return new APIResponseModel { StatusCode = StatusCodes.Status400BadRequest, Message = "Please enter valid id." };
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
+            }
+        }
+        public async Task<APIResponseModel> DeletePropertyByID(int ID)
+        {
+            try
+            {
+                var execution = _context.ListingAddress.Where(x => x.ID == ID).FirstOrDefault();
+                if (execution != null)
+                {
+                    _context.ListingAddress.Remove(execution);
+                    _context.ClientDetail.RemoveRange(_context.ClientDetail.Where(x => x.PID == ID));
+                    _context.LegalDetail.Remove(_context.LegalDetail.Where(x => x.PID == ID).FirstOrDefault());
+                    _context.ParticularDetail.Remove(_context.ParticularDetail.Where(x => x.PID == ID).FirstOrDefault());
+                    _context.SolicitorDetail.RemoveRange(_context.SolicitorDetail.Where(x => x.PID == ID));
+                    _context.ContractDetail.Remove(_context.ContractDetail.Where(x => x.PID == ID).FirstOrDefault());
+                    _context.ContractRate.Remove(_context.ContractRate.Where(x => x.PID == ID).FirstOrDefault());
+                    _context.EstimatesDetail.Remove(_context.EstimatesDetail.Where(x => x.PID == ID).FirstOrDefault());
+                    _context.Estimates.RemoveRange(_context.Estimates.Where(x => x.PID == ID));
+                    _context.Execution.RemoveRange(_context.Execution.Where(x => x.PID == ID));
+                    _context.MethodOfSale.Remove(_context.MethodOfSale.Where(x => x.PID == ID).FirstOrDefault());
+                    _context.PriorAgencyMarketing.Remove(_context.PriorAgencyMarketing.Where(x => x.PID == ID).FirstOrDefault());
+                    _context.CalculationOfCommission.Remove(_context.CalculationOfCommission.Where(x => x.PID == ID).FirstOrDefault());
+                    _context.TenancyDetail.Remove(_context.TenancyDetail.Where(x => x.PID == ID).FirstOrDefault());
+                    _context.PropertyInformation.RemoveRange(_context.PropertyInformation.Where(x => x.PID == ID));
+                    _context.PropertyInformationDetail.Remove(_context.PropertyInformationDetail.Where(x => x.PID == ID).FirstOrDefault());
+                    _context.SignaturesOfClient.RemoveRange(_context.SignaturesOfClient.Where(x => x.PID == ID));
+                    _context.SaveChanges();
+
+                    return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success" };
+                }
+                else
+                {
+                    return new APIResponseModel { StatusCode = StatusCodes.Status400BadRequest, Message = "Please enter valid id." };
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
+            }
+        }
+
     }
 }

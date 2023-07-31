@@ -138,6 +138,14 @@ namespace RE360.API.Controllers
         }
 
         [HttpPost]
+        [Route("AddCalculationOfCommission")]
+        public async Task<IActionResult> AddCalculationOfCommission([FromBody] CalculationOfCommissionViewModel model)
+        {
+            var result = await _propertyInformationRepository.AddCalculationOfCommission(model);
+            return Ok(result);
+        }
+
+        [HttpPost]
         [Route("AddTenancyDetail")]
         public async Task<IActionResult> AddTenancyDetail([FromBody] TenancyDetailViewModel model)
         {
@@ -169,6 +177,30 @@ namespace RE360.API.Controllers
         {
 
             var result = await _propertyInformationRepository.GetList();
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("DeleteClientByID")]
+        public async Task<IActionResult> DeleteClientByID(int id)
+        {
+            var result = await _propertyInformationRepository.DeleteClientByID(id);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("DeleteSolicitorByID")]
+        public async Task<IActionResult> DeleteSolicitorByID(int id)
+        {
+            var result = await _propertyInformationRepository.DeleteSolicitorByID(id);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("DeletePropertyByID")]
+        public async Task<IActionResult> DeletePropertyByID(int pid)
+        {
+            var result = await _propertyInformationRepository.DeletePropertyByID(pid);
             return Ok(result);
         }
     }
