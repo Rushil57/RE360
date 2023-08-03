@@ -1,6 +1,14 @@
 ﻿
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using iTextSharp.tool.xml.css;
+using iTextSharp.tool.xml.html;
+using iTextSharp.tool.xml.parser;
+using iTextSharp.tool.xml.pipeline.css;
+using iTextSharp.tool.xml.pipeline.end;
+using iTextSharp.tool.xml.pipeline.html;
+using iTextSharp.tool.xml;
+using System.Text;
 
 namespace RE360.API.Common
 {
@@ -63,6 +71,49 @@ namespace RE360.API.Common
     }
     public class PDFHelper
     {
-       
+        public void GeneratePDF(string html, string CSS)
+        {
+            try
+            {
+                string filePath = @"D:\Projects\RE360\RE360\RE360.API\Document\test.pdf";
+                if (System.IO.File.Exists(filePath))
+                    System.IO.File.Delete(filePath);
+
+                using (var doc = new Document(PageSize.A4))
+                {
+                    var writer = PdfWriter.GetInstance(doc, new FileStream(filePath, FileMode.Create));
+                    writer.PageEvent = new PdfFooter();
+                    doc.Open();
+
+                    var tagProcessors = (DefaultTagProcessorFactory)Tags.GetHtmlTagProcessorFactory();
+                    tagProcessors.RemoveProcessor(HTML.Tag.IMG); // remove the default processor
+                    tagProcessors.AddProcessor(HTML.Tag.IMG, new CustomImageTagProcessor()); // use our new processor
+                    CssFilesImpl cssFiles = new CssFilesImpl();
+                    cssFiles.Add(XMLWorkerHelper.GetInstance().GetDefaultCSS());
+                    var cssResolver = new StyleAttrCSSResolver(cssFiles);
+                    cssResolver.AddCss(CSS, "utf-8", true);
+                    var charset = Encoding.UTF8;
+                    var hpc = new HtmlPipelineContext(new CssAppliersImpl(new XMLWorkerFontProvider()));
+                    hpc.SetAcceptUnknown(true).AutoBookmark(true).SetTagFactory(tagProcessors); // inject the tagProcessors
+                    var htmlPipeline = new HtmlPipeline(hpc, new PdfWriterPipeline(doc, writer));
+                    var pipeline = new CssResolverPipeline(cssResolver, htmlPipeline);
+                    var worker = new XMLWorker(pipeline, true);
+                    var xmlParser = new XMLParser(true, worker, charset);
+                    xmlParser.Parse(new StringReader(html));
+                }
+                //Process.Start("test.pdf");
+
+                //var p = new Process();
+                //p.StartInfo = new ProcessStartInfo(@"test.pdf")
+                //{
+                //    UseShellExecute = true
+                //};
+                //p.Start();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

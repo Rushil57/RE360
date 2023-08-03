@@ -849,50 +849,10 @@ namespace RE360.API.Repositories
                 //                     executionDetail = signaturesOfClientList
                 //                 }).FirstOrDefault();
 
-                try
-                {
-                    string filePath = @"D:\Projects\RE360\RE360\RE360.API\test.pdf";
-                    if (System.IO.File.Exists(filePath))
-                        System.IO.File.Delete(filePath);
-
-                    using (var doc = new Document(PageSize.A4))
-                    {
-                        var writer = PdfWriter.GetInstance(doc, new FileStream(filePath, FileMode.Create));
-                        writer.PageEvent = new PdfFooter();
-                        doc.Open();
-
-                        var html = System.IO.File.ReadAllText(@"D:/Projects/RE360/RE360/RE360.API/Document/htmlpage.html");
-                        var CSS = System.IO.File.ReadAllText(@"D:/Projects/RE360/RE360/RE360.API/Document/StyleSheet.css");
-
-                        var tagProcessors = (DefaultTagProcessorFactory)Tags.GetHtmlTagProcessorFactory();
-                        tagProcessors.RemoveProcessor(HTML.Tag.IMG); // remove the default processor
-                        tagProcessors.AddProcessor(HTML.Tag.IMG, new CustomImageTagProcessor()); // use our new processor
-                        CssFilesImpl cssFiles = new CssFilesImpl();
-                        cssFiles.Add(XMLWorkerHelper.GetInstance().GetDefaultCSS());
-                        var cssResolver = new StyleAttrCSSResolver(cssFiles);
-                        cssResolver.AddCss(CSS, "utf-8", true);
-                        var charset = Encoding.UTF8;
-                        var hpc = new HtmlPipelineContext(new CssAppliersImpl(new XMLWorkerFontProvider()));
-                        hpc.SetAcceptUnknown(true).AutoBookmark(true).SetTagFactory(tagProcessors); // inject the tagProcessors
-                        var htmlPipeline = new HtmlPipeline(hpc, new PdfWriterPipeline(doc, writer));
-                        var pipeline = new CssResolverPipeline(cssResolver, htmlPipeline);
-                        var worker = new XMLWorker(pipeline, true);
-                        var xmlParser = new XMLParser(true, worker, charset);
-                        xmlParser.Parse(new StringReader(html));
-                    }
-                    //Process.Start("test.pdf");
-
-                    //var p = new Process();
-                    //p.StartInfo = new ProcessStartInfo(@"test.pdf")
-                    //{
-                    //    UseShellExecute = true
-                    //};
-                    //p.Start();
-                }
-                catch (Exception ex)
-                {
-                    throw;
-                }
+                var html = System.IO.File.ReadAllText(@"D:/Projects/RE360/RE360/RE360.API/Document/htmlpage.html");
+                var CSS = System.IO.File.ReadAllText(@"D:/Projects/RE360/RE360/RE360.API/Document/StyleSheet.css");
+                PDFHelper pDFHelper = new PDFHelper();
+                pDFHelper.GeneratePDF(html, CSS);
                 return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success" };
             }
             catch (Exception ex)
