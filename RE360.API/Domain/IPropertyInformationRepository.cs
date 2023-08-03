@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RE360.API.Auth;
 using RE360.API.Migrations;
 using RE360.API.Models;
 
@@ -30,7 +31,7 @@ namespace RE360.API.Domain
         Task<APIResponseModel> DeleteClientByID(int ID);
         Task<APIResponseModel> DeleteSolicitorByID(int ID);
         Task<APIResponseModel> DeletePropertyByID(int ID);
-        
+        Task<APIResponseModel> GeneratePDF(int ID);
 
     }
 }

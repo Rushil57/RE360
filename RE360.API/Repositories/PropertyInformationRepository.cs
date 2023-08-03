@@ -1,5 +1,15 @@
 ﻿using AutoMapper;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.tool.xml.css;
+using iTextSharp.tool.xml.html;
+using iTextSharp.tool.xml.parser;
+using iTextSharp.tool.xml.pipeline.css;
+using iTextSharp.tool.xml.pipeline.end;
+using iTextSharp.tool.xml.pipeline.html;
+using iTextSharp.tool.xml;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using RE360.API.Auth;
 using RE360.API.Common;
 using RE360.API.DBModels;
@@ -7,6 +17,7 @@ using RE360.API.Domain;
 using RE360.API.Models;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace RE360.API.Repositories
@@ -410,31 +421,33 @@ namespace RE360.API.Repositories
         {
             try
             {
-                var propertyInformationViewModel = model.PropertyInformationViewModel;
-                var propertyInformation = _mapper.Map<List<PropertyInformation>>(propertyInformationViewModel);
-                var ID = propertyInformation[0].ID;
-                if (ID > 0)
+                if (model.PropertyInformationViewModel.Count > 0)
                 {
-                    var PID = propertyInformation[0].PID;
-                    var propertyInformationList = _context.PropertyInformation.Where(x => x.PID == PID).ToList();
-                    if (propertyInformationList.Count > 0)
+                    var propertyInformationViewModel = model.PropertyInformationViewModel;
+                    var propertyInformation = _mapper.Map<List<PropertyInformation>>(propertyInformationViewModel);
+                    var ID = propertyInformation[0].ID;
+                    if (ID > 0)
                     {
-                        _context.PropertyInformation.RemoveRange(propertyInformationList);
-                        await _context.SaveChangesAsync();
+                        var PID = propertyInformation[0].PID;
+                        var propertyInformationList = _context.PropertyInformation.Where(x => x.PID == PID).ToList();
+                        if (propertyInformationList.Count > 0)
+                        {
+                            _context.PropertyInformation.RemoveRange(propertyInformationList);
+                            await _context.SaveChangesAsync();
+                        }
                     }
+                    foreach (var item in propertyInformation)
+                    {
+                        item.ID = 0;
+                    }
+
+                    _context.PropertyInformation.AddRange(propertyInformation);
+                    await _context.SaveChangesAsync();
+
+                    var propertyInformationVM = _mapper.Map<List<PropertyInformationViewModel>>(propertyInformation);
+
+                    model.PropertyInformationViewModel = propertyInformationVM;
                 }
-                foreach (var item in propertyInformation)
-                {
-                    item.ID = 0;
-                }
-
-                _context.PropertyInformation.AddRange(propertyInformation);
-                await _context.SaveChangesAsync();
-
-                var propertyInformationVM = _mapper.Map<List<PropertyInformationViewModel>>(propertyInformation);
-
-                model.PropertyInformationViewModel = propertyInformationVM;
-
                 var propertyInformationDetailViewModel = model.PropertyInformationDetailViewModel;
                 var propertyInformationDetail = _mapper.Map<PropertyInformationDetail>(propertyInformationDetailViewModel);
                 if (propertyInformationDetail.ID > 0)
@@ -513,6 +526,9 @@ namespace RE360.API.Repositories
                                           join etdl in _context.EstimatesDetail
                                           on l.ID equals etdl.PID into estimatesDetail
                                           from etd in estimatesDetail.DefaultIfEmpty()
+                                          join calc in _context.CalculationOfCommission
+                                          on l.ID equals calc.PID into CalcOfCommission
+                                          from calc in CalcOfCommission.DefaultIfEmpty()
                                           where l.ID == id
                                           select new
                                           {
@@ -531,8 +547,10 @@ namespace RE360.API.Repositories
                                               estimates = estimatesList,
                                               estimatesDetail = etd,
                                               execution = execution,
-                                              executionDetail = signaturesOfClientList
+                                              executionDetail = signaturesOfClientList,
+                                              calculationOfcommission = calc
                                           }).FirstOrDefault();
+
 
 
                 return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = listingAddressList };
@@ -559,7 +577,12 @@ namespace RE360.API.Repositories
                                           select new
                                           {
                                               Id = a.ID,
-                                              address = a.Address + "," + a.Unit + " ," + a.Suburb + " ," + a.PostCode + " ," + a.StreetNumber + " ," + a.StreetName,
+                                              address = a.Address,
+                                              Unit = a.Unit,
+                                              Suburb = a.Suburb,
+                                              PostCode = a.PostCode,
+                                              StreetNumber = a.StreetNumber,
+                                              StreetName = a.StreetName,
                                               clientName = cd.Title + " " + cd.SurName + " " + cd.FirstName,
                                               companyTrustName = cd.CompanyTrustName,
                                               Date = exe.CreatedDate == null ? "In Progress" : exe.CreatedDate.ToString()
@@ -742,5 +765,141 @@ namespace RE360.API.Repositories
             }
         }
 
+        public async Task<APIResponseModel> GeneratePDF(int id)
+        {
+            try
+            {
+                //var PropertyAttrList = (from p in _context.PropertyAttributeType
+                //                        select new
+                //                        {
+                //                            Name = p.Name,
+                //                            list = p.PropertyAttribute.ToList()
+                //                        }).ToList();
+
+                //var clientDetailsList = _context.ClientDetail.Where(x => x.PID == id).ToList();
+                //var propertyInformationsList = _context.PropertyInformation.Where(x => x.PID == id).ToList();
+                //var estimatesList = _context.Estimates.Where(x => x.PID == id).ToList();
+                //var signaturesOfClientList = _context.SignaturesOfClient.Where(x => x.PID == id).ToList();
+                //var solicitorList = _context.SolicitorDetail.Where(x => x.PID == id).ToList();
+                //var execution = _context.Execution.Where(x => x.PID == id).FirstOrDefault();
+                //if (execution != null)
+                //{
+                //    if (!string.IsNullOrEmpty(execution.SignedOnBehalfOfTheAgent))
+                //    {
+                //        execution.SignedOnBehalfOfTheAgent = _configuration["BlobStorageSettings:ImagesPath"].ToString() + execution.SignedOnBehalfOfTheAgent + _configuration["BlobStorageSettings:ImageToken"].ToString();
+                //    }
+                //    if (!string.IsNullOrEmpty(execution.AgentToSignHere))
+                //    {
+                //        execution.AgentToSignHere = _configuration["BlobStorageSettings:ImagesPath"].ToString() + execution.AgentToSignHere + _configuration["BlobStorageSettings:ImageToken"].ToString();
+                //    }
+                //}
+                //foreach (var item in signaturesOfClientList)
+                //{
+                //    item.SignatureOfClientName = _configuration["BlobStorageSettings:ImagesPath"].ToString() + item.SignatureOfClientName + _configuration["BlobStorageSettings:ImageToken"].ToString();
+                //}
+                //var FinalList = (from l in _context.ListingAddress
+                //                 join cod in _context.ContractDetail
+                //                 on l.ID equals cod.PID into contractdetail
+                //                 from cd in contractdetail.DefaultIfEmpty()
+                //                 join cor in _context.ContractRate
+                //                 on l.ID equals cor.PID into contractRate
+                //                 from cr in contractRate.DefaultIfEmpty()
+                //                 join esti in _context.Estimates
+                //                 on l.ID equals esti.PID into estimate
+                //                 from est in estimate.DefaultIfEmpty()
+                //                 join led in _context.LegalDetail
+                //                 on l.ID equals led.PID into legalDetail
+                //                 from ld in legalDetail.DefaultIfEmpty()
+                //                 join meos in _context.MethodOfSale
+                //                 on l.ID equals meos.PID into methodOfSale
+                //                 from mos in methodOfSale.DefaultIfEmpty()
+                //                 join pad in _context.ParticularDetail
+                //                 on l.ID equals pad.PID into particularDetail
+                //                 from pd in particularDetail.DefaultIfEmpty()
+                //                 join pram in _context.PriorAgencyMarketing
+                //                 on l.ID equals pram.PID into priorAgencyMarketing
+                //                 from pam in priorAgencyMarketing.DefaultIfEmpty()
+                //                 join prid in _context.PropertyInformationDetail
+                //                 on l.ID equals prid.PID into propertyInformationDetail
+                //                 from pid in propertyInformationDetail.DefaultIfEmpty()
+                //                 join ted in _context.TenancyDetail
+                //                 on l.ID equals ted.PID into tenancyDetail
+                //                 from td in tenancyDetail.DefaultIfEmpty()
+                //                 join etdl in _context.EstimatesDetail
+                //                 on l.ID equals etdl.PID into estimatesDetail
+                //                 from etd in estimatesDetail.DefaultIfEmpty()
+                //                 where l.ID == id
+                //                 select new
+                //                 {
+                //                     listingAddress = l,
+                //                     clientDetail = clientDetailsList,
+                //                     solicitorDetail = solicitorList,
+                //                     particularDetail = pd,
+                //                     legalDetail = ld,
+                //                     contractDetail = cd,
+                //                     contractRate = cr,
+                //                     methodOfSale = mos,
+                //                     propertyInformation = propertyInformationsList,
+                //                     propertyInformationDetail = pid,
+                //                     tenancyDetail = td,
+                //                     priorAgencyMarketing = pam,
+                //                     estimates = estimatesList,
+                //                     estimatesDetail = etd,
+                //                     execution = execution,
+                //                     executionDetail = signaturesOfClientList
+                //                 }).FirstOrDefault();
+
+                try
+                {
+                    string filePath = @"D:\Projects\RE360\RE360\RE360.API\test.pdf";
+                    if (System.IO.File.Exists(filePath))
+                        System.IO.File.Delete(filePath);
+
+                    using (var doc = new Document(PageSize.A4))
+                    {
+                        var writer = PdfWriter.GetInstance(doc, new FileStream(filePath, FileMode.Create));
+                        writer.PageEvent = new PdfFooter();
+                        doc.Open();
+
+                        var html = System.IO.File.ReadAllText(@"D:/Projects/RE360/RE360/RE360.API/Document/htmlpage.html");
+                        var CSS = System.IO.File.ReadAllText(@"D:/Projects/RE360/RE360/RE360.API/Document/StyleSheet.css");
+
+                        var tagProcessors = (DefaultTagProcessorFactory)Tags.GetHtmlTagProcessorFactory();
+                        tagProcessors.RemoveProcessor(HTML.Tag.IMG); // remove the default processor
+                        tagProcessors.AddProcessor(HTML.Tag.IMG, new CustomImageTagProcessor()); // use our new processor
+                        CssFilesImpl cssFiles = new CssFilesImpl();
+                        cssFiles.Add(XMLWorkerHelper.GetInstance().GetDefaultCSS());
+                        var cssResolver = new StyleAttrCSSResolver(cssFiles);
+                        cssResolver.AddCss(CSS, "utf-8", true);
+                        var charset = Encoding.UTF8;
+                        var hpc = new HtmlPipelineContext(new CssAppliersImpl(new XMLWorkerFontProvider()));
+                        hpc.SetAcceptUnknown(true).AutoBookmark(true).SetTagFactory(tagProcessors); // inject the tagProcessors
+                        var htmlPipeline = new HtmlPipeline(hpc, new PdfWriterPipeline(doc, writer));
+                        var pipeline = new CssResolverPipeline(cssResolver, htmlPipeline);
+                        var worker = new XMLWorker(pipeline, true);
+                        var xmlParser = new XMLParser(true, worker, charset);
+                        xmlParser.Parse(new StringReader(html));
+                    }
+                    //Process.Start("test.pdf");
+
+                    //var p = new Process();
+                    //p.StartInfo = new ProcessStartInfo(@"test.pdf")
+                    //{
+                    //    UseShellExecute = true
+                    //};
+                    //p.Start();
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success" };
+            }
+            catch (Exception ex)
+            {
+
+                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
+            }
+        }
     }
 }

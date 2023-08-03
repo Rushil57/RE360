@@ -14,7 +14,7 @@ namespace RE360.API.DBModels
         public DateTime? SignedOnBehalfOfTheAgentDate { get; set; }
         public string? SignedOnBehalfOfTheAgentTime { get; set; }
         public string? AgentToSignHere { get; set; }
-        public string? AgentToSignHereDate { get; set; }
+        public DateTime? AgentToSignHereDate { get; set; }
         public List<SignaturesOfClient> SignaturesOfClient { get; set; }
 
     }

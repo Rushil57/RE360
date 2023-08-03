@@ -1,0 +1,51 @@
+﻿table {
+    <!-- border: 1px solid black; -->
+}
+
+.tablecls {
+    border: 1px solid black;
+}
+
+.ipDiv {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    border: 1px thin black;
+    background-color: lavender;
+    font-size: 10px;
+}
+
+span {
+    font-size: 10px;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+ /*   width: 50%;*/
+    /* background-color: red;
+    color: white;*/
+    text-align: left;
+    font-size: 8px;
+}
+
+.footer2 {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 50%;
+    /* background-color: red;
+    color: white;*/
+    text-align: right;
+}
+
+.heading {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    color: skyblue;
+    text-align: left;
+    background-color: black;
+}

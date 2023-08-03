@@ -17,6 +17,6 @@ namespace RE360.API.Models
         public string? SignedOnBehalfOfTheAgentTime { get; set; }
         public string? AgentToSignHere { get; set; }
 		public IFormFile? AgentToSignHereFile { get; set; }
-		public string? AgentToSignHereDate { get; set; }
+		public DateTime? AgentToSignHereDate { get; set; }
     }
 }

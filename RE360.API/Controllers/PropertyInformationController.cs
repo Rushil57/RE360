@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using RE360.API.Domain;
 using RE360.API.Models;
 
@@ -14,7 +16,7 @@ namespace RE360.API.Controllers
         private readonly IPropertyInformationRepository _propertyInformationRepository;
         public PropertyInformationController(IPropertyInformationRepository propertyInformationRepository)
         {
-                _propertyInformationRepository= propertyInformationRepository;
+            _propertyInformationRepository = propertyInformationRepository;
         }
 
         [HttpGet]
@@ -30,8 +32,9 @@ namespace RE360.API.Controllers
         [Route("GetPropertyList")]
         public async Task<IActionResult> GetPropertyList(Guid agentID)
         {
-            if(agentID==null || agentID==Guid.Empty) {
-                var error= new APIResponseModel { StatusCode = StatusCodes.Status400BadRequest, Message = "Please add agentid" };
+            if (agentID == null || agentID == Guid.Empty)
+            {
+                var error = new APIResponseModel { StatusCode = StatusCodes.Status400BadRequest, Message = "Please add agentid" };
                 return Ok(error);
             }
             var result = await _propertyInformationRepository.GetPropertyList(agentID);
@@ -201,6 +204,14 @@ namespace RE360.API.Controllers
         public async Task<IActionResult> DeletePropertyByID(int pid)
         {
             var result = await _propertyInformationRepository.DeletePropertyByID(pid);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("GeneratePDF")]
+        public async Task<IActionResult> GeneratePDF(int pid)
+        {
+            var result = await _propertyInformationRepository.GeneratePDF(pid);
             return Ok(result);
         }
     }

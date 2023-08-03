@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RE360.API.Auth;
 
@@ -11,9 +12,11 @@ using RE360.API.Auth;
 namespace RE360.API.Migrations
 {
     [DbContext(typeof(RE360AppDbContext))]
-    partial class RE360AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230801063703_ChangeDateFrmt")]
+    partial class ChangeDateFrmt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -398,8 +401,8 @@ namespace RE360.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<string>("AgreedMarketSpend")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal>("AgreedMarketSpend")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("AuthorityEndDate")
                         .HasColumnType("datetime2");
@@ -840,8 +843,8 @@ namespace RE360.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int?>("Count")
-                        .HasColumnType("int");
+                    b.Property<decimal?>("Count")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("PID")
                         .HasColumnType("int");

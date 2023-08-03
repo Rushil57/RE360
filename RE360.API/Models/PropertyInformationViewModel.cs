@@ -9,7 +9,7 @@ namespace RE360.API.Models
         [Range(1, int.MaxValue, ErrorMessage = "Please enter a value bigger than 0")]
         public int PID { get; set; }
         public int PropAttrId { get; set; }
-        public decimal? Count { get; set; }
+        public int? Count { get; set; }
         public string? Remarks { get; set; }
     }
 }
