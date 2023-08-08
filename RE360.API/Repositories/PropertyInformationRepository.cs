@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Identity;
 
 namespace RE360.API.Repositories
 {
@@ -273,28 +274,47 @@ namespace RE360.API.Repositories
         {
             try
             {
+                Execution exeList = _context.Execution.Find(model.ID);
 
                 if (model.SignedOnBehalfOfTheAgentFile != null)
                 {
                     if (model.SignedOnBehalfOfTheAgentFile.Length > 0)
                     {
                         model.SignedOnBehalfOfTheAgent = await common.UploadBlobFile(model.SignedOnBehalfOfTheAgentFile, "images");
+                        if (exeList != null)
+                        {
+                            exeList.SignedOnBehalfOfTheAgent = model.SignedOnBehalfOfTheAgent;
+                        }
                     }
                 }
-
+                else
+                {
+                    model.SignedOnBehalfOfTheAgent = exeList.SignedOnBehalfOfTheAgent;
+                }
                 if (model.AgentToSignHereFile != null)
                 {
                     if (model.AgentToSignHereFile.Length > 0)
                     {
                         model.AgentToSignHere = await common.UploadBlobFile(model.AgentToSignHereFile, "images");
+                        if (exeList != null)
+                        {
+                            exeList.AgentToSignHere = model.AgentToSignHere;
+                        }
                     }
                 }
-
+                else
+                {
+                    model.AgentToSignHere = exeList.AgentToSignHere;
+                }
                 var execution = _mapper.Map<Execution>(model);
-
                 if (execution.ID > 0)
                 {
-                    _context.Execution.Update(execution);
+                    exeList.PID = model.PID;
+                    exeList.CreatedDate = model.CreatedDate;
+                    exeList.SignedOnBehalfOfTheAgentDate = model.SignedOnBehalfOfTheAgentDate;
+                    exeList.SignedOnBehalfOfTheAgentTime = model.SignedOnBehalfOfTheAgentTime;
+                    exeList.AgentToSignHereDate = model.AgentToSignHereDate;
+                    _context.Execution.Update(exeList);
                 }
                 else
                 {
@@ -623,20 +643,27 @@ namespace RE360.API.Repositories
         {
             try
             {
-
+                SignaturesOfClient SignList = _context.SignaturesOfClient.Find(model.ID);
+                string StrSignatureOfClientName = "";
                 if (model.SignatureClient != null)
                 {
                     if (model.SignatureClient.Length > 0)
                     {
                         model.SignatureOfClientName = await common.UploadBlobFile(model.SignatureClient, "images");
+                        StrSignatureOfClientName = model.SignatureOfClientName;
+                        if (SignList != null)
+                        {
+                            SignList.SignatureOfClientName = model.SignatureOfClientName;
+                        }
                     }
                 }
 
                 var signaturesOfClient = _mapper.Map<SignaturesOfClient>(model);
-
                 if (signaturesOfClient.ID > 0)
                 {
-                    _context.SignaturesOfClient.Update(signaturesOfClient);
+                    SignList.PID = signaturesOfClient.PID;
+                    SignList.ClientId = signaturesOfClient.ClientId;
+                    _context.SignaturesOfClient.Update(SignList);
                 }
                 else
                 {
@@ -645,9 +672,9 @@ namespace RE360.API.Repositories
 
                 _context.SaveChanges();
 
-                if (!string.IsNullOrEmpty(signaturesOfClient.SignatureOfClientName))
+                if (!string.IsNullOrEmpty(StrSignatureOfClientName))
                 {
-                    signaturesOfClient.SignatureOfClientName = _configuration["BlobStorageSettings:ImagesPath"].ToString() + signaturesOfClient.SignatureOfClientName + _configuration["BlobStorageSettings:ImageToken"].ToString();
+                    signaturesOfClient.SignatureOfClientName = _configuration["BlobStorageSettings:ImagesPath"].ToString() + StrSignatureOfClientName + _configuration["BlobStorageSettings:ImageToken"].ToString();
                 }
 
                 var signaturesOfClientViewModel = _mapper.Map<SignaturesOfClientViewModel>(signaturesOfClient);
