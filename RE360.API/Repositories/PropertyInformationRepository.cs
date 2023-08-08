@@ -310,7 +310,6 @@ namespace RE360.API.Repositories
                 if (execution.ID > 0)
                 {
                     exeList.PID = model.PID;
-                    exeList.CreatedDate = model.CreatedDate;
                     exeList.SignedOnBehalfOfTheAgentDate = model.SignedOnBehalfOfTheAgentDate;
                     exeList.SignedOnBehalfOfTheAgentTime = model.SignedOnBehalfOfTheAgentTime;
                     exeList.AgentToSignHereDate = model.AgentToSignHereDate;
