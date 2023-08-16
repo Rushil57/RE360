@@ -20,6 +20,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Identity;
+using static iTextSharp.text.pdf.AcroFields;
 
 namespace RE360.API.Repositories
 {
@@ -29,8 +30,10 @@ namespace RE360.API.Repositories
         private readonly RE360AppDbContext _context;
         CommonMethod common;
         private readonly IConfiguration _configuration;
-        public PropertyInformationRepository(IMapper mapper, RE360AppDbContext context = null, IConfiguration configuration = null)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public PropertyInformationRepository(IMapper mapper, UserManager<ApplicationUser> userManager, RE360AppDbContext context = null, IConfiguration configuration = null)
         {
+            _userManager = userManager;
             _mapper = mapper;
             _context = context;
             _configuration = configuration;
@@ -388,7 +391,7 @@ namespace RE360.API.Repositories
             }
         }
 
-        public async Task<APIResponseModel> AddCalculationOfCommission(CalculationOfCommissionViewModel model)
+        public async Task<APIResponseModel> AddCalculationOfCommission(CaclulationCommissionNewModel model)
         {
             try
             {
@@ -400,11 +403,28 @@ namespace RE360.API.Repositories
                 else
                 {
                     _context.CalculationOfCommission.Add(CalculationOfCommission);
+                   
+                }
+                if (CalculationOfCommission.IsStandard == true)
+                {
+                    Guid AgentID = _context.ListingAddress.Where(o => o.ID == model.PID).FirstOrDefault().AgentID;
+                    model.ClientCommissionDetails = new List<ClientCommissionDetails>();
+                    foreach (var item in _context.CommissionDetails.Where(o => o.AgentID == AgentID))
+                    {
+                        model.ClientCommissionDetails.Add(new ClientCommissionDetails { PID = model.PID, Percent = item.Percent, UpToAmount = item.UpToAmount, Sequence = item.Sequence });
+                    }
+                }
+                if (_context.ClientCommissionDetails.Where(o => o.PID == model.PID).Count() > 0)
+                {
+                    _context.ClientCommissionDetails.RemoveRange(_context.ClientCommissionDetails.Where(o => o.PID == model.PID));
+                }
+                if (model.ClientCommissionDetails.Count() > 0)
+                {
+                    _context.ClientCommissionDetails.AddRange(model.ClientCommissionDetails);
                 }
                 _context.SaveChanges();
-
-                var CalculationOfCommissionVM = _mapper.Map<CalculationOfCommissionViewModel>(CalculationOfCommission);
-                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = CalculationOfCommissionVM };
+                model.ID = CalculationOfCommission.ID;
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = model };
             }
             catch (Exception ex)
             {
@@ -493,12 +513,15 @@ namespace RE360.API.Repositories
         {
             try
             {
+                Guid AgentID = _context.ListingAddress.Where(o => o.ID == id).FirstOrDefault().AgentID;
                 var clientDetailsList = _context.ClientDetail.Where(x => x.PID == id).ToList();
                 var propertyInformationsList = _context.PropertyInformation.Where(x => x.PID == id).ToList();
                 var estimatesList = _context.Estimates.Where(x => x.PID == id).ToList();
                 var signaturesOfClientList = _context.SignaturesOfClient.Where(x => x.PID == id).ToList();
                 var solicitorList = _context.SolicitorDetail.Where(x => x.PID == id).ToList();
                 var execution = _context.Execution.Where(x => x.PID == id).FirstOrDefault();
+                var ClientCalOfCommList = _context.ClientCommissionDetails.Where(x => x.PID == id).ToList();
+                var AgentCalOfCommList = _context.CommissionDetails.Where(o => o.AgentID == AgentID).ToList();
                 if (execution != null)
                 {
                     if (!string.IsNullOrEmpty(execution.SignedOnBehalfOfTheAgent))
@@ -567,7 +590,9 @@ namespace RE360.API.Repositories
                                               estimatesDetail = etd,
                                               execution = execution,
                                               executionDetail = signaturesOfClientList,
-                                              calculationOfcommission = calc
+                                              calculationOfcommission = calc,
+                                              ClientCalOfCommList = ClientCalOfCommList,
+                                              AgentCalOfCommList = AgentCalOfCommList
                                           }).FirstOrDefault();
 
 

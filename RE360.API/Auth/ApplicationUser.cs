@@ -12,5 +12,11 @@ public class ApplicationUser : IdentityUser
     public DateTime CreatedDateTime { get; set; }
     public string? FCMToken { get; set; }
     public string? Device { get; set; }
+    public string? CompanyName { get; set; }
+    public string? ManagerEmail { get; set; }
+    public string? OffinceName { get; set; }
+    public decimal? BaseAmount { get; set; }
+    public int? SalePricePercentage { get; set; }
+    public decimal? MinimumCommission { get; set; }
 
 }

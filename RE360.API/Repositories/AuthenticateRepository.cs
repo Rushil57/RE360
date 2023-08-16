@@ -162,6 +162,13 @@ namespace RE360.API.Repositories
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     CreatedDateTime = DateTime.UtcNow,
+                    CompanyName = model.CompanyName,
+                    ManagerEmail = model.ManagerEmail,
+                    OffinceName = model.OffinceName,
+                    BaseAmount = model.BaseAmount,
+                    SalePricePercentage = model.SalePricePercantage,
+                    MinimumCommission = model.MinimumCommission,
+
                 };
 
                 if (model.ProfileImage != null)

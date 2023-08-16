@@ -18,7 +18,7 @@ namespace RE360.API.Domain
         Task<APIResponseModel> AddExecution(ExecutionViewModel model);
         Task<APIResponseModel> AddMethodOfSale(MethodOfSaleViewModel model);
         Task<APIResponseModel> AddPriorAgencyMarketing(PriorAgencyMarketingViewModel model);
-        Task<APIResponseModel> AddCalculationOfCommission(CalculationOfCommissionViewModel model);
+        Task<APIResponseModel> AddCalculationOfCommission(CaclulationCommissionNewModel model);
         
         Task<APIResponseModel> AddTenancyDetail(TenancyDetailViewModel model);
 

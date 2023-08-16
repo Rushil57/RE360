@@ -1,26 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using RE360.API.DBModels;
 using System.ComponentModel.DataAnnotations;
 
 namespace RE360.API.Models
 {
-    public class CalculationOfCommissionViewModel
+    public class CaclulationCommissionNewModel
     {
-        [Key]
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
+        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Please enter a value bigger than 0")]
         public int PID { get; set; }
         public bool IsPlusGST { get; set; }
         public bool IsIncGST { get; set; }
         public bool IsStandard { get; set; }
-
-        /* Remove
-        //public bool IsNonStandard { get; set; }
-        //public decimal? FirstlyFee { get; set; }
-        //public decimal? Secondly { get; set; }
-        //public decimal? OnTheFirst { get; set; }
-        //public decimal? Thirdly { get; set; }
-        //public decimal? SecondlyTwo { get; set; }
-        */
+        public bool IsCreateCustComTerm { get; set; }
+        public bool IsInCaseOfLessHoldTerm { get; set; }
         public decimal? WithMinimumCommission { get; set; }
         public decimal? EstimatedCommission { get; set; }
         public bool IsPercentageOfTheSalePrice { get; set; }
@@ -29,6 +22,8 @@ namespace RE360.API.Models
         public bool IsUnAppraisedClientAskingPrice { get; set; }
         public decimal? SalePrice { get; set; }
         public decimal? EstimatedCommissionIncGST { get; set; }
-
+        public decimal? BaseAmount { get; set; }
+        public int? SalePricePercantage { get; set; }
+        public List<ClientCommissionDetails> ClientCommissionDetails { get; set; }
     }
 }

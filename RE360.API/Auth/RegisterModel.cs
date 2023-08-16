@@ -16,7 +16,12 @@ public class RegisterModel
 
     [Required(ErrorMessage = "Password is required")]
     public string? Password { get; set; }
-
+    public string? CompanyName { get; set; }
+    public string? ManagerEmail { get; set; }
+    public string? OffinceName { get; set; }
+    public decimal? BaseAmount { get; set; }
+    public int? SalePricePercantage { get; set; }
+    public decimal? MinimumCommission { get; set; }
     public IFormFile? ProfileImage { get; set; }
 }
 

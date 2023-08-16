@@ -142,7 +142,7 @@ namespace RE360.API.Controllers
 
         [HttpPost]
         [Route("AddCalculationOfCommission")]
-        public async Task<IActionResult> AddCalculationOfCommission([FromBody] CalculationOfCommissionViewModel model)
+        public async Task<IActionResult> AddCalculationOfCommission([FromBody] CaclulationCommissionNewModel model)
         {
             var result = await _propertyInformationRepository.AddCalculationOfCommission(model);
             return Ok(result);

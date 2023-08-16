@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using RE360.API.Auth;
 using RE360.API.DBModels;
+using RE360WebApp.Model;
 
 namespace RE360.API.Models
 {
@@ -56,8 +58,11 @@ namespace RE360.API.Models
             CreateMap<EstimatesDetail, EstimatesDetailViewModel>();
             CreateMap<EstimatesDetailViewModel, EstimatesDetail>();
 
-            CreateMap<CalculationOfCommission, CalculationOfCommissionViewModel>();
-            CreateMap<CalculationOfCommissionViewModel, CalculationOfCommission>();
+            CreateMap<CalculationOfCommission, CaclulationCommissionNewModel>();
+            CreateMap<CaclulationCommissionNewModel, CalculationOfCommission>();
+
+            CreateMap<UserDetailModel, RegisterModel>();
+            CreateMap<RegisterModel, UserDetailModel>();
         }
     }
 }

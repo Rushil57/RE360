@@ -19,20 +19,31 @@ using System.Security.Cryptography;
 using System.Text;
 using static Azure.Core.HttpHeader;
 using static System.Net.WebRequestMethods;
+using RE360.API.DBModels;
+using System;
+using RE360WebApp.Model;
+using RE360.API.Domain;
+using AutoMapper;
 
 namespace RE360.API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
+        private readonly IAuthenticateRepository _authenticateRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         public string UserImgPath;
         private readonly IConfiguration _configuration;
         CommonMethod common;
-        public UserController(UserManager<ApplicationUser> userManager, IConfiguration configuration, Microsoft.AspNetCore.Hosting.IHostingEnvironment env, RE360AppDbContext dbContext)
+        private readonly RE360AppDbContext _context;
+        private readonly IMapper _mapper;
+        public UserController(IMapper mapper, IAuthenticateRepository authenticateRepository, UserManager<ApplicationUser> userManager, IConfiguration configuration, Microsoft.AspNetCore.Hosting.IHostingEnvironment env, RE360AppDbContext dbContext)
         {
+            _mapper = mapper;
+            _authenticateRepository = authenticateRepository;
+            _context = dbContext;
             _userManager = userManager;
             _configuration = configuration;
             UserImgPath = Path.Combine(env.ContentRootPath, "UserImages");
@@ -73,6 +84,12 @@ namespace RE360.API.Controllers
                             //    profileData = common.ImageCompressed(bytes);
                             //}
                         }
+                        string Agentid = user.Id;
+                        Guid guid;
+                        if (Guid.TryParse(Agentid, out guid))
+                        {
+                            Console.WriteLine(guid);
+                        }
                         return StatusCode(StatusCodes.Status200OK, new APIResponseModel
                         {
                             StatusCode = StatusCodes.Status200OK,
@@ -84,6 +101,13 @@ namespace RE360.API.Controllers
                                 Email = user.Email,
                                 ProfileUrl = filePath,
                                 ProfileImageData = profileData,
+                                BaseAmount = user.BaseAmount,
+                                CompanyName = user.CompanyName,
+                                ManagerEmail = user.ManagerEmail,
+                                MinimumCommission = user.MinimumCommission,
+                                OffinceName = user.OffinceName,
+                                SalePricePercentage = user.SalePricePercentage,
+                                CommissionDetail = _context.CommissionDetails.Where(o => o.AgentID == guid)
                             }
                         });
                     }
@@ -346,6 +370,107 @@ namespace RE360.API.Controllers
             {
                 CommonDBHelper.ErrorLog("UserController - Logout", ex.Message, ex.StackTrace);
                 return StatusCode(StatusCodes.Status500InternalServerError, new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = "Something Went Wrong." });
+            }
+        }
+
+        [HttpPost]
+        [Route("GetAgentByID")]
+        public async Task<IActionResult> GetAgentByID(string AgentID)
+        {
+            UserDetailModel userDetailModel = new UserDetailModel();
+            try
+            {
+                if (AgentID == "0")
+                {
+                    return StatusCode(StatusCodes.Status200OK, new APIResponseModel
+                    {
+                        StatusCode = StatusCodes.Status200OK,
+                        Message = "Success",
+                        Result = userDetailModel
+                    });
+                }
+                if (!string.IsNullOrEmpty(AgentID))
+                {
+                    var user = await _userManager.FindByIdAsync(AgentID.Trim());
+                    if (user != null)
+                    {
+                        string Agentid = user.Id;
+                        Guid guid;
+                        if (Guid.TryParse(Agentid, out guid))
+                        {
+                            Console.WriteLine(guid);
+                        }
+                        userDetailModel.Commisions = _context.CommissionDetails.Where(o => o.AgentID == guid).ToList();
+                        return StatusCode(StatusCodes.Status200OK, new APIResponseModel
+                        {
+                            StatusCode = StatusCodes.Status200OK,
+                            Message = "Success",
+                            Result = userDetailModel
+                        });
+                    }
+                    else
+                    {
+                        return StatusCode(StatusCodes.Status200OK, new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = "User details does not found" });
+                    }
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status200OK, new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = "User Id is required" });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                CommonDBHelper.ErrorLog("UserController - GetUserProfile", ex.Message, ex.StackTrace);
+                return StatusCode(StatusCodes.Status500InternalServerError, new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = "Something Went Wrong." });
+            }
+        }
+        
+        [HttpPost]
+        [Route("UpdateAgent")]
+        public async Task<IActionResult> UpdateAgent([FromForm] UserDetailModel model)
+        {
+            string ErrMsg = "";
+            try
+            {
+                if (string.IsNullOrEmpty(model.AgentID) || model.AgentID == "0")
+                {
+                    var userModel = _mapper.Map<RegisterModel>(model);
+                    var result = await _authenticateRepository.Register(userModel);
+                    if (result != null)
+                    {
+                        ErrMsg = "User inserted successfully!";
+                    }
+                }
+                else
+                {
+                    var user = await _userManager.FindByIdAsync(model.AgentID.Trim());
+                    if (user != null)
+                    {
+                        user.FirstName = model.FirstName.Trim();
+                        user.LastName = model.LastName.Trim();
+                        var result = await _userManager.UpdateAsync(user);
+                        if (!result.Succeeded)
+                        {
+                            ErrMsg = "User Updated failed! Please check user details and try again";
+                        }
+                        else
+                        {
+                            ErrMsg = "User Updated successfully!";
+                        }
+                    }
+                    else
+                    {
+                        ErrMsg = "User Details not found.";
+                    }
+                }
+                return StatusCode(StatusCodes.Status200OK, new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = string.IsNullOrEmpty(ErrMsg) ? "Something Went Wrong." : ErrMsg });
+
+            }
+            catch (Exception ex)
+            {
+                CommonDBHelper.ErrorLog("UserController - UpdateProfile", ex.Message, ex.StackTrace);
+                return StatusCode(StatusCodes.Status500InternalServerError, new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Something Went Wrong." });
             }
         }
     }

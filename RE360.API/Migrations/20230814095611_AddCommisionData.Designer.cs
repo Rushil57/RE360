@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RE360.API.Auth;
 
@@ -11,9 +12,11 @@ using RE360.API.Auth;
 namespace RE360.API.Migrations
 {
     [DbContext(typeof(RE360AppDbContext))]
-    partial class RE360AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230814095611_AddCommisionData")]
+    partial class AddCommisionData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -236,8 +239,8 @@ namespace RE360.API.Migrations
                     b.Property<DateTime>("RefreshTokenExpiryTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("SalePricePercentage")
-                        .HasColumnType("int");
+                    b.Property<decimal?>("SalePricePercentage")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -269,9 +272,6 @@ namespace RE360.API.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<decimal?>("BaseAmount")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("EstimatedCommission")
                         .HasColumnType("decimal(18,2)");
@@ -311,9 +311,6 @@ namespace RE360.API.Migrations
 
                     b.Property<decimal?>("SalePrice")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("SalePricePercentage")
-                        .HasColumnType("int");
 
                     b.Property<decimal?>("WithMinimumCommission")
                         .HasColumnType("decimal(18,2)");

@@ -12,12 +12,8 @@ namespace RE360.API.DBModels
         public bool IsPlusGST { get; set; }
         public bool IsIncGST { get; set; }
         public bool IsStandard { get; set; }
-        public bool IsNonStandard { get; set; }
-        public decimal? FirstlyFee { get; set; }
-        public decimal? Secondly { get; set; }
-        public decimal? OnTheFirst { get; set; }
-        public decimal? Thirdly { get; set; }
-        public decimal? SecondlyTwo { get; set; }
+        public bool IsCreateCustComTerm { get; set; }
+        public bool IsInCaseOfLessHoldTerm { get; set; }
         public decimal? WithMinimumCommission { get; set; }
         public decimal? EstimatedCommission { get; set; }
         public bool IsPercentageOfTheSalePrice { get; set; }
@@ -26,8 +22,9 @@ namespace RE360.API.DBModels
         public bool IsAppraisedValue { get; set; }
         public bool IsUnAppraisedClientAskingPrice { get; set; }
         public decimal? SalePrice { get; set; }
-
         public decimal? EstimatedCommissionIncGST { get; set; }
-        
+        public decimal? BaseAmount { get; set; }
+        public int? SalePricePercentage { get; set; }
+
     }
 }
