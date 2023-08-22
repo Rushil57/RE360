@@ -827,90 +827,11 @@ namespace RE360.API.Repositories
         {
             try
             {
-                //var PropertyAttrList = (from p in _context.PropertyAttributeType
-                //                        select new
-                //                        {
-                //                            Name = p.Name,
-                //                            list = p.PropertyAttribute.ToList()
-                //                        }).ToList();
-
-                //var clientDetailsList = _context.ClientDetail.Where(x => x.PID == id).ToList();
-                //var propertyInformationsList = _context.PropertyInformation.Where(x => x.PID == id).ToList();
-                //var estimatesList = _context.Estimates.Where(x => x.PID == id).ToList();
-                //var signaturesOfClientList = _context.SignaturesOfClient.Where(x => x.PID == id).ToList();
-                //var solicitorList = _context.SolicitorDetail.Where(x => x.PID == id).ToList();
-                //var execution = _context.Execution.Where(x => x.PID == id).FirstOrDefault();
-                //if (execution != null)
-                //{
-                //    if (!string.IsNullOrEmpty(execution.SignedOnBehalfOfTheAgent))
-                //    {
-                //        execution.SignedOnBehalfOfTheAgent = _configuration["BlobStorageSettings:ImagesPath"].ToString() + execution.SignedOnBehalfOfTheAgent + _configuration["BlobStorageSettings:ImageToken"].ToString();
-                //    }
-                //    if (!string.IsNullOrEmpty(execution.AgentToSignHere))
-                //    {
-                //        execution.AgentToSignHere = _configuration["BlobStorageSettings:ImagesPath"].ToString() + execution.AgentToSignHere + _configuration["BlobStorageSettings:ImageToken"].ToString();
-                //    }
-                //}
-                //foreach (var item in signaturesOfClientList)
-                //{
-                //    item.SignatureOfClientName = _configuration["BlobStorageSettings:ImagesPath"].ToString() + item.SignatureOfClientName + _configuration["BlobStorageSettings:ImageToken"].ToString();
-                //}
-                //var FinalList = (from l in _context.ListingAddress
-                //                 join cod in _context.ContractDetail
-                //                 on l.ID equals cod.PID into contractdetail
-                //                 from cd in contractdetail.DefaultIfEmpty()
-                //                 join cor in _context.ContractRate
-                //                 on l.ID equals cor.PID into contractRate
-                //                 from cr in contractRate.DefaultIfEmpty()
-                //                 join esti in _context.Estimates
-                //                 on l.ID equals esti.PID into estimate
-                //                 from est in estimate.DefaultIfEmpty()
-                //                 join led in _context.LegalDetail
-                //                 on l.ID equals led.PID into legalDetail
-                //                 from ld in legalDetail.DefaultIfEmpty()
-                //                 join meos in _context.MethodOfSale
-                //                 on l.ID equals meos.PID into methodOfSale
-                //                 from mos in methodOfSale.DefaultIfEmpty()
-                //                 join pad in _context.ParticularDetail
-                //                 on l.ID equals pad.PID into particularDetail
-                //                 from pd in particularDetail.DefaultIfEmpty()
-                //                 join pram in _context.PriorAgencyMarketing
-                //                 on l.ID equals pram.PID into priorAgencyMarketing
-                //                 from pam in priorAgencyMarketing.DefaultIfEmpty()
-                //                 join prid in _context.PropertyInformationDetail
-                //                 on l.ID equals prid.PID into propertyInformationDetail
-                //                 from pid in propertyInformationDetail.DefaultIfEmpty()
-                //                 join ted in _context.TenancyDetail
-                //                 on l.ID equals ted.PID into tenancyDetail
-                //                 from td in tenancyDetail.DefaultIfEmpty()
-                //                 join etdl in _context.EstimatesDetail
-                //                 on l.ID equals etdl.PID into estimatesDetail
-                //                 from etd in estimatesDetail.DefaultIfEmpty()
-                //                 where l.ID == id
-                //                 select new
-                //                 {
-                //                     listingAddress = l,
-                //                     clientDetail = clientDetailsList,
-                //                     solicitorDetail = solicitorList,
-                //                     particularDetail = pd,
-                //                     legalDetail = ld,
-                //                     contractDetail = cd,
-                //                     contractRate = cr,
-                //                     methodOfSale = mos,
-                //                     propertyInformation = propertyInformationsList,
-                //                     propertyInformationDetail = pid,
-                //                     tenancyDetail = td,
-                //                     priorAgencyMarketing = pam,
-                //                     estimates = estimatesList,
-                //                     estimatesDetail = etd,
-                //                     execution = execution,
-                //                     executionDetail = signaturesOfClientList
-                //                 }).FirstOrDefault();
-
-                var html = System.IO.File.ReadAllText(@"D:/Projects/RE360/RE360/RE360.API/Document/htmlpage.html");
-                var CSS = System.IO.File.ReadAllText(@"D:/Projects/RE360/RE360/RE360.API/Document/StyleSheet.css");
-                PDFHelper pDFHelper = new PDFHelper();
-                pDFHelper.GeneratePDF(html, CSS);
+               
+                //var html = System.IO.File.ReadAllText(@"D:/Projects/RE360/RE360/RE360.API/Document/htmlpage.html");
+                //var CSS = System.IO.File.ReadAllText(@"D:/Projects/RE360/RE360/RE360.API/Document/StyleSheet.css");
+                GeneratePDF pDFHelper = new GeneratePDF(_context, _configuration );
+                pDFHelper.DownloadPDF(id );
                 return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success" };
             }
             catch (Exception ex)
