@@ -23,7 +23,7 @@ namespace RE360.API.Models
         public decimal? SalePrice { get; set; }
         public decimal? EstimatedCommissionIncGST { get; set; }
         public decimal? BaseAmount { get; set; }
-        public int? SalePricePercantage { get; set; }
+        public int? SalePricePercentage { get; set; }
         public List<ClientCommissionDetails> ClientCommissionDetails { get; set; }
     }
 }
