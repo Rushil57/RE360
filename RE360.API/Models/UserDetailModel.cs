@@ -5,21 +5,26 @@ namespace RE360WebApp.Model
 {
     public class UserDetailModel
     {
-        public string AgentID { get; set; }
-        [Required(ErrorMessage = "Please enter Email")]
-        public string Email { get; set; } = "a@a.com";
-
-        [Required(ErrorMessage = "Please enter First Name")]
-        public string FirstName { get; set; } = "test data";
-        public string LastName { get; set; } = "Last name";
-
+        public string? AgentID { get; set; } = "";
+        public string Email { get; set; }
+        public string FirstName { get; set; } 
+        public string LastName { get; set; } 
         public string CompanyName { get; set; }
-        public string OfficeName { get; set; }
-        public string ManagerEmail { get; set; }
-        public decimal BaseAmount { get; set; }
-        public decimal SalePrice { get; set; }
-        public decimal MinCommision { get; set; }
+        public string OffinceName { get; set; }
+        public string? ManagerEmail { get; set; }
+        public decimal? BaseAmount { get; set; }
+        public int? SalePricePercantage { get; set; }
+        public decimal? MinimumCommission { get; set; }
         public List<CommissionDetails> Commisions { get; set; } = new List<CommissionDetails>() { };
+
+    }
+    public class CommissionDetailsModel
+    {
+        public int ID { get; set; }
+        public Guid AgentID { get; set; }
+        public decimal? Percent { get; set; }
+        public decimal? UpToAmount { get; set; }
+        public int Sequence { get; set; }
 
     }
 }

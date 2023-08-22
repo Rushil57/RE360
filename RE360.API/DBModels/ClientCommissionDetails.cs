@@ -5,6 +5,8 @@ namespace RE360.API.DBModels
 {
     public class ClientCommissionDetails
     {
+        [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "Please enter a value bigger than 0")]

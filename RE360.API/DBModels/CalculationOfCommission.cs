@@ -5,6 +5,8 @@ namespace RE360.API.DBModels
 {
     public class CalculationOfCommission
     {
+        [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "Please enter a value bigger than 0")]
@@ -18,7 +20,6 @@ namespace RE360.API.DBModels
         public decimal? EstimatedCommission { get; set; }
         public bool IsPercentageOfTheSalePrice { get; set; }
         public bool IsFlatCommission { get; set; }
-
         public bool IsAppraisedValue { get; set; }
         public bool IsUnAppraisedClientAskingPrice { get; set; }
         public decimal? SalePrice { get; set; }

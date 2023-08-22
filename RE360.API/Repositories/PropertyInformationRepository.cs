@@ -403,7 +403,7 @@ namespace RE360.API.Repositories
                 else
                 {
                     _context.CalculationOfCommission.Add(CalculationOfCommission);
-                   
+
                 }
                 if (CalculationOfCommission.IsStandard == true)
                 {
@@ -424,6 +424,10 @@ namespace RE360.API.Repositories
                 }
                 _context.SaveChanges();
                 model.ID = CalculationOfCommission.ID;
+                if (CalculationOfCommission.IsStandard == true)
+                {
+                    model.ClientCommissionDetails = new List<ClientCommissionDetails>();
+                }
                 return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = model };
             }
             catch (Exception ex)
@@ -522,6 +526,8 @@ namespace RE360.API.Repositories
                 var execution = _context.Execution.Where(x => x.PID == id).FirstOrDefault();
                 var ClientCalOfCommList = _context.ClientCommissionDetails.Where(x => x.PID == id).ToList();
                 var AgentCalOfCommList = _context.CommissionDetails.Where(o => o.AgentID == AgentID).ToList();
+                var user = await _userManager.FindByIdAsync(AgentID.ToString().Trim());
+                var AgentCalofComm = new { BaseAmount = user.BaseAmount, MinimumCommission = user.MinimumCommission, SalePricePercentage = user.SalePricePercentage };
                 if (execution != null)
                 {
                     if (!string.IsNullOrEmpty(execution.SignedOnBehalfOfTheAgent))
@@ -592,7 +598,8 @@ namespace RE360.API.Repositories
                                               executionDetail = signaturesOfClientList,
                                               calculationOfcommission = calc,
                                               ClientCalOfCommList = ClientCalOfCommList,
-                                              AgentCalOfCommList = AgentCalOfCommList
+                                              AgentCalOfCommList = AgentCalOfCommList,
+                                              AgentCalofComm = AgentCalofComm
                                           }).FirstOrDefault();
 
 
