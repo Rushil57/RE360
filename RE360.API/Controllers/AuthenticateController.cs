@@ -212,8 +212,8 @@ public class AuthenticateController : ControllerBase
                         SalePricePercentage = model.SalePricePercantage,
                         MinimumCommission = model.MinimumCommission,
                     };
-                    string Password = common.GenerateRandomPassword();
-                    //string Password = "Test@123";
+                    //string Password = common.GenerateRandomPassword();
+                    string Password = "Test@123";
                     var result = await _userManager.CreateAsync(user, Password);
                     if (result != null)
                     {
