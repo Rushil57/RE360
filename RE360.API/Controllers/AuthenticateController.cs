@@ -25,12 +25,14 @@ public class AuthenticateController : ControllerBase
     private readonly IAuthenticateRepository _authenticateRepository;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RE360AppDbContext _context;
+    CommonMethod common;
     public AuthenticateController(
         IAuthenticateRepository authenticateRepository, UserManager<ApplicationUser> userManager, RE360AppDbContext context)
     {
         _authenticateRepository = authenticateRepository;
         _userManager = userManager;
         _context = context;
+        common = new CommonMethod(context);
     }
 
 
@@ -210,7 +212,8 @@ public class AuthenticateController : ControllerBase
                         SalePricePercentage = model.SalePricePercantage,
                         MinimumCommission = model.MinimumCommission,
                     };
-                    string Password = "Test@123";
+                    string Password = common.GenerateRandomPassword();
+                    //string Password = "Test@123";
                     var result = await _userManager.CreateAsync(user, Password);
                     if (result != null)
                     {
@@ -225,7 +228,11 @@ public class AuthenticateController : ControllerBase
                             _context.CommissionDetails.AddRange(model.Commisions);
                             _context.SaveChanges();
                         }
-                        ErrMsg = "User inserted successfully!";
+                        return StatusCode(StatusCodes.Status200OK, new APIResponseModel
+                        {
+                            StatusCode = StatusCodes.Status200OK,
+                            Message = "User inserted successfully!"
+                        });
                     }
                 }
                 else
@@ -275,7 +282,12 @@ public class AuthenticateController : ControllerBase
                             _context.CommissionDetails.AddRange(model.Commisions);
                         }
                         _context.SaveChanges();
-                        ErrMsg = "User Updated successfully!";
+                        return StatusCode(StatusCodes.Status200OK, new APIResponseModel
+                        {
+                            StatusCode = StatusCodes.Status200OK,
+                            Message = "User Updated successfully!"
+                        });
+
                     }
                 }
                 else
@@ -283,13 +295,13 @@ public class AuthenticateController : ControllerBase
                     ErrMsg = "User Details not found.";
                 }
             }
-            return StatusCode(StatusCodes.Status200OK, new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = string.IsNullOrEmpty(ErrMsg) ? "Something Went Wrong." : ErrMsg });
+            return StatusCode(StatusCodes.Status200OK, new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = string.IsNullOrEmpty(ErrMsg) ? "Something Went Wrong." : ErrMsg });
 
         }
         catch (Exception ex)
         {
             CommonDBHelper.ErrorLog("UserController - ADDUpdateAgent", ex.Message, ex.StackTrace);
-            return StatusCode(StatusCodes.Status500InternalServerError, new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Something Went Wrong." });
+            return StatusCode(StatusCodes.Status500InternalServerError, new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = "Something Went Wrong." });
         }
     }
 
