@@ -827,10 +827,16 @@ namespace RE360.API.Repositories
         {
             try
             {
-               
+
+                Guid guAgentID;
+                Guid item = _context.ListingAddress.Where(x => x.ID == id).FirstOrDefault().AgentID;
+
+                Guid.TryParse(item.ToString(), out guAgentID);
+
+                ApplicationUser user = await _userManager.FindByIdAsync(guAgentID.ToString());
                 //var html = System.IO.File.ReadAllText(@"D:/Projects/RE360/RE360/RE360.API/Document/htmlpage.html");
                 //var CSS = System.IO.File.ReadAllText(@"D:/Projects/RE360/RE360/RE360.API/Document/StyleSheet.css");
-                GeneratePDF pDFHelper = new GeneratePDF(_context, _configuration );
+                GeneratePDF pDFHelper = new GeneratePDF(user, _context, _configuration);
                 pDFHelper.DownloadPDF(id );
                 return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success" };
             }

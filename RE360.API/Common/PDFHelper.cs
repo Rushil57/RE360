@@ -75,7 +75,7 @@ namespace RE360.API.Common
         {
             try
             {
-                string filePath = @"D:\Projects\RE360\RE360\RE360.API\Document\test.pdf";
+                string filePath = @"C:\Users\HP\Source\Repos\RE360\RE360.API\Document\test.pdf";
                 if (System.IO.File.Exists(filePath))
                     System.IO.File.Delete(filePath);
 
