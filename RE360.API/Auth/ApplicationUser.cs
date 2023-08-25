@@ -16,7 +16,7 @@ public class ApplicationUser : IdentityUser
     public string? ManagerEmail { get; set; }
     public string? OffinceName { get; set; }
     public decimal? BaseAmount { get; set; }
-    public int? SalePricePercentage { get; set; }
+    public decimal? SalePricePercentage { get; set; }
     public decimal? MinimumCommission { get; set; }
 
 }

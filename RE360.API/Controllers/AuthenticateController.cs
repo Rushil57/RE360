@@ -157,7 +157,7 @@ public class AuthenticateController : ControllerBase
                     userDetailModel.OffinceName = user.OffinceName;
                     userDetailModel.ManagerEmail = user.ManagerEmail;
                     userDetailModel.BaseAmount = Convert.ToDecimal(user.BaseAmount);
-                    userDetailModel.SalePricePercantage = Convert.ToInt32(user.SalePricePercentage);
+                    userDetailModel.SalePricePercantage = Convert.ToDecimal(user.SalePricePercentage);
                     userDetailModel.MinimumCommission = Convert.ToDecimal(user.MinimumCommission);
                     userDetailModel.Commisions = _context.CommissionDetails.Where(o => o.AgentID == guAgentID).ToList();
                     return StatusCode(StatusCodes.Status200OK, new APIResponseModel
@@ -212,8 +212,8 @@ public class AuthenticateController : ControllerBase
                         SalePricePercentage = model.SalePricePercantage,
                         MinimumCommission = model.MinimumCommission,
                     };
-                    //string Password = common.GenerateRandomPassword();
-                    string Password = "Test@123";
+                    string Password = common.GenerateRandomPassword();
+                    //string Password = "Test@123";
                     var result = await _userManager.CreateAsync(user, Password);
                     if (result != null)
                     {
@@ -228,6 +228,15 @@ public class AuthenticateController : ControllerBase
                             _context.CommissionDetails.AddRange(model.Commisions);
                             _context.SaveChanges();
                         }
+                        var mailSend = common.SendMailForAgentRegi(model.Email, model.FirstName + " " + model.LastName, Password);
+                        //if (mailSend.Result == "Mail Sent Successfully")
+                        //{
+                        //    return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "We have sent an updated password to your registered email address. You can use that password and we recommend updating the password after login from the mobile application" };
+                        //}
+                        //else
+                        //{
+                        //    return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = "Mail not sent" };
+                        //}
                         return StatusCode(StatusCodes.Status200OK, new APIResponseModel
                         {
                             StatusCode = StatusCodes.Status200OK,

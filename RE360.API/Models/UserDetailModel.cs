@@ -13,7 +13,7 @@ namespace RE360WebApp.Model
         public string OffinceName { get; set; }
         public string? ManagerEmail { get; set; }
         public decimal? BaseAmount { get; set; }
-        public int? SalePricePercantage { get; set; }
+        public decimal? SalePricePercantage { get; set; }
         public decimal? MinimumCommission { get; set; }
         public List<CommissionDetails> Commisions { get; set; } = new List<CommissionDetails>() { };
 

@@ -157,5 +157,63 @@ namespace RE360.API.Common
             }
         }
 
+        public async Task<string> SendMailForAgentRegi(string receiverEmailId, string firstName, string Password)
+        {
+            var filePath = _configuration["BlobStorageSettings:DocumentPath"] + "logo.png" + _configuration["BlobStorageSettings:DocumentPathToken"];
+            var senderPassword = _configuration["Smtp:Password"].ToString();
+            var sendEmailId = _configuration["Smtp:FromAddress"].ToString();
+            var host = _configuration["Smtp:Server"].ToString();
+            var port = Convert.ToInt32(_configuration["Smtp:Port"]);
+
+            var mailSubject = "Registration";
+            var mailBody = "<p style='padding-left:2%;'>Hello " + firstName + "," +
+                            "</p><p style='padding-left: 5%;'>Your Account has been created successfully." +
+                            "<br>Your User Name is: <b>" + receiverEmailId + "</b>" +
+                            "<br>Your New password is: <b>" + Password + "</b>" +
+                            "<br><b>Note:- </b> We recommend you to change the password when you login first time with this new password.</p>";
+            var sumUp = "<p style='padding-top: 3%;padding-left: 3%;border-left: 1px solid #d5d5ec;'>RE360</p>";
+
+
+            AlternateView alternateView = AlternateView.CreateAlternateViewFromString
+            (
+             mailBody + "<br> <div style=\"display: flex;\"><p style=\"padding-left: 2%;\">" +
+             "<img src=" + filePath + " style=\"height: 100px;width: 120px;\"></p>" +
+             sumUp + "</div>", null, "text/html"
+            );
+
+            try
+            {
+                MailMessage mail = new MailMessage();
+                mail.To.Add(receiverEmailId);
+                mail.From = new MailAddress(sendEmailId);
+                mail.Subject = mailSubject;
+                mail.AlternateViews.Add(alternateView);
+                mail.IsBodyHtml = true;
+                SmtpClient smtp = new SmtpClient(host, port);
+                smtp.EnableSsl = true;
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = new NetworkCredential(sendEmailId, senderPassword);
+                try
+                {
+                    smtp.Send(mail);
+                    return "Mail Sent Successfully";
+                }
+                catch (Exception ex)
+                {
+                    string SendMailError = ex.Message + ex.StackTrace;
+                    CommonDBHelper.ErrorLog("AuthenticateController - SendMail", ex.Message, ex.StackTrace);
+                    return SendMailError;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                string Error = ex.Message;
+                CommonDBHelper.ErrorLog("AuthenticateController - SendMail", ex.Message, ex.StackTrace);
+                return Error;
+            }
+
+        }
+
     }
 }
