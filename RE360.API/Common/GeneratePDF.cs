@@ -4063,6 +4063,9 @@ namespace RE360.API.Common
 
 
 
+
+
+
         }
         public enum FieldType
         {
@@ -4310,7 +4313,10 @@ namespace RE360.API.Common
             tf213.BorderColor = new BaseColor(232, 232, 232);
             tf213.BackgroundColor = new BaseColor(232, 232, 232);
             tf213.Options = TextField.READ_ONLY;
-            tf213.Text = isSoleSelected == true ? ((DateTime)contractDetails[0].AuthorityStartDate).ToString("dd-MM-yyyy") : string.Empty;
+
+            tf213.Text = isSoleSelected == true && contractDetails[0].AuthorityStartDate != null ? ((DateTime)contractDetails[0].AuthorityStartDate).ToString("dd-MM-yyyy") : string.Empty;
+
+           // tf213.Text = isSoleSelected == true ? ((DateTime)contractDetails[0].AuthorityStartDate).ToString("dd-MM-yyyy") : string.Empty;
             tf213.FontSize = 8;
             tf213.TextColor = BaseColor.BLACK;
             writer.AddAnnotation(tf213.GetTextField());
@@ -4322,7 +4328,8 @@ namespace RE360.API.Common
             tf214.BorderColor = new BaseColor(232, 232, 232);
             tf214.BackgroundColor = new BaseColor(232, 232, 232);
             tf214.Options = TextField.READ_ONLY;
-            tf214.Text = isSoleSelected == true ? ((DateTime)contractDetails[0].AuthorityEndDate).ToString("dd-MM-yyyy") : string.Empty;
+            tf214.Text = isSoleSelected == true && contractDetails[0].AuthorityEndDate != null ? ((DateTime)contractDetails[0].AuthorityEndDate).ToString("dd-MM-yyyy") : string.Empty;
+           // tf214.Text = isSoleSelected == true ? ((DateTime)contractDetails[0].AuthorityEndDate).ToString("dd-MM-yyyy") : string.Empty;
             tf214.FontSize = 8;
             tf214.TextColor = BaseColor.BLACK;
             writer.AddAnnotation(tf214.GetTextField());
@@ -4362,7 +4369,8 @@ namespace RE360.API.Common
             tf215.BorderColor = new BaseColor(232, 232, 232);
             tf215.BackgroundColor = new BaseColor(232, 232, 232);
             tf215.Options = TextField.READ_ONLY;
-            tf215.Text = isGeneralSelected == true ? ((DateTime)contractDetails[0].AuthorityEndDate).ToString("dd-MM-yyyy") : string.Empty;
+            tf215.Text = isGeneralSelected == true && contractDetails[0].AuthorityEndDate != null ? ((DateTime)contractDetails[0].AuthorityEndDate).ToString("dd-MM-yyyy") : string.Empty;
+            // tf215.Text = isGeneralSelected == true ? ((DateTime)contractDetails[0].AuthorityEndDate).ToString("dd-MM-yyyy") : string.Empty;
             tf215.FontSize = 8;
             tf215.TextColor = BaseColor.BLACK;
             writer.AddAnnotation(tf215.GetTextField());
@@ -4373,7 +4381,8 @@ namespace RE360.API.Common
             tf216.BorderColor = new BaseColor(232, 232, 232);
             tf216.BackgroundColor = new BaseColor(232, 232, 232);
             tf216.Options = TextField.READ_ONLY;
-            tf216.Text = isGeneralSelected == true ? ((DateTime)contractDetails[0].AuthorityEndDate).ToString("dd-MM-yyyy") : string.Empty;
+            tf216.Text = isGeneralSelected == true && contractDetails[0].AuthorityEndDate != null ? ((DateTime)contractDetails[0].AuthorityEndDate).ToString("dd-MM-yyyy") : string.Empty;
+           // tf216.Text = isGeneralSelected == true ? ((DateTime)contractDetails[0].AuthorityEndDate).ToString("dd-MM-yyyy") : string.Empty;
             tf216.FontSize = 8;
             tf216.TextColor = BaseColor.BLACK;
             writer.AddAnnotation(tf216.GetTextField());
@@ -4385,7 +4394,7 @@ namespace RE360.API.Common
                 "             \r\n" +
                 "unless otherwise cancelled prior by either party giving seven (7) days’ written notice to the other party; or, if no end date is provided, until cancelled by either party giving seven (7) days’ written notice to the other party.", contentFont);
 
-            formattedContent6.Add(c2);
+                formattedContent6.Add(c2);
             formattedContent6.Add(c3);
 
 
@@ -4802,7 +4811,7 @@ namespace RE360.API.Common
             tf059.Options = TextField.READ_ONLY | TextField.MULTILINE;
             writer.AddAnnotation(tf059.GetTextField());
             //AddTextFieldToPDF(writer, doc, "c25", "", 300, 481, 340, 500);
-            Chunk c34 = new Chunk("                                    " + "including GST on advertising, marketing and promoting the Property on             the Client’s behalf; and", contentFont);
+            Chunk c34 = new Chunk("                                    " + "including GST on advertising, marketing and promoting the                Property on the Client’s behalf; and", contentFont);
             formattedContent20.Add(c32);
             formattedContent20.Add(c33);
             formattedContent20.Add(c34);
@@ -5787,6 +5796,10 @@ namespace RE360.API.Common
             //DownloadImage(doc, id);
             // Phrase formattedContent80 = new Phrase();
             // Chunk c194 = new Chunk("\nSignature of Client(s): " + "                                                                 Signature of Client(s):", contentFont);
+            if (execution == null)
+            {
+                execution = new Execution();
+            }
 
 
 
@@ -5796,7 +5809,7 @@ namespace RE360.API.Common
             //Chunk c196 = new Chunk("\n Authorised Signatory" + "                                                                  Authorised Signatory", contentFont);
 
 
-            Phrase formattedContent80 = new Phrase();
+            Phrase formattedContent80 = new Phrase();   
             Chunk c194 = new Chunk("\nSignature of Client(s): " + "                                                                 Signature of Client(s):", contentFont);
 
             CreatePdfWithImageInsideTextField(doc, writer, signature[0].SignatureOfClientName != null ? signature[0].SignatureOfClientName : "", "signature1", 125, 705, 220, 733);
@@ -5825,7 +5838,7 @@ namespace RE360.API.Common
 
             //AddTextFieldToPDF(writer, doc, "Propertyfield", "", "", 125, 635, 220, 660);
             //AddTextFieldToPDF(writer, doc, "Propertyfield", "", "", 380, 635, 470, 660);
-            Chunk c198 = new Chunk("\n Position: " + clientDetails[2].Position + "                                                                                      Position: " + clientDetails[3].Position, contentFont);
+            Chunk c198 = new Chunk("\n Position: " + clientDetails[2].Position + "                                                                                    Position: " + clientDetails[3].Position, contentFont);
             Chunk c199 = new Chunk("\n " + clientDetails[2].FirstName + " " + clientDetails[0].SurName + "                                                                                " + clientDetails[3].FirstName + " " + clientDetails[3].SurName, contentFont);
             formattedContent81.Add(c197);
             formattedContent81.Add(c198);
@@ -5836,11 +5849,15 @@ namespace RE360.API.Common
             Phrase formattedContent82 = new Phrase();
             Chunk c200 = new Chunk("\n Signed on behalf of the Agent:" + "                                      Date:" + "                                   at" + "                                  am/pm", contentFont);
 
-            iTextSharp.text.Image logo00 = iTextSharp.text.Image.GetInstance(execution.AgentToSignHere);
-            logo00.ScaleToFit(35f, 35f);
-            logo00.SetAbsolutePosition(160, 530);
-            PdfContentByte contentByte = writer.DirectContent;
-            contentByte.AddImage(logo00);
+            if (execution.AgentToSignHere != null)
+            {
+                iTextSharp.text.Image logo00 = iTextSharp.text.Image.GetInstance(execution.AgentToSignHere);
+                logo00.ScaleToFit(35f, 35f);
+                logo00.SetAbsolutePosition(160, 530);
+
+                PdfContentByte contentByte = writer.DirectContent;
+                contentByte.AddImage(logo00);
+            }
             //AddTextFieldToPDF(writer, doc, "Propertyfield", "", "", 160, 545, 250, 520);
             var executionDate = execution.AgentToSignHereDate != null ? ((DateTime)execution.AgentToSignHereDate).ToString("MM-yyyy") : "";
             var executionTIme = execution.AgentToSignHereDate != null ? (DateTimeOffset.Parse(execution.AgentToSignHereDate.ToString()).ToString("tt")) : "";
@@ -8421,23 +8438,44 @@ namespace RE360.API.Common
                 float boxX = document.Right - boxWidth; // Adjust the 36 to set the distance from the right margin
                 float boxY = y1 - 10; // Adjust the 10 to set the vertical position of the signature box
 
-                iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(_execution.AgentToSignHere);
-                logo1.ScaleToFit(35f, 35f);
-                logo1.SetAbsolutePosition(boxX + 10, boxY + boxHeight - 20);
-                //PdfContentByte contentByte = writer.DirectContent;
-                //contentByte.AddImage(logo1);
-                // Set the background color of the signature box
-                //BaseColor backgroundColor = new BaseColor(43, 145, 175); // Replace with your desired background color  
-                BaseColor backgroundColor = new BaseColor(232, 232, 232); // Replace with your desired background color  
-                PdfGState state = new PdfGState();
-                //state.FillOpacity = 0.3f;
-                cb.SetGState(state);
-                cb.SetColorFill(backgroundColor);
-                //cb.Rectangle(boxX, boxY, boxWidth, boxHeight);
-                cb.AddImage(logo1);
-                cb.Fill();
+                ////iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(_execution.AgentToSignHere);
+                ////logo1.ScaleToFit(35f, 35f);
+                ////logo1.SetAbsolutePosition(boxX + 10, boxY + boxHeight - 20);
+                ////if (_execution != null)
+                ////{
+                ////    iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(_execution.AgentToSignHere);
+                ////    logo1.ScaleToFit(35f, 35f);
+                ////    logo1.SetAbsolutePosition(boxX + 10, boxY + boxHeight - 20);
+                ////}
+                ////PdfContentByte contentByte = writer.DirectContent;
+                ////contentByte.AddImage(logo1);
+                //// Set the background color of the signature box
+                ////BaseColor backgroundColor = new BaseColor(43, 145, 175); // Replace with your desired background color  
+                //BaseColor backgroundColor = new BaseColor(232, 232, 232); // Replace with your desired background color  
+                //PdfGState state = new PdfGState();
+                ////state.FillOpacity = 0.3f;
+                //cb.SetGState(state);
+                //cb.SetColorFill(backgroundColor);
+                ////cb.Rectangle(boxX, boxY, boxWidth, boxHeight);
+                //cb.AddImage(logo1);
+                //cb.Fill();
+                if (_execution != null)
+                {
+                    iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(_execution.AgentToSignHere);
+                    logo1.ScaleToFit(35f, 35f);
+                    logo1.SetAbsolutePosition(boxX + 10, boxY + boxHeight - 20);
 
+                    // Set the background color of the signature box
+                    BaseColor backgroundColor = new BaseColor(232, 232, 232); // Replace with your desired background color  
+                    PdfGState state = new PdfGState();
+                    cb.SetGState(state);
+                    cb.SetColorFill(backgroundColor);
+                    cb.AddImage(logo1);
+                    cb.Fill();
 
+                }
+
+              
 
                 Font labelFont = new Font(baseFont, 10, Font.NORMAL, BaseColor.BLACK);
                 Phrase label = new Phrase("Initial Here:", labelFont);
