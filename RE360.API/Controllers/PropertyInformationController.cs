@@ -10,7 +10,7 @@ namespace RE360.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+   // [Authorize]
     public class PropertyInformationController : ControllerBase
     {
         private readonly IPropertyInformationRepository _propertyInformationRepository;
@@ -210,6 +210,14 @@ namespace RE360.API.Controllers
         [HttpGet]
         [Route("GeneratePDF")]
         public async Task<IActionResult> GeneratePDF(int pid)
+        {
+            var result = await _propertyInformationRepository.GeneratePDF(pid);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("GeneratePDFURL")]
+        public async Task<IActionResult> GeneratePDFURL(int pid)
         {
             var result = await _propertyInformationRepository.GeneratePDF(pid);
             return Ok(result);
