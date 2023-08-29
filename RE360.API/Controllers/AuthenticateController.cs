@@ -224,7 +224,6 @@ public class AuthenticateController : ControllerBase
                         IsPasswordChange = true
                     };
                     string Password = common.GenerateRandomPassword();
-                    //string Password = "Test@123";
                     var result = await _userManager.CreateAsync(user, Password);
                     if (result != null)
                     {
