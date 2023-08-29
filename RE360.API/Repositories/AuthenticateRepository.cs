@@ -75,6 +75,7 @@ namespace RE360.API.Repositories
                                 userDetail.UserId = user.Id;
                                 userDetail.UserName = user.FirstName + " " + user.LastName;
                                 userDetail.Email = user.UserName;
+                                userDetail.IsPasswordChange = user.IsPasswordChange;
                                 if (!string.IsNullOrEmpty(user.ProfileUrl))
                                 {
                                     userDetail.ProfileImage = _configuration["BlobStorageSettings:UserImagesPath"].ToString() + user.ProfileUrl + _configuration["BlobStorageSettings:UserImagesPathToken"].ToString();
@@ -193,7 +194,7 @@ namespace RE360.API.Repositories
             catch (Exception ex)
             {
                 CommonDBHelper.ErrorLog("AuthenticateController - Register", ex.Message, ex.StackTrace);
-                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = "Something Went Wrong" };
+                return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.StackTrace };
             }
         }
 

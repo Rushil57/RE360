@@ -285,6 +285,7 @@ namespace RE360.API.Controllers
                                     }
                                     else
                                     {
+                                        user.IsPasswordChange = false;
                                         var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword.Trim(), model.NewPassword.Trim());
                                         if (!result.Succeeded)
                                         {
