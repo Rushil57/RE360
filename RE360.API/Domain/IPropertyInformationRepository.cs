@@ -31,7 +31,7 @@ namespace RE360.API.Domain
         Task<APIResponseModel> DeleteClientByID(int ID);
         Task<APIResponseModel> DeleteSolicitorByID(int ID);
         Task<APIResponseModel> DeletePropertyByID(int ID);
-        Task<APIResponseModel> GeneratePDF(int ID);
+        Task<APIResponseModel> GeneratePDF(int ID, IConfiguration configuration);
 
     }
 }

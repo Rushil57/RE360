@@ -14,6 +14,7 @@ namespace RE360.API.Controllers
     public class PropertyInformationController : ControllerBase
     {
         private readonly IPropertyInformationRepository _propertyInformationRepository;
+
         public PropertyInformationController(IPropertyInformationRepository propertyInformationRepository)
         {
             _propertyInformationRepository = propertyInformationRepository;
@@ -207,20 +208,73 @@ namespace RE360.API.Controllers
             return Ok(result);
         }
 
+        //[HttpGet]
+        //[Route("GeneratePDF")]
+        //public async Task<IActionResult> GeneratePDF(int pid)
+        //{
+        //    var result = await _propertyInformationRepository.GeneratePDF(pid);
+        //    return Ok(result);
+        //}
+
+        ////[HttpGet]
+        ////[Route("GeneratePDFURL")]
+        ////public async Task<IActionResult> GeneratePDFURL(int pid)
+        ////{
+        ////    var result = await _propertyInformationRepository.GeneratePDF(pid);
+        ////    var filePath = configuration["BlobStorageSettings:DocPath"] + "logo.png" + configuration["BlobStorageSettings:DocToken"];
+        ////    return Ok(result);
+        ////}
+
+        //[HttpGet]
+        //[Route("GeneratePDFURL")]
+        //public async Task<IActionResult> GeneratePDFURL(int pid)
+        //{
+        //    var result = await _propertyInformationRepository.GeneratePDF(pid, configuration);
+
+        //    var filePath = configuration["BlobStorageSettings:DocPath"] + "logo.png" + configuration["BlobStorageSettings:DocToken"];
+        //    return Ok(result);
+        //}
+
         [HttpGet]
         [Route("GeneratePDF")]
-        public async Task<IActionResult> GeneratePDF(int pid)
+        public async Task<IActionResult> GeneratePDF(int pid, IConfiguration configuration)
         {
-            var result = await _propertyInformationRepository.GeneratePDF(pid);
+            var result = await _propertyInformationRepository.GeneratePDF(pid, configuration);
             return Ok(result);
         }
+
+        //[HttpGet]
+        //[Route("GeneratePDFURL")]
+        //public async Task<IActionResult> GeneratePDFURL(int pid, IConfiguration configuration)
+        //{
+        //    var result = await _propertyInformationRepository.GeneratePDF(pid, configuration);
+        //    var filePath = Path.Combine(configuration["BlobStorageSettings:AgentDocPath"], pid.ToString()) + configuration["BlobStorageSettings:AgentDocToken"];
+
+        //    return Ok(result);
+        //}
 
         [HttpGet]
         [Route("GeneratePDFURL")]
         public async Task<IActionResult> GeneratePDFURL(int pid)
         {
-            var result = await _propertyInformationRepository.GeneratePDF(pid);
-            return Ok(result);
+            try
+            {
+                var configuration = HttpContext.RequestServices.GetRequiredService<IConfiguration>();
+
+                var result = await _propertyInformationRepository.GeneratePDF(pid, configuration);
+
+                var filePath = $"{configuration["BlobStorageSettings:AgentDocPath"]}{pid}.pdf{configuration["BlobStorageSettings:AgentDocToken"]}";
+
+     
+                return Ok(new { Result = result, FilePath = filePath });
+            }
+            catch (Exception ex)
+
+            { 
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while generating PDF URL.");
+            }
         }
+
+
     }
 }

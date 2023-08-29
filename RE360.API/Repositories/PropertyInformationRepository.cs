@@ -823,28 +823,86 @@ namespace RE360.API.Repositories
             }
         }
 
-        public async Task<APIResponseModel> GeneratePDF(int id)
+        //public async Task<APIResponseModel> GeneratePDF(int id)
+        //{
+        //    try
+        //    {
+
+        //        Guid guAgentID;
+        //        Guid item = _context.ListingAddress.Where(x => x.ID == id).FirstOrDefault().AgentID;
+
+        //        Guid.TryParse(item.ToString(), out guAgentID);
+
+        //        ApplicationUser user = await _userManager.FindByIdAsync(guAgentID.ToString());
+        //        //var html = System.IO.File.ReadAllText(@"D:/Projects/RE360/RE360/RE360.API/Document/htmlpage.html");
+        //        //var CSS = System.IO.File.ReadAllText(@"D:/Projects/RE360/RE360/RE360.API/Document/StyleSheet.css");
+        //        GeneratePDF pDFHelper = new GeneratePDF(user, _context, _configuration);
+        //        pDFHelper.DownloadPDF(id);
+        //        return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success" };
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
+        //    }
+        //}
+
+
+
+        public async Task<APIResponseModel> GeneratePDF(int id, IConfiguration configuration)
         {
             try
             {
-
                 Guid guAgentID;
                 Guid item = _context.ListingAddress.Where(x => x.ID == id).FirstOrDefault().AgentID;
 
                 Guid.TryParse(item.ToString(), out guAgentID);
 
                 ApplicationUser user = await _userManager.FindByIdAsync(guAgentID.ToString());
-                //var html = System.IO.File.ReadAllText(@"D:/Projects/RE360/RE360/RE360.API/Document/htmlpage.html");
-                //var CSS = System.IO.File.ReadAllText(@"D:/Projects/RE360/RE360/RE360.API/Document/StyleSheet.css");
-                GeneratePDF pDFHelper = new GeneratePDF(user, _context, _configuration);
-                pDFHelper.DownloadPDF(id );
+                GeneratePDF pDFHelper = new GeneratePDF(user, _context, configuration);
+                pDFHelper.DownloadPDF(id);
                 return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success" };
             }
             catch (Exception ex)
             {
-
                 return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
             }
         }
+
+
+
+        //public async Task<APIResponseModel> GenerateAndStorePdf(int pid)
+        //{
+        //    try
+        //    {
+        //        ApplicationUser user = await _userManager.FindByIdAsync(/* provide the user ID */);
+
+        //        GeneratePDF pDFHelper = new GeneratePDF(user, _context, _configuration);
+        //        MemoryStream memoryStream = pDFHelper.GeneratePDF(pid);
+
+        //        string pdfContainerName = "pdfs";
+        //        string pdfFileName = pid.ToString() + ".pdf";
+        //        string pdfAzureFilePath = await UploadBlobPdf(memoryStream, pdfFileName, pdfContainerName);
+
+        //        Execution exeList = _context.Execution.Find(pid);
+        //        if (exeList != null)
+        //        {
+        //            exeList.PdfUrl = pdfAzureFilePath;
+        //            _context.SaveChanges();
+        //        }
+
+        //        return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "PDF generated and URL stored successfully." };
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
+        //    }
+        //}
+
+
+
+
+
     }
 }
