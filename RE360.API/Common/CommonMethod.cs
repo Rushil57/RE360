@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Mail;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using iTextSharp.text.pdf;
 
 namespace RE360.API.Common
 {
@@ -156,6 +157,35 @@ namespace RE360.API.Common
                 throw ex;
             }
         }
+
+
+        public async Task<string> UploadBlobPdf(Stream fileStream, string fileName, string blobContainerName)
+        {
+            try
+            {
+                CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(_configuration["BlobStorageSettings:BlobStorageConnStr"].ToString());
+                CloudBlobClient blobClient = cloudStorageAccount.CreateCloudBlobClient();
+                CloudBlobContainer container = blobClient.GetContainerReference(blobContainerName);
+                CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileName);
+
+                await blockBlob.UploadFromStreamAsync(fileStream);
+
+                return blockBlob.Uri.ToString();
+            }
+            catch (Exception ex)
+            {
+                CommonDBHelper.ErrorLog("CommonMethod - UploadBlobFile", ex.Message, ex.StackTrace);
+                throw ex;
+            }
+        }
+
+
+
+
+
+
+
+
 
         public async Task<string> SendMailForAgentRegi(string receiverEmailId, string firstName, string Password)
         {
