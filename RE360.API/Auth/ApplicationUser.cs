@@ -18,5 +18,6 @@ public class ApplicationUser : IdentityUser
     public decimal? BaseAmount { get; set; }
     public decimal? SalePricePercentage { get; set; }
     public decimal? MinimumCommission { get; set; }
+    public bool IsPasswordChange { get; set; } = false;
 
 }

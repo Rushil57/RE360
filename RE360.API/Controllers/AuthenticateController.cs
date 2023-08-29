@@ -54,9 +54,19 @@ public class AuthenticateController : ControllerBase
     public async Task<IActionResult> Login([FromBody] LoginModel model)
     {
 
-        var result = await _authenticateRepository.Login(model);
-        var statuscode = (int)result.StatusCode;
-        return StatusCode(statuscode, result);
+        try
+        {
+            var result = await _authenticateRepository.Login(model);
+            var statuscode = (int)result.StatusCode;
+            return StatusCode(statuscode, result);
+        }
+        catch (Exception ex)
+        {
+            //return Ok(new { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message + "-->" + ex.StackTrace });
+            CommonDBHelper.ErrorLog("CommonDBHelper - GetDataSet", ex.Message, ex.StackTrace);
+            return Ok(new { StatusCode = StatusCodes.Status403Forbidden, Message = "Something Went Wrong" });
+            throw;
+        }
     }
 
     /// <summary>
@@ -211,9 +221,9 @@ public class AuthenticateController : ControllerBase
                         BaseAmount = model.BaseAmount,
                         SalePricePercentage = model.SalePricePercantage,
                         MinimumCommission = model.MinimumCommission,
+                        IsPasswordChange = true
                     };
                     string Password = common.GenerateRandomPassword();
-                    //string Password = "Test@123";
                     var result = await _userManager.CreateAsync(user, Password);
                     if (result != null)
                     {

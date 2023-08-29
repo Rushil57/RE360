@@ -79,7 +79,7 @@ namespace RE360.API.Common
 
         public async Task<string> SendMail(string receiverEmailId, string newpassword, string firstName)
         {
-            var filePath = _configuration["BlobStorageSettings:DocumentPath"] + "logo.png" + _configuration["BlobStorageSettings:DocumentPathToken"];
+            var filePath = _configuration["BlobStorageSettings:DocPath"] + "logo.png" + _configuration["BlobStorageSettings:DocToken"];
             var senderPassword = _configuration["Smtp:Password"].ToString();
             var sendEmailId = _configuration["Smtp:FromAddress"].ToString();
             var host = _configuration["Smtp:Server"].ToString();
@@ -189,21 +189,21 @@ namespace RE360.API.Common
 
         public async Task<string> SendMailForAgentRegi(string receiverEmailId, string firstName, string Password)
         {
-            var filePath = _configuration["BlobStorageSettings:DocumentPath"] + "logo.png" + _configuration["BlobStorageSettings:DocumentPathToken"];
+            var filePath = _configuration["BlobStorageSettings:DocPath"] + "logo.png" + _configuration["BlobStorageSettings:DocToken"];
             var senderPassword = _configuration["Smtp:Password"].ToString();
             var sendEmailId = _configuration["Smtp:FromAddress"].ToString();
             var host = _configuration["Smtp:Server"].ToString();
             var port = Convert.ToInt32(_configuration["Smtp:Port"]);
 
             var mailSubject = "Registration";
-            var mailBody = "<p style='padding-left:2%;'>Hello " + firstName + "," +
-                            "</p><p style='padding-left: 5%;'>Your Account has been created successfully." +
+            var mailBody = "<p>Dear " + firstName + " Agent," +
+                            "<br>We are pleased to inform you that your account has been successfully created.<br>" +
                             "<br>Your User Name is: <b>" + receiverEmailId + "</b>" +
-                            "<br>Your New password is: <b>" + Password + "</b>" +
-                            "<br><b>Note:- </b> We recommend you to change the password when you login first time with this new password.</p>";
+                            "<br>Your Temporary Password is: <b>" + Password + "</b>" +
+                            "<br><br>Please note that we strongly recommend changing your password the first time you log in using this temporary password for enhanced security." +
+            "<br><br>Thank you for choosing our services. If you have any questions or require assistance, please do not hesitate to reach out to our support team.";
+
             var sumUp = "<p style='padding-top: 3%;padding-left: 3%;border-left: 1px solid #d5d5ec;'>RE360</p>";
-
-
             AlternateView alternateView = AlternateView.CreateAlternateViewFromString
             (
              mailBody + "<br> <div style=\"display: flex;\"><p style=\"padding-left: 2%;\">" +
@@ -239,7 +239,7 @@ namespace RE360.API.Common
             catch (Exception ex)
             {
                 string Error = ex.Message;
-                CommonDBHelper.ErrorLog("AuthenticateController - SendMail", ex.Message, ex.StackTrace);
+                CommonDBHelper.ErrorLog("AuthenticateController - SendMailForAgentRegi", ex.Message, ex.StackTrace);
                 return Error;
             }
 
