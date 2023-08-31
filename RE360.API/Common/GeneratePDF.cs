@@ -220,9 +220,11 @@ namespace RE360.API.Common
                     rightCell.HorizontalAlignment = Element.ALIGN_RIGHT;
                     rightCell.Border = Rectangle.NO_BORDER;
                     righttable.DefaultCell.Border = 0;
-                    string logoPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "logopdf.png");
-                    iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(logoPath);
-                    if (System.IO.File.Exists(logoPath))
+            //   var filePath = _configuration["BlobStorageSettings:DocPath"] + "logopdf.png" + _configuration["BlobStorageSettings:DocToken"];
+            var filePath = _configuration["BlobStorageSettings:DocPath"] + "logopdf.png" + _configuration["BlobStorageSettings:DocToken"];
+          //  string logoPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "logopdf.png");
+                    iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(filePath);
+                    if (System.IO.File.Exists(filePath))
                     {
 
                         logo.ScaleAbsolute(70f, 70f);
@@ -1097,10 +1099,10 @@ namespace RE360.API.Common
 
 
 
-
-                    string logoPath1 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
-                    iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(logoPath1);
-                    if (System.IO.File.Exists(logoPath1))
+            var filePath1 = _configuration["BlobStorageSettings:DocPath"] + "Calender.png" + _configuration["BlobStorageSettings:DocToken"];
+          //  string logoPath1 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
+                    iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(filePath1);
+                    if (System.IO.File.Exists(filePath1))
                     {
                         logo1.ScaleAbsolute(15f, 15f);
                         logo1.SetAbsolutePosition(308, 465);
@@ -1126,9 +1128,10 @@ namespace RE360.API.Common
                     tf89.Options = TextField.READ_ONLY;
                     writer.AddAnnotation(tf89.GetTextField());
 
-                    string logoPath2 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Clock.png");
-                    iTextSharp.text.Image logo2 = iTextSharp.text.Image.GetInstance(logoPath2);
-                    if (System.IO.File.Exists(logoPath2))
+            var filePath2 = _configuration["BlobStorageSettings:DocPath"] + "Clock.png" + _configuration["BlobStorageSettings:DocToken"];
+         //   string logoPath2 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Clock.png");
+                    iTextSharp.text.Image logo2 = iTextSharp.text.Image.GetInstance(filePath2);
+                    if (System.IO.File.Exists(filePath2))
                     {
                         logo2.ScaleAbsolute(15f, 15f);
                         logo2.SetAbsolutePosition(365, 465);
@@ -1212,9 +1215,10 @@ namespace RE360.API.Common
                     cb24.ShowTextAligned(1, text24, 450, 482, 0);
                     cb24.EndText();
 
-                    string logoPath3 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
-                    iTextSharp.text.Image logo3 = iTextSharp.text.Image.GetInstance(logoPath3);
-                    if (System.IO.File.Exists(logoPath3))
+            var filePath3 = _configuration["BlobStorageSettings:DocPath"] + "Calender.png" + _configuration["BlobStorageSettings:DocToken"];
+          //  string logoPath3 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
+                    iTextSharp.text.Image logo3 = iTextSharp.text.Image.GetInstance(filePath3);
+                    if (System.IO.File.Exists(filePath3))
                     {
                         logo3.ScaleAbsolute(15f, 15f);
                         logo3.SetAbsolutePosition(437, 465);
@@ -1237,9 +1241,10 @@ namespace RE360.API.Common
                     tf94.Options = TextField.READ_ONLY;
                     writer.AddAnnotation(tf94.GetTextField());
 
-                    string logoPath4 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Clock.png");
-                    iTextSharp.text.Image logo4 = iTextSharp.text.Image.GetInstance(logoPath4);
-                    if (System.IO.File.Exists(logoPath4))
+            var filePath4 = _configuration["BlobStorageSettings:DocPath"] + "Clock.png" + _configuration["BlobStorageSettings:DocToken"];
+           // string logoPath4 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Clock.png");
+                    iTextSharp.text.Image logo4 = iTextSharp.text.Image.GetInstance(filePath4);
+                    if (System.IO.File.Exists(filePath4))
                     {
                         logo4.ScaleAbsolute(15f, 15f);
                         logo4.SetAbsolutePosition(500, 465);
@@ -1274,9 +1279,10 @@ namespace RE360.API.Common
                     cb25.ShowTextAligned(1, text25, 480, 440, 0);
                     cb25.EndText();
 
-                    string logoPath5 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
-                    iTextSharp.text.Image logo5 = iTextSharp.text.Image.GetInstance(logoPath5);
-                    if (System.IO.File.Exists(logoPath5))
+            var filePath5 = _configuration["BlobStorageSettings:DocPath"] + "Calender.png" + _configuration["BlobStorageSettings:DocToken"];
+          //  string logoPath5 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
+                    iTextSharp.text.Image logo5 = iTextSharp.text.Image.GetInstance(filePath5);
+                    if (System.IO.File.Exists(filePath5))
                     {
                         logo5.ScaleAbsolute(15f, 15f);
                         logo5.SetAbsolutePosition(437, 420);
@@ -1299,9 +1305,10 @@ namespace RE360.API.Common
                     tf96.Options = TextField.READ_ONLY;
                     writer.AddAnnotation(tf96.GetTextField());
 
-                    string logoPath6 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Clock.png");
-                    iTextSharp.text.Image logo6 = iTextSharp.text.Image.GetInstance(logoPath6);
-                    if (System.IO.File.Exists(logoPath6))
+            var filePath6 = _configuration["BlobStorageSettings:DocPath"] + "Clock.png" + _configuration["BlobStorageSettings:DocToken"];
+          //  string logoPath6 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Clock.png");
+                    iTextSharp.text.Image logo6 = iTextSharp.text.Image.GetInstance(filePath6);
+                    if (System.IO.File.Exists(filePath6))
                     {
                         logo6.ScaleAbsolute(15f, 15f);
                         logo6.SetAbsolutePosition(500, 420);
@@ -3852,9 +3859,10 @@ namespace RE360.API.Common
                     content010.BeginText();
                     content010.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Start", 33, 150, 0);
                     content010.EndText();
-                    string logoPath11 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
-                    iTextSharp.text.Image logo11 = iTextSharp.text.Image.GetInstance(logoPath11);
-                    if (System.IO.File.Exists(logoPath11))
+            var filePath11 = _configuration["BlobStorageSettings:DocPath"] + "Calender.png" + _configuration["BlobStorageSettings:DocToken"];
+          //  string logoPath11 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
+                    iTextSharp.text.Image logo11 = iTextSharp.text.Image.GetInstance(filePath11);
+                    if (System.IO.File.Exists(filePath11))
                     {
                         logo11.ScaleAbsolute(15f, 15f);
                         logo11.SetAbsolutePosition(43, 150);
@@ -3892,9 +3900,10 @@ namespace RE360.API.Common
                     content011.BeginText();
                     content011.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "End", 33, 115, 0);
                     content011.EndText();
-                    string logoPath22 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
-                    iTextSharp.text.Image logo22 = iTextSharp.text.Image.GetInstance(logoPath22);
-                    if (System.IO.File.Exists(logoPath22))
+            var filePath12 = _configuration["BlobStorageSettings:DocPath"] + "Calender.png" + _configuration["BlobStorageSettings:DocToken"];
+          //  string logoPath22 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
+                    iTextSharp.text.Image logo22 = iTextSharp.text.Image.GetInstance(filePath12);
+                    if (System.IO.File.Exists(filePath12))
                     {
                         logo22.ScaleAbsolute(15f, 15f);
                         logo22.SetAbsolutePosition(43, 115);
@@ -4268,9 +4277,10 @@ namespace RE360.API.Common
             leftCell02.HorizontalAlignment = Element.ALIGN_RIGHT;
             leftCell02.Border = Rectangle.NO_BORDER;
             leftCell02.FixedHeight = 50f;
-            string logoPath33 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "logopdf.png");
-            iTextSharp.text.Image logo33 = iTextSharp.text.Image.GetInstance(logoPath33);
-            if (System.IO.File.Exists(logoPath33))
+            var filePath33 = _configuration["BlobStorageSettings:DocPath"] + "logopdf.png" + _configuration["BlobStorageSettings:DocToken"];
+           // string logoPath33 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "logopdf.png");
+            iTextSharp.text.Image logo33 = iTextSharp.text.Image.GetInstance(filePath33);
+            if (System.IO.File.Exists(filePath33))
             {
                 logo33.ScaleAbsolute(70f, 70f);
                 //logo33.SetAbsolutePosition(500, 725);
@@ -4616,29 +4626,30 @@ namespace RE360.API.Common
             Chunk c15 = new Chunk("(4.1. Auction Authority)", colorFont);
             formattedContent9.Add(c15);
 
-            string logoPath1 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "RadioChecked.png");
-            iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(logoPath1);
-            if (System.IO.File.Exists(logoPath1))
+            var filePathradio = _configuration["BlobStorageSettings:DocPath"] + "RadioChecked.png" + _configuration["BlobStorageSettings:DocToken"];
+          //  string logoPath1 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "RadioChecked.png");
+            iTextSharp.text.Image logoradio = iTextSharp.text.Image.GetInstance(filePathradio);
+            if (System.IO.File.Exists(filePathradio))
             {
-                logo1.ScaleAbsolute(15f, 15f);
-                logo1.SetAbsolutePosition(150, 113);
+                logoradio.ScaleAbsolute(15f, 15f);
+                logoradio.SetAbsolutePosition(150, 113);
 
 
-                doc.Add(logo1);
+                doc.Add(logoradio);
             }
             Chunk c16 = new Chunk("                 Applicable", colorFont);
             formattedContent9.Add(c16);
 
-
-            string logoPath2 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "RadioUnChecked.png");
-            iTextSharp.text.Image logo2 = iTextSharp.text.Image.GetInstance(logoPath2);
-            if (System.IO.File.Exists(logoPath2))
+            var filePathunradio = _configuration["BlobStorageSettings:DocPath"] + "RadioUnChecked.png" + _configuration["BlobStorageSettings:DocToken"];
+         //   string logoPath2 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "RadioUnChecked.png");
+            iTextSharp.text.Image logounradio = iTextSharp.text.Image.GetInstance(filePathunradio);
+            if (System.IO.File.Exists(filePathunradio))
             {
-                logo2.ScaleAbsolute(15f, 15f);
-                logo2.SetAbsolutePosition(240, 113);
+                logounradio.ScaleAbsolute(15f, 15f);
+                logounradio.SetAbsolutePosition(240, 113);
 
 
-                doc.Add(logo2);
+                doc.Add(logounradio);
             }
             Chunk c17 = new Chunk("                  Not Applicable", colorFont);
             formattedContent9.Add(c17);
