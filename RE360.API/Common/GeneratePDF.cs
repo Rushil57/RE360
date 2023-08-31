@@ -50,4048 +50,4111 @@ namespace RE360.API.Common
             _user = user;
 
         }
-        public async void DownloadPDF(int id)
+        public async Task DownloadPDF(int id, Stream memoryStream)
+
         {
-            List<ClientDetail> clientDetailsList = new List<ClientDetail>();
-            ListingAddress listingAddressList = new ListingAddress();
-            List<SolicitorDetail> solicitorList = new List<SolicitorDetail>();
-            List<ParticularDetail> particularList = new List<ParticularDetail>();
-            List<PriorAgencyMarketing> priorAgencyMarketingList = new List<PriorAgencyMarketing>();
-            List<Estimates> estimatesList = new List<Estimates>();
-            List<EstimatesDetail> additionaldisclosure = new List<EstimatesDetail>();
-            List<MethodOfSale> methodOfSaleList = new List<MethodOfSale>();
-            List<TenancyDetail> tenancyDetailsList = new List<TenancyDetail>();
-            List<LegalDetail> legaldetailsList = new List<LegalDetail>();
-            List<ContractDetail> contractdetailsList = new List<ContractDetail>();
-            List<ContractRate> contractRatelsList = new List<ContractRate>();
-            List<SignaturesOfClient> signatureOfClients = new List<SignaturesOfClient>();
-            Execution signatureOfAgent = new Execution();
+            
+                List<ClientDetail> clientDetailsList = new List<ClientDetail>();
+                ListingAddress listingAddressList = new ListingAddress();
+                List<SolicitorDetail> solicitorList = new List<SolicitorDetail>();
+                List<ParticularDetail> particularList = new List<ParticularDetail>();
+                List<PriorAgencyMarketing> priorAgencyMarketingList = new List<PriorAgencyMarketing>();
+                List<Estimates> estimatesList = new List<Estimates>();
+                List<EstimatesDetail> additionaldisclosure = new List<EstimatesDetail>();
+                List<MethodOfSale> methodOfSaleList = new List<MethodOfSale>();
+                List<TenancyDetail> tenancyDetailsList = new List<TenancyDetail>();
+                List<LegalDetail> legaldetailsList = new List<LegalDetail>();
+                List<ContractDetail> contractdetailsList = new List<ContractDetail>();
+                List<ContractRate> contractRatelsList = new List<ContractRate>();
+                List<SignaturesOfClient> signatureOfClients = new List<SignaturesOfClient>();
+                Execution signatureOfAgent = new Execution();
 
-            var PropertyAttrList = (from p in _context.PropertyAttributeType
-                                    select new
-                                    {
-                                        Name = p.Name,
-                                        list = p.PropertyAttribute.ToList()
-                                    }).ToList();
+                var PropertyAttrList = (from p in _context.PropertyAttributeType
+                                        select new
+                                        {
+                                            Name = p.Name,
+                                            list = p.PropertyAttribute.ToList()
+                                        }).ToList();
 
-            //var clientDetailsList = _context.ClientDetail.Where(x => x.PID == id).ToList();
-            methodOfSaleList = _context.MethodOfSale.Where(x => x.PID == id).ToList();
-            tenancyDetailsList = _context.TenancyDetail.Where(x => x.PID == id).ToList();
-            contractdetailsList = _context.ContractDetail.Where(x => x.PID == id).ToList();
-            contractRatelsList = _context.ContractRate.Where(x => x.PID == id).ToList();
-            signatureOfAgent = _context.Execution.Where(x => x.PID == id).FirstOrDefault();
-            signatureOfClients = _context.SignaturesOfClient.Where(x => x.PID == id).ToList();
-            priorAgencyMarketingList = _context.PriorAgencyMarketing.Where(x => x.PID == id).ToList();
-            legaldetailsList = _context.LegalDetail.Where(x => x.PID == id).ToList();
-            additionaldisclosure = _context.EstimatesDetail.Where(x => x.PID == id).ToList();
-            clientDetailsList = _context.ClientDetail.Where(x => x.PID == id).ToList();
-            listingAddressList = _context.ListingAddress.Where(x => x.ID == id).FirstOrDefault(); ;
-            particularList = _context.ParticularDetail.Where(x => x.PID == id).ToList();
-            var propertyInformationsList = _context.PropertyInformation.Where(x => x.PID == id).ToList();
-            var othercommentList = _context.PropertyInformationDetail.Where(w => w.PID == id).ToList();
-            estimatesList = _context.Estimates.Where(x => x.PID == id).ToList();
-            var signaturesOfClientList = _context.SignaturesOfClient.Where(x => x.PID == id).ToList();
-            solicitorList = _context.SolicitorDetail.Where(x => x.PID == id).ToList();
-            var execution = _context.Execution.Where(x => x.PID == id).FirstOrDefault();
-            if (execution != null)
-            {
-                if (!string.IsNullOrEmpty(execution.SignedOnBehalfOfTheAgent))
+                //var clientDetailsList = _context.ClientDetail.Where(x => x.PID == id).ToList();
+                methodOfSaleList = _context.MethodOfSale.Where(x => x.PID == id).ToList();
+                tenancyDetailsList = _context.TenancyDetail.Where(x => x.PID == id).ToList();
+                contractdetailsList = _context.ContractDetail.Where(x => x.PID == id).ToList();
+                contractRatelsList = _context.ContractRate.Where(x => x.PID == id).ToList();
+                signatureOfAgent = _context.Execution.Where(x => x.PID == id).FirstOrDefault();
+                signatureOfClients = _context.SignaturesOfClient.Where(x => x.PID == id).ToList();
+                priorAgencyMarketingList = _context.PriorAgencyMarketing.Where(x => x.PID == id).ToList();
+                legaldetailsList = _context.LegalDetail.Where(x => x.PID == id).ToList();
+                additionaldisclosure = _context.EstimatesDetail.Where(x => x.PID == id).ToList();
+                clientDetailsList = _context.ClientDetail.Where(x => x.PID == id).ToList();
+                listingAddressList = _context.ListingAddress.Where(x => x.ID == id).FirstOrDefault(); ;
+                particularList = _context.ParticularDetail.Where(x => x.PID == id).ToList();
+                var propertyInformationsList = _context.PropertyInformation.Where(x => x.PID == id).ToList();
+                var othercommentList = _context.PropertyInformationDetail.Where(w => w.PID == id).ToList();
+                estimatesList = _context.Estimates.Where(x => x.PID == id).ToList();
+                var signaturesOfClientList = _context.SignaturesOfClient.Where(x => x.PID == id).ToList();
+                solicitorList = _context.SolicitorDetail.Where(x => x.PID == id).ToList();
+                var execution = _context.Execution.Where(x => x.PID == id).FirstOrDefault();
+                if (execution != null)
                 {
-                    execution.SignedOnBehalfOfTheAgent = _configuration["BlobStorageSettings:ImagesPath"].ToString() + execution.SignedOnBehalfOfTheAgent + _configuration["BlobStorageSettings:ImageToken"].ToString();
+                    if (!string.IsNullOrEmpty(execution.SignedOnBehalfOfTheAgent))
+                    {
+                        execution.SignedOnBehalfOfTheAgent = _configuration["BlobStorageSettings:ImagesPath"].ToString() + execution.SignedOnBehalfOfTheAgent + _configuration["BlobStorageSettings:ImageToken"].ToString();
+                    }
+                    if (!string.IsNullOrEmpty(execution.AgentToSignHere))
+                    {
+                        execution.AgentToSignHere = _configuration["BlobStorageSettings:ImagesPath"].ToString() + execution.AgentToSignHere + _configuration["BlobStorageSettings:ImageToken"].ToString();
+                    }
                 }
-                if (!string.IsNullOrEmpty(execution.AgentToSignHere))
+                foreach (var item in signaturesOfClientList)
                 {
-                    execution.AgentToSignHere = _configuration["BlobStorageSettings:ImagesPath"].ToString() + execution.AgentToSignHere + _configuration["BlobStorageSettings:ImageToken"].ToString();
+                    item.SignatureOfClientName = _configuration["BlobStorageSettings:ImagesPath"].ToString() + item.SignatureOfClientName + _configuration["BlobStorageSettings:ImageToken"].ToString();
                 }
-            }
-            foreach (var item in signaturesOfClientList)
-            {
-                item.SignatureOfClientName = _configuration["BlobStorageSettings:ImagesPath"].ToString() + item.SignatureOfClientName + _configuration["BlobStorageSettings:ImageToken"].ToString();
-            }
-            var FinalList = (from l in _context.ListingAddress
-                             join cod in _context.ContractDetail
-                             on l.ID equals cod.PID into contractdetail
-                             from cd in contractdetail.DefaultIfEmpty()
-                             join cor in _context.ContractRate
-                             on l.ID equals cor.PID into contractRate
-                             from cr in contractRate.DefaultIfEmpty()
-                             join esti in _context.Estimates
-                             on l.ID equals esti.PID into estimate
-                             from est in estimate.DefaultIfEmpty()
-                             join led in _context.LegalDetail
-                             on l.ID equals led.PID into legalDetail
-                             from ld in legalDetail.DefaultIfEmpty()
-                             join meos in _context.MethodOfSale
-                             on l.ID equals meos.PID into methodOfSale
-                             from mos in methodOfSale.DefaultIfEmpty()
-                             join pad in _context.ParticularDetail
-                             on l.ID equals pad.PID into particularDetail
-                             from pd in particularDetail.DefaultIfEmpty()
-                             join pram in _context.PriorAgencyMarketing
-                             on l.ID equals pram.PID into priorAgencyMarketing
-                             from pam in priorAgencyMarketing.DefaultIfEmpty()
-                             join prid in _context.PropertyInformationDetail
-                             on l.ID equals prid.PID into propertyInformationDetail
-                             from pid in propertyInformationDetail.DefaultIfEmpty()
-                             join ted in _context.TenancyDetail
-                             on l.ID equals ted.PID into tenancyDetail
-                             from td in tenancyDetail.DefaultIfEmpty()
-                             join etdl in _context.EstimatesDetail
-                             on l.ID equals etdl.PID into estimatesDetail
-                             from etd in estimatesDetail.DefaultIfEmpty()
-                             where l.ID == id
-                             select new
-                             {
-                                 listingAddress = l,
-                                 clientDetail = clientDetailsList,
-                                 solicitorDetail = solicitorList,
-                                 particularDetail = pd,
-                                 legalDetail = ld,
-                                 contractDetail = cd,
-                                 contractRate = cr,
-                                 methodOfSale = mos,
-                                 propertyInformation = propertyInformationsList,
-                                 propertyInformationDetail = pid,
-                                 tenancyDetail = td,
-                                 priorAgencyMarketing = pam,
-                                 estimates = estimatesList,
-                                 estimatesDetail = etd,
-                                 execution = execution,
-                                 executionDetail = signaturesOfClientList
-                             }).FirstOrDefault();
+                var FinalList = (from l in _context.ListingAddress
+                                 join cod in _context.ContractDetail
+                                 on l.ID equals cod.PID into contractdetail
+                                 from cd in contractdetail.DefaultIfEmpty()
+                                 join cor in _context.ContractRate
+                                 on l.ID equals cor.PID into contractRate
+                                 from cr in contractRate.DefaultIfEmpty()
+                                 join esti in _context.Estimates
+                                 on l.ID equals esti.PID into estimate
+                                 from est in estimate.DefaultIfEmpty()
+                                 join led in _context.LegalDetail
+                                 on l.ID equals led.PID into legalDetail
+                                 from ld in legalDetail.DefaultIfEmpty()
+                                 join meos in _context.MethodOfSale
+                                 on l.ID equals meos.PID into methodOfSale
+                                 from mos in methodOfSale.DefaultIfEmpty()
+                                 join pad in _context.ParticularDetail
+                                 on l.ID equals pad.PID into particularDetail
+                                 from pd in particularDetail.DefaultIfEmpty()
+                                 join pram in _context.PriorAgencyMarketing
+                                 on l.ID equals pram.PID into priorAgencyMarketing
+                                 from pam in priorAgencyMarketing.DefaultIfEmpty()
+                                 join prid in _context.PropertyInformationDetail
+                                 on l.ID equals prid.PID into propertyInformationDetail
+                                 from pid in propertyInformationDetail.DefaultIfEmpty()
+                                 join ted in _context.TenancyDetail
+                                 on l.ID equals ted.PID into tenancyDetail
+                                 from td in tenancyDetail.DefaultIfEmpty()
+                                 join etdl in _context.EstimatesDetail
+                                 on l.ID equals etdl.PID into estimatesDetail
+                                 from etd in estimatesDetail.DefaultIfEmpty()
+                                 where l.ID == id
+                                 select new
+                                 {
+                                     listingAddress = l,
+                                     clientDetail = clientDetailsList,
+                                     solicitorDetail = solicitorList,
+                                     particularDetail = pd,
+                                     legalDetail = ld,
+                                     contractDetail = cd,
+                                     contractRate = cr,
+                                     methodOfSale = mos,
+                                     propertyInformation = propertyInformationsList,
+                                     propertyInformationDetail = pid,
+                                     tenancyDetail = td,
+                                     priorAgencyMarketing = pam,
+                                     estimates = estimatesList,
+                                     estimatesDetail = etd,
+                                     execution = execution,
+                                     executionDetail = signaturesOfClientList
+                                 }).FirstOrDefault();
 
-            var data = new List<PropertyAttributeTypeWithAllDataViewModel>();
-            using (var connection = new SqlConnection(_configuration["ConnectionStrings:ConnStr"].ToString()))
-            {
-                var sql = string.Format("SELECT PAT.ID as PropertyAttributeTypeID,PAT.Name,PA.ID as PropertyAttributeID,pa.Name as PropertyAttributeName, case when ISNULL(PIL.ID,0)=0 THEN 0 ELSE 1 END as Checkbox, PIL.Remarks, PIL.Count FROM PropertyAttributeType PAT JOIN PropertyAttribute PA ON PAT.ID = PA.PropertyAttributeTypeID left JOIN PropertyInformation PIL ON PA.ID = PIL.PropAttrId AND PIL.PID={0}", id);
-                data = connection.Query<PropertyAttributeTypeWithAllDataViewModel>(sql).ToList();
-            }
-            propertyAddress = listingAddressList != null ? listingAddressList.Address + "," + listingAddressList.Unit + "," + listingAddressList.Suburb + "," + listingAddressList.PostCode + "," + listingAddressList.StreetNumber + "," + listingAddressList.StreetName : string.Empty;
-            propertyAddress = Regex.Replace(propertyAddress.Trim(','), ",,+", ",");
+                var data = new List<PropertyAttributeTypeWithAllDataViewModel>();
+                using (var connection = new SqlConnection(_configuration["ConnectionStrings:ConnStr"].ToString()))
+                {
+                    var sql = string.Format("SELECT PAT.ID as PropertyAttributeTypeID,PAT.Name,PA.ID as PropertyAttributeID,pa.Name as PropertyAttributeName, case when ISNULL(PIL.ID,0)=0 THEN 0 ELSE 1 END as Checkbox, PIL.Remarks, PIL.Count FROM PropertyAttributeType PAT JOIN PropertyAttribute PA ON PAT.ID = PA.PropertyAttributeTypeID left JOIN PropertyInformation PIL ON PA.ID = PIL.PropAttrId AND PIL.PID={0}", id);
+                    data = connection.Query<PropertyAttributeTypeWithAllDataViewModel>(sql).ToList();
+                }
+                propertyAddress = listingAddressList != null ? listingAddressList.Address + "," + listingAddressList.Unit + "," + listingAddressList.Suburb + "," + listingAddressList.PostCode + "," + listingAddressList.StreetNumber + "," + listingAddressList.StreetName : string.Empty;
+                propertyAddress = Regex.Replace(propertyAddress.Trim(','), ",,+", ",");
 
 
-            float cellHeight = 100f;
+                float cellHeight = 100f;
+          
             Document document = new Document();
-            using (var memoryStream = new MemoryStream())
-            {
-                //var memoryStream = new MemoryStream();
-                PdfWriter writer = PdfWriter.GetInstance(document, memoryStream);
+       
+            PdfWriter writer = PdfWriter.GetInstance(document, memoryStream);
 
-                document.Open();
+            document.Open();
 
 
-                //writer.PageEvent = new PdfFooter();
-                writer.PageEvent = new PdfFooter(_user, signatureOfAgent);
+                    //writer.PageEvent = new PdfFooter();
+                    writer.PageEvent = new PdfFooter(_user, signatureOfAgent);
 
 
-                PdfPTable table = new PdfPTable(3);
-                Font lightblue = new Font(Font.FontFamily.COURIER, 9f, Font.BOLD, new BaseColor(43, 145, 175));
-                Font brown = new Font(Font.FontFamily.TIMES_ROMAN, 9f, Font.NORMAL, new BaseColor(163, 21, 21));
-                table.WidthPercentage = 108;
-                table.SpacingBefore = 10f;
-                table.SpacingAfter = 12.5f;
-                table.SpacingBefore = 10f;
-                table.SpacingAfter = 12.5f;
+                    PdfPTable table = new PdfPTable(3);
+                    Font lightblue = new Font(Font.FontFamily.COURIER, 9f, Font.BOLD, new BaseColor(43, 145, 175));
+                    Font brown = new Font(Font.FontFamily.TIMES_ROMAN, 9f, Font.NORMAL, new BaseColor(163, 21, 21));
+                    table.WidthPercentage = 108;
+                    table.SpacingBefore = 10f;
+                    table.SpacingAfter = 12.5f;
+                    table.SpacingBefore = 10f;
+                    table.SpacingAfter = 12.5f;
 
-                PdfPTable lefttable = new PdfPTable(1);
-                PdfPCell leftCell = new PdfPCell(new Phrase("PROPERTY INFORMATION", FontFactory.GetFont("verdana", 12, Font.BOLD)));
-                leftCell.Border = Rectangle.NO_BORDER;
-                lefttable.DefaultCell.Border = 0;
-                lefttable.AddCell(leftCell);
-
-
-                PdfPTable centertable = new PdfPTable(1);
-                //PdfPCell centerCell = new PdfPCell(new Phrase("CONFIDENTIAL", new Font(Font.FontFamily.COURIER, 17f, Font.BOLDITALIC, new BaseColor(0, 48, 143))));
-                PdfPCell centerCell = new PdfPCell(new Phrase(" "));
-                centerCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                centerCell.Padding = 7.5f;
-
-                IPdfPCellEvent roundedRectangle = new RoundedCellEvent(5, new BaseColor(System.Drawing.Color.Gray)); // Specify corner radius and fill color
-                                                                                                                     //centerCell.CellEvent = roundedRectangle;
-                centerCell.Border = Rectangle.NO_BORDER;
-                centerCell.PaddingBottom = 5f;
-                centertable.DefaultCell.Border = 0;
-                centertable.AddCell(centerCell);
+                    PdfPTable lefttable = new PdfPTable(1);
+                    PdfPCell leftCell = new PdfPCell(new Phrase("PROPERTY INFORMATION", FontFactory.GetFont("verdana", 12, Font.BOLD)));
+                    leftCell.Border = Rectangle.NO_BORDER;
+                    lefttable.DefaultCell.Border = 0;
+                    lefttable.AddCell(leftCell);
 
 
-                PdfPTable righttable = new PdfPTable(1);
-                PdfPCell rightCell = new PdfPCell();
-                rightCell.HorizontalAlignment = Element.ALIGN_RIGHT;
-                rightCell.Border = Rectangle.NO_BORDER;
-                righttable.DefaultCell.Border = 0;
-                string logoPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "logopdf.png");
-                iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(logoPath);
-                if (System.IO.File.Exists(logoPath))
-                {
+                    PdfPTable centertable = new PdfPTable(1);
+                    //PdfPCell centerCell = new PdfPCell(new Phrase("CONFIDENTIAL", new Font(Font.FontFamily.COURIER, 17f, Font.BOLDITALIC, new BaseColor(0, 48, 143))));
+                    PdfPCell centerCell = new PdfPCell(new Phrase(" "));
+                    centerCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    centerCell.Padding = 7.5f;
 
-                    logo.ScaleAbsolute(70f, 70f);
-                    rightCell.PaddingLeft = 80f;
-                    rightCell.PaddingBottom = -75f;
-                    rightCell.PaddingTop = 0f;
-                    rightCell.PaddingRight = 0f;
-
-                    logo.SetAbsolutePosition(iTextSharp.text.PageSize.A4.Rotate().Width - 0, 20);
-                    rightCell.AddElement(logo);
-
-                }
-                righttable.AddCell(rightCell);
-                table.DefaultCell.Border = 0;
-                table.AddCell(lefttable);
-                table.AddCell(centertable);
-                table.AddCell(righttable);
-                document.Add(table);
-
-                AddContentToPDF(document, writer, listingAddressList, _user);
+                    IPdfPCellEvent roundedRectangle = new RoundedCellEvent(5, new BaseColor(System.Drawing.Color.Gray)); // Specify corner radius and fill color
+                                                                                                                         //centerCell.CellEvent = roundedRectangle;
+                    centerCell.Border = Rectangle.NO_BORDER;
+                    centerCell.PaddingBottom = 5f;
+                    centertable.DefaultCell.Border = 0;
+                    centertable.AddCell(centerCell);
 
 
-
-                if (clientDetailsList.Count == 1)
-                {
-                    var batchList = clientDetailsList.Batch(1).ToList();
-                    foreach (var item in batchList)
+                    PdfPTable righttable = new PdfPTable(1);
+                    PdfPCell rightCell = new PdfPCell();
+                    rightCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                    rightCell.Border = Rectangle.NO_BORDER;
+                    righttable.DefaultCell.Border = 0;
+                    string logoPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "logopdf.png");
+                    iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(logoPath);
+                    if (System.IO.File.Exists(logoPath))
                     {
-                        if (item.ToList().Count() == 1)
+
+                        logo.ScaleAbsolute(70f, 70f);
+                        rightCell.PaddingLeft = 80f;
+                        rightCell.PaddingBottom = -75f;
+                        rightCell.PaddingTop = 0f;
+                        rightCell.PaddingRight = 0f;
+
+                        logo.SetAbsolutePosition(iTextSharp.text.PageSize.A4.Rotate().Width - 0, 20);
+                        rightCell.AddElement(logo);
+
+                    }
+                    righttable.AddCell(rightCell);
+                    table.DefaultCell.Border = 0;
+                    table.AddCell(lefttable);
+                    table.AddCell(centertable);
+                    table.AddCell(righttable);
+                    document.Add(table);
+
+                    AddContentToPDF(document, writer, listingAddressList, _user);
+
+
+
+                    if (clientDetailsList.Count == 1)
+                    {
+                        var batchList = clientDetailsList.Batch(1).ToList();
+                        foreach (var item in batchList)
                         {
-                            List<ClientDetail> clientDetails = new List<ClientDetail>();
-                            clientDetails.Add(item.ToArray()[0]);
-                            ClientDetail obj = new ClientDetail();
-                            clientDetails.Add(obj);
-                            AddClientTables(document, writer, clientDetails);
-                        }
-                        else
-                        {
-                            AddClientTables(document, writer, item.ToList());
+                            if (item.ToList().Count() == 1)
+                            {
+                                List<ClientDetail> clientDetails = new List<ClientDetail>();
+                                clientDetails.Add(item.ToArray()[0]);
+                                ClientDetail obj = new ClientDetail();
+                                clientDetails.Add(obj);
+                                AddClientTables(document, writer, clientDetails);
+                            }
+                            else
+                            {
+                                AddClientTables(document, writer, item.ToList());
+                            }
                         }
                     }
-                }
-                else
-                {
-                    var batchList = clientDetailsList.Batch(2).ToList();
-
-                    foreach (var item in batchList)
+                    else
                     {
-                        if (item.ToList().Count() == 1)
+                        var batchList = clientDetailsList.Batch(2).ToList();
+
+                        foreach (var item in batchList)
                         {
-                            List<ClientDetail> clientDetails = new List<ClientDetail>();
-                            clientDetails.Add(item.ToArray()[0]);
-                            ClientDetail obj = new ClientDetail();
-                            clientDetails.Add(obj);
-                            AddClientTables(document, writer, clientDetails);
-                        }
-                        else
-                        {
-                            AddClientTables(document, writer, item.ToList());
+                            if (item.ToList().Count() == 1)
+                            {
+                                List<ClientDetail> clientDetails = new List<ClientDetail>();
+                                clientDetails.Add(item.ToArray()[0]);
+                                ClientDetail obj = new ClientDetail();
+                                clientDetails.Add(obj);
+                                AddClientTables(document, writer, clientDetails);
+                            }
+                            else
+                            {
+                                AddClientTables(document, writer, item.ToList());
+                            }
                         }
                     }
-                }
 
-                document.Add(new Paragraph("\r\n"));
-                if (solicitorList.Count == 0)
-                {
-                    SolicitorDetail obj = new SolicitorDetail();
-                    solicitorList.Add(obj);
-                }
-                for (int i = 0; i < solicitorList.Count; i++)
-                {
-
-                    AddContentToSolicitordetails(document, writer, solicitorList[i]);
                     document.Add(new Paragraph("\r\n"));
-                }
-                if (particularList.Count == 0)
-                {
-                    ParticularDetail obj = new ParticularDetail();
-                    particularList.Add(obj);
-                }
-                if (legaldetailsList.Count == 0)
-                {
-                    LegalDetail obj = new LegalDetail();
-                    legaldetailsList.Add(obj);
-                }
-
-                document.Add(new Paragraph("\r\n"));
-
-                AddContentToParticulars(document, writer, particularList, data, legaldetailsList, id);
-
-
-                document.NewPage();
-
-                PdfPCell leftCell1 = new PdfPCell(new Phrase("PROPERTY INFORMATION", GetFont()));
-                leftCell1.Border = Rectangle.NO_BORDER;
-
-                table.AddCell(leftCell1);
-                document.Add(table);
-
-                var legalDetailsCheckboxList = data.Where(x => x.Name == "Legal Detail Title Type").ToList();
-                int propertyID = _context.PropertyAttributeType.Where(x => x.Name == "Legal Detail Title Type").Select(x => x.ID).FirstOrDefault();
-                var chkboxlistForLegalDetails = new List<PropertyAttributeTypeWithLegalParticularDetailModel>();
-                using (var connection = new SqlConnection(_configuration["ConnectionStrings:ConnStr"].ToString()))
-                {
-                    var sql = string.Format("SELECT PAT.ID as PropertyAttributeTypeID,PA.Name as PropertyAttributeName,PA.ID as PropertyAttributeID, LD.TitleTypeID,LD.PID, case when ISNULL(LD.TitleTypeID,0)=0 THEN 0 ELSE 1 END as Checkbox FROM PropertyAttributeType as PAT INNER JOIN PropertyAttribute as PA  ON PAT.ID = PA.PropertyAttributeTypeID LEFT JOIN legaldetail as LD on PA.id = LD.TitleTypeID and  LD.PID={0}", id + " WHERE  PA.PropertyAttributeTypeID=" + propertyID);
-                    chkboxlistForLegalDetails = connection.Query<PropertyAttributeTypeWithLegalParticularDetailModel>(sql).ToList();
-                }
-
-
-
-                PdfPTable legalstable = new PdfPTable(1);
-                PdfPCell outercell1 = new PdfPCell();
-                legalstable.DefaultCell.Border = 0;
-                outercell1.BorderColor = BaseColor.DARK_GRAY;
-                outercell1.FixedHeight = 134f;
-                legalstable.WidthPercentage = 108; // Set the width percentage of the parent table        
-                legalstable.SpacingBefore = 2f;
-                legalstable.SpacingAfter = 5f;
-                outercell1.CellEvent = new RectangleOverPdfPCellBorder("Legal details", 30f, 747, 65f, 20f, 32f, 760f);
-
-
-                PdfPTable innerTable1 = new PdfPTable(2);
-                innerTable1.DefaultCell.Border = 0;
-                innerTable1.WidthPercentage = 100f;
-                innerTable1.SpacingBefore = 10f;
-
-                PdfContentByte cb2 = writer.DirectContent;
-                BaseFont bf2 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
-                string text2 = "Title Type";
-                cb2.BeginText();
-                //put the alignment and coordinates here
-                cb2.SetFontAndSize(bf2, 8f);
-                cb2.ShowTextAligned(2, text2, 60, 733, 0);
-                cb2.EndText();
-
-
-                // Create the first inner cell
-                PdfPCell innerCell3 = new PdfPCell();
-                innerCell3.Border = 0;
-                innerCell3.HorizontalAlignment = Element.ALIGN_CENTER;
-                innerCell3.VerticalAlignment = Element.ALIGN_MIDDLE;
-                innerCell3.FixedHeight = cellHeight;
-                innerTable1.AddCell(innerCell3);
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 720, 23, 730), chkboxlistForLegalDetails[0].Checkbox, 23, 720);
-                PdfContentByte content42 = writer.DirectContent;
-                BaseFont baseF14 = BaseFont.CreateFont();
-                content42.SetFontAndSize(baseF14, 8);
-                content42.BeginText();
-                content42.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForLegalDetails[0].PropertyAttributeName, 53, 720, 0);
-                content42.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 705, 23, 715), chkboxlistForLegalDetails[1].Checkbox, 23, 705);
-                PdfContentByte content43 = writer.DirectContent;
-                BaseFont baseF15 = BaseFont.CreateFont();
-                content43.SetFontAndSize(baseF15, 8);
-                content43.BeginText();
-                content43.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForLegalDetails[1].PropertyAttributeName, 73, 705, 0);
-                content43.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 700, 23, 690), chkboxlistForLegalDetails[2].Checkbox, 23, 690);
-                PdfContentByte content44 = writer.DirectContent;
-                BaseFont baseF16 = BaseFont.CreateFont();
-                content44.SetFontAndSize(baseF16, 8);
-                content44.BeginText();
-                content44.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForLegalDetails[2].PropertyAttributeName, 73, 692, 0);
-                content44.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 685, 23, 675), chkboxlistForLegalDetails[3].Checkbox, 23, 675);
-                PdfContentByte content45 = writer.DirectContent;
-                BaseFont baseF17 = BaseFont.CreateFont();
-                content45.SetFontAndSize(baseF17, 8);
-                content45.BeginText();
-                content45.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForLegalDetails[3].PropertyAttributeName, 53, 678, 0);
-                content45.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 670, 23, 660), chkboxlistForLegalDetails[4].Checkbox, 23, 660);
-                PdfContentByte content46 = writer.DirectContent;
-                BaseFont baseF18 = BaseFont.CreateFont();
-                content46.SetFontAndSize(baseF18, 8);
-                content46.BeginText();
-                content46.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForLegalDetails[4].PropertyAttributeName, 70, 663, 0);
-                content46.EndText();
-
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 655, 23, 645), chkboxlistForLegalDetails[5].Checkbox, 23, 645);
-                PdfContentByte content47 = writer.DirectContent;
-                BaseFont baseF19 = BaseFont.CreateFont();
-                content47.SetFontAndSize(baseF19, 8);
-                content47.BeginText();
-                content47.ShowTextAligned(PdfContentByte.ALIGN_CENTER, legalDetailsCheckboxList[5].PropertyAttributeName, 68, 648, 0);
-                content47.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 640, 23, 630), chkboxlistForLegalDetails[6].Checkbox, 23, 630);
-                PdfContentByte content48 = writer.DirectContent;
-                BaseFont baseF20 = BaseFont.CreateFont();
-                content48.SetFontAndSize(baseF20, 8);
-                content48.BeginText();
-                content48.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForLegalDetails[6].PropertyAttributeName, 45, 633, 0);
-                content48.EndText();
-
-                ////ADDING MORE FIELDS IN CELL
-                TextField tf54 = new TextField(writer, new Rectangle(170, 745, 254, 730), legaldetailsList[0].LotNo);
-                tf54.BorderColor = new BaseColor(232, 232, 232);
-                tf54.BackgroundColor = new BaseColor(232, 232, 232);
-                tf54.Text = legaldetailsList[0].LotNo == null ? " " : legaldetailsList[0].LotNo.ToString();
-                tf54.FontSize = 8;
-                tf54.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf54.GetTextField());
-                PdfContentByte overContent58 = writer.DirectContent;
-                BaseFont baseFont58 = BaseFont.CreateFont();
-                overContent58.SetFontAndSize(baseFont58, 10);
-                BaseFont overContent1 = BaseFont.CreateFont();
-                overContent58.SetFontAndSize(overContent1, 8);
-                overContent58.BeginText();
-                overContent58.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Lot", 160, 733, 0);
-                overContent58.EndText();
-
-                TextField tf58 = new TextField(writer, new Rectangle(280, 745, 358, 730), "DP");
-                tf58.BorderColor = new BaseColor(232, 232, 232);
-                tf58.BackgroundColor = new BaseColor(232, 232, 232);
-                tf58.FontSize = 8;
-                tf58.Text = legaldetailsList[0].DepositedPlan == null ? " " : legaldetailsList[0].DepositedPlan.ToString();
-                tf58.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf58.GetTextField());
-                PdfContentByte overContent59 = writer.DirectContent;
-                BaseFont baseFont59 = BaseFont.CreateFont();
-                overContent59.SetFontAndSize(baseFont59, 8);
-                overContent59.BeginText();
-                overContent59.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "DP", 270, 733, 0);
-                overContent59.EndText();
-
-                TextField tf60 = new TextField(writer, new Rectangle(380, 745, 455, 730), "Title");
-                tf60.BorderColor = new BaseColor(232, 232, 232);
-                tf60.BackgroundColor = new BaseColor(232, 232, 232);
-                tf60.FontSize = 8;
-                tf60.Text = legaldetailsList[0].TitleIdentifier == null ? " " : legaldetailsList[0].TitleIdentifier.ToString();
-                tf60.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf60.GetTextField());
-                PdfContentByte overContent60 = writer.DirectContent;
-                BaseFont baseFont60 = BaseFont.CreateFont();
-                overContent60.SetFontAndSize(baseFont60, 8);
-                overContent60.BeginText();
-                overContent60.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Title", 369, 733, 0);
-                overContent60.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(465, 740, 475, 730), legaldetailsList[0].IsPropertyUnitTitle, 465, 730);
-                PdfContentByte overContent61 = writer.DirectContent;
-                BaseFont baseFont61 = BaseFont.CreateFont();
-                overContent61.SetFontAndSize(baseFont61, 8);
-                overContent61.BeginText();
-                overContent61.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Property is a unit title", 521, 730, 0);
-                overContent61.EndText();
-
-                TextField tf61 = new TextField(writer, new Rectangle(228, 720, 565, 703), "Registered");
-                tf61.BorderColor = new BaseColor(232, 232, 232);
-                tf61.BackgroundColor = new BaseColor(232, 232, 232);
-                tf61.Text = legaldetailsList[0].RegisteredOwner == null ? " " : legaldetailsList[0].RegisteredOwner;
-                tf61.FontSize = 8;
-                tf61.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf61.GetTextField());
-                PdfContentByte overContent62 = writer.DirectContent;
-                BaseFont baseFont62 = BaseFont.CreateFont();
-                overContent61.SetFontAndSize(baseFont62, 8);
-                overContent61.BeginText();
-                overContent61.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Registered owners", 190, 710, 0);
-                overContent61.EndText();
-                PdfContentByte overContent63 = writer.DirectContent;
-                BaseFont baseFont63 = BaseFont.CreateFont();
-                overContent63.SetFontAndSize(baseFont63, 8);
-                overContent63.BeginText();
-                overContent63.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "(Full name of client/trustees, used for legal documentation)", 260, 690, 0);
-                overContent63.EndText();
-
-                TextField tf64 = new TextField(writer, new Rectangle(222, 668, 393, 683), "Additional");
-                tf64.BorderColor = new BaseColor(232, 232, 232);
-                tf64.BackgroundColor = new BaseColor(232, 232, 232);
-                tf64.FontSize = 8;
-                tf64.Text = legaldetailsList[0].AdditionalDetails == null ? " " : legaldetailsList[0].AdditionalDetails;
-                tf64.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf64.GetTextField());
-                PdfContentByte overContent64 = writer.DirectContent;
-                BaseFont baseFont64 = BaseFont.CreateFont();
-                overContent64.SetFontAndSize(baseFont64, 8);
-                overContent64.BeginText();
-                overContent64.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Additional details", 188, 670, 0);
-                overContent64.EndText();
-
-                TextField tf65 = new TextField(writer, new Rectangle(460, 668, 560, 683), "Land value $");
-                tf65.BorderColor = new BaseColor(232, 232, 232);
-                tf65.BackgroundColor = new BaseColor(232, 232, 232);
-                tf65.Text = legaldetailsList[0].LandValue == null ? " " : legaldetailsList[0].LandValue.ToString();
-                tf65.FontSize = 8;
-                tf65.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf65.GetTextField());
-                PdfContentByte overContent65 = writer.DirectContent;
-                BaseFont baseFont65 = BaseFont.CreateFont();
-                overContent65.SetFontAndSize(baseFont65, 8);
-                overContent65.BeginText();
-                overContent65.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Land value $", 428, 670, 0);
-                overContent65.EndText();
-
-                TextField tf66 = new TextField(writer, new Rectangle(232, 655, 290, 640), "Improvement");
-                tf66.BorderColor = new BaseColor(232, 232, 232);
-                tf66.BackgroundColor = new BaseColor(232, 232, 232);
-                tf66.Text = legaldetailsList[0].ImprovementValue == null ? " " : legaldetailsList[0].ImprovementValue.ToString();
-                tf66.FontSize = 8;
-                tf66.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf66.GetTextField());
-                PdfContentByte overContent66 = writer.DirectContent;
-                BaseFont baseFont66 = BaseFont.CreateFont();
-                overContent66.SetFontAndSize(baseFont66, 8);
-                overContent66.BeginText();
-                overContent66.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Improvement value $", 192, 645, 0);
-                overContent66.EndText();
-
-                TextField tf67 = new TextField(writer, new Rectangle(362, 655, 430, 640), "Rateable");
-                tf67.BorderColor = new BaseColor(232, 232, 232);
-                tf67.BackgroundColor = new BaseColor(232, 232, 232);
-                tf67.FontSize = 8;
-                tf67.Text = legaldetailsList[0].RateableValue == null ? " " : legaldetailsList[0].RateableValue.ToString();
-                tf67.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf67.GetTextField());
-                PdfContentByte overContent67 = writer.DirectContent;
-                BaseFont baseFont67 = BaseFont.CreateFont();
-                overContent67.SetFontAndSize(baseFont67, 8);
-                overContent67.BeginText();
-                overContent67.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Rateable value $ ", 330, 645, 0);
-                overContent67.EndText();
-
-
-
-                TextField tf68 = new TextField(writer, new Rectangle(520, 655, 565, 640), "Rating");
-                tf68.BorderColor = new BaseColor(232, 232, 232);
-                tf68.BackgroundColor = new BaseColor(232, 232, 232);
-                tf68.FontSize = 8;
-
-                // Cast RatingValuationDate to DateTime and format the date as mm-yyyy
-                string formattedDate = legaldetailsList[0].RatingValuationDate == null ? " " : ((DateTime)legaldetailsList[0].RatingValuationDate).ToString("MM-yyyy");
-                tf68.Text = formattedDate;
-
-                tf68.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf68.GetTextField());
-                PdfContentByte overContent68 = writer.DirectContent;
-                BaseFont baseFont68 = BaseFont.CreateFont();
-                overContent68.SetFontAndSize(baseFont68, 8);
-                overContent68.BeginText();
-                overContent68.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Rating valuation date", 475, 645, 0);
-                overContent68.EndText();
-
-
-
-
-
-
-                PdfPCell innerCell4 = new PdfPCell();
-                innerCell4.FixedHeight = cellHeight;
-                innerCell4.Border = 0;
-                innerCell4.HorizontalAlignment = Element.ALIGN_CENTER;
-                innerCell4.VerticalAlignment = Element.ALIGN_MIDDLE;
-                innerTable1.AddCell(innerCell3);
-                outercell1.AddElement(innerTable1);
-                legalstable.AddCell(outercell1);
-                document.Add(legalstable);
-
-                Phrase phrase2 = new Phrase();
-                Chunk chunk1 = new Chunk(" ");
-
-                var para1 = new Paragraph(chunk1);
-                para1.PaddingTop = 2f;
-                para1.Alignment = Element.ALIGN_TOP;
-                para1.Font.Color = BaseColor.BLACK;
-
-                //ADD CONTRACT DETAILS
-                PdfPTable parentTable1 = new PdfPTable(3);
-                parentTable1.DefaultCell.Border = 0;
-                parentTable1.WidthPercentage = 108; // Set the width percentage of the parent table        
-                parentTable1.SpacingBefore = 10f;
-                parentTable1.SpacingAfter = 20f;
-
-                float[] testcolumnWidths = new float[] { 50f, 1f, 50f };
-                parentTable1.SetWidths(testcolumnWidths);
-
-
-                PdfPCell cell12 = new PdfPCell();
-
-                cell12.AddElement(para1);
-                cell12.AddElement(phrase2);
-                cell12.HorizontalAlignment = PdfPCell.ALIGN_CENTER;
-                cell12.VerticalAlignment = PdfPCell.ALIGN_MIDDLE;
-                cell12.PaddingTop = 53;
-                cell12.BorderColor = BaseColor.DARK_GRAY;
-                cell12.BorderWidth = 1f;
-
-
-
-
-                cell12.CellEvent = new RectangleOverPdfPCellBorder("Contract Details", 30f, 596f, 80f, 20f, 32f, 608f);
-                PdfPCell cell21 = new PdfPCell();
-
-                cell21.HorizontalAlignment = PdfPCell.ALIGN_CENTER;
-                cell21.VerticalAlignment = PdfPCell.ALIGN_MIDDLE;
-                cell21.BorderColor = BaseColor.DARK_GRAY;
-                cell21.BorderWidth = 1f;
-                cell21.CellEvent = new RectangleOverPdfPCellBorder("Rates", 310f, 596f, 30f, 20f, 312f, 608f);
-                //cell21.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Rates", 310f, 20f, 80f, 595f); //380, 630, 322, 645
-                parentTable1.AddCell(cell12);
-                //dummy cell created to have an empty space with width `0.1f` which was declared //above.
-                PdfPCell cell0222 = new PdfPCell(new Phrase(" "));
-                cell0222.Border = 0;
-                parentTable1.AddCell(cell0222);
-                parentTable1.AddCell(cell21);
-
-                PdfPTable mainTable1 = new PdfPTable(1);
-                mainTable1.DefaultCell.Border = 0;
-                mainTable1.WidthPercentage = 108; // Set the width percentage of the main table
-
-                // Add the parent table to the main table
-                mainTable1.AddCell(parentTable1);
-                mainTable1.DefaultCell.Border = 0;
-
-
-                // Add the main table to the document
-                document.Add(mainTable1);
-
-
-
-
-
-                //ADD TEXT FIELDS FOR CONTRACT DETAILS
-                TextField tf70 = new TextField(writer, new Rectangle(105, 590, 280, 575), "Authoritystart ");
-                tf70.BorderColor = new BaseColor(232, 232, 232);
-                tf70.BackgroundColor = new BaseColor(232, 232, 232);
-                tf70.FontSize = 8;
-                //tf70.Text = ((DateTime)FinalList.contractDetail.AuthorityStartDate).ToString("dd-MM-yyyy");
-                if (FinalList != null && FinalList.contractDetail != null && FinalList.contractDetail.AuthorityStartDate != null)
-                {
-                    string formattedDate1 = ((DateTime)FinalList.contractDetail.AuthorityStartDate).ToString("dd-MM-yyyy");
-                    tf70.Text = formattedDate1;
-                }
-                else
-                {
-                    tf70.Text = " "; // Set a default value if the data is not available
-                }
-
-
-                tf70.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf70.GetTextField());
-                PdfContentByte overContent70 = writer.DirectContent;
-                BaseFont baseFont70 = BaseFont.CreateFont();
-                overContent70.SetFontAndSize(baseFont70, 8);
-                overContent70.BeginText();
-                overContent70.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Authority start date", 90, 580, 0);
-                overContent70.EndText();
-
-
-                TextField tf71 = new TextField(writer, new Rectangle(105, 568, 280, 553), "Authorityend");
-                tf71.BorderColor = new BaseColor(232, 232, 232);
-                tf71.BackgroundColor = new BaseColor(232, 232, 232);
-                tf71.FontSize = 8;
-
-                if (FinalList != null && FinalList.contractDetail != null && FinalList.contractDetail.AuthorityEndDate != null)
-                {
-                    string formattedDate2 = ((DateTime)FinalList.contractDetail.AuthorityEndDate).ToString("dd-MM-yyyy");
-                    tf71.Text = formattedDate2;
-                }
-                else
-                {
-                    tf71.Text = " "; // Set a default value if the data is not available
-                }
-                tf71.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf71.GetTextField());
-                PdfContentByte overContent71 = writer.DirectContent;
-                BaseFont baseFont71 = BaseFont.CreateFont();
-                overContent71.SetFontAndSize(baseFont71, 8);
-                overContent71.BeginText();
-                overContent71.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Authority end date", 90, 555, 0);
-                overContent71.EndText();
-
-                TextField tf72 = new TextField(writer, new Rectangle(130, 545, 245, 530), " marketing spend $ ");
-                tf72.BorderColor = new BaseColor(232, 232, 232);
-                tf72.BackgroundColor = new BaseColor(232, 232, 232);
-                // tf72.Text = FinalList.contractDetail.AgreedMarketSpend.ToString();
-                if (FinalList != null && FinalList.contractDetail != null && FinalList.contractDetail.AgreedMarketSpend != null)
-                {
-                    string AgreedMarketSpend = FinalList.contractDetail.AgreedMarketSpend.ToString();
-                    tf72.Text = AgreedMarketSpend;
-                }
-                else
-                {
-                    tf72.Text = " "; // Set a default value if the data is not available
-                }
-                tf72.FontSize = 8;
-
-                tf72.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf72.GetTextField());
-                PdfContentByte overContent72 = writer.DirectContent;
-                BaseFont baseFont72 = BaseFont.CreateFont();
-                overContent72.SetFontAndSize(baseFont72, 8);
-                overContent72.BeginText();
-                overContent72.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Agreed marketing spend $ ", 120, 533, 0);
-                overContent72.EndText();
-
-                PdfContentByte overContent73 = writer.DirectContent;
-                BaseFont baseFont73 = BaseFont.CreateFont();
-                overContent73.SetFontAndSize(baseFont73, 8);
-                overContent73.BeginText();
-                overContent73.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "(inc. GST) ", 285, 533, 0);
-                overContent73.EndText();
-
-                //ADDING MORE CONTRACT DETAILS
-
-                TextField tf74 = new TextField(writer, new Rectangle(345, 590, 550, 575), "Water");
-                tf74.BorderColor = new BaseColor(232, 232, 232);
-                tf74.BackgroundColor = new BaseColor(232, 232, 232);
-                if (FinalList != null && FinalList.contractRate != null && FinalList.contractRate.Water != null)
-                {
-                    string Water = FinalList.contractRate.Water.ToString();
-                    tf74.Text = Water;
-                }
-                else
-                {
-                    tf74.Text = " "; // Set a default value if the data is not available
-                }
-                //tf74.Text = FinalList.contractRate.Water.ToString();
-                tf74.FontSize = 8;
-                tf74.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf74.GetTextField());
-                PdfContentByte overContent74 = writer.DirectContent;
-                BaseFont baseFont74 = BaseFont.CreateFont();
-                overContent74.SetFontAndSize(baseFont74, 8);
-                overContent74.BeginText();
-                overContent74.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Water $", 335, 580, 0);
-                overContent74.EndText();
-                PdfContentByte overContent76 = writer.DirectContent;
-                BaseFont baseFont76 = BaseFont.CreateFont();
-                overContent76.SetFontAndSize(baseFont76, 8);
-                overContent76.BeginText();
-                overContent76.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "pa", 565, 580, 0);
-                overContent76.EndText();
-
-
-                TextField tf75 = new TextField(writer, new Rectangle(345, 568, 550, 553), "Council");
-                tf75.BorderColor = new BaseColor(232, 232, 232);
-                tf75.BackgroundColor = new BaseColor(232, 232, 232);
-                //tf75.Text = FinalList.contractRate.Council.ToString();
-                if (FinalList != null && FinalList.contractRate != null && FinalList.contractRate.Council != null)
-                {
-                    string Council = FinalList.contractRate.Council.ToString();
-                    tf75.Text = Council;
-                }
-                else
-                {
-                    tf75.Text = " "; // Set a default value if the data is not available
-                }
-                tf75.FontSize = 8;
-                tf75.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf75.GetTextField());
-                PdfContentByte overContent75 = writer.DirectContent;
-                BaseFont baseFont75 = BaseFont.CreateFont();
-                overContent75.SetFontAndSize(baseFont75, 8);
-                overContent75.BeginText();
-                overContent75.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Council $", 340, 555, 0);
-                overContent75.EndText();
-                PdfContentByte overContent77 = writer.DirectContent;
-                BaseFont baseFont77 = BaseFont.CreateFont();
-                overContent77.SetFontAndSize(baseFont77, 8);
-                overContent77.BeginText();
-                overContent77.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "pa", 565, 555, 0);
-                overContent77.EndText();
-
-                TextField tf78 = new TextField(writer, new Rectangle(345, 545, 490, 525), "other");
-                tf78.BorderColor = new BaseColor(232, 232, 232);
-                tf78.BackgroundColor = new BaseColor(232, 232, 232);
-                //tf78.Text = FinalList.contractRate.OtherValue.ToString();
-                if (FinalList != null && FinalList.contractRate != null && FinalList.contractRate.OtherValue != null)
-                {
-                    string OtherValue = FinalList.contractRate.OtherValue.ToString();
-                    tf78.Text = OtherValue;
-                }
-                else
-                {
-                    tf78.Text = " "; // Set a default value if the data is not available
-                }
-                tf78.FontSize = 8;
-                tf78.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf78.GetTextField());
-                PdfContentByte overContent78 = writer.DirectContent;
-                BaseFont baseFont78 = BaseFont.CreateFont();
-                overContent78.SetFontAndSize(baseFont78, 8);
-                overContent78.BeginText();
-                overContent78.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Other $", 335, 533, 0);
-                overContent78.EndText();
-                if (FinalList != null && FinalList.contractRate != null)
-                {
-                    bool isPerAnnum = FinalList.contractRate.IsPerAnnum;
-
-                    // Assuming AddCheckboxField function works similarly to your AddTextField function
-                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(500, 543, 512, 530), isPerAnnum, 500, 530);
-                }
-                else
-                {
-                    // If the data is not available, you might want to decide the default state of the checkbox
-                    // For example, you could set it to unchecked
-                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(500, 543, 512, 530), false, 500, 530);
-                }
-
-                // AddCheckboxField(document, writer, "myCheckbox", new Rectangle(500, 543, 512, 530), FinalList.contractRate.IsPerAnnum, 500, 530);
-                //AddCheckboxField(document, writer, "myCheckbox", new Rectangle(500, 543, 512, 530), FinalList.contractRate.IsPerAnnum, 500, 530);
-
-                PdfContentByte overContent80 = writer.DirectContent;
-                BaseFont baseFont80 = BaseFont.CreateFont();
-                overContent80.SetFontAndSize(baseFont80, 8);
-                overContent80.BeginText();
-                overContent80.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "pa", 525, 535, 0);
-                overContent80.EndText();
-                if (FinalList != null && FinalList.contractRate != null)
-                {
-                    bool IsPerQuarter = FinalList.contractRate.IsPerQuarter;
-
-                    // Assuming AddCheckboxField function works similarly to your AddTextField function
-                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(538, 543, 550, 530), IsPerQuarter, 538, 530);
-                }
-                else
-                {
-                    // If the data is not available, you might want to decide the default state of the checkbox
-                    // For example, you could set it to unchecked
-                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(538, 543, 550, 530), false, 538, 530);
-                }
-                // AddCheckboxField(document, writer, "myCheckbox", new Rectangle(550, 543, 538, 530), FinalList.contractRate.IsPerQuarter, 538, 530);
-                //AddCheckboxField(document, writer, "myCheckbox", new Rectangle(550, 543, 538, 530), FinalList.contractRate.IsPerQuarter, 538, 530);
-
-                PdfContentByte overContent79 = writer.DirectContent;
-                BaseFont baseFont79 = BaseFont.CreateFont();
-                overContent79.SetFontAndSize(baseFont79, 8);
-                overContent79.BeginText();
-                overContent79.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "pq", 565, 535, 0);
-                overContent79.EndText();
-
-
-                //METHOD OF SALE DETAILS
-                var methodOfSaleCheckboxAgencyList = data.Where(x => x.Name == "Method Of Sale Agency Type").ToList();
-                int propertyID1 = _context.PropertyAttributeType.Where(x => x.Name == "Method Of Sale Agency Type").Select(x => x.ID).FirstOrDefault();
-                var chkboxlistForAgencyType = new List<PropertyAttributeTypeWithMethodOfSaleModel>();
-                using (var connection = new SqlConnection(_configuration["ConnectionStrings:ConnStr"].ToString()))
-                {
-                    var sql = string.Format("SELECT PAT.ID,PA.Name as PropertyAttributeName, PA.PropertyAttributeTypeID,PA.Name ,PA.ID as PropertyAttributeID,MOS.AgencyTypeID,MOS.MethodOfSaleID, MOS.AgencyOtherTypeRemark, MOS.Price, MOS.PriceRemark, MOS.AuctionDate, MOS.AuctionTime, MOS.AuctionVenue, MOS.Auctioneer, MOS.TenderDate, MOS.TenderTime, MOS.IsMortgageeSale, MOS.IsAsIs, MOS.IsAuctionUnlessSoldPrior, MOS.IsTenderUnlessSoldPrior,MOS.IsAuctionOnSite,MOS.TenderVenue,MOS.PID, case when ISNULL(MOS.AgencyTypeID,0)=0 THEN 0 ELSE 1 END as Checkbox FROM PropertyAttributeType as PAT  INNER JOIN PropertyAttribute as PA  ON PAT.ID = PA.PropertyAttributeTypeID left join MethodOfSale as MOS on PA.id = MOS.AgencyTypeID  AND MOS.PID={0}", id + " WHERE  PA.PropertyAttributeTypeID=" + propertyID1);
-                    chkboxlistForAgencyType = connection.Query<PropertyAttributeTypeWithMethodOfSaleModel>(sql).ToList();
-                }
-
-                foreach (var item in chkboxlistForAgencyType)
-                {
-                    if (item.PropertyAttributeName == "Sole") { isSoleSelected = item.Checkbox; }
-                    if (item.PropertyAttributeName == "General") { isGeneralSelected = item.Checkbox; }
-                }
-
-                var methodOfSaleCheckboxList = data.Where(x => x.Name == "Method Of Sale").ToList();
-                int propertyID2 = _context.PropertyAttributeType.Where(x => x.Name == "Method Of Sale").Select(x => x.ID).FirstOrDefault();
-                var chkboxlistForMethodOfSale = new List<PropertyAttributeTypeWithMethodOfSaleModel>();
-                using (var connection = new SqlConnection(_configuration["ConnectionStrings:ConnStr"].ToString()))
-                {
-                    var sql = string.Format("SELECT PAT.ID,PA.Name as PropertyAttributeName, PA.PropertyAttributeTypeID,PA.Name ,PA.ID as PropertyAttributeID,MOS.AgencyTypeID,MOS.MethodOfSaleID, MOS.AgencyOtherTypeRemark, MOS.Price, MOS.PriceRemark, MOS.AuctionDate, MOS.AuctionTime, MOS.AuctionVenue, MOS.Auctioneer, MOS.TenderDate, MOS.TenderTime, MOS.IsMortgageeSale, MOS.IsAsIs, MOS.IsAuctionUnlessSoldPrior, MOS.IsTenderUnlessSoldPrior,MOS.IsAuctionOnSite,MOS.TenderVenue,MOS.PID, case when ISNULL(MOS.MethodOfSaleID,0)=0 THEN 0 ELSE 1 END as Checkbox FROM PropertyAttributeType as PAT  INNER JOIN PropertyAttribute as PA  ON PAT.ID = PA.PropertyAttributeTypeID left join MethodOfSale as MOS on PA.id = MOS.MethodOfSaleID  AND MOS.PID={0}", id + "  WHERE  PA.PropertyAttributeTypeID=" + propertyID2);
-                    chkboxlistForMethodOfSale = connection.Query<PropertyAttributeTypeWithMethodOfSaleModel>(sql).ToList();
-                }
-
-                foreach (var item in chkboxlistForMethodOfSale)
-                {
-                    if (item.PropertyAttributeName == "Price") { isPriceSelected = item.Checkbox; }
-                    if (item.PropertyAttributeName == "No price") { isNoPriceSelected = item.Checkbox; }
-                    if (item.PropertyAttributeName == "Auction") { isAuctionSelected = item.Checkbox; }
-                    if (item.PropertyAttributeName == "Tender") { isTenderSelected = item.Checkbox; }
-                    if (item.PropertyAttributeName == "Deadline sale") { isDeadlinesaleSelected = item.Checkbox; }
-                    if (item.PropertyAttributeName == "Unless sold prior") { isUnlesssoldpriorSelected = item.Checkbox; }
-                }
-
-
-                PdfPTable methodOfTable = new PdfPTable(1);
-
-                PdfPCell outercell21 = new PdfPCell();
-                methodOfTable.DefaultCell.Border = 0;
-                outercell21.BorderColor = BaseColor.DARK_GRAY;
-                outercell21.FixedHeight = 123f;
-                methodOfTable.WidthPercentage = 108; // Set the width percentage of the parent table        
-                methodOfTable.SpacingBefore = 12f;
-                methodOfTable.SpacingAfter = 10f;
-                outercell21.CellEvent = new RectangleOverPdfPCellBorder("Method of Sale", 30f, 490f, 77f, 20f, 32f, 500f);
-                //outercell21.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Method of Sale", 50f, 20f, 80f, 490f);
-                //particulartable.AddCell(outercell);
-
-                PdfPTable innerTable21 = new PdfPTable(2);
-                innerTable21.DefaultCell.Border = 0;
-                innerTable21.WidthPercentage = 100f;
-                innerTable21.SpacingBefore = 10f;
-
-                PdfContentByte cb21 = writer.DirectContent;
-                BaseFont bf21 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
-                string text21 = "Agency Type";
-                cb21.BeginText();
-                cb21.SetFontAndSize(bf21, 8);
-                // put the alignment and coordinates here
-                cb21.ShowTextAligned(1, text21, 55, 482, 0);
-                cb21.EndText();
-                // Create the first inner cell
-                PdfPCell innerCell21 = new PdfPCell();
-                innerCell21.FixedHeight = cellHeight;
-                innerCell21.Border = 0;
-                innerCell21.HorizontalAlignment = Element.ALIGN_CENTER;
-                innerCell21.VerticalAlignment = Element.ALIGN_MIDDLE;
-                innerTable21.AddCell(innerCell21);
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(25, 465, 35, 475), chkboxlistForAgencyType[0].Checkbox, 25, 465);
-                PdfContentByte content21 = writer.DirectContent;
-                BaseFont baseF21 = BaseFont.CreateFont();
-                content21.SetFontAndSize(baseF21, 8);
-                content21.BeginText();
-                content21.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForAgencyType[0].PropertyAttributeName, 49, 466, 0);
-                content21.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(25, 450, 35, 460), chkboxlistForAgencyType[1].Checkbox, 25, 450);
-                PdfContentByte content56 = writer.DirectContent;
-                BaseFont baseF56 = BaseFont.CreateFont();
-                content56.SetFontAndSize(baseF56, 8);
-                content56.BeginText();
-                content56.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForAgencyType[1].PropertyAttributeName, 55, 452, 0);
-                content56.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(25, 435, 35, 445), chkboxlistForAgencyType[2].Checkbox, 25, 435);
-                PdfContentByte content57 = writer.DirectContent;
-                BaseFont baseF57 = BaseFont.CreateFont();
-                content57.SetFontAndSize(baseF57, 8);
-                content57.BeginText();
-                content57.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForAgencyType[2].PropertyAttributeName, 62, 436, 0);
-                content57.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(25, 418, 35, 428), chkboxlistForAgencyType[3].Checkbox, 25, 418);
-                PdfContentByte content58 = writer.DirectContent;
-                BaseFont baseF58 = BaseFont.CreateFont();
-                content58.SetFontAndSize(baseF58, 8);
-                content58.BeginText();
-                content58.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForAgencyType[3].PropertyAttributeName, 49, 419, 0);
-                content58.EndText();
-
-                TextField tf85 = new TextField(writer, new Rectangle(25, 410, 110, 390), "Other");
-                tf85.BorderColor = new BaseColor(232, 232, 232);
-                tf85.BackgroundColor = new BaseColor(232, 232, 232);
-                if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.AgencyOtherTypeRemark != null)
-                {
-                    string AgencyOtherTypeRemark = FinalList.methodOfSale.AgencyOtherTypeRemark.ToString();
-                    tf85.Text = AgencyOtherTypeRemark;
-                }
-                else
-                {
-                    tf85.Text = " "; // Set a default value if the data is not available
-                }
-                // tf85.Text = FinalList.methodOfSale.AgencyOtherTypeRemark.ToString();
-                tf85.FontSize = 8;
-                tf85.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf85.GetTextField());
-
-
-
-                PdfContentByte cb22 = writer.DirectContent;
-                BaseFont bf22 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
-                string text22 = "Method of sale";
-                cb22.BeginText();
-                cb22.SetFontAndSize(bf22, 8);
-                // 2ut the alignment and coordinates here
-                cb22.ShowTextAligned(1, text22, 180, 482, 0);
-                cb22.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(150, 465, 160, 475), chkboxlistForMethodOfSale[0].Checkbox, 150, 465);
-                PdfContentByte content25 = writer.DirectContent;
-                BaseFont baseF25 = BaseFont.CreateFont();
-                content25.SetFontAndSize(baseF25, 8);
-                content25.BeginText();
-                content25.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForMethodOfSale[0].PropertyAttributeName, 174, 465, 0);
-                content25.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(220, 465, 230, 475), chkboxlistForMethodOfSale[3].Checkbox, 220, 465);
-                PdfContentByte content27 = writer.DirectContent;
-                BaseFont baseF27 = BaseFont.CreateFont();
-                content27.SetFontAndSize(baseF25, 8);
-                content27.BeginText();
-                content27.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForMethodOfSale[3].PropertyAttributeName, 250, 465, 0);
-                content27.EndText();
-
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(150, 450, 160, 460), chkboxlistForMethodOfSale[1].Checkbox, 150, 450);
-                PdfContentByte content26 = writer.DirectContent;
-                BaseFont baseF26 = BaseFont.CreateFont();
-                content26.SetFontAndSize(baseF26, 8);
-                content26.BeginText();
-                content26.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForMethodOfSale[1].PropertyAttributeName, 180, 452, 0);
-                content26.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(220, 450, 230, 460), chkboxlistForMethodOfSale[4].Checkbox, 220, 450);
-                PdfContentByte content29 = writer.DirectContent;
-                BaseFont baseF29 = BaseFont.CreateFont();
-                content29.SetFontAndSize(baseF29, 8);
-                content29.BeginText();
-                content29.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForMethodOfSale[4].PropertyAttributeName, 250, 452, 0);
-                content29.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(150, 435, 160, 445), chkboxlistForMethodOfSale[2].Checkbox, 150, 435);
-                PdfContentByte content28 = writer.DirectContent;
-                BaseFont baseF28 = BaseFont.CreateFont();
-                content28.SetFontAndSize(baseF28, 8);
-                content28.BeginText();
-                content28.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForMethodOfSale[2].PropertyAttributeName, 190, 436, 0);
-                content28.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(220, 435, 230, 445), chkboxlistForMethodOfSale[5].Checkbox, 220, 435);
-                PdfContentByte content30 = writer.DirectContent;
-                BaseFont baseF30 = BaseFont.CreateFont();
-                content30.SetFontAndSize(baseF30, 8);
-                content30.BeginText();
-                content30.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForMethodOfSale[5].PropertyAttributeName, 268, 436, 0);
-                content30.EndText();
-
-                PdfContentByte content63 = writer.DirectContent;
-                BaseFont baseF63 = BaseFont.CreateFont();
-                content63.SetFontAndSize(baseF63, 8);
-                content63.BeginText();
-                content63.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Price (specific amount)", 195, 419, 0);
-                content63.EndText();
-
-                PdfContentByte content64 = writer.DirectContent;
-                BaseFont baseF64 = BaseFont.CreateFont();
-                content64.SetFontAndSize(baseF63, 8);
-                content64.BeginText();
-                content64.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "$", 150, 395, 0);
-                content64.EndText();
-                TextField tf87 = new TextField(writer, new Rectangle(300, 410, 160, 390), "$ textbox");
-                tf87.BorderColor = new BaseColor(232, 232, 232);
-                tf87.BackgroundColor = new BaseColor(232, 232, 232);
-
-
-
-
-
-
-                // tf87.Text = FinalList.methodOfSale.Price.ToString();
-                if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.Price != null)
-                {
-                    string Price = isPriceSelected == true ? FinalList.methodOfSale.Price.ToString() : "";
-                    tf87.Text = Price;
-                }
-                else
-                {
-                    tf87.Text = " "; // Set a default value if the data is not available
-                }
-                tf87.FontSize = 8;
-                tf87.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf87.GetTextField());
-
-
-
-
-
-
-
-
-                PdfContentByte cb23 = writer.DirectContent;
-                BaseFont bf23 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
-                string text23 = "Auction";
-                cb23.BeginText();
-                cb23.SetFontAndSize(bf23, 8);
-                // 3ut the alignment and coordinates here
-                cb23.ShowTextAligned(1, text23, 325, 482, 0);
-                cb23.EndText();
-
-
-
-
-
-                string logoPath1 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
-                iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(logoPath1);
-                if (System.IO.File.Exists(logoPath1))
-                {
-                    logo1.ScaleAbsolute(15f, 15f);
-                    logo1.SetAbsolutePosition(308, 465);
-
-
-                    document.Add(logo1);
-                }
-
-                TextField tf89 = new TextField(writer, new Rectangle(325, 478, 360, 465), "Auction Date");
-                tf89.BorderColor = new BaseColor(232, 232, 232);
-                tf89.BackgroundColor = new BaseColor(232, 232, 232);
-                //tf89.Text = ((DateTime)FinalList.methodOfSale.AuctionDate).ToString("dd-MM-yyyy");
-                if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.AuctionDate != null)
-                {
-                    string AuctionDate = isAuctionSelected == true ? ((DateTime)FinalList.methodOfSale.AuctionDate).ToString("dd-MM-yyyy") : " ";
-                    tf89.Text = AuctionDate;
-                }
-                else
-                {
-                    tf89.Text = " "; // Set a default value if the data is not available
-                }
-                // tf89.FontSize= 8;
-                tf89.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf89.GetTextField());
-
-                string logoPath2 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Clock.png");
-                iTextSharp.text.Image logo2 = iTextSharp.text.Image.GetInstance(logoPath2);
-                if (System.IO.File.Exists(logoPath2))
-                {
-                    logo2.ScaleAbsolute(15f, 15f);
-                    logo2.SetAbsolutePosition(365, 465);
-
-
-                    document.Add(logo2);
-                }
-
-                TextField tf90 = new TextField(writer, new Rectangle(385, 478, 420, 465), "Auction Time");
-                tf90.BorderColor = new BaseColor(232, 232, 232);
-                tf90.BackgroundColor = new BaseColor(232, 232, 232);
-                // tf90.FontSize = 8;
-                //tf90.Text = DateTimeOffset.Parse(FinalList.methodOfSale.AuctionTime).ToString("hh:mm tt");
-                if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.AuctionTime != null)
-                {
-                    string AuctionTime = isAuctionSelected == true ? DateTimeOffset.Parse(FinalList.methodOfSale.AuctionTime).ToString("hh:mm tt") : "";
-                    tf90.Text = AuctionTime;
-                }
-                else
-                {
-                    tf90.Text = " "; // Set a default value if the data is not available
-                }
-                tf90.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf90.GetTextField());
-
-
-                TextField tf91 = new TextField(writer, new Rectangle(335, 455, 410, 435), "Venue");
-                tf91.BorderColor = new BaseColor(232, 232, 232);
-                tf91.BackgroundColor = new BaseColor(232, 232, 232);
-                //tf91.Text = FinalList.methodOfSale.TenderVenue;
-                if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.TenderVenue != null)
-                {
-                    string TenderVenue = isAuctionSelected == true ? FinalList.methodOfSale.TenderVenue : "";
-                    tf91.Text = TenderVenue;
-                }
-                else
-                {
-                    tf91.Text = " "; // Set a default value if the data is not available
-                }
-
-
-                tf91.Options = TextField.READ_ONLY;
-                tf91.FontSize = 8;
-                writer.AddAnnotation(tf91.GetTextField());
-                PdfContentByte overContent91 = writer.DirectContent;
-                BaseFont baseFont91 = BaseFont.CreateFont();
-                overContent91.SetFontAndSize(baseFont91, 8);
-                overContent91.BeginText();
-                overContent91.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Venue", 330, 436, 0);
-                overContent91.EndText();
-
-                TextField tf92 = new TextField(writer, new Rectangle(350, 420, 425, 400), "Auctioneer Venue");
-                tf92.BorderColor = new BaseColor(232, 232, 232);
-                tf92.BackgroundColor = new BaseColor(232, 232, 232);
-                //tf92.Text = FinalList.methodOfSale.AuctionVenue;
-                if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.AuctionVenue != null)
-                {
-                    string AuctionVenue = isAuctionSelected == true ? FinalList.methodOfSale.AuctionVenue : "";
-                    tf92.Text = AuctionVenue;
-                }
-                else
-                {
-                    tf92.Text = " "; // Set a default value if the data is not available
-                }
-                tf92.FontSize = 8;
-                tf92.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf92.GetTextField());
-                PdfContentByte overContent92 = writer.DirectContent;
-                BaseFont baseFont92 = BaseFont.CreateFont();
-                overContent92.SetFontAndSize(baseFont91, 8);
-                overContent92.BeginText();
-                overContent92.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Auctioneer", 348, 410, 0);
-                overContent92.EndText();
-
-                PdfContentByte cb24 = writer.DirectContent;
-                BaseFont bf24 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
-                string text24 = "Tender";
-                cb24.BeginText();
-                cb24.SetFontAndSize(bf24, 8);
-                // 4ut the alignment and coordinates here
-                cb24.ShowTextAligned(1, text24, 450, 482, 0);
-                cb24.EndText();
-
-                string logoPath3 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
-                iTextSharp.text.Image logo3 = iTextSharp.text.Image.GetInstance(logoPath3);
-                if (System.IO.File.Exists(logoPath3))
-                {
-                    logo3.ScaleAbsolute(15f, 15f);
-                    logo3.SetAbsolutePosition(437, 465);
-                    document.Add(logo3);
-                }
-                TextField tf94 = new TextField(writer, new Rectangle(455, 478, 490, 465), "Tender Date");
-                tf94.BorderColor = new BaseColor(232, 232, 232);
-                tf94.BackgroundColor = new BaseColor(232, 232, 232);
-                // tf94.Text = ((DateTime)FinalList.methodOfSale.TenderDate).ToString("dd-MM-yyyy");
-                if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.TenderDate != null)
-                {
-                    string TenderDate = isTenderSelected == true ? ((DateTime)FinalList.methodOfSale.TenderDate).ToString("dd-MM-yyyy") : "";
-                    tf94.Text = TenderDate;
-                }
-                else
-                {
-                    tf94.Text = " "; // Set a default value if the data is not available
-                }
-                //  tf94.FontSize = 8;
-                tf94.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf94.GetTextField());
-
-                string logoPath4 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Clock.png");
-                iTextSharp.text.Image logo4 = iTextSharp.text.Image.GetInstance(logoPath4);
-                if (System.IO.File.Exists(logoPath4))
-                {
-                    logo4.ScaleAbsolute(15f, 15f);
-                    logo4.SetAbsolutePosition(500, 465);
-
-
-                    document.Add(logo4);
-                }
-                TextField tf95 = new TextField(writer, new Rectangle(520, 478, 560, 465), "TenderTime");
-                tf95.BorderColor = new BaseColor(232, 232, 232);
-                tf95.BackgroundColor = new BaseColor(232, 232, 232);
-                //  tf95.FontSize = 8;
-                // tf95.Text = DateTimeOffset.Parse(FinalList.methodOfSale.TenderTime).ToString("hh:mm tt");
-                if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.TenderTime != null)
-                {
-                    string TenderTime = isTenderSelected == true ? DateTimeOffset.Parse(FinalList.methodOfSale.TenderTime).ToString("hh:mm tt") : "";
-                    tf95.Text = TenderTime;
-                }
-                else
-                {
-                    tf95.Text = " "; // Set a default value if the data is not available
-                }
-                tf95.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf95.GetTextField());
-
-
-                PdfContentByte cb25 = writer.DirectContent;
-                BaseFont bf25 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
-                string text25 = "Deadline sale date";
-                cb25.BeginText();
-                cb25.SetFontAndSize(bf25, 8);
-                // 4ut the alignment and coordinates here
-                cb25.ShowTextAligned(1, text25, 480, 440, 0);
-                cb25.EndText();
-
-                string logoPath5 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
-                iTextSharp.text.Image logo5 = iTextSharp.text.Image.GetInstance(logoPath5);
-                if (System.IO.File.Exists(logoPath5))
-                {
-                    logo5.ScaleAbsolute(15f, 15f);
-                    logo5.SetAbsolutePosition(437, 420);
-                    document.Add(logo5);
-                }
-
-                TextField tf96 = new TextField(writer, new Rectangle(455, 435, 490, 420), "Deadline Date");
-                tf96.BorderColor = new BaseColor(232, 232, 232);
-                tf96.BackgroundColor = new BaseColor(232, 232, 232);
-                // tf96.Text = ((DateTime)FinalList.methodOfSale.DeadLineDate).ToString("dd-MM-yyyy");
-                if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.DeadLineDate != null)
-                {
-                    string DeadLineDate = isDeadlinesaleSelected == true ? ((DateTime)FinalList.methodOfSale.DeadLineDate).ToString("dd-MM-yyyy") : "";
-                    tf96.Text = DeadLineDate;
-                }
-                else
-                {
-                    tf96.Text = " "; // Set a default value if the data is not available
-                }
-                tf96.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf96.GetTextField());
-
-                string logoPath6 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Clock.png");
-                iTextSharp.text.Image logo6 = iTextSharp.text.Image.GetInstance(logoPath6);
-                if (System.IO.File.Exists(logoPath6))
-                {
-                    logo6.ScaleAbsolute(15f, 15f);
-                    logo6.SetAbsolutePosition(500, 420);
-                    document.Add(logo6);
-                }
-
-                TextField tf97 = new TextField(writer, new Rectangle(520, 435, 560, 420), "Deadline Time");
-                tf97.BorderColor = new BaseColor(232, 232, 232);
-                tf97.BackgroundColor = new BaseColor(232, 232, 232);
-                //  tf97.FontSize = 8;
-                //tf97.Text = DateTimeOffset.Parse(FinalList.methodOfSale.DeadLineTime).ToString("hh:mm:ss tt");
-                if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.DeadLineTime != null)
-                {
-                    string DeadLineTime = isDeadlinesaleSelected == true ? DateTimeOffset.Parse(FinalList.methodOfSale.DeadLineTime).ToString("hh:mm tt") : "";
-                    tf97.Text = DeadLineTime;
-                }
-                else
-                {
-                    tf97.Text = " "; // Set a default value if the data is not available
-                }
-                tf97.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf97.GetTextField());
-
-                if (methodOfSaleList != null && methodOfSaleList.Count > 0)
-                {
-                    bool isMortgageeSale = methodOfSaleList[0].IsMortgageeSale;
-
-                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(437, 410, 448, 400), isMortgageeSale, 437, 400);
-                }
-                else
-                {
-                    // Handle the case when methodOfSaleList is null or empty
-                    // For example, you might want to provide a default value for the checkbox
-                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(437, 410, 448, 400), false, 437, 400);
-                }
-
-
-                // AddCheckboxField(document, writer, "myCheckbox", new Rectangle(437, 410, 448, 400), methodOfSaleList[0].IsMortgageeSale, 437, 400);
-                PdfContentByte content59 = writer.DirectContent;
-                BaseFont baseF59 = BaseFont.CreateFont();
-                content59.SetFontAndSize(baseF59, 8);
-                content59.BeginText();
-                content59.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Mortgagee sale", 480, 403, 0);
-                content59.EndText();
-
-
-
-                if (methodOfSaleList != null && methodOfSaleList.Count > 0)
-                {
-                    bool isAsIs = methodOfSaleList[0].IsAsIs;
-
-                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(437, 395, 448, 385), isAsIs, 437, 400);
-                }
-                else
-                {
-                    // Handle the case when methodOfSaleList is null or empty
-                    // For example, you might want to provide a default value for the checkbox
-                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(437, 395, 448, 385), false, 437, 400);
-                }
-                // AddCheckboxField(document, writer, "myCheckbox", new Rectangle(437, 395, 448, 385), methodOfSaleList[0].IsAsIs, 437, 385);
-                PdfContentByte content60 = writer.DirectContent;
-                BaseFont baseF60 = BaseFont.CreateFont();
-                content60.SetFontAndSize(baseF60, 8);
-                content60.BeginText();
-                content60.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "As is, where is", 480, 389, 0);
-                content60.EndText();
-
-
-
-                //CODE FOR CHATTELS CHECKBOXES
-
-                // Create the second inner cell
-                PdfPCell innerCell22 = new PdfPCell();
-                innerCell22.FixedHeight = cellHeight;
-                innerCell22.Border = 0;
-                innerCell22.HorizontalAlignment = Element.ALIGN_CENTER;
-                innerCell22.VerticalAlignment = Element.ALIGN_MIDDLE;
-                innerTable21.AddCell(innerCell22);
-                outercell21.AddElement(innerTable21);
-                methodOfTable.AddCell(outercell21);
-                document.Add(methodOfTable);
-
-                // Step 4: Create a new Table with 5 columns
-                PdfPTable multipleMainTable = new PdfPTable(5);
-
-                multipleMainTable.SpacingBefore = 10f;
-                multipleMainTable.WidthPercentage = 108;
-                multipleMainTable.DefaultCell.Border = 0;
-                float[] columnWidths = new float[] { 36f, 30f, 30f, 30f, 30f };
-                multipleMainTable.SetWidths(columnWidths);
-                // Step 5: Create the cells for each column using nested tables
-
-                var chattelslist = data.Where(w => w.Name == "Chattels").ToList();
-
-
-                // Column 1 
-                PdfPTable col1Table = new PdfPTable(1);
-                PdfPCell cell11 = new PdfPCell(new Phrase());
-                cell11.FixedHeight = 305f; // Set the height of the cell
-                col1Table.DefaultCell.Border = 0;
-
-                cell11.BorderColor = BaseColor.BLACK;
-                cell11.Padding = 10;
-
-                //col1Table.WidthPercentage = 100; // Set the width percentage of the parent table        
-                col1Table.SpacingBefore = 3f;
-                col1Table.SpacingAfter = 3f;
-                cell11.CellEvent = new RectangleOverPdfPCellBorder("Chattels", 30f, 340f, 43f, 20f, 32f, 355f);
-                //cell11.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Chattels", 40f, 20f, 80f, 340f);
-
-                col1Table.AddCell(cell11);
-                multipleMainTable.AddCell(col1Table);
-
-                //CHECKBOX FIELDS
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 320, 23, 310), chattelslist[0].Checkbox, 23, 310);
-                PdfContentByte content211 = writer.DirectContent;
-                BaseFont baseF211 = BaseFont.CreateFont();
-                content211.SetFontAndSize(baseF211, 8);
-                content211.BeginText();
-                content211.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[0].PropertyAttributeName, 49, 312, 0);
-                content211.EndText();
-                TextField tf211 = new TextField(writer, new Rectangle(110, 325, 130, 310), "Blinds");
-                tf211.BorderColor = new BaseColor(232, 232, 232);
-                tf211.BackgroundColor = new BaseColor(232, 232, 232);
-                tf211.Options = TextField.READ_ONLY;
-                // tf211.Text = chattelslist[0].Count.ToString();
-                if (chattelslist.Count > 0)
-                {
-                    tf211.Text = chattelslist[0].Count != 0 ? chattelslist[0].Count.ToString() : "";
-                }
-                else
-                {
-                    // Handle the case when othercommentList is empty
-                    tf211.Text = ""; // Set a default value or handle it based on your requirements
-                }
-
-                tf211.FontSize = 8;
-                tf211.TextColor = BaseColor.BLACK;
-                writer.AddAnnotation(tf211.GetTextField());
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 305, 23, 295), chattelslist[1].Checkbox, 23, 295);
-                PdfContentByte content212 = writer.DirectContent;
-                BaseFont baseF212 = BaseFont.CreateFont();
-                content212.SetFontAndSize(baseF212, 8);
-                content212.BeginText();
-                content212.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[1].PropertyAttributeName, 61, 297, 0);
-                content212.EndText();
-                TextField tf212 = new TextField(writer, new Rectangle(110, 308, 130, 295), "Burglar");
-                tf212.BorderColor = new BaseColor(232, 232, 232);
-                tf212.BackgroundColor = new BaseColor(232, 232, 232);
-                tf212.Options = TextField.READ_ONLY;
-                tf212.Text = chattelslist[1].Count != 0 ? chattelslist[1].Count.ToString() : "";
-                tf212.TextColor = BaseColor.BLACK;
-                tf212.FontSize = 8;
-                writer.AddAnnotation(tf212.GetTextField());
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 290, 23, 280), chattelslist[2].Checkbox, 23, 280);
-                PdfContentByte content213 = writer.DirectContent;
-                BaseFont baseF213 = BaseFont.CreateFont();
-                content213.SetFontAndSize(baseF213, 8);
-                content213.BeginText();
-                content213.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[2].PropertyAttributeName, 49, 282, 0);
-                content213.EndText();
-                TextField tf2160 = new TextField(writer, new Rectangle(110, 294, 130, 280), "Drapes");
-                tf2160.BorderColor = new BaseColor(232, 232, 232);
-                tf2160.BackgroundColor = new BaseColor(232, 232, 232);
-                tf2160.Options = TextField.READ_ONLY;
-                tf2160.Text = chattelslist[2].Count != 0 ? chattelslist[2].Count.ToString() : "";
-                tf2160.TextColor = BaseColor.BLACK;
-                tf2160.FontSize = 8; ;
-                writer.AddAnnotation(tf2160.GetTextField());
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 275, 23, 265), chattelslist[3].Checkbox, 23, 265);
-                PdfContentByte content214 = writer.DirectContent;
-                BaseFont baseF214 = BaseFont.CreateFont();
-                content214.SetFontAndSize(baseF214, 8);
-                content214.BeginText();
-                content214.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[3].PropertyAttributeName, 49, 267, 0);
-                content214.EndText();
-                TextField tf216 = new TextField(writer, new Rectangle(110, 278, 130, 265), "Fixed");
-                tf216.BorderColor = new BaseColor(232, 232, 232);
-                tf216.BackgroundColor = new BaseColor(232, 232, 232);
-                tf216.Options = TextField.READ_ONLY;
-                tf216.Text = chattelslist[3].Count != 0 ? chattelslist[3].Count.ToString() : "";
-                tf216.TextColor = BaseColor.BLACK;
-                tf216.FontSize = 8;
-                writer.AddAnnotation(tf216.GetTextField());
-
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 260, 23, 250), chattelslist[4].Checkbox, 23, 250);
-                PdfContentByte content215 = writer.DirectContent;
-                BaseFont baseF215 = BaseFont.CreateFont();
-                content215.SetFontAndSize(baseF215, 8);
-                content215.BeginText();
-                content215.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[4].PropertyAttributeName, 59, 252, 0);
-                content215.EndText();
-                TextField tf215 = new TextField(writer, new Rectangle(110, 263, 130, 250), "Dishwasher");
-                tf215.BorderColor = new BaseColor(232, 232, 232);
-                tf215.BackgroundColor = new BaseColor(232, 232, 232);
-                tf215.Options = TextField.READ_ONLY;
-                tf215.Text = chattelslist[4].Count != 0 ? chattelslist[4].Count.ToString() : "";
-                tf215.TextColor = BaseColor.BLACK;
-                tf215.FontSize = 8;
-                writer.AddAnnotation(tf215.GetTextField());
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 245, 23, 235), chattelslist[5].Checkbox, 23, 235);
-                PdfContentByte content216 = writer.DirectContent;
-                BaseFont baseF216 = BaseFont.CreateFont();
-                content216.SetFontAndSize(baseF216, 8);
-                content216.BeginText();
-                content216.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[5].PropertyAttributeName, 71, 237, 0);
-                content216.EndText();
-                TextField tf2163 = new TextField(writer, new Rectangle(110, 248, 130, 235), "Fixed");
-                tf2163.BorderColor = new BaseColor(232, 232, 232);
-                tf2163.BackgroundColor = new BaseColor(232, 232, 232);
-                tf2163.Options = TextField.READ_ONLY;
-                tf2163.Text = chattelslist[5].Count != 0 ? chattelslist[5].Count.ToString() : "";
-                tf2163.TextColor = BaseColor.BLACK;
-                tf2163.FontSize = 8;
-                writer.AddAnnotation(tf2163.GetTextField());
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 230, 23, 220), chattelslist[6].Checkbox, 23, 220);
-                PdfContentByte content217 = writer.DirectContent;
-                BaseFont baseF217 = BaseFont.CreateFont();
-                content217.SetFontAndSize(baseF217, 8);
-                content217.BeginText();
-                content217.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[6].PropertyAttributeName, 61, 222, 0);
-                content217.EndText();
-                TextField tf214 = new TextField(writer, new Rectangle(110, 233, 130, 220), "Garden");
-                tf214.BorderColor = new BaseColor(232, 232, 232);
-                tf214.BackgroundColor = new BaseColor(232, 232, 232);
-                tf214.Options = TextField.READ_ONLY;
-                tf214.Text = chattelslist[6].Count != 0 ? chattelslist[6].Count.ToString() : "";
-                tf214.TextColor = BaseColor.BLACK;
-                tf214.FontSize = 8;
-                writer.AddAnnotation(tf214.GetTextField());
-
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 215, 23, 205), chattelslist[7].Checkbox, 23, 205);
-                PdfContentByte content218 = writer.DirectContent;
-                BaseFont baseF218 = BaseFont.CreateFont();
-                content218.SetFontAndSize(baseF218, 8);
-                content218.BeginText();
-                content218.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[7].PropertyAttributeName, 74, 207, 0);
-                content218.EndText();
-                TextField tf218 = new TextField(writer, new Rectangle(110, 218, 130, 202), "Garage");
-                tf218.BorderColor = new BaseColor(232, 232, 232);
-                tf218.BackgroundColor = new BaseColor(232, 232, 232);
-                tf218.Options = TextField.READ_ONLY;
-                tf218.Text = chattelslist[7].Count != 0 ? chattelslist[7].Count.ToString() : "";
-                tf218.TextColor = BaseColor.BLACK;
-                tf218.FontSize = 8;
-                writer.AddAnnotation(tf218.GetTextField());
-
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 200, 23, 190), chattelslist[8].Checkbox, 23, 190);
-                PdfContentByte content219 = writer.DirectContent;
-                BaseFont baseF219 = BaseFont.CreateFont();
-                content219.SetFontAndSize(baseF219, 8);
-                content219.BeginText();
-                content219.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[8].PropertyAttributeName, 69, 192, 0);
-                content219.EndText();
-                TextField tf219 = new TextField(writer, new Rectangle(110, 200, 130, 185), "Heated");
-                tf219.BorderColor = new BaseColor(232, 232, 232);
-                tf219.BackgroundColor = new BaseColor(232, 232, 232);
-                tf219.Options = TextField.READ_ONLY;
-                tf219.Text = chattelslist[8].Count != 0 ? chattelslist[8].Count.ToString() : "";
-                tf219.TextColor = BaseColor.BLACK;
-                tf219.FontSize = 8;
-                writer.AddAnnotation(tf219.GetTextField());
-
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 185, 23, 175), chattelslist[9].Checkbox, 23, 175);
-                PdfContentByte content220 = writer.DirectContent;
-                BaseFont baseF220 = BaseFont.CreateFont();
-                content220.SetFontAndSize(baseF220, 8);
-                content220.BeginText();
-                content220.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[9].PropertyAttributeName, 61, 177, 0);
-                content220.EndText();
-                TextField tf2190 = new TextField(writer, new Rectangle(110, 184, 130, 170), "Heated");
-                tf2190.BorderColor = new BaseColor(232, 232, 232);
-                tf2190.BackgroundColor = new BaseColor(232, 232, 232);
-                tf2190.Options = TextField.READ_ONLY;
-                tf2190.Text = chattelslist[9].Count != 0 ? chattelslist[9].Count.ToString() : "";
-                tf2190.TextColor = BaseColor.BLACK;
-                tf2190.FontSize = 8;
-                writer.AddAnnotation(tf2190.GetTextField());
-
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 170, 23, 160), chattelslist[10].Checkbox, 23, 160);
-                PdfContentByte content221 = writer.DirectContent;
-                BaseFont baseF221 = BaseFont.CreateFont();
-                content221.SetFontAndSize(baseF221, 8);
-                content221.BeginText();
-                content221.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[10].PropertyAttributeName, 59, 162, 0);
-                content221.EndText();
-                TextField tf221 = new TextField(writer, new Rectangle(110, 168, 130, 157), "Heated");
-                tf221.BorderColor = new BaseColor(232, 232, 232);
-                tf221.BackgroundColor = new BaseColor(232, 232, 232);
-                tf221.Options = TextField.READ_ONLY;
-                tf221.Text = chattelslist[10].Count != 0 ? chattelslist[10].Count.ToString() : "";
-                tf221.TextColor = BaseColor.BLACK;
-                tf221.FontSize = 8;
-                writer.AddAnnotation(tf221.GetTextField());
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 155, 23, 145), chattelslist[11].Checkbox, 23, 145);
-                PdfContentByte content222 = writer.DirectContent;
-                BaseFont baseF222 = BaseFont.CreateFont();
-                content222.SetFontAndSize(baseF222, 8);
-                content222.BeginText();
-                content222.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[11].PropertyAttributeName, 52, 147, 0);
-                content222.EndText();
-                TextField tf222 = new TextField(writer, new Rectangle(110, 155, 130, 144), "Fireplace");
-                tf222.BorderColor = new BaseColor(232, 232, 232);
-                tf222.BackgroundColor = new BaseColor(232, 232, 232);
-                tf222.Options = TextField.READ_ONLY;
-                tf222.Text = chattelslist[11].Count != 0 ? chattelslist[11].Count.ToString() : "";
-                tf222.TextColor = BaseColor.BLACK;
-                writer.AddAnnotation(tf222.GetTextField());
-
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 140, 23, 130), chattelslist[12].Checkbox, 23, 130);
-                PdfContentByte content223 = writer.DirectContent;
-                BaseFont baseF223 = BaseFont.CreateFont();
-                content223.SetFontAndSize(baseF223, 8);
-                content223.BeginText();
-                content223.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[12].PropertyAttributeName, 59, 132, 0);
-                content223.EndText();
-                TextField tf223 = new TextField(writer, new Rectangle(110, 142, 130, 129), "Rangehood");
-                tf223.BorderColor = new BaseColor(232, 232, 232);
-                tf223.BackgroundColor = new BaseColor(232, 232, 232);
-                tf223.Options = TextField.READ_ONLY;
-                tf223.Text = chattelslist[12].Count != 0 ? chattelslist[12].Count.ToString() : "";
-                tf223.TextColor = BaseColor.BLACK;
-                tf223.FontSize = 8;
-                writer.AddAnnotation(tf223.GetTextField());
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 125, 23, 115), chattelslist[13].Checkbox, 23, 115);
-                PdfContentByte content228 = writer.DirectContent;
-                BaseFont baseF228 = BaseFont.CreateFont();
-                content228.SetFontAndSize(baseF228, 8);
-                content228.BeginText();
-                content228.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[13].PropertyAttributeName, 46, 117, 0);
-                content228.EndText();
-                TextField tf228 = new TextField(writer, new Rectangle(110, 128, 130, 114), "Stove");
-                tf228.BorderColor = new BaseColor(232, 232, 232);
-                tf228.BackgroundColor = new BaseColor(232, 232, 232);
-                tf228.Options = TextField.READ_ONLY;
-                tf228.Text = chattelslist[13].Count != 0 ? chattelslist[13].Count.ToString() : "";
-                tf228.TextColor = BaseColor.BLACK;
-                tf228.FontSize = 8;
-                writer.AddAnnotation(tf228.GetTextField());
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 110, 23, 100), chattelslist[14].Checkbox, 23, 100);
-                PdfContentByte content224 = writer.DirectContent;
-                BaseFont baseF224 = BaseFont.CreateFont();
-                content224.SetFontAndSize(baseF224, 8);
-                content224.BeginText();
-                content224.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[14].PropertyAttributeName, 51, 102, 0);
-                content224.EndText();
-                TextField tf224 = new TextField(writer, new Rectangle(110, 113, 130, 100), "TV");
-                tf224.BorderColor = new BaseColor(232, 232, 232);
-                tf224.BackgroundColor = new BaseColor(232, 232, 232);
-                tf224.Options = TextField.READ_ONLY;
-                tf224.Text = chattelslist[14].Count != 0 ? chattelslist[14].Count.ToString() : "";
-                tf224.TextColor = BaseColor.BLACK;
-                tf224.FontSize = 8;
-                writer.AddAnnotation(tf224.GetTextField());
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 95, 23, 85), chattelslist[15].Checkbox, 23, 85);
-                PdfContentByte content225 = writer.DirectContent;
-                BaseFont baseF225 = BaseFont.CreateFont();
-                content225.SetFontAndSize(baseF225, 8);
-                content225.BeginText();
-                content225.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[15].PropertyAttributeName, 67, 87, 0);
-                content225.EndText();
-                TextField tf225 = new TextField(writer, new Rectangle(110, 98, 130, 84), "Waste");
-                tf225.BorderColor = new BaseColor(232, 232, 232);
-                tf225.BackgroundColor = new BaseColor(232, 232, 232);
-                tf225.Options = TextField.READ_ONLY;
-                tf225.Text = chattelslist[15].Count != 0 ? chattelslist[15].Count.ToString() : "";
-                tf225.TextColor = BaseColor.BLACK;
-                tf225.FontSize = 8;
-                writer.AddAnnotation(tf225.GetTextField());
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 80, 23, 70), chattelslist[16].Checkbox, 23, 70);
-                PdfContentByte content226 = writer.DirectContent;
-                BaseFont baseF226 = BaseFont.CreateFont();
-                content226.SetFontAndSize(baseF226, 8);
-                content226.BeginText();
-                content226.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[16].PropertyAttributeName, 49, 72, 0);
-                content226.EndText();
-                TextField tf2270 = new TextField(writer, new Rectangle(110, 82, 130, 69), "Central");
-                tf2270.BorderColor = new BaseColor(232, 232, 232);
-                tf2270.BackgroundColor = new BaseColor(232, 232, 232);
-                tf2270.Options = TextField.READ_ONLY;
-                tf2270.Text = chattelslist[16].Count != 0 ? chattelslist[16].Count.ToString() : "";
-                tf2270.TextColor = BaseColor.BLACK;
-                tf2270.FontSize = 8;
-                writer.AddAnnotation(tf2270.GetTextField());
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 65, 23, 55), chattelslist[17].Checkbox, 23, 55);
-                PdfContentByte content227 = writer.DirectContent;
-                BaseFont baseF227 = BaseFont.CreateFont();
-                content227.SetFontAndSize(baseF227, 8);
-                content227.BeginText();
-                content227.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[17].PropertyAttributeName, 68, 57, 0);
-                content227.EndText();
-                TextField tf227 = new TextField(writer, new Rectangle(110, 68, 130, 55), "Central");
-                tf227.BorderColor = new BaseColor(232, 232, 232);
-                tf227.BackgroundColor = new BaseColor(232, 232, 232);
-                tf227.Options = TextField.READ_ONLY;
-                tf227.Text = chattelslist[17].Count != 0 ? chattelslist[17].Count.ToString() : "";
-                tf227.TextColor = BaseColor.BLACK;
-                tf227.FontSize = 8;
-                writer.AddAnnotation(tf227.GetTextField());
-
-
-                //CODE FOR INSULATION CHECKBOXES
-
-
-                var insulationlist = data.Where(w => w.Name == "Insulation").ToList();
-                // Column 2
-
-                PdfPTable col2Table = new PdfPTable(1);
-
-                PdfPCell cell211 = new PdfPCell(new Phrase());
-                cell211.FixedHeight = 98f; // Set the height of the cell
-                cell211.BorderColor = BaseColor.BLACK;
-                cell211.CellEvent = new RectangleOverPdfPCellBorder("Insulation", 165f, 344f, 50f, 20f, 168f, 358f);
-                //cell211.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Insulation", 175f, 20f, 70f, 345f);
-                col2Table.AddCell(cell211);
-
-                //AddCheckboxField(document, writer, "myCheckbox", new Rectangle(180, 280, 180, 320), true, 40, 310);
-                //AddCheckboxField(document, writer, "myCheckbox", new Rectangle(150, 490, 190, 320), true, 150, 465);
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 330, 165, 340), insulationlist[0].Checkbox, 155, 330);
-                PdfContentByte content229 = writer.DirectContent;
-                BaseFont baseF229 = BaseFont.CreateFont();
-                content229.SetFontAndSize(baseF229, 8);
-                content229.BeginText();
-                content229.ShowTextAligned(PdfContentByte.ALIGN_CENTER, insulationlist[0].PropertyAttributeName, 180, 330, 0);
-                content229.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 315, 165, 325), insulationlist[1].Checkbox, 155, 315);
-                PdfContentByte content230 = writer.DirectContent;
-                BaseFont baseF230 = BaseFont.CreateFont();
-                content230.SetFontAndSize(baseF230, 8);
-                content230.BeginText();
-                content230.ShowTextAligned(PdfContentByte.ALIGN_CENTER, insulationlist[1].PropertyAttributeName, 180, 315, 0);
-                content230.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 300, 165, 310), insulationlist[2].Checkbox, 155, 300);
-                PdfContentByte content231 = writer.DirectContent;
-                BaseFont baseF231 = BaseFont.CreateFont();
-                content231.SetFontAndSize(baseF231, 8);
-                content231.BeginText();
-                content231.ShowTextAligned(PdfContentByte.ALIGN_CENTER, insulationlist[2].PropertyAttributeName, 180, 300, 0);
-                content231.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 285, 165, 295), insulationlist[3].Checkbox, 155, 285);
-                PdfContentByte content232 = writer.DirectContent;
-                BaseFont baseF232 = BaseFont.CreateFont();
-                content232.SetFontAndSize(baseF232, 8);
-                content232.BeginText();
-                content232.ShowTextAligned(PdfContentByte.ALIGN_CENTER, insulationlist[3].PropertyAttributeName, 180, 285, 0);
-                content232.EndText();
-
-                TextField tf231 = new TextField(writer, new Rectangle(156, 265, 250, 280), "Other");
-                tf231.BorderColor = new BaseColor(232, 232, 232);
-                tf231.BackgroundColor = new BaseColor(232, 232, 232);
-                tf231.Options = TextField.READ_ONLY;
-                tf231.Text = insulationlist[3].Remarks;
-                tf231.TextColor = BaseColor.BLACK;
-                tf231.FontSize = 8;
-                writer.AddAnnotation(tf231.GetTextField());
-
-
-
-                PdfPCell blankCell16 = new PdfPCell(new Phrase(Chunk.NEWLINE));
-                blankCell16.Border = PdfPCell.NO_BORDER;
-                blankCell16.FixedHeight = 10f;
-                col2Table.AddCell(blankCell16);
-
-
-                // CODE FOR HEATING CHECKBOXES
-
-                var heatinglist = data.Where(w => w.Name == "Heating").ToList();
-
-                PdfPCell cell212 = new PdfPCell(new Phrase());
-                cell212.FixedHeight = 180f; // Set the height of the cell
-                cell212.BorderColor = BaseColor.DARK_GRAY;
-                cell212.CellEvent = new RectangleOverPdfPCellBorder("Heating", 165f, 246f, 40f, 15f, 168f, 246f);
-                //cell212.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Heating", 170f, 15f, 70f, 240f);
-                col2Table.AddCell(cell212);
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 225, 165, 235), heatinglist[0].Checkbox, 155, 225);
-                PdfContentByte content233 = writer.DirectContent;
-                BaseFont baseF233 = BaseFont.CreateFont();
-                content233.SetFontAndSize(baseF233, 8);
-                content233.BeginText();
-                content233.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[0].PropertyAttributeName, 185, 225, 0);
-                content233.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 210, 165, 220), heatinglist[1].Checkbox, 155, 210);
-                PdfContentByte content234 = writer.DirectContent;
-                BaseFont baseF234 = BaseFont.CreateFont();
-                content234.SetFontAndSize(baseF234, 8);
-                content234.BeginText();
-                content234.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[1].PropertyAttributeName, 195, 210, 0);
-                content234.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 195, 165, 205), heatinglist[2].Checkbox, 155, 195);
-                PdfContentByte content235 = writer.DirectContent;
-                BaseFont baseF235 = BaseFont.CreateFont();
-                content235.SetFontAndSize(baseF235, 8);
-                content235.BeginText();
-                content235.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[2].PropertyAttributeName, 205, 195, 0);
-                content235.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 180, 165, 190), heatinglist[3].Checkbox, 155, 180);
-                PdfContentByte content236 = writer.DirectContent;
-                BaseFont baseF236 = BaseFont.CreateFont();
-                content236.SetFontAndSize(baseF236, 8);
-                content236.BeginText();
-                content236.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[3].PropertyAttributeName, 185, 180, 0);
-                content236.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 165, 165, 175), heatinglist[4].Checkbox, 155, 165);
-                PdfContentByte content237 = writer.DirectContent;
-                BaseFont baseF237 = BaseFont.CreateFont();
-                content237.SetFontAndSize(baseF237, 8);
-                content237.BeginText();
-                content237.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[4].PropertyAttributeName, 200, 165, 0);
-                content237.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 150, 165, 160), heatinglist[5].Checkbox, 155, 150);
-                PdfContentByte content238 = writer.DirectContent;
-                BaseFont baseF238 = BaseFont.CreateFont();
-                content238.SetFontAndSize(baseF238, 8);
-                content238.BeginText();
-                content238.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[5].PropertyAttributeName, 190, 150, 0);
-                content238.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 135, 165, 145), heatinglist[6].Checkbox, 155, 135);
-                PdfContentByte content239 = writer.DirectContent;
-                BaseFont baseF239 = BaseFont.CreateFont();
-                content239.SetFontAndSize(baseF239, 8);
-                content239.BeginText();
-                content239.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[6].PropertyAttributeName, 190, 135, 0);
-                content239.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 120, 165, 130), heatinglist[7].Checkbox, 155, 120);
-                PdfContentByte content240 = writer.DirectContent;
-                BaseFont baseF240 = BaseFont.CreateFont();
-                content240.SetFontAndSize(baseF240, 8);
-                content240.BeginText();
-                content240.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[7].PropertyAttributeName, 180, 120, 0);
-                content240.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 105, 165, 115), heatinglist[8].Checkbox, 155, 105);
-                PdfContentByte content241 = writer.DirectContent;
-                BaseFont baseF241 = BaseFont.CreateFont();
-                content241.SetFontAndSize(baseF241, 8);
-                content241.BeginText();
-                content241.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[8].PropertyAttributeName, 185, 105, 0);
-                content241.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 90, 165, 100), heatinglist[9].Checkbox, 155, 90);
-                PdfContentByte content242 = writer.DirectContent;
-                BaseFont baseF242 = BaseFont.CreateFont();
-                content242.SetFontAndSize(baseF242, 8);
-                content242.BeginText();
-                content242.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[9].PropertyAttributeName, 190, 90, 0);
-                content242.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 75, 165, 85), heatinglist[10].Checkbox, 155, 75);
-                PdfContentByte content243 = writer.DirectContent;
-                BaseFont baseF243 = BaseFont.CreateFont();
-                content243.SetFontAndSize(baseF243, 8);
-                content243.BeginText();
-                content243.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[10].PropertyAttributeName, 180, 75, 0);
-                content243.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 60, 165, 70), heatinglist[11].Checkbox, 155, 60);
-                PdfContentByte content295 = writer.DirectContent;
-                BaseFont baseF295 = BaseFont.CreateFont();
-                content295.SetFontAndSize(baseF295, 8);
-                content295.BeginText();
-                content295.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[11].PropertyAttributeName, 190, 60, 0);
-                content295.EndText();
-
-                multipleMainTable.AddCell(col2Table);
-
-                //CODE FOR INTERIOR CONDITION CHECKBOXES
-
-                var interiorConditionlist = data.Where(w => w.Name == "Interior Condition").ToList();
-
-                // Column 3
-                PdfPTable col3Table = new PdfPTable(1);
-                PdfPCell cell31 = new PdfPCell(new Phrase());
-                cell31.FixedHeight = 80f; // Set the height of the cell
-                cell31.BorderColor = BaseColor.BLACK;
-                cell31.CellEvent = new RectangleOverPdfPCellBorder("Interior condition", 267f, 344f, 85f, 20f, 269f, 355f);
-                //cell31.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Interior condition", 270f, 20f, 70f, 345f);
-                col3Table.AddCell(cell31);
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 330, 272, 340), interiorConditionlist[0].Checkbox, 262, 330);
-                PdfContentByte content245 = writer.DirectContent;
-                BaseFont baseF245 = BaseFont.CreateFont();
-                content245.SetFontAndSize(baseF245, 8);
-                content245.BeginText();
-                content245.ShowTextAligned(PdfContentByte.ALIGN_CENTER, interiorConditionlist[0].PropertyAttributeName, 292, 330, 0);
-                content245.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 315, 272, 325), interiorConditionlist[1].Checkbox, 262, 315);
-                PdfContentByte content246 = writer.DirectContent;
-                BaseFont baseF246 = BaseFont.CreateFont();
-                content246.SetFontAndSize(baseF246, 8);
-                content246.BeginText();
-                content246.ShowTextAligned(PdfContentByte.ALIGN_CENTER, interiorConditionlist[1].PropertyAttributeName, 292, 315, 0);
-                content246.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 300, 272, 310), interiorConditionlist[2].Checkbox, 262, 300);
-                PdfContentByte content247 = writer.DirectContent;
-                BaseFont baseF247 = BaseFont.CreateFont();
-                content247.SetFontAndSize(baseF247, 8);
-                content247.BeginText();
-                content247.ShowTextAligned(PdfContentByte.ALIGN_CENTER, interiorConditionlist[2].PropertyAttributeName, 286, 300, 0);
-                content247.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 285, 272, 295), interiorConditionlist[3].Checkbox, 262, 285);
-                PdfContentByte content248 = writer.DirectContent;
-                BaseFont baseF248 = BaseFont.CreateFont();
-                content248.SetFontAndSize(baseF248, 8);
-                content248.BeginText();
-                content248.ShowTextAligned(PdfContentByte.ALIGN_CENTER, interiorConditionlist[3].PropertyAttributeName, 286, 285, 0);
-                content248.EndText();
-
-
-                PdfPCell blankCell17 = new PdfPCell(new Phrase(Chunk.NEWLINE));
-                blankCell17.Border = PdfPCell.NO_BORDER;
-                blankCell17.FixedHeight = 10f;
-                col3Table.AddCell(blankCell17);
-
-                //CODE FOR EXTERIOR CHECKBOXES
-
-                var exteriorList = data.Where(w => w.Name == "Exterior").ToList();
-
-                PdfPCell cell32 = new PdfPCell(new Phrase());
-                cell32.FixedHeight = 55f; // Set the height of the cell
-                cell32.BorderColor = BaseColor.DARK_GRAY;
-                cell32.CellEvent = new RectangleOverPdfPCellBorder("Exterior", 270f, 265f, 45f, 14f, 272f, 265f);
-                //cell32.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Exterior", 270f, 20f, 70f, 255f);
-                col3Table.AddCell(cell32);
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 240, 272, 230), exteriorList[0].Checkbox, 262, 230);
-                PdfContentByte content249 = writer.DirectContent;
-                BaseFont baseF249 = BaseFont.CreateFont();
-                content249.SetFontAndSize(baseF249, 8);
-                content249.BeginText();
-                content249.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[0].PropertyAttributeName, 309, 230, 0);
-                content249.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 225, 272, 215), exteriorList[1].Checkbox, 262, 215);
-                PdfContentByte content250 = writer.DirectContent;
-                BaseFont baseF250 = BaseFont.CreateFont();
-                content250.SetFontAndSize(baseF250, 8);
-                content250.BeginText();
-                content250.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[1].PropertyAttributeName, 317, 215, 0);
-                content250.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 210, 272, 200), exteriorList[2].Checkbox, 262, 200);
-                PdfContentByte content251 = writer.DirectContent;
-                BaseFont baseF251 = BaseFont.CreateFont();
-                content251.SetFontAndSize(baseF251, 8);
-                content251.BeginText();
-                content251.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[2].PropertyAttributeName, 312, 200, 0);
-                content251.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 195, 272, 185), exteriorList[3].Checkbox, 262, 185);
-                PdfContentByte content252 = writer.DirectContent;
-                BaseFont baseF252 = BaseFont.CreateFont();
-                content252.SetFontAndSize(baseF252, 8);
-                content252.BeginText();
-                content252.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[3].PropertyAttributeName, 304, 185, 0);
-                content252.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 180, 272, 170), exteriorList[4].Checkbox, 262, 170);
-                PdfContentByte content253 = writer.DirectContent;
-                BaseFont baseF253 = BaseFont.CreateFont();
-                content253.SetFontAndSize(baseF253, 8);
-                content253.BeginText();
-                content253.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[4].PropertyAttributeName, 314, 170, 0);
-                content253.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 165, 272, 155), exteriorList[5].Checkbox, 262, 155);
-                PdfContentByte content254 = writer.DirectContent;
-                BaseFont baseF254 = BaseFont.CreateFont();
-                content254.SetFontAndSize(baseF254, 8);
-                content254.BeginText();
-                content254.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[5].PropertyAttributeName, 302, 155, 0);
-                content254.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 150, 272, 140), exteriorList[6].Checkbox, 262, 140);
-                PdfContentByte content255 = writer.DirectContent;
-                BaseFont baseF255 = BaseFont.CreateFont();
-                content255.SetFontAndSize(baseF255, 8);
-                content255.BeginText();
-                content255.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[6].PropertyAttributeName, 299, 140, 0);
-                content255.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 135, 272, 125), exteriorList[7].Checkbox, 262, 125);
-                PdfContentByte content256 = writer.DirectContent;
-                BaseFont baseF256 = BaseFont.CreateFont();
-                content256.SetFontAndSize(baseF256, 8);
-                content256.BeginText();
-                content256.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[7].PropertyAttributeName, 290, 125, 0);
-                content256.EndText();
-
-                PdfContentByte cb221 = writer.DirectContent;
-                BaseFont bf221 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
-                string text221 = "Other comments";
-                cb221.BeginText();
-                cb221.SetFontAndSize(bf221, 8);
-                // 2ut the alignment and coordinates here
-                cb221.ShowTextAligned(1, text221, 295, 110, 0);
-                cb221.EndText();
-                TextField tf321 = new TextField(writer, new Rectangle(262, 105, 350, 90), "Central");
-                tf321.BorderColor = new BaseColor(232, 232, 232);
-                tf321.BackgroundColor = new BaseColor(232, 232, 232);
-                tf321.Options = TextField.READ_ONLY;
-                tf321.Text = exteriorList[7].Remarks;
-                tf321.TextColor = BaseColor.BLACK;
-                tf321.FontSize = 8;
-                writer.AddAnnotation(tf321.GetTextField());
-
-                multipleMainTable.AddCell(col3Table);
-
-
-
-                //CODE FOR FLOORING CHECKBOXES
-
-                var flooringlist = data.Where(w => w.Name == "Floring").ToList();
-                // Column 4
-                PdfPTable col4Table = new PdfPTable(1);
-                PdfPCell cell41 = new PdfPCell(new Phrase());
-                cell41.FixedHeight = 125f; // Set the height of the cell
-                cell41.BorderColor = BaseColor.BLACK;
-                cell41.CellEvent = new RectangleOverPdfPCellBorder("Flooring", 370f, 343f, 44f, 20f, 372f, 358f);
-                //cell41.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Flooring", 370f, 20f, 70f, 345f);
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 330, 380, 340), flooringlist[0].Checkbox, 370, 330);
-                PdfContentByte content257 = writer.DirectContent;
-                BaseFont baseF257 = BaseFont.CreateFont();
-                content257.SetFontAndSize(baseF257, 8);
-                content257.BeginText();
-                content257.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[0].PropertyAttributeName, 393, 330, 0);
-                content257.EndText();
-
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 315, 380, 325), flooringlist[1].Checkbox, 370, 315);
-                PdfContentByte content258 = writer.DirectContent;
-                BaseFont baseF258 = BaseFont.CreateFont();
-                content258.SetFontAndSize(baseF258, 8);
-                content258.BeginText();
-                content258.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[1].PropertyAttributeName, 396, 315, 0);
-                content258.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 300, 380, 310), flooringlist[2].Checkbox, 370, 300);
-                PdfContentByte content259 = writer.DirectContent;
-                BaseFont baseF259 = BaseFont.CreateFont();
-                content259.SetFontAndSize(baseF259, 8);
-                content259.BeginText();
-                content259.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[2].PropertyAttributeName, 390, 300, 0);
-                content259.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 285, 380, 295), flooringlist[3].Checkbox, 370, 285);
-                PdfContentByte content260 = writer.DirectContent;
-                BaseFont baseF260 = BaseFont.CreateFont();
-                content260.SetFontAndSize(baseF260, 8);
-                content260.BeginText();
-                content260.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[3].PropertyAttributeName, 393, 285, 0);
-                content260.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 270, 380, 280), flooringlist[4].Checkbox, 370, 270);
-                PdfContentByte content261 = writer.DirectContent;
-                BaseFont baseF261 = BaseFont.CreateFont();
-                content261.SetFontAndSize(baseF261, 8);
-                content261.BeginText();
-                content261.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[4].PropertyAttributeName, 390, 270, 0);
-                content261.EndText();
-
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 255, 380, 265), flooringlist[5].Checkbox, 370, 255);
-                PdfContentByte content262 = writer.DirectContent;
-                BaseFont baseF262 = BaseFont.CreateFont();
-                content262.SetFontAndSize(baseF262, 8);
-                content262.BeginText();
-                content262.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[5].PropertyAttributeName, 393, 255, 0);
-                content262.EndText();
-
-                TextField tf232 = new TextField(writer, new Rectangle(370, 250, 450, 240), "Other");
-                tf232.BorderColor = new BaseColor(232, 232, 232);
-                tf232.BackgroundColor = new BaseColor(232, 232, 232);
-                tf232.Options = TextField.READ_ONLY;
-                tf232.Text = flooringlist[5].Remarks;
-                tf232.TextColor = BaseColor.BLACK;
-                tf232.FontSize = 8;
-                writer.AddAnnotation(tf232.GetTextField());
-
-
-
-
-                //CODE FOR GARAGE CHECKBOXES
-
-                var garagelist = data.Where(w => w.Name == "Garage").ToList();
-
-                PdfPCell cell42 = new PdfPCell(new Phrase());
-                cell42.FixedHeight = 60f; // Set the height of the cell
-                cell42.BorderColor = BaseColor.DARK_GRAY;
-                cell42.CellEvent = new RectangleOverPdfPCellBorder("Garage", 370f, 220f, 38f, 14f, 372f, 220f);
-                //cell42.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Garage", 370f, 15f, 70f, 218f);
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 200, 380, 190), garagelist[0].Checkbox, 370, 190);
-                PdfContentByte content263 = writer.DirectContent;
-                BaseFont baseF263 = BaseFont.CreateFont();
-                content263.SetFontAndSize(baseF263, 8);
-                content263.BeginText();
-                content263.ShowTextAligned(PdfContentByte.ALIGN_CENTER, garagelist[0].PropertyAttributeName, 397, 190, 0);
-                content263.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 185, 380, 175), garagelist[1].Checkbox, 370, 175);
-                PdfContentByte content264 = writer.DirectContent;
-                BaseFont baseF264 = BaseFont.CreateFont();
-                content264.SetFontAndSize(baseF264, 8);
-                content264.BeginText();
-                content264.ShowTextAligned(PdfContentByte.ALIGN_CENTER, garagelist[1].PropertyAttributeName, 400, 175, 0);
-                content264.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 170, 380, 160), garagelist[2].Checkbox, 370, 160);
-                PdfContentByte content265 = writer.DirectContent;
-                BaseFont baseF265 = BaseFont.CreateFont();
-                content265.SetFontAndSize(baseF265, 8);
-                content265.BeginText();
-                content265.ShowTextAligned(PdfContentByte.ALIGN_CENTER, garagelist[2].PropertyAttributeName, 400, 160, 0);
-                content265.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 155, 380, 145), garagelist[3].Checkbox, 370, 145);
-                PdfContentByte content266 = writer.DirectContent;
-                BaseFont baseF266 = BaseFont.CreateFont();
-                content266.SetFontAndSize(baseF266, 8);
-                content266.BeginText();
-                content266.ShowTextAligned(PdfContentByte.ALIGN_CENTER, garagelist[3].PropertyAttributeName, 413, 145, 0);
-                content266.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 140, 380, 130), garagelist[4].Checkbox, 370, 130);
-                PdfContentByte content267 = writer.DirectContent;
-                BaseFont baseF267 = BaseFont.CreateFont();
-                content267.SetFontAndSize(baseF267, 8);
-                content267.BeginText();
-                content267.ShowTextAligned(PdfContentByte.ALIGN_CENTER, garagelist[4].PropertyAttributeName, 415, 130, 0);
-                content267.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 125, 380, 115), garagelist[5].Checkbox, 370, 115);
-                PdfContentByte content268 = writer.DirectContent;
-                BaseFont baseF268 = BaseFont.CreateFont();
-                content268.SetFontAndSize(baseF268, 8);
-                content268.BeginText();
-                content268.ShowTextAligned(PdfContentByte.ALIGN_CENTER, garagelist[5].PropertyAttributeName, 413, 115, 0);
-                content268.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 110, 380, 100), garagelist[6].Checkbox, 370, 100);
-                PdfContentByte content269 = writer.DirectContent;
-                BaseFont baseF269 = BaseFont.CreateFont();
-                content269.SetFontAndSize(baseF269, 8);
-                content269.BeginText();
-                content269.ShowTextAligned(PdfContentByte.ALIGN_CENTER, garagelist[6].PropertyAttributeName, 405, 100, 0);
-                content269.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 95, 380, 85), garagelist[7].Checkbox, 370, 85);
-                PdfContentByte content270 = writer.DirectContent;
-                BaseFont baseF270 = BaseFont.CreateFont();
-                content270.SetFontAndSize(baseF270, 8);
-                content270.BeginText();
-                content270.ShowTextAligned(PdfContentByte.ALIGN_CENTER, garagelist[7].PropertyAttributeName, 400, 85, 0);
-                content270.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 80, 380, 70), garagelist[8].Checkbox, 370, 70);
-                PdfContentByte content271 = writer.DirectContent;
-                BaseFont baseF271 = BaseFont.CreateFont();
-                content271.SetFontAndSize(baseF271, 8);
-                content271.BeginText();
-                content271.ShowTextAligned(PdfContentByte.ALIGN_CENTER, garagelist[8].PropertyAttributeName, 422, 70, 0);
-                content271.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 65, 380, 55), garagelist[9].Checkbox, 370, 55);
-                PdfContentByte content272 = writer.DirectContent;
-                BaseFont baseF272 = BaseFont.CreateFont();
-                content272.SetFontAndSize(baseF272, 8);
-                content272.BeginText();
-                content272.ShowTextAligned(PdfContentByte.ALIGN_CENTER, garagelist[9].PropertyAttributeName, 410, 55, 0);
-                content272.EndText();
-
-                col4Table.AddCell(cell41);
-
-                PdfPCell blankCell18 = new PdfPCell(new Phrase(Chunk.NEWLINE));
-                blankCell18.Border = PdfPCell.NO_BORDER;
-                blankCell18.FixedHeight = 10f;
-                col4Table.AddCell(blankCell18);
-
-                col4Table.AddCell(cell42);
-                multipleMainTable.AddCell(col4Table);
-
-
-
-
-                //CODE FOR WATER CHECKBOXES
-
-                var waterlist = data.Where(w => w.Name == "Water").ToList();
-                // Column 5
-                PdfPTable col5Table = new PdfPTable(1);
-                PdfPCell cell51 = new PdfPCell(new Phrase());
-                cell51.FixedHeight = 93f; // Set the height of the cell
-                cell51.CellEvent = new RectangleOverPdfPCellBorder("Water", 485f, 344f, 35f, 20f, 487f, 355f);
-                //cell51.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Water", 485f, 20f, 70f, 345f);
-                cell51.BorderColor = BaseColor.DARK_GRAY;
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 335, 490, 345), waterlist[0].Checkbox, 480, 335);
-                PdfContentByte content273 = writer.DirectContent;
-                BaseFont baseF273 = BaseFont.CreateFont();
-                content273.SetFontAndSize(baseF273, 8);
-                content273.BeginText();
-                content273.ShowTextAligned(PdfContentByte.ALIGN_CENTER, waterlist[0].PropertyAttributeName, 502, 335, 0);
-                content273.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 320, 490, 330), waterlist[1].Checkbox, 480, 320);
-                PdfContentByte content274 = writer.DirectContent;
-                BaseFont baseF274 = BaseFont.CreateFont();
-                content274.SetFontAndSize(baseF274, 8);
-                content274.BeginText();
-                content274.ShowTextAligned(PdfContentByte.ALIGN_CENTER, waterlist[1].PropertyAttributeName, 502, 320, 0);
-                content274.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 305, 490, 315), waterlist[2].Checkbox, 480, 305);
-                PdfContentByte content275 = writer.DirectContent;
-                BaseFont baseF275 = BaseFont.CreateFont();
-                content275.SetFontAndSize(baseF275, 8);
-                content275.BeginText();
-                content275.ShowTextAligned(PdfContentByte.ALIGN_CENTER, waterlist[2].PropertyAttributeName, 502, 305, 0);
-                content275.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 290, 490, 300), waterlist[3].Checkbox, 480, 290);
-                PdfContentByte content276 = writer.DirectContent;
-                BaseFont baseF276 = BaseFont.CreateFont();
-                content276.SetFontAndSize(baseF276, 8);
-                content276.BeginText();
-                content276.ShowTextAligned(PdfContentByte.ALIGN_CENTER, waterlist[3].PropertyAttributeName, 502, 290, 0);
-                content276.EndText();
-
-
-                TextField tf233 = new TextField(writer, new Rectangle(480, 270, 550, 285), "Central");
-                tf233.BorderColor = new BaseColor(232, 232, 232);
-                tf233.BackgroundColor = new BaseColor(232, 232, 232);
-                tf233.Options = TextField.READ_ONLY;
-                tf233.Text = waterlist[3].Remarks;
-                tf233.TextColor = BaseColor.BLACK;
-                tf233.FontSize = 8;
-                writer.AddAnnotation(tf233.GetTextField());
-                col5Table.AddCell(cell51);
-
-
-                PdfPCell blankCell19 = new PdfPCell(new Phrase(Chunk.NEWLINE));
-                blankCell19.Border = PdfPCell.NO_BORDER;
-                blankCell19.FixedHeight = 10f;
-                col5Table.AddCell(blankCell19);
-
-
-
-
-
-                //CODE FOR FRONTAGE CHECKBOXES
-
-                var frontageList = data.Where(w => w.Name == "Frontage").ToList();
-
-                PdfPCell cell52 = new PdfPCell(new Phrase());
-                cell52.FixedHeight = 50f; // Set the height of the cell
-                cell52.BorderColor = BaseColor.DARK_GRAY;
-                cell52.CellEvent = new RectangleOverPdfPCellBorder("Frontage", 485f, 250f, 48f, 15f, 487f, 250f);
-                //cell52.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Frontage", 485f, 15f, 70f, 245f);
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 235, 490, 245), frontageList[0].Checkbox, 480, 235);
-                PdfContentByte content277 = writer.DirectContent;
-                BaseFont baseF277 = BaseFont.CreateFont();
-                content277.SetFontAndSize(baseF277, 8);
-                content277.BeginText();
-                content277.ShowTextAligned(PdfContentByte.ALIGN_CENTER, frontageList[0].PropertyAttributeName, 502, 235, 0);
-                content277.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 220, 490, 230), frontageList[1].Checkbox, 480, 220);
-                PdfContentByte content278 = writer.DirectContent;
-                BaseFont baseF278 = BaseFont.CreateFont();
-                content278.SetFontAndSize(baseF278, 8);
-                content278.BeginText();
-                content278.ShowTextAligned(PdfContentByte.ALIGN_CENTER, frontageList[1].PropertyAttributeName, 502, 220, 0);
-                content278.EndText();
-
-                col5Table.AddCell(cell52);
-
-
-                PdfPCell blankCell20 = new PdfPCell(new Phrase(Chunk.NEWLINE));
-                blankCell20.Border = PdfPCell.NO_BORDER;
-                blankCell20.FixedHeight = 10f;
-                col5Table.AddCell(blankCell20);
-
-
-
-                //CODE FOR LEVELS CHECKBOXES
-
-                var levelsList = data.Where(w => w.Name == "Level").ToList();
-
-                PdfPCell cell53 = new PdfPCell(new Phrase());
-                cell53.FixedHeight = 55f; // Set the height of the cell
-                cell53.BorderColor = BaseColor.DARK_GRAY;
-                cell53.CellEvent = new RectangleOverPdfPCellBorder("Levels", 485f, 190f, 40f, 15f, 485f, 193f);
-                //cell53.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Levels", 485f, 15f, 70f, 190f);
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 175, 490, 185), levelsList[0].Checkbox, 480, 175);
-                PdfContentByte content279 = writer.DirectContent;
-                BaseFont baseF279 = BaseFont.CreateFont();
-                content279.SetFontAndSize(baseF279, 8);
-                content279.BeginText();
-                content279.ShowTextAligned(PdfContentByte.ALIGN_CENTER, levelsList[0].PropertyAttributeName, 518, 175, 0);
-                content279.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 160, 490, 170), levelsList[1].Checkbox, 480, 160);
-                PdfContentByte content280 = writer.DirectContent;
-                BaseFont baseF280 = BaseFont.CreateFont();
-                content280.SetFontAndSize(baseF280, 8);
-                content280.BeginText();
-                content280.ShowTextAligned(PdfContentByte.ALIGN_CENTER, levelsList[1].PropertyAttributeName, 518, 160, 0);
-                content280.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 145, 490, 155), levelsList[2].Checkbox, 480, 145);
-                PdfContentByte content281 = writer.DirectContent;
-                BaseFont baseF281 = BaseFont.CreateFont();
-                content281.SetFontAndSize(baseF281, 8);
-                content281.BeginText();
-                content281.ShowTextAligned(PdfContentByte.ALIGN_CENTER, levelsList[2].PropertyAttributeName, 518, 145, 0);
-                content281.EndText();
-
-
-                //CODE FOR AMENITIES CHECKBOXES
-
-                var amenitiesList = data.Where(w => w.Name == "Amenities").ToList();
-
-                PdfPCell cell54 = new PdfPCell(new Phrase());
-                cell54.FixedHeight = 30f; // Set the height of the cell
-                cell54.BorderColor = BaseColor.BLACK;
-                cell54.CellEvent = new RectangleOverPdfPCellBorder("Amenities", 485f, 120f, 40f, 20f, 485f, 120f);
-                //cell54.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Amenities", 485f, 15f, 70f, 120f);
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 100, 490, 110), amenitiesList[0].Checkbox, 480, 100);
-                PdfContentByte content282 = writer.DirectContent;
-                BaseFont baseF282 = BaseFont.CreateFont();
-                content282.SetFontAndSize(baseF282, 8);
-                content282.BeginText();
-                content282.ShowTextAligned(PdfContentByte.ALIGN_CENTER, amenitiesList[0].PropertyAttributeName, 518, 100, 0);
-                content282.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 85, 490, 95), amenitiesList[1].Checkbox, 480, 85);
-                PdfContentByte content283 = writer.DirectContent;
-                BaseFont baseF283 = BaseFont.CreateFont();
-                content283.SetFontAndSize(baseF283, 8);
-                content283.BeginText();
-                content283.ShowTextAligned(PdfContentByte.ALIGN_CENTER, amenitiesList[1].PropertyAttributeName, 522, 85, 0);
-                content283.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 70, 490, 80), amenitiesList[2].Checkbox, 480, 70);
-                PdfContentByte content284 = writer.DirectContent;
-                BaseFont baseF284 = BaseFont.CreateFont();
-                content284.SetFontAndSize(baseF284, 8);
-                content284.BeginText();
-                content284.ShowTextAligned(PdfContentByte.ALIGN_CENTER, amenitiesList[2].PropertyAttributeName, 520, 70, 0);
-                content284.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 55, 490, 65), amenitiesList[3].Checkbox, 480, 55);
-                PdfContentByte content285 = writer.DirectContent;
-                BaseFont baseF285 = BaseFont.CreateFont();
-                content285.SetFontAndSize(baseF283, 8);
-                content285.BeginText();
-                content285.ShowTextAligned(PdfContentByte.ALIGN_CENTER, amenitiesList[3].PropertyAttributeName, 521, 55, 0);
-                content285.EndText();
-
-                col5Table.AddCell(cell53);
-
-                PdfPCell blankCell21 = new PdfPCell(new Phrase(Chunk.NEWLINE));
-                blankCell21.Border = PdfPCell.NO_BORDER;
-                blankCell21.FixedHeight = 10f;
-                col5Table.AddCell(blankCell21);
-
-                col5Table.AddCell(cell54);
-                multipleMainTable.AddCell(col5Table);
-                col1Table.DefaultCell.Border = 0;
-                col2Table.DefaultCell.Border = 0;
-                col3Table.DefaultCell.Border = 0;
-                col4Table.DefaultCell.Border = 0;
-                col5Table.DefaultCell.Border = 0;
-                // Add the main table to the document
-                document.Add(multipleMainTable);
-
-
-                PdfPCell leftCell2 = new PdfPCell(new Phrase("PROPERTY INFORMATION", GetFont()));
-                leftCell2.Border = Rectangle.NO_BORDER;
-
-                table.AddCell(leftCell2);
-                document.Add(table);
-
-
-
-                PdfPTable multipleMainTable1 = new PdfPTable(5);
-                multipleMainTable1.WidthPercentage = 108;
-                multipleMainTable1.SpacingBefore = 10f;
-                multipleMainTable1.DefaultCell.Border = 0;
-
-                float[] columnWidths1 = new float[] { 36f, 36f, 30f, 30f, 30f };
-                multipleMainTable1.SetWidths(columnWidths1);
-                // Step 5: Create the cells for each column using nested tables
-
-                // Column 1
-                PdfPTable col1Table1 = new PdfPTable(1);
-                col1Table1.SpacingBefore = 5f;
-                col1Table1.SpacingAfter = 5f;
-                PdfPCell cell111 = new PdfPCell(new Phrase());
-                cell111.FixedHeight = 100f; // Set the height of the cell
-                cell111.BorderColor = BaseColor.BLACK;
-                //cell111.Padding = 10;
-                col1Table1.AddCell(cell111);
-
-
-                //CHECKBOX FIELDS FOR CHATTELS
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 720, 23, 730), chattelslist[18].Checkbox, 23, 720);
-                PdfContentByte content301 = writer.DirectContent;
-                BaseFont baseF301 = BaseFont.CreateFont();
-                content301.SetFontAndSize(baseF301, 8);
-                content301.BeginText();
-                content301.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[18].PropertyAttributeName, 55, 720, 0);
-                content301.EndText();
-                TextField tf301 = new TextField(writer, new Rectangle(115, 720, 135, 735), "Wall oven");
-                tf301.BorderColor = new BaseColor(232, 232, 232);
-                tf301.BackgroundColor = new BaseColor(232, 232, 232);
-                tf301.Options = TextField.READ_ONLY;
-                tf301.Text = chattelslist[18].Count != 0 ? chattelslist[18].Count.ToString() : "";
-                tf301.TextColor = BaseColor.BLACK;
-                tf301.FontSize = 8;
-                writer.AddAnnotation(tf301.GetTextField());
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 705, 23, 715), chattelslist[19].Checkbox, 23, 705);
-                PdfContentByte content302 = writer.DirectContent;
-                BaseFont baseF302 = BaseFont.CreateFont();
-                content302.SetFontAndSize(baseF302, 8);
-                content302.BeginText();
-                content302.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[19].PropertyAttributeName, 67, 705, 0);
-                content302.EndText();
-                TextField tf302 = new TextField(writer, new Rectangle(115, 705, 135, 718), "Smoke detectors");
-                tf302.BorderColor = new BaseColor(232, 232, 232);
-                tf302.BackgroundColor = new BaseColor(232, 232, 232);
-                tf302.Options = TextField.READ_ONLY;
-                tf302.Text = chattelslist[19].Count != 0 ? chattelslist[19].Count.ToString() : "";
-                tf302.TextColor = BaseColor.BLACK;
-                tf302.FontSize = 8;
-                writer.AddAnnotation(tf302.GetTextField());
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 690, 23, 700), chattelslist[20].Checkbox, 23, 690);
-                PdfContentByte content303 = writer.DirectContent;
-                BaseFont baseF303 = BaseFont.CreateFont();
-                content303.SetFontAndSize(baseF303, 8);
-                content303.BeginText();
-                content303.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[20].PropertyAttributeName, 66, 690, 0);
-                content303.EndText();
-                TextField tf303 = new TextField(writer, new Rectangle(115, 687, 135, 703), "Security system");
-                tf303.BorderColor = new BaseColor(232, 232, 232);
-                tf303.BackgroundColor = new BaseColor(232, 232, 232);
-                tf303.Options = TextField.READ_ONLY;
-                tf303.Text = chattelslist[20].Count != 0 ? chattelslist[20].Count.ToString() : "";
-                tf303.TextColor = BaseColor.BLACK;
-                tf303.FontSize = 8;
-                writer.AddAnnotation(tf303.GetTextField());
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 675, 23, 685), chattelslist[21].Checkbox, 23, 675);
-                PdfContentByte content304 = writer.DirectContent;
-                BaseFont baseF304 = BaseFont.CreateFont();
-                content304.SetFontAndSize(baseF304, 8);
-                content304.BeginText();
-                content304.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[21].PropertyAttributeName, 76, 675, 0);
-                content304.EndText();
-                TextField tf304 = new TextField(writer, new Rectangle(115, 686, 135, 672), "Bathroom extractorfan");
-                tf304.BorderColor = new BaseColor(232, 232, 232);
-                tf304.BackgroundColor = new BaseColor(232, 232, 232);
-                tf304.Options = TextField.READ_ONLY;
-                tf304.Text = chattelslist[21].Count != 0 ? chattelslist[21].Count.ToString() : "";
-                tf304.TextColor = BaseColor.BLACK;
-                tf304.FontSize = 8;
-                writer.AddAnnotation(tf304.GetTextField());
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 660, 23, 670), chattelslist[22].Checkbox, 23, 660);
-                PdfContentByte content305 = writer.DirectContent;
-                BaseFont baseF305 = BaseFont.CreateFont();
-                content305.SetFontAndSize(baseF305, 8);
-                content305.BeginText();
-                content305.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[22].PropertyAttributeName, 49, 660, 0);
-                content305.EndText();
-
-                TextField tf01 = new TextField(writer, new Rectangle(23, 655, 130, 640), "othertestfield");
-                tf01.BorderColor = new BaseColor(232, 232, 232);
-                tf01.BackgroundColor = new BaseColor(232, 232, 232);
-                tf01.Options = TextField.READ_ONLY;
-                tf01.FontSize = 8;
-                tf01.Text = chattelslist[22].Remarks;
-                tf01.TextColor = BaseColor.BLACK;
-                writer.AddAnnotation(tf01.GetTextField());
-
-
-                PdfPCell blankCell5 = new PdfPCell(new Phrase(Chunk.NEWLINE));
-                blankCell5.Border = PdfPCell.NO_BORDER;
-                blankCell5.FixedHeight = 10f;
-                col1Table1.AddCell(blankCell5);
-
-                // CODE FOR OTHER ROOMS CHECKBOXES
-
-                var otherrroomslist = data.Where(w => w.Name == "Other Rooms").ToList();
-
-                PdfPCell cell112 = new PdfPCell(new Phrase());
-                cell112.FixedHeight = 275f; // Set the height of the cell
-                cell112.BorderColor = BaseColor.BLACK;
-                cell112.Padding = 10;
-                cell112.CellEvent = new RectangleOverPdfPCellBorder("Other rooms", 30f, 620f, 68f, 15f, 33f, 624f);
-                //cell112.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Other rooms", 50f, 20f, 70f, 610);
-                col1Table1.AddCell(cell112);
-
-
-
-                //CHECKBOX FIELDS
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 610, 23, 600), otherrroomslist[0].Checkbox, 23, 600);
-                PdfContentByte content306 = writer.DirectContent;
-                BaseFont baseF306 = BaseFont.CreateFont();
-                content306.SetFontAndSize(baseF306, 8);
-                content306.BeginText();
-                content306.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[0].PropertyAttributeName, 62, 600, 0);
-                content306.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 595, 23, 585), (otherrroomslist[1].Checkbox != null ? otherrroomslist[1].Checkbox : false), 23, 585);
-                PdfContentByte content307 = writer.DirectContent;
-                BaseFont baseF307 = BaseFont.CreateFont();
-                content307.SetFontAndSize(baseF307, 8);
-                content307.BeginText();
-                content307.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[1].PropertyAttributeName, 64, 585, 0);
-                content307.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 580, 23, 570), otherrroomslist[2].Checkbox, 23, 570);
-                PdfContentByte content308 = writer.DirectContent;
-                BaseFont baseF308 = BaseFont.CreateFont();
-                content308.SetFontAndSize(baseF308, 8);
-                content308.BeginText();
-                content308.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[2].PropertyAttributeName, 51, 570, 0);
-                content308.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 565, 23, 555), otherrroomslist[3].Checkbox, 23, 555);
-                PdfContentByte content309 = writer.DirectContent;
-                BaseFont baseF309 = BaseFont.CreateFont();
-                content309.SetFontAndSize(baseF309, 8);
-                content309.BeginText();
-                content309.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[3].PropertyAttributeName, 57, 555, 0);
-                content309.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 550, 23, 540), otherrroomslist[4].Checkbox, 23, 540);
-                PdfContentByte content310 = writer.DirectContent;
-                BaseFont baseF310 = BaseFont.CreateFont();
-                content310.SetFontAndSize(baseF310, 8);
-                content310.BeginText();
-                content310.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[4].PropertyAttributeName, 49, 540, 0);
-                content310.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 535, 23, 525), otherrroomslist[5].Checkbox, 23, 525);
-                PdfContentByte content311 = writer.DirectContent;
-                BaseFont baseF311 = BaseFont.CreateFont();
-                content311.SetFontAndSize(baseF311, 8);
-                content311.BeginText();
-                content311.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[5].PropertyAttributeName, 56, 525, 0);
-                content311.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 520, 23, 510), otherrroomslist[6].Checkbox, 23, 510);
-                PdfContentByte content312 = writer.DirectContent;
-                BaseFont baseF312 = BaseFont.CreateFont();
-                content312.SetFontAndSize(baseF312, 8);
-                content312.BeginText();
-                content312.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[6].PropertyAttributeName, 57, 510, 0);
-                content312.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 505, 23, 495), otherrroomslist[7].Checkbox, 23, 495);
-                PdfContentByte content313 = writer.DirectContent;
-                BaseFont baseF313 = BaseFont.CreateFont();
-                content313.SetFontAndSize(baseF313, 8);
-                content313.BeginText();
-                content313.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[7].PropertyAttributeName, 63, 495, 0);
-                content313.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 490, 23, 480), otherrroomslist[8].Checkbox, 23, 480);
-                PdfContentByte content314 = writer.DirectContent;
-                BaseFont baseF314 = BaseFont.CreateFont();
-                content314.SetFontAndSize(baseF314, 8);
-                content314.BeginText();
-                content314.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[8].PropertyAttributeName, 55, 480, 0);
-                content314.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 475, 23, 465), otherrroomslist[9].Checkbox, 23, 465);
-                PdfContentByte content315 = writer.DirectContent;
-                BaseFont baseF315 = BaseFont.CreateFont();
-                content315.SetFontAndSize(baseF315, 8);
-                content315.BeginText();
-                content315.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[9].PropertyAttributeName, 63, 465, 0);
-                content315.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 460, 23, 450), otherrroomslist[10].Checkbox, 23, 450);
-                PdfContentByte content316 = writer.DirectContent;
-                BaseFont baseF316 = BaseFont.CreateFont();
-                content316.SetFontAndSize(baseF316, 8);
-                content316.BeginText();
-                content316.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[10].PropertyAttributeName, 59, 450, 0);
-                content316.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 445, 23, 435), otherrroomslist[11].Checkbox, 23, 435);
-                PdfContentByte content317 = writer.DirectContent;
-                BaseFont baseF317 = BaseFont.CreateFont();
-                content317.SetFontAndSize(baseF317, 8);
-                content317.BeginText();
-                content317.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[11].PropertyAttributeName, 50, 435, 0);
-                content317.EndText();
-
-                TextField tf02 = new TextField(writer, new Rectangle(23, 430, 130, 410), "Other");
-                tf02.BorderColor = new BaseColor(232, 232, 232);
-                tf02.BackgroundColor = new BaseColor(232, 232, 232);
-                tf02.Options = TextField.READ_ONLY;
-                tf02.Text = otherrroomslist[11].Remarks;
-                tf02.TextColor = BaseColor.BLACK;
-                tf02.FontSize = 8;
-                writer.AddAnnotation(tf02.GetTextField());
-
-                PdfContentByte cb01 = writer.DirectContent;
-                BaseFont bf01 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
-                string text01 = "Bedrooms";
-                cb01.BeginText();
-                cb01.SetFontAndSize(bf01, 8);
-                // 2ut the alignment and coordinates here
-                cb01.ShowTextAligned(1, text01, 45, 400, 0);
-                cb01.EndText();
-
-                PdfContentByte content286 = writer.DirectContent;
-                BaseFont baseF286 = BaseFont.CreateFont();
-                content286.SetFontAndSize(baseF286, 8);
-                content286.BeginText();
-                content286.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Double", 33, 390, 0);
-                content286.EndText();
-                TextField tf03 = new TextField(writer, new Rectangle(53, 395, 130, 380), "Double");
-                tf03.BorderColor = new BaseColor(232, 232, 232);
-                tf03.BackgroundColor = new BaseColor(232, 232, 232);
-                tf03.Options = TextField.READ_ONLY;
-                //tf03.Text = othercommentList[0].Double;
-                if (othercommentList.Count > 0)
-                {
-                    tf03.Text = othercommentList[0].Double;
-                }
-                else
-                {
-                    // Handle the case when othercommentList is empty
-                    tf03.Text = ""; // Set a default value or handle it based on your requirements
-                }
-
-                tf03.TextColor = BaseColor.BLACK;
-                tf03.FontSize = 8;
-                writer.AddAnnotation(tf03.GetTextField());
-
-
-                PdfContentByte content287 = writer.DirectContent;
-                BaseFont baseF287 = BaseFont.CreateFont();
-                content287.SetFontAndSize(baseF287, 8);
-                content287.BeginText();
-                content287.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Single", 33, 365, 0);
-                content287.EndText();
-                TextField tf04 = new TextField(writer, new Rectangle(53, 375, 130, 360), "Single");
-                tf04.BorderColor = new BaseColor(232, 232, 232);
-                tf04.BackgroundColor = new BaseColor(232, 232, 232);
-                tf04.Options = TextField.READ_ONLY;
-                // tf04.Text = othercommentList[0].Single;
-                if (othercommentList.Count > 0)
-                {
-                    tf04.Text = othercommentList[0].Single;
-                }
-                else
-                {
-                    // Handle the case when othercommentList is empty
-                    tf04.Text = ""; // Set a default value or handle it based on your requirements
-                }
-
-                tf04.TextColor = BaseColor.BLACK;
-                tf04.FontSize = 8;
-                writer.AddAnnotation(tf04.GetTextField());
-
-                PdfPCell blankCell6 = new PdfPCell(new Phrase(Chunk.NEWLINE));
-                blankCell6.Border = PdfPCell.NO_BORDER;
-                blankCell6.FixedHeight = 10f;
-                col1Table1.AddCell(blankCell6);
-
-
-                // CODE FOR HOT WATER CHECKBOXES
-
-                var hotwaterlist = data.Where(w => w.Name == "Hot Water").ToList();
-
-                PdfPCell cell113 = new PdfPCell(new Phrase());
-                cell113.FixedHeight = 110f; // Set the height of the cell
-                cell113.BorderColor = BaseColor.BLACK;
-                cell113.Padding = 10;
-                cell113.CellEvent = new RectangleOverPdfPCellBorder("Hot Water", 30f, 334f, 53f, 15f, 33f, 338f);
-                //cell113.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Hot Water", 50f, 20f, 70f, 328);
-                col1Table1.AddCell(cell113);
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 330, 23, 320), hotwaterlist[0].Checkbox, 23, 320);
-                PdfContentByte content318 = writer.DirectContent;
-                BaseFont baseF318 = BaseFont.CreateFont();
-                content318.SetFontAndSize(baseF318, 8);
-                content318.BeginText();
-                content318.ShowTextAligned(PdfContentByte.ALIGN_CENTER, hotwaterlist[0].PropertyAttributeName, 55, 320, 0);
-                content318.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 315, 23, 305), hotwaterlist[1].Checkbox, 23, 305);
-                PdfContentByte content319 = writer.DirectContent;
-                BaseFont baseF319 = BaseFont.CreateFont();
-                content319.SetFontAndSize(baseF319, 8);
-                content319.BeginText();
-                content319.ShowTextAligned(PdfContentByte.ALIGN_CENTER, hotwaterlist[1].PropertyAttributeName, 48, 305, 0);
-                content319.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 300, 23, 290), hotwaterlist[2].Checkbox, 23, 290);
-                PdfContentByte content320 = writer.DirectContent;
-                BaseFont baseF320 = BaseFont.CreateFont();
-                content320.SetFontAndSize(baseF320, 8);
-                content320.BeginText();
-                content320.ShowTextAligned(PdfContentByte.ALIGN_CENTER, hotwaterlist[1].PropertyAttributeName, 51, 290, 0);
-                content320.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 285, 23, 275), hotwaterlist[3].Checkbox, 23, 275);
-                PdfContentByte content321 = writer.DirectContent;
-                BaseFont baseF321 = BaseFont.CreateFont();
-                content321.SetFontAndSize(baseF321, 8);
-                content321.BeginText();
-                content321.ShowTextAligned(PdfContentByte.ALIGN_CENTER, hotwaterlist[3].PropertyAttributeName, 53, 275, 0);
-                content321.EndText();
-
-                TextField tf322 = new TextField(writer, new Rectangle(33, 260, 130, 240), "Other comments");
-                tf322.BorderColor = new BaseColor(232, 232, 232);
-                tf322.BackgroundColor = new BaseColor(232, 232, 232);
-                tf322.Options = TextField.READ_ONLY;
-                tf322.Text = hotwaterlist[4].Remarks;
-                tf322.TextColor = BaseColor.BLACK;
-                tf322.FontSize = 8;
-                writer.AddAnnotation(tf322.GetTextField());
-
-                PdfContentByte cb05 = writer.DirectContent;
-                BaseFont bf05 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
-                string text05 = "Other comments";
-                cb05.BeginText();
-                cb05.SetFontAndSize(bf05, 8);
-                // 5ut the alignment and coordinates here
-                cb05.ShowTextAligned(1, text05, 57, 263, 0);
-                cb05.EndText();
-                TextField tf05 = new TextField(writer, new Rectangle(40, 237, 150, 220), "Central");
-                writer.AddAnnotation(tf05.GetTextField());
-
-
-                multipleMainTable1.AddCell(col1Table1);
-
-                //// Column 2
-                PdfPTable col2Table2 = new PdfPTable(1);
-                PdfPCell cell22 = new PdfPCell(new Phrase());
-                cell22.FixedHeight = 60f; // Set the height of the cell
-                cell22.BorderColor = BaseColor.BLACK;
-                col2Table2.AddCell(cell22);
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 720, 158, 730), heatinglist[12].Checkbox, 148, 720);
-                PdfContentByte content322 = writer.DirectContent;
-                BaseFont baseF322 = BaseFont.CreateFont();
-                content322.SetFontAndSize(baseF322, 8);
-                content322.BeginText();
-                content322.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[12].PropertyAttributeName, 185, 720, 0);
-                content322.EndText();
-
-                PdfContentByte cb03 = writer.DirectContent;
-                BaseFont bf03 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
-                string text03 = "Other comments";
-                cb03.BeginText();
-                cb03.SetFontAndSize(bf03, 8);
-                //03t the alignment and coordinates here
-                cb03.ShowTextAligned(1, text03, 185, 710, 0);
-                cb03.EndText();
-                TextField tf06 = new TextField(writer, new Rectangle(148, 690, 245, 708), "Other comments");
-                tf06.BorderColor = new BaseColor(232, 232, 232);
-                tf06.BackgroundColor = new BaseColor(232, 232, 232);
-                tf06.Options = TextField.READ_ONLY;
-                tf06.Text = heatinglist[13].Remarks;
-                tf06.TextColor = BaseColor.BLACK;
-                tf06.FontSize = 8;
-                writer.AddAnnotation(tf06.GetTextField());
-
-                PdfPCell blankCell3 = new PdfPCell(new Phrase(Chunk.NEWLINE));
-                blankCell3.Border = PdfPCell.NO_BORDER;
-                blankCell3.FixedHeight = 10f;
-                col2Table2.AddCell(blankCell3);
-
-
-
-
-                // CODE FOR KITCHEN CHECKBOXES
-
-                var kitchenlist = data.Where(w => w.Name == "Kitchen").ToList();
-
-                PdfPCell cell311 = new PdfPCell(new Phrase());
-                cell311.FixedHeight = 75f; // Set the height of the cell
-                cell311.BorderColor = BaseColor.BLACK;
-                cell311.CellEvent = new RectangleOverPdfPCellBorder("Kitchen", 155f, 665f, 40f, 15f, 158f, 667f);
-                //cell311.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Kitchen", 170f, 20f, 70f, 655);
-                col2Table2.AddCell(cell311);
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 645, 158, 655), kitchenlist[0].Checkbox, 148, 645);
-                PdfContentByte content323 = writer.DirectContent;
-                BaseFont baseF323 = BaseFont.CreateFont();
-                content323.SetFontAndSize(baseF323, 8);
-                content323.BeginText();
-                content323.ShowTextAligned(PdfContentByte.ALIGN_CENTER, kitchenlist[0].PropertyAttributeName, 177, 645, 0);
-                content323.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 630, 158, 640), kitchenlist[1].Checkbox, 148, 630);
-                PdfContentByte content324 = writer.DirectContent;
-                BaseFont baseF324 = BaseFont.CreateFont();
-                content324.SetFontAndSize(baseF324, 8);
-                content324.BeginText();
-                content324.ShowTextAligned(PdfContentByte.ALIGN_CENTER, kitchenlist[1].PropertyAttributeName, 177, 630, 0);
-                content324.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 615, 158, 625), kitchenlist[2].Checkbox, 148, 615);
-                PdfContentByte content325 = writer.DirectContent;
-                BaseFont baseF325 = BaseFont.CreateFont();
-                content325.SetFontAndSize(baseF325, 8);
-                content325.BeginText();
-                content325.ShowTextAligned(PdfContentByte.ALIGN_CENTER, kitchenlist[2].PropertyAttributeName, 177, 615, 0);
-                content325.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 600, 158, 610), kitchenlist[3].Checkbox, 148, 600);
-                PdfContentByte content326 = writer.DirectContent;
-                BaseFont baseF326 = BaseFont.CreateFont();
-                content326.SetFontAndSize(baseF326, 8);
-                content326.BeginText();
-                content326.ShowTextAligned(PdfContentByte.ALIGN_CENTER, kitchenlist[3].PropertyAttributeName, 182, 600, 0);
-                content326.EndText();
-
-
-                PdfPCell blankCell4 = new PdfPCell(new Phrase(Chunk.NEWLINE));
-                blankCell4.Border = PdfPCell.NO_BORDER;
-                blankCell4.FixedHeight = 10f;
-                col2Table2.AddCell(blankCell4);
-
-
-                // CODE FOR DINING CHECKBOXES
-
-                var dininglist = data.Where(w => w.Name == "Kitchen").ToList();
-
-                PdfPCell cell312 = new PdfPCell(new Phrase());
-                cell312.FixedHeight = 75f; // Set the height of the cell
-                cell312.BorderColor = BaseColor.BLACK;
-                cell312.CellEvent = new RectangleOverPdfPCellBorder("Dining", 158f, 580f, 35f, 15f, 158f, 582f);
-                // cell312.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Dining", 170f, 20f, 70f, 568f);
-
-                col2Table2.AddCell(cell312);
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 545, 158, 555), dininglist[0].Checkbox, 148, 545);
-                PdfContentByte content327 = writer.DirectContent;
-                BaseFont baseF327 = BaseFont.CreateFont();
-                content327.SetFontAndSize(baseF327, 8);
-                content327.BeginText();
-                content327.ShowTextAligned(PdfContentByte.ALIGN_CENTER, dininglist[0].PropertyAttributeName, 191, 545, 0);
-                content327.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 530, 158, 540), dininglist[1].Checkbox, 148, 530);
-                PdfContentByte content328 = writer.DirectContent;
-                BaseFont baseF328 = BaseFont.CreateFont();
-                content328.SetFontAndSize(baseF328, 8);
-                content328.BeginText();
-                content328.ShowTextAligned(PdfContentByte.ALIGN_CENTER, dininglist[1].PropertyAttributeName, 189, 530, 0);
-                content328.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 515, 158, 525), dininglist[2].Checkbox, 148, 515);
-                PdfContentByte content329 = writer.DirectContent;
-                BaseFont baseF329 = BaseFont.CreateFont();
-                content329.SetFontAndSize(baseF329, 8);
-                content329.BeginText();
-                content329.ShowTextAligned(PdfContentByte.ALIGN_CENTER, dininglist[2].PropertyAttributeName, 192, 515, 0);
-                content329.EndText();
-
-                PdfPCell blankCell2 = new PdfPCell(new Phrase(Chunk.NEWLINE));
-                blankCell2.Border = PdfPCell.NO_BORDER;
-                blankCell2.FixedHeight = 7f;
-                col2Table2.AddCell(blankCell2);
-
-                // CODE FOR BATHROOM/TOILET CHECKBOXES
-
-                var bathroomlist = data.Where(w => w.Name == "Bathroom Toilets").ToList();
-
-                PdfPCell cell313 = new PdfPCell(new Phrase());
-                cell313.FixedHeight = 97f; // Set the height of the cell
-                cell313.BorderColor = BaseColor.BLACK;
-                cell313.CellEvent = new RectangleOverPdfPCellBorder("Bathroom/toilet", 155f, 495f, 78f, 15f, 158f, 498f);
-                //cell313.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Bathroom/toilet", 170f, 15f, 70f, 495);
-                col2Table2.AddCell(cell313);
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 470, 158, 480), bathroomlist[0].Checkbox, 148, 470);
-                PdfContentByte content330 = writer.DirectContent;
-                BaseFont baseF330 = BaseFont.CreateFont();
-                content330.SetFontAndSize(baseF330, 8);
-                content330.BeginText();
-                content330.ShowTextAligned(PdfContentByte.ALIGN_CENTER, bathroomlist[0].PropertyAttributeName, 196, 470, 0);
-                content330.EndText();
-
-                TextField tf330 = new TextField(writer, new Rectangle(235, 480, 255, 468), "Separate bathrooms");//(33, 445, 23, 435)
-                tf330.BorderColor = new BaseColor(232, 232, 232);
-                tf330.BackgroundColor = new BaseColor(232, 232, 232);
-                tf330.Options = TextField.READ_ONLY;
-                tf330.Text = bathroomlist[0].Count != 0 ? bathroomlist[0].Count.ToString() : "";
-                tf330.TextColor = BaseColor.BLACK;
-                tf330.FontSize = 8;
-                writer.AddAnnotation(tf330.GetTextField());
-                //col5Table.AddCell(cell51);
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 455, 158, 465), bathroomlist[1].Checkbox, 148, 455);
-                PdfContentByte content331 = writer.DirectContent;
-                BaseFont baseF331 = BaseFont.CreateFont();
-                content331.SetFontAndSize(baseF331, 8);
-                content331.BeginText();
-                content331.ShowTextAligned(PdfContentByte.ALIGN_CENTER, bathroomlist[1].PropertyAttributeName, 189, 455, 0);
-                content331.EndText();
-
-                TextField tf331 = new TextField(writer, new Rectangle(235, 465, 255, 453), "Separate WCs");//(33, 445, 23, 435)
-                tf331.BorderColor = new BaseColor(232, 232, 232);
-                tf331.BackgroundColor = new BaseColor(232, 232, 232);
-                tf331.Options = TextField.READ_ONLY;
-                tf331.Text = bathroomlist[1].Count != 0 ? bathroomlist[1].Count.ToString() : "";
-                tf331.TextColor = BaseColor.BLACK;
-                tf331.FontSize = 8;
-                writer.AddAnnotation(tf331.GetTextField());
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 440, 158, 450), bathroomlist[2].Checkbox, 148, 440);
-                PdfContentByte content332 = writer.DirectContent;
-                BaseFont baseF332 = BaseFont.CreateFont();
-                content332.SetFontAndSize(baseF330, 8);
-                content332.BeginText();
-                content332.ShowTextAligned(PdfContentByte.ALIGN_CENTER, bathroomlist[2].PropertyAttributeName, 190, 440, 0);
-                content332.EndText();
-
-                TextField tf332 = new TextField(writer, new Rectangle(235, 450, 255, 438), "Separate shower");//(33, 445, 23, 435)
-                tf332.BorderColor = new BaseColor(232, 232, 232);
-                tf332.BackgroundColor = new BaseColor(232, 232, 232);
-                tf332.Options = TextField.READ_ONLY;
-                tf332.Text = bathroomlist[2].Count != 0 ? bathroomlist[2].Count.ToString() : "";
-                tf332.TextColor = BaseColor.BLACK;
-                tf332.FontSize = 8;
-                writer.AddAnnotation(tf332.GetTextField());
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 425, 158, 435), bathroomlist[3].Checkbox, 148, 425);
-                PdfContentByte content333 = writer.DirectContent;
-                BaseFont baseF333 = BaseFont.CreateFont();
-                content333.SetFontAndSize(baseF330, 8);
-                content333.BeginText();
-                content333.ShowTextAligned(PdfContentByte.ALIGN_CENTER, bathroomlist[3].PropertyAttributeName, 197, 425, 0);
-                content333.EndText();
-
-                TextField tf333 = new TextField(writer, new Rectangle(235, 435, 255, 423), "Combined bth/WCs ");//(33, 445, 23, 435)
-                tf333.BorderColor = new BaseColor(232, 232, 232);
-                tf333.BackgroundColor = new BaseColor(232, 232, 232);
-                tf333.Options = TextField.READ_ONLY;
-                tf333.Text = bathroomlist[3].Count != 0 ? bathroomlist[3].Count.ToString() : "";
-                tf333.TextColor = BaseColor.BLACK;
-                tf333.FontSize = 8;
-                writer.AddAnnotation(tf333.GetTextField());
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 410, 158, 420), bathroomlist[4].Checkbox, 148, 410);
-                PdfContentByte content334 = writer.DirectContent;
-                BaseFont baseF334 = BaseFont.CreateFont();
-                content334.SetFontAndSize(baseF330, 8);
-                content334.BeginText();
-                content334.ShowTextAligned(PdfContentByte.ALIGN_CENTER, bathroomlist[4].PropertyAttributeName, 178, 410, 0);
-                content334.EndText();
-
-                TextField tf334 = new TextField(writer, new Rectangle(235, 420, 255, 410), "Ensuite");//(33, 445, 23, 435)
-                tf334.BorderColor = new BaseColor(232, 232, 232);
-                tf334.BackgroundColor = new BaseColor(232, 232, 232);
-                tf334.Options = TextField.READ_ONLY;
-                tf334.Text = bathroomlist[4].Count != 0 ? bathroomlist[4].Count.ToString() : "";
-                tf334.TextColor = BaseColor.BLACK;
-                tf334.FontSize = 8;
-                writer.AddAnnotation(tf334.GetTextField());
-
-                PdfPCell blankCell1 = new PdfPCell(new Phrase(Chunk.NEWLINE));
-                blankCell1.Border = PdfPCell.NO_BORDER;
-                blankCell1.FixedHeight = 7f;
-                col2Table2.AddCell(blankCell1);
-
-
-                // CODE FOR LOUNGE CHECKBOXES
-
-                var loungelist = data.Where(w => w.Name == "Lounge").ToList();
-
-                PdfPCell cell314 = new PdfPCell(new Phrase());
-                cell314.FixedHeight = 60f; // Set the height of the cell
-                cell314.BorderColor = BaseColor.BLACK;
-                cell314.CellEvent = new RectangleOverPdfPCellBorder("Lounge", 158f, 393f, 40f, 14f, 160f, 396f);
-                //cell314.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Lounge", 170f, 20f, 70f, 385f);
-                col2Table2.AddCell(cell314);
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 365, 158, 375), loungelist[0].Checkbox, 148, 365);
-                PdfContentByte content335 = writer.DirectContent;
-                BaseFont baseF335 = BaseFont.CreateFont();
-                content335.SetFontAndSize(baseF335, 8);
-                content335.BeginText();
-                content335.ShowTextAligned(PdfContentByte.ALIGN_CENTER, loungelist[0].PropertyAttributeName, 204, 365, 0);
-                content335.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 350, 158, 360), loungelist[1].Checkbox, 148, 350);
-                PdfContentByte content336 = writer.DirectContent;
-                BaseFont baseF336 = BaseFont.CreateFont();
-                content336.SetFontAndSize(baseF336, 8);
-                content336.BeginText();
-                content336.ShowTextAligned(PdfContentByte.ALIGN_CENTER, loungelist[1].PropertyAttributeName, 176, 350, 0);
-                content336.EndText();
-
-                PdfPCell blankCell = new PdfPCell(new Phrase(Chunk.NEWLINE));
-                blankCell.Border = PdfPCell.NO_BORDER;
-                blankCell.FixedHeight = 10f;
-                col2Table2.AddCell(blankCell);
-
-
-                // CODE FOR STOVE CHECKBOXES
-
-                var stovelist = data.Where(w => w.Name == "Stove").ToList();
-
-                PdfPCell cell315 = new PdfPCell(new Phrase());
-                cell315.FixedHeight = 30f; // Set the height of the cell
-                cell315.BorderColor = BaseColor.BLACK;
-                cell315.CellEvent = new RectangleOverPdfPCellBorder("Stove", 158f, 322f, 30f, 14f, 158f, 325f);
-                // cell315.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Stove", 170f, 20f, 70f, 316);
-                col2Table2.AddCell(cell315);
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 310, 158, 320), stovelist[0].Checkbox, 148, 310);
-                PdfContentByte content337 = writer.DirectContent;
-                BaseFont baseF337 = BaseFont.CreateFont();
-                content337.SetFontAndSize(baseF337, 8);
-                content337.BeginText();
-                content337.ShowTextAligned(PdfContentByte.ALIGN_CENTER, stovelist[0].PropertyAttributeName, 176, 310, 0);
-                content337.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 295, 158, 305), stovelist[1].Checkbox, 148, 295);
-                PdfContentByte content338 = writer.DirectContent;
-                BaseFont baseF338 = BaseFont.CreateFont();
-                content338.SetFontAndSize(baseF338, 8);
-                content338.BeginText();
-                content338.ShowTextAligned(PdfContentByte.ALIGN_CENTER, stovelist[1].PropertyAttributeName, 179, 295, 0);
-                content338.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 280, 158, 290), stovelist[2].Checkbox, 148, 280);
-                PdfContentByte content339 = writer.DirectContent;
-                BaseFont baseF339 = BaseFont.CreateFont();
-                content339.SetFontAndSize(baseF339, 8);
-                content339.BeginText();
-                content339.ShowTextAligned(PdfContentByte.ALIGN_CENTER, stovelist[2].PropertyAttributeName, 182, 280, 0);
-                content339.EndText();
-
-                multipleMainTable1.AddCell(col2Table2);
-
-
-                // CODE FOR EXTERIOR CONDITION CHECKBOXES
-
-                var exteriorConditonlist = data.Where(w => w.Name == "Exterior Condition").ToList();
-                // Column 3
-                PdfPTable col3Table3 = new PdfPTable(1);
-                PdfPCell cell44 = new PdfPCell(new Phrase());
-                cell44.FixedHeight = 70f; // Set the height of the cell
-                cell44.BorderColor = BaseColor.BLACK;
-                cell44.CellEvent = new RectangleOverPdfPCellBorder("Exterior condition", 272f, 733f, 85f, 15f, 273f, 735f);
-                //cell44.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Exterior condition", 265f, 15f, 80f, 733f);
-                col3Table3.AddCell(cell44);
-
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 720, 285, 730), exteriorConditonlist[0].Checkbox, 275, 720);
-                PdfContentByte content340 = writer.DirectContent;
-                BaseFont baseF340 = BaseFont.CreateFont();
-                content340.SetFontAndSize(baseF340, 8);
-                content340.BeginText();
-                content340.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorConditonlist[0].PropertyAttributeName, 307, 720, 0);
-                content340.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 705, 285, 715), exteriorConditonlist[0].Checkbox, 275, 705);
-                PdfContentByte content341 = writer.DirectContent;
-                BaseFont baseF341 = BaseFont.CreateFont();
-                content341.SetFontAndSize(baseF341, 8);
-                content341.BeginText();
-                content341.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorConditonlist[1].PropertyAttributeName, 310, 705, 0);
-                content341.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 690, 285, 700), exteriorConditonlist[2].Checkbox, 275, 690);
-                PdfContentByte content342 = writer.DirectContent;
-                BaseFont baseF342 = BaseFont.CreateFont();
-                content342.SetFontAndSize(baseF342, 8);
-                content342.BeginText();
-                content342.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorConditonlist[2].PropertyAttributeName, 301, 690, 0);
-                content342.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 675, 285, 685), exteriorConditonlist[3].Checkbox, 275, 675);
-                PdfContentByte content343 = writer.DirectContent;
-                BaseFont baseF343 = BaseFont.CreateFont();
-                content343.SetFontAndSize(baseF343, 8);
-                content343.BeginText();
-                content343.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorConditonlist[3].PropertyAttributeName, 299, 675, 0);
-                content343.EndText();
-
-                PdfPCell blankCell7 = new PdfPCell(new Phrase(Chunk.NEWLINE));
-                blankCell7.Border = PdfPCell.NO_BORDER;
-                blankCell7.FixedHeight = 10f;
-                col3Table3.AddCell(blankCell7);
-
-
-
-                // CODE FOR SWIMMING POOL CONDITION CHECKBOXES
-
-                var swimmingpoollist = data.Where(w => w.Name == "Swimming Pool").ToList();
-                PdfPCell cell45 = new PdfPCell(new Phrase());
-                cell45.FixedHeight = 105f; // Set the height of the cell
-                cell45.BorderColor = BaseColor.BLACK;
-                cell45.CellEvent = new RectangleOverPdfPCellBorder("Swimming pool", 272f, 650f, 85f, 15f, 273f, 655f);
-                //cell45.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Swimming pool", 265f, 15f, 80f, 650f);
-                col3Table3.AddCell(cell45);
-
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 635, 285, 645), swimmingpoollist[0].Checkbox, 275, 635);
-                PdfContentByte content344 = writer.DirectContent;
-                BaseFont baseF344 = BaseFont.CreateFont();
-                content344.SetFontAndSize(baseF344, 8);
-                content344.BeginText();
-                content344.ShowTextAligned(PdfContentByte.ALIGN_CENTER, swimmingpoollist[0].PropertyAttributeName, 314, 635, 0);
-                content344.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 620, 285, 630), swimmingpoollist[1].Checkbox, 275, 620);
-                PdfContentByte content345 = writer.DirectContent;
-                BaseFont baseF345 = BaseFont.CreateFont();
-                content345.SetFontAndSize(baseF345, 8);
-                content345.BeginText();
-                content345.ShowTextAligned(PdfContentByte.ALIGN_CENTER, swimmingpoollist[1].PropertyAttributeName, 307, 620, 0);
-                content345.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 605, 285, 615), swimmingpoollist[2].Checkbox, 275, 605);
-                PdfContentByte content346 = writer.DirectContent;
-                BaseFont baseF346 = BaseFont.CreateFont();
-                content346.SetFontAndSize(baseF346, 8);
-                content346.BeginText();
-                content346.ShowTextAligned(PdfContentByte.ALIGN_CENTER, swimmingpoollist[2].PropertyAttributeName, 306, 605, 0);
-                content346.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 590, 285, 600), swimmingpoollist[3].Checkbox, 275, 590);
-                PdfContentByte content347 = writer.DirectContent;
-                BaseFont baseF347 = BaseFont.CreateFont();
-                content347.SetFontAndSize(baseF347, 8);
-                content347.BeginText();
-                content347.ShowTextAligned(PdfContentByte.ALIGN_CENTER, swimmingpoollist[3].PropertyAttributeName, 304, 590, 0);
-                content347.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 575, 285, 585), swimmingpoollist[4].Checkbox, 275, 575);
-                PdfContentByte content348 = writer.DirectContent;
-                BaseFont baseF348 = BaseFont.CreateFont();
-                content348.SetFontAndSize(baseF348, 8);
-                content348.BeginText();
-                content348.ShowTextAligned(PdfContentByte.ALIGN_CENTER, swimmingpoollist[4].PropertyAttributeName, 303, 575, 0);
-                content348.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 560, 285, 570), swimmingpoollist[5].Checkbox, 275, 560);
-                PdfContentByte content349 = writer.DirectContent;
-                BaseFont baseF349 = BaseFont.CreateFont();
-                content349.SetFontAndSize(baseF349, 8);
-                content349.BeginText();
-                content349.ShowTextAligned(PdfContentByte.ALIGN_CENTER, swimmingpoollist[5].PropertyAttributeName, 302, 560, 0);
-                content349.EndText();
-
-                PdfPCell blankCell8 = new PdfPCell(new Phrase(Chunk.NEWLINE));
-                blankCell8.Border = PdfPCell.NO_BORDER;
-                blankCell8.FixedHeight = 10f;
-                col3Table3.AddCell(blankCell8);
-
-
-
-
-                // CODE FOR GENERAL CHECKBOXES
-
-                var generallist = data.Where(w => w.Name == "General").ToList();
-
-                PdfPCell cell46 = new PdfPCell(new Phrase());
-                cell46.FixedHeight = 115f; // Set the height of the cell
-                cell46.BorderColor = BaseColor.BLACK;
-                cell46.CellEvent = new RectangleOverPdfPCellBorder("General", 278f, 535f, 45f, 15f, 280f, 538f);
-                //cell46.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "General", 275f, 20f, 70f, 530f);
-                col3Table3.AddCell(cell46);
-
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 515, 285, 525), generallist[0].Checkbox, 275, 515);
-                PdfContentByte content350 = writer.DirectContent;
-                BaseFont baseF350 = BaseFont.CreateFont();
-                content350.SetFontAndSize(baseF350, 8);
-                content350.BeginText();
-                content350.ShowTextAligned(PdfContentByte.ALIGN_CENTER, generallist[0].PropertyAttributeName, 315, 515, 0);
-                content350.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 500, 285, 510), generallist[1].Checkbox, 275, 500);
-                PdfContentByte content351 = writer.DirectContent;
-                BaseFont baseF351 = BaseFont.CreateFont();
-                content351.SetFontAndSize(baseF351, 8);
-                content351.BeginText();
-                content351.ShowTextAligned(PdfContentByte.ALIGN_CENTER, generallist[1].PropertyAttributeName, 315, 500, 0);
-                content351.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 485, 285, 495), generallist[2].Checkbox, 275, 485);
-                PdfContentByte content352 = writer.DirectContent;
-                BaseFont baseF352 = BaseFont.CreateFont();
-                content352.SetFontAndSize(baseF352, 8);
-                content352.BeginText();
-                content352.ShowTextAligned(PdfContentByte.ALIGN_CENTER, generallist[2].PropertyAttributeName, 313, 485, 0);
-                content352.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 470, 285, 480), generallist[3].Checkbox, 275, 470);
-                PdfContentByte content353 = writer.DirectContent;
-                BaseFont baseF353 = BaseFont.CreateFont();
-                content353.SetFontAndSize(baseF353, 8);
-                content353.BeginText();
-                content353.ShowTextAligned(PdfContentByte.ALIGN_CENTER, generallist[3].PropertyAttributeName, 313, 470, 0);
-                content353.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 455, 285, 465), generallist[4].Checkbox, 275, 455);
-                PdfContentByte content354 = writer.DirectContent;
-                BaseFont baseF354 = BaseFont.CreateFont();
-                content354.SetFontAndSize(baseF354, 8);
-                content354.BeginText();
-                content354.ShowTextAligned(PdfContentByte.ALIGN_CENTER, generallist[4].PropertyAttributeName, 321, 455, 0);
-                content354.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 440, 285, 450), generallist[5].Checkbox, 275, 440);
-                PdfContentByte content355 = writer.DirectContent;
-                BaseFont baseF355 = BaseFont.CreateFont();
-                content355.SetFontAndSize(baseF355, 8);
-                content355.BeginText();
-                content355.ShowTextAligned(PdfContentByte.ALIGN_CENTER, generallist[5].PropertyAttributeName, 321, 440, 0);
-                content355.EndText();
-
-                PdfPCell blankCell9 = new PdfPCell(new Phrase(Chunk.NEWLINE));
-                blankCell9.Border = PdfPCell.NO_BORDER;
-                blankCell9.FixedHeight = 10f;
-                col3Table3.AddCell(blankCell9);
-
-
-
-
-                // CODE FOR ROOOF CHECKBOXES
-
-                var rooflist = data.Where(w => w.Name == "Roof").ToList();
-
-
-                PdfPCell cell47 = new PdfPCell(new Phrase());
-                cell47.FixedHeight = 95f; // Set the height of the cell
-                cell47.BorderColor = BaseColor.BLACK;
-                cell47.CellEvent = new RectangleOverPdfPCellBorder("Roof", 278f, 415f, 25f, 15f, 278f, 415f);
-                //cell47.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Roof", 275f, 20f, 70f, 405f);
-                col3Table3.AddCell(cell47);
-
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 385, 285, 395), rooflist[0].Checkbox, 275, 385);
-                PdfContentByte content356 = writer.DirectContent;
-                BaseFont baseF356 = BaseFont.CreateFont();
-                content356.SetFontAndSize(baseF356, 8);
-                content356.BeginText();
-                content356.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[0].PropertyAttributeName, 299, 385, 0);
-                content356.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 370, 285, 380), rooflist[1].Checkbox, 275, 370);
-                PdfContentByte content357 = writer.DirectContent;
-                BaseFont baseF357 = BaseFont.CreateFont();
-                content357.SetFontAndSize(baseF357, 8);
-                content357.BeginText();
-                content357.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[1].PropertyAttributeName, 312, 370, 0);
-                content357.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 355, 285, 365), rooflist[2].Checkbox, 275, 355);
-                PdfContentByte content358 = writer.DirectContent;
-                BaseFont baseF358 = BaseFont.CreateFont();
-                content358.SetFontAndSize(baseF358, 8);
-                content358.BeginText();
-                content358.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[2].PropertyAttributeName, 310, 355, 0);
-                content358.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 340, 285, 350), rooflist[3].Checkbox, 275, 340);
-                PdfContentByte content359 = writer.DirectContent;
-                BaseFont baseF359 = BaseFont.CreateFont();
-                content359.SetFontAndSize(baseF359, 8);
-                content359.BeginText();
-                content359.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[3].PropertyAttributeName, 309, 340, 0);
-                content359.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 325, 285, 335), rooflist[4].Checkbox, 275, 325);
-                PdfContentByte content360 = writer.DirectContent;
-                BaseFont baseF360 = BaseFont.CreateFont();
-                content360.SetFontAndSize(baseF360, 8);
-                content360.BeginText();
-                content360.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[4].PropertyAttributeName, 309, 325, 0);
-                content360.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 310, 285, 320), rooflist[5].Checkbox, 275, 310);
-                PdfContentByte content361 = writer.DirectContent;
-                BaseFont baseF361 = BaseFont.CreateFont();
-                content361.SetFontAndSize(baseF361, 8);
-                content361.BeginText();
-                content361.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[5].PropertyAttributeName, 318, 310, 0);
-                content361.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 295, 285, 305), rooflist[6].Checkbox, 275, 295);
-                PdfContentByte content362 = writer.DirectContent;
-                BaseFont baseF362 = BaseFont.CreateFont();
-                content362.SetFontAndSize(baseF362, 8);
-                content362.BeginText();
-                content362.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[6].PropertyAttributeName, 308, 295, 0);
-                content362.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 280, 285, 290), rooflist[7].Checkbox, 275, 280);
-                PdfContentByte content363 = writer.DirectContent;
-                BaseFont baseF363 = BaseFont.CreateFont();
-                content363.SetFontAndSize(baseF363, 8);
-                content363.BeginText();
-                content363.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[7].PropertyAttributeName, 310, 280, 0);
-                content363.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 264, 285, 275), rooflist[8].Checkbox, 275, 264);
-                PdfContentByte content364 = writer.DirectContent;
-                BaseFont baseF364 = BaseFont.CreateFont();
-                content364.SetFontAndSize(baseF364, 8);
-                content364.BeginText();
-                content364.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[8].PropertyAttributeName, 327, 264, 0);
-                content364.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 250, 285, 260), rooflist[9].Checkbox, 275, 250);
-                PdfContentByte content365 = writer.DirectContent;
-                BaseFont baseF365 = BaseFont.CreateFont();
-                content365.SetFontAndSize(baseF365, 8);
-                content365.BeginText();
-                content365.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[9].PropertyAttributeName, 306, 250, 0);
-                content365.EndText();
-
-                TextField tf07 = new TextField(writer, new Rectangle(275, 230, 350, 245), "Central");
-                tf07.BorderColor = new BaseColor(232, 232, 232);
-                tf07.BackgroundColor = new BaseColor(232, 232, 232);
-                tf07.Options = TextField.READ_ONLY;
-                tf07.Text = rooflist[9].Remarks;
-                tf07.TextColor = BaseColor.BLACK;
-                tf07.FontSize = 8;
-                writer.AddAnnotation(tf07.GetTextField());
-
-                multipleMainTable1.AddCell(col3Table3);
-
-
-
-                //CODE FOR FENCING CHECKBOXES
-
-                var fencingList = data.Where(w => w.Name == "Fencing").ToList();
-                // Column 4
-                PdfPTable col4Table4 = new PdfPTable(1);
-                PdfPCell cell5 = new PdfPCell(new Phrase());
-                cell5.FixedHeight = 65f; // Set the height of the cell
-                cell5.BorderColor = BaseColor.BLACK;
-                cell5.CellEvent = new RectangleOverPdfPCellBorder("Fencing", 378f, 735f, 40f, 15f, 378f, 738f);
-                //cell5.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Fencing", 375f, 20f, 70f, 728f);
-                col4Table4.AddCell(cell5);
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 725, 390, 715), fencingList[0].Checkbox, 380, 715);
-                PdfContentByte content366 = writer.DirectContent;
-                BaseFont baseF366 = BaseFont.CreateFont();
-                content366.SetFontAndSize(baseF366, 8);
-                content366.BeginText();
-                content366.ShowTextAligned(PdfContentByte.ALIGN_CENTER, fencingList[0].PropertyAttributeName, 415, 715, 0);
-                content366.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 710, 390, 700), fencingList[1].Checkbox, 380, 700);
-                PdfContentByte content367 = writer.DirectContent;
-                BaseFont baseF367 = BaseFont.CreateFont();
-                content367.SetFontAndSize(baseF367, 8);
-                content367.BeginText();
-                content367.ShowTextAligned(PdfContentByte.ALIGN_CENTER, fencingList[1].PropertyAttributeName, 421, 700, 0);
-                content367.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 695, 390, 685), fencingList[2].Checkbox, 380, 685);
-                PdfContentByte content368 = writer.DirectContent;
-                BaseFont baseF368 = BaseFont.CreateFont();
-                content368.SetFontAndSize(baseF368, 8);
-                content368.BeginText();
-                content368.ShowTextAligned(PdfContentByte.ALIGN_CENTER, fencingList[1].PropertyAttributeName, 420, 685, 0);
-                content368.EndText();
-
-                PdfPCell blankCell11 = new PdfPCell(new Phrase(Chunk.NEWLINE));
-                blankCell11.Border = PdfPCell.NO_BORDER;
-                blankCell11.FixedHeight = 10f;
-                col4Table4.AddCell(blankCell11);
-
-
-
-
-                //CODE FOR ASPECT CHECKBOXES
-
-                var aspectList = data.Where(w => w.Name == "Aspect").ToList();
-
-                PdfPCell cell6 = new PdfPCell(new Phrase());
-                cell6.FixedHeight = 85f; // Set the height of the cell
-                cell6.BorderColor = BaseColor.BLACK;
-                cell6.CellEvent = new RectangleOverPdfPCellBorder("Aspect", 378f, 660f, 35f, 15f, 378f, 662f);
-                //cell6.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Aspect", 375f, 20f, 70f, 650f);
-                col4Table4.AddCell(cell6);
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 635, 390, 645), aspectList[0].Checkbox, 380, 635);
-                PdfContentByte content369 = writer.DirectContent;
-                BaseFont baseF369 = BaseFont.CreateFont();
-                content369.SetFontAndSize(baseF369, 8);
-                content369.BeginText();
-                content369.ShowTextAligned(PdfContentByte.ALIGN_CENTER, aspectList[0].PropertyAttributeName, 414, 635, 0);
-                content369.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 620, 390, 630), aspectList[1].Checkbox, 380, 620);
-                PdfContentByte content370 = writer.DirectContent;
-                BaseFont baseF370 = BaseFont.CreateFont();
-                content370.SetFontAndSize(baseF370, 8);
-                content370.BeginText();
-                content370.ShowTextAligned(PdfContentByte.ALIGN_CENTER, aspectList[1].PropertyAttributeName, 414, 620, 0);
-                content370.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 605, 390, 615), aspectList[2].Checkbox, 380, 605);
-                PdfContentByte content371 = writer.DirectContent;
-                BaseFont baseF371 = BaseFont.CreateFont();
-                content371.SetFontAndSize(baseF371, 8);
-                content371.BeginText();
-                content371.ShowTextAligned(PdfContentByte.ALIGN_CENTER, aspectList[2].PropertyAttributeName, 414, 605, 0);
-                content371.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 590, 390, 600), aspectList[3].Checkbox, 380, 590);
-                PdfContentByte content372 = writer.DirectContent;
-                BaseFont baseF372 = BaseFont.CreateFont();
-                content372.SetFontAndSize(baseF372, 8);
-                content372.BeginText();
-                content372.ShowTextAligned(PdfContentByte.ALIGN_CENTER, aspectList[3].PropertyAttributeName, 414, 590, 0);
-                content372.EndText();
-
-                PdfPCell blankCell10 = new PdfPCell(new Phrase(Chunk.NEWLINE));
-                blankCell10.Border = PdfPCell.NO_BORDER;
-                blankCell10.FixedHeight = 10f;
-                col4Table4.AddCell(blankCell10);
-
-
-
-                //CODE FOR VIEWS CHECKBOXES
-
-                var viewsList = data.Where(w => w.Name == "Views").ToList();
-
-                PdfPCell cell7 = new PdfPCell(new Phrase());
-                cell7.FixedHeight = 190f; // Set the height of the cell
-                cell7.BorderColor = BaseColor.BLACK;
-                cell7.CellEvent = new RectangleOverPdfPCellBorder("Views", 378f, 563f, 30f, 15f, 378f, 565f);
-                //cell7.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Views", 375f, 15f, 70f, 560f);
-                col4Table4.AddCell(cell7);
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 535, 390, 545), viewsList[0].Checkbox, 380, 535);
-                PdfContentByte content373 = writer.DirectContent;
-                BaseFont baseF373 = BaseFont.CreateFont();
-                content373.SetFontAndSize(baseF373, 8);
-                content373.BeginText();
-                content373.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[0].PropertyAttributeName, 405, 535, 0);
-                content373.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 520, 390, 530), viewsList[1].Checkbox, 380, 520);
-                PdfContentByte content374 = writer.DirectContent;
-                BaseFont baseF374 = BaseFont.CreateFont();
-                content374.SetFontAndSize(baseF374, 8);
-                content374.BeginText();
-                content374.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[1].PropertyAttributeName, 405, 520, 0);
-                content374.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 505, 390, 515), viewsList[2].Checkbox, 380, 505);
-                PdfContentByte content375 = writer.DirectContent;
-                BaseFont baseF375 = BaseFont.CreateFont();
-                content375.SetFontAndSize(baseF375, 8);
-                content375.BeginText();
-                content375.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[2].PropertyAttributeName, 407, 505, 0);
-                content375.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 490, 390, 500), viewsList[3].Checkbox, 380, 490);
-                PdfContentByte content376 = writer.DirectContent;
-                BaseFont baseF376 = BaseFont.CreateFont();
-                content376.SetFontAndSize(baseF376, 8);
-                content376.BeginText();
-                content376.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[3].PropertyAttributeName, 408, 490, 0);
-                content376.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 475, 390, 485), viewsList[4].Checkbox, 380, 475);
-                PdfContentByte content377 = writer.DirectContent;
-                BaseFont baseF377 = BaseFont.CreateFont();
-                content377.SetFontAndSize(baseF377, 8);
-                content377.BeginText();
-                content377.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[4].PropertyAttributeName, 409, 475, 0);
-                content377.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 460, 390, 470), viewsList[5].Checkbox, 380, 460);
-                PdfContentByte content378 = writer.DirectContent;
-                BaseFont baseF378 = BaseFont.CreateFont();
-                content378.SetFontAndSize(baseF378, 8);
-                content378.BeginText();
-                content378.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[5].PropertyAttributeName, 408, 460, 0);
-                content378.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 445, 390, 455), viewsList[6].Checkbox, 380, 445);
-                PdfContentByte content379 = writer.DirectContent;
-                BaseFont baseF379 = BaseFont.CreateFont();
-                content379.SetFontAndSize(baseF379, 8);
-                content379.BeginText();
-                content379.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[6].PropertyAttributeName, 410, 445, 0);
-                content379.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 430, 390, 440), viewsList[7].Checkbox, 380, 430);
-                PdfContentByte content380 = writer.DirectContent;
-                BaseFont baseF380 = BaseFont.CreateFont();
-                content380.SetFontAndSize(baseF380, 8);
-                content380.BeginText();
-                content380.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[7].PropertyAttributeName, 405, 430, 0);
-                content380.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 415, 390, 425), viewsList[8].Checkbox, 380, 415);
-                PdfContentByte content381 = writer.DirectContent;
-                BaseFont baseF381 = BaseFont.CreateFont();
-                content381.SetFontAndSize(baseF381, 8);
-                content381.BeginText();
-                content381.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[8].PropertyAttributeName, 415, 415, 0);
-                content381.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 400, 390, 410), viewsList[9].Checkbox, 380, 400);
-                PdfContentByte content382 = writer.DirectContent;
-                BaseFont baseF382 = BaseFont.CreateFont();
-                content382.SetFontAndSize(baseF382, 8);
-                content382.BeginText();
-                content382.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[9].PropertyAttributeName, 412, 400, 0);
-                content382.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 385, 390, 395), viewsList[10].Checkbox, 380, 385);
-                PdfContentByte content383 = writer.DirectContent;
-                BaseFont baseF383 = BaseFont.CreateFont();
-                content383.SetFontAndSize(baseF383, 8);
-                content383.BeginText();
-                content383.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Other", 412, 385, 0);
-                content383.EndText();
-
-                PdfPCell blankCell12 = new PdfPCell(new Phrase(Chunk.NEWLINE));
-                blankCell12.Border = PdfPCell.NO_BORDER;
-                blankCell12.FixedHeight = 10f;
-                col4Table4.AddCell(blankCell12);
-
-
-                //CODE FOR SEWAGE CHECKBOXES
-
-
-
-
-
-                var sewageList = data.Where(w => w.Name == "Sewage system").ToList();
-
-                PdfPCell cell71 = new PdfPCell(new Phrase());
-                cell71.FixedHeight = 100f; // Set the height of the cell
-                cell71.BorderColor = BaseColor.BLACK;
-                cell71.CellEvent = new RectangleOverPdfPCellBorder("Sewage system", 378f, 363f, 75f, 15f, 378f, 365f);
-                //cell71.CellEvent = new RectangleCellEvent(BaseColor.GREEN, BaseColor.BLUE, "Sewage system", 375f, 20f, 70f, 355f);
-                col4Table4.AddCell(cell71);
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 350, 390, 360), sewageList[0].Checkbox, 380, 350);
-                PdfContentByte content384 = writer.DirectContent;
-                BaseFont baseF384 = BaseFont.CreateFont();
-                content384.SetFontAndSize(baseF384, 8);
-                content384.BeginText();
-                content384.ShowTextAligned(PdfContentByte.ALIGN_CENTER, sewageList[0].PropertyAttributeName, 411, 350, 0);
-                content384.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 335, 390, 345), sewageList[1].Checkbox, 380, 335);
-                PdfContentByte content385 = writer.DirectContent;
-                BaseFont baseF385 = BaseFont.CreateFont();
-                content385.SetFontAndSize(baseF385, 8);
-                content385.BeginText();
-                content385.ShowTextAligned(PdfContentByte.ALIGN_CENTER, sewageList[1].PropertyAttributeName, 411, 335, 0);
-                content385.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 320, 390, 330), sewageList[2].Checkbox, 380, 320);
-                PdfContentByte content386 = writer.DirectContent;
-                BaseFont baseF386 = BaseFont.CreateFont();
-                content386.SetFontAndSize(baseF386, 8);
-                content386.BeginText();
-                content386.ShowTextAligned(PdfContentByte.ALIGN_CENTER, sewageList[2].PropertyAttributeName, 415, 320, 0);
-                content386.EndText();
-
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 305, 390, 315), sewageList[3].Checkbox, 380, 305);
-                PdfContentByte content387 = writer.DirectContent;
-                BaseFont baseF387 = BaseFont.CreateFont();
-                content387.SetFontAndSize(baseF387, 8);
-                content387.BeginText();
-                content387.ShowTextAligned(PdfContentByte.ALIGN_CENTER, sewageList[3].PropertyAttributeName, 411, 305, 0);
-                content387.EndText();
-
-                TextField tf08 = new TextField(writer, new Rectangle(380, 285, 450, 300), "Other");
-                tf08.BorderColor = new BaseColor(232, 232, 232);
-                tf08.BackgroundColor = new BaseColor(232, 232, 232);
-                tf08.Options = TextField.READ_ONLY;
-                tf08.Text = sewageList[3].Remarks;
-                tf08.TextColor = BaseColor.BLACK;
-                tf08.FontSize = 8;
-                writer.AddAnnotation(tf08.GetTextField());
-
-                multipleMainTable1.AddCell(col4Table4);
-
-                //CODE FOR OTHER COMMENT SECTIONS
-                //var othercommentList = _context.PropertyInformationDetail.Where(w => w.PID == id).ToList();
-                // Column 5
-                PdfPTable col5Table5 = new PdfPTable(1);
-                PdfPCell cell8 = new PdfPCell(new Phrase());
-                cell8.FixedHeight = 215f; // Set the height of the cell
-                cell8.BorderColor = BaseColor.BLACK;
-                cell8.CellEvent = new RectangleOverPdfPCellBorder("Other", 480f, 740f, 40f, 15f, 482f, 740f);
-                //cell8.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Other", 478f, 20f, 70f, 728f);
-                col5Table5.AddCell(cell8);
-
-                PdfContentByte content01 = writer.DirectContent;
-                BaseFont baseF01 = BaseFont.CreateFont();
-                content01.SetFontAndSize(baseF01, 8);
-                content01.BeginText();
-                content01.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Other Comments:", 515, 715, 0);
-                content01.EndText();
-                TextField tf09 = new TextField(writer, new Rectangle(485, 660, 565, 705), "Central");
-                tf09.BorderColor = new BaseColor(232, 232, 232);
-                tf09.BackgroundColor = new BaseColor(232, 232, 232);
-                tf09.Options = TextField.READ_ONLY | TextField.MULTILINE;
-                // tf09.Text = othercommentList[0].Comment;
-                if (othercommentList.Count > 0)
-                {
-                    tf09.Text = othercommentList[0].Comment;
-                }
-                else
-                {
-                    // Handle the case when othercommentList is empty
-                    tf09.Text = ""; // Set a default value or handle it based on your requirements
-                }
-
-                tf09.TextColor = BaseColor.BLACK;
-                tf09.FontSize = 8;
-                writer.AddAnnotation(tf09.GetTextField());
-
-                PdfContentByte content02 = writer.DirectContent;
-                BaseFont baseF02 = BaseFont.CreateFont();
-                content02.SetFontAndSize(baseF02, 8);
-                content02.BeginText();
-                content02.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Other features/additionals:", 526, 650, 0);
-                content02.EndText();
-                TextField tf010 = new TextField(writer, new Rectangle(485, 600, 565, 640), "Other features/additionals");
-                tf010.BorderColor = new BaseColor(232, 232, 232);
-                tf010.BackgroundColor = new BaseColor(232, 232, 232);
-                tf010.Options = TextField.READ_ONLY | TextField.MULTILINE;
-                //tf010.Text = othercommentList[0].AdditionalFeature;
-                if (othercommentList.Count > 0)
-                {
-                    tf010.Text = othercommentList[0].AdditionalFeature;
-                }
-                else
-                {
-                    // Handle the case when othercommentList is empty
-                    tf010.Text = ""; // Set a default value or handle it based on your requirements
-                }
-                tf010.TextColor = BaseColor.BLACK;
-                tf010.FontSize = 8;
-                writer.AddAnnotation(tf010.GetTextField());
-
-                PdfContentByte content03 = writer.DirectContent;
-                BaseFont baseF03 = BaseFont.CreateFont();
-                content03.SetFontAndSize(baseF03, 8);
-                content03.BeginText();
-                content03.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Excluded chattels:", 515, 590, 0);
-                content03.EndText();
-                TextField tf011 = new TextField(writer, new Rectangle(485, 540, 565, 580), "Central");
-                tf011.BorderColor = new BaseColor(232, 232, 232);
-                tf011.BackgroundColor = new BaseColor(232, 232, 232);
-                tf011.Options = TextField.READ_ONLY | TextField.MULTILINE;
-                // tf011.Text = othercommentList[0].ExcludedChattels;
-                if (othercommentList.Count > 0)
-                {
-                    tf011.Text = othercommentList[0].ExcludedChattels;
-                }
-                else
-                {
-                    // Handle the case when othercommentList is empty
-                    tf011.Text = ""; // Set a default value or handle it based on your requirements
-                }
-                tf011.TextColor = BaseColor.BLACK;
-                tf011.FontSize = 8;
-                writer.AddAnnotation(tf011.GetTextField());
-
-
-                PdfPCell blankCell13 = new PdfPCell(new Phrase(Chunk.NEWLINE));
-                blankCell13.Border = PdfPCell.NO_BORDER;
-                blankCell13.FixedHeight = 10f;
-                col5Table5.AddCell(blankCell13);
-
-                PdfPCell cell10 = new PdfPCell(new Phrase());
-                cell10.FixedHeight = 100f; // Set the height of the cell
-                cell10.BorderColor = BaseColor.BLACK;
-                cell10.CellEvent = new RectangleOverPdfPCellBorder("Internal remarks", 480f, 513f, 80f, 14f, 482f, 513f);
-                // cell10.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Internal remarks", 478f, 20f, 70f, 500f);
-                col5Table5.AddCell(cell10);
-
-                TextField tf012 = new TextField(writer, new Rectangle(485, 350, 565, 495), "Internal remarks");
-                tf012.BorderColor = new BaseColor(232, 232, 232);
-                tf012.BackgroundColor = new BaseColor(232, 232, 232);
-                tf012.Options = TextField.READ_ONLY | TextField.MULTILINE;
-                // tf012.Text = othercommentList[0].InternalRemark;
-                if (othercommentList.Count > 0)
-                {
-                    tf012.Text = othercommentList[0].InternalRemark;
-                }
-                else
-                {
-                    // Handle the case when othercommentList is empty
-                    tf012.Text = ""; // Set a default value or handle it based on your requirements
-                }
-                tf012.TextColor = BaseColor.BLACK;
-                tf012.FontSize = 8;
-                writer.AddAnnotation(tf012.GetTextField());
-
-                col1Table1.DefaultCell.Border = 0;
-                col2Table2.DefaultCell.Border = 0;
-                col3Table3.DefaultCell.Border = 0;
-                col4Table4.DefaultCell.Border = 0;
-                col5Table5.DefaultCell.Border = 0;
-                multipleMainTable1.AddCell(col5Table5);
-
-                // Add the main table to the document
-                document.Add(multipleMainTable1);
-
-
-
-                //tenancy Details
-                PdfPTable tenancyTable = new PdfPTable(1);
-
-                PdfPCell tenancyoutercell21 = new PdfPCell();
-                tenancyTable.DefaultCell.Border = 0;
-                tenancyoutercell21.BorderColor = BaseColor.BLACK;
-                tenancyoutercell21.FixedHeight = 120f;
-                tenancyTable.WidthPercentage = 108; // Set the width percentage of the parent table        
-                tenancyTable.SpacingBefore = 12f;
-                tenancyTable.SpacingAfter = 10f;
-                //tenancyoutercell21.CellEvent = new RectangleOverPdfPCellBorder("Tenancy details", 33f, 210f, 80f, 14f, 482f, 200f);
-                tenancyoutercell21.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Tenancy details", 33f, 20f, 80f, 200f);
-                //particulartable.AddCell(outercell);
-
-                PdfPTable tenancyinnerTable21 = new PdfPTable(2);
-                tenancyinnerTable21.DefaultCell.Border = 0;
-                tenancyinnerTable21.WidthPercentage = 100f;
-                tenancyinnerTable21.SpacingBefore = 10f;
-
-
-
-                PdfContentByte cb015 = writer.DirectContent;
-                BaseFont bf015 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
-                string text015 = "Status";
-
-                cb015.BeginText();
-                cb015.SetFontAndSize(bf015, 8);
-                //015ut the alignment and coordinates here
-                cb015.ShowTextAligned(1, text015, 40, 192, 0);
-                cb015.EndText();
-                // Create the first inner cell
-                PdfPCell tenancyinnerCell21 = new PdfPCell();
-                tenancyinnerCell21.FixedHeight = cellHeight;
-                tenancyinnerCell21.Border = 0;
-                tenancyinnerCell21.HorizontalAlignment = Element.ALIGN_CENTER;
-                tenancyinnerCell21.VerticalAlignment = Element.ALIGN_MIDDLE;
-                tenancyinnerTable21.AddCell(innerCell21);
-
-                //fields and checkboxes
-                if (tenancyDetailsList != null && tenancyDetailsList.Count > 0)
-                {
-                    bool isVacant = tenancyDetailsList[0].IsVacant;
-
-                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 175, 23, 185), isVacant, 23, 175);
-                }
-                else
-                {
-                    // Handle the case when methodOfSaleList is null or empty
-                    // For example, you might want to provide a default value for the checkbox
-                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 175, 23, 185), false, 23, 175);
-                }
-                //AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 175, 23, 185), FinalList.tenancyDetail.IsVacant, 23, 175);
-                //AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 175, 23, 185), FinalList.tenancyDetail.IsVacant, 23, 175);
-                PdfContentByte content08 = writer.DirectContent;
-                BaseFont baseF08 = BaseFont.CreateFont();
-                content08.SetFontAndSize(baseF08, 8);
-                content08.BeginText();
-                content08.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Vacant", 50, 175, 0);
-                content08.EndText();
-
-
-                if (tenancyDetailsList != null && tenancyDetailsList.Count > 0)
-                {
-                    bool isTananted = tenancyDetailsList[0].IsTananted;
-
-                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(90, 175, 80, 185), isTananted, 23, 175);
-                }
-                else
-                {
-                    // Handle the case when methodOfSaleList is null or empty
-                    // For example, you might want to provide a default value for the checkbox
-                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(90, 175, 80, 185), false, 23, 175);
-                }
-                // AddCheckboxField(document, writer, "myCheckbox", new Rectangle(90, 175, 80, 185), FinalList.tenancyDetail.IsTananted, 23, 175);
-                //AddCheckboxField(document, writer, "myCheckbox", new Rectangle(90, 175, 80, 185), FinalList.tenancyDetail.IsTananted, 23, 175);
-                PdfContentByte content09 = writer.DirectContent;
-                BaseFont baseF09 = BaseFont.CreateFont();
-                content09.SetFontAndSize(baseF09, 8);
-                content09.BeginText();
-                content09.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Tenanted", 110, 175, 0);
-                content09.EndText();
-
-                PdfContentByte content010 = writer.DirectContent;
-                BaseFont baseF010 = BaseFont.CreateFont();
-                content010.SetFontAndSize(baseF010, 8);
-                content010.BeginText();
-                content010.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Start", 33, 150, 0);
-                content010.EndText();
-                string logoPath11 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
-                iTextSharp.text.Image logo11 = iTextSharp.text.Image.GetInstance(logoPath11);
-                if (System.IO.File.Exists(logoPath11))
-                {
-                    logo11.ScaleAbsolute(15f, 15f);
-                    logo11.SetAbsolutePosition(43, 150);
-
-
-                    document.Add(logo11);
-                }
-                TextField tf013 = new TextField(writer, new Rectangle(59, 170, 150, 150), "start");
-                tf013.BorderColor = new BaseColor(232, 232, 232);
-                tf013.BackgroundColor = new BaseColor(232, 232, 232);
-                if (FinalList.tenancyDetail != null && FinalList.tenancyDetail.TenancyStartDate != null)
-                {
-                    tf013.Text = ((DateTime)FinalList.tenancyDetail.TenancyStartDate).ToString("dd-MM-yyyy");
-                }
-                else
-                {
-                    tf013.Text = "";
-                }
-
-                tf013.FontSize = 8;
-                tf013.Options = TextField.READ_ONLY;
-
-
-                tf013.FontSize = 8;
-                tf013.Options = TextField.READ_ONLY;
-
-
-                writer.AddAnnotation(tf013.GetTextField());
-
-
-
-                PdfContentByte content011 = writer.DirectContent;
-                BaseFont baseF011 = BaseFont.CreateFont();
-                content011.SetFontAndSize(baseF011, 8);
-                content011.BeginText();
-                content011.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "End", 33, 115, 0);
-                content011.EndText();
-                string logoPath22 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
-                iTextSharp.text.Image logo22 = iTextSharp.text.Image.GetInstance(logoPath22);
-                if (System.IO.File.Exists(logoPath22))
-                {
-                    logo22.ScaleAbsolute(15f, 15f);
-                    logo22.SetAbsolutePosition(43, 115);
-
-
-                    document.Add(logo22);
-                }
-                TextField tf014 = new TextField(writer, new Rectangle(59, 140, 150, 120), "end");
-                tf014.BorderColor = new BaseColor(232, 232, 232);
-                tf014.BackgroundColor = new BaseColor(232, 232, 232);
-                if (FinalList.tenancyDetail != null && FinalList.tenancyDetail.TenancyEndDate != null)
-                {
-                    tf014.Text = ((DateTime)FinalList.tenancyDetail.TenancyEndDate).ToString("dd-MM-yyyy");
-                }
-                else
-                {
-                    tf014.Text = "";
-                }
-                // tf014.Text = ((DateTime)FinalList.tenancyDetail.TenancyEndDate).ToString("dd-MM-yyyy");
-                tf014.FontSize = 8;
-                tf014.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf014.GetTextField());
-
-                PdfContentByte cb016 = writer.DirectContent;
-                BaseFont bf016 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
-                string text016 = "Tenant details";
-                cb016.BeginText();
-                cb016.SetFontAndSize(bf016, 8);
-                //016ut the alignment and coordinates here
-                cb016.ShowTextAligned(1, text016, 230, 195, 0);
-                cb016.EndText();
-
-                PdfContentByte content012 = writer.DirectContent;
-                BaseFont baseF012 = BaseFont.CreateFont();
-                content012.SetFontAndSize(baseF012, 8);
-                content012.BeginText();
-                content012.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Name", 190, 175, 0);
-                content012.EndText();
-                TextField tf016 = new TextField(writer, new Rectangle(348, 190, 210, 170), "Name");
-                tf016.BorderColor = new BaseColor(232, 232, 232);
-                tf016.BackgroundColor = new BaseColor(232, 232, 232);
-                tf016.Options = TextField.READ_ONLY;
-                tf016.FontSize = 8;
-                //tf016.Text = FinalList.tenancyDetail.Name;
-                if (FinalList != null && FinalList.tenancyDetail != null && FinalList.tenancyDetail.Name != null)
-                {
-                    string Name = FinalList.tenancyDetail.Name.ToString();
-                    tf016.Text = Name;
-                }
-                else
-                {
-                    tf016.Text = " "; // Set a default value if the data is not available
-                }
-
-
-                tf016.TextColor = BaseColor.BLACK;
-                writer.AddAnnotation(tf016.GetTextField());
-
-                PdfContentByte content013 = writer.DirectContent;
-                BaseFont baseF013 = BaseFont.CreateFont();
-                content013.SetFontAndSize(baseF013, 8);
-                content013.BeginText();
-                content013.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Email", 190, 155, 0);
-                content013.EndText();
-                TextField tf015 = new TextField(writer, new Rectangle(348, 165, 210, 145), "Email");
-                tf015.BorderColor = new BaseColor(232, 232, 232);
-                tf015.BackgroundColor = new BaseColor(232, 232, 232);
-                if (FinalList != null && FinalList.tenancyDetail != null && FinalList.tenancyDetail.Email != null)
-                {
-                    string Email = FinalList.tenancyDetail.Email.ToString();
-                    tf015.Text = Email;
-                }
-                else
-                {
-                    tf015.Text = " "; // Set a default value if the data is not available
-                }
-                //tf015.Text = FinalList.tenancyDetail.Email;
-
-                tf015.FontSize = 8;
-                tf015.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf015.GetTextField());
-
-                PdfContentByte content014 = writer.DirectContent;
-                BaseFont baseF014 = BaseFont.CreateFont();
-                content014.SetFontAndSize(baseF014, 8);
-                content014.BeginText();
-                content014.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Phone", 190, 130, 0);
-                content014.EndText();
-                TextField tf017 = new TextField(writer, new Rectangle(348, 140, 210, 120), "Phone");
-                tf017.BorderColor = new BaseColor(232, 232, 232);
-                tf017.BackgroundColor = new BaseColor(232, 232, 232);
-                if (FinalList != null && FinalList.tenancyDetail != null && FinalList.tenancyDetail.Phone != null)
-                {
-                    string Phone = FinalList.tenancyDetail.Phone.ToString();
-                    tf017.Text = Phone;
-                }
-                else
-                {
-                    tf017.Text = " "; // Set a default value if the data is not available
-                }
-                // tf017.Text = FinalList.tenancyDetail.Phone;
-                tf017.FontSize = 8;
-                tf017.Options = TextField.READ_ONLY;
-                writer.AddAnnotation(tf017.GetTextField());
-
-
-                PdfContentByte cb017 = writer.DirectContent;
-                BaseFont bf017 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
-                string text017 = "Tenancy details";
-                cb017.BeginText();
-                cb017.SetFontAndSize(bf017, 8);
-                //017ut the alignment and coordinates here
-                cb017.ShowTextAligned(1, text017, 400, 195, 0);
-                cb017.EndText();
-                TextField tf019 = new TextField(writer, new Rectangle(360, 190, 550, 120), "Tenancy details");
-                tf019.BorderColor = new BaseColor(232, 232, 232);
-                tf019.BackgroundColor = new BaseColor(232, 232, 232);
-                tf019.Options = TextField.READ_ONLY | TextField.MULTILINE;
-                tf019.FontSize = 8f;
-                tf019.TextColor = BaseColor.BLACK;
-                //tf019.Options = TextField.MULTILINE;
-
-                //  tf019.Text = FinalList.tenancyDetail.TenancyDetails;
-                if (FinalList != null && FinalList.tenancyDetail != null && FinalList.tenancyDetail.TenancyDetails != null)
-                {
-                    string TenancyDetails = FinalList.tenancyDetail.TenancyDetails;
-                    tf019.Text = TenancyDetails;
-                }
-                else
-                {
-                    tf019.Text = " "; // Set a default value if the data is not available
-                }
-
-                writer.AddAnnotation(tf019.GetTextField());
-
-
-
-
-                PdfPCell tenancyinnerCell22 = new PdfPCell();
-                tenancyinnerCell22.FixedHeight = cellHeight;
-                tenancyinnerCell22.Border = 0;
-                tenancyinnerCell22.HorizontalAlignment = Element.ALIGN_CENTER;
-                tenancyinnerCell22.VerticalAlignment = Element.ALIGN_MIDDLE;
-                tenancyinnerTable21.AddCell(innerCell22);
-                tenancyoutercell21.AddElement(innerTable21);
-                tenancyTable.AddCell(tenancyoutercell21);
-                document.Add(tenancyTable);
-
-
-                //NEW PAGE 
-                //document.Add(new Paragraph(" "));
-                document.Add(new Paragraph(" "));
-                //document.Add(new Paragraph(" "));
-
-
-                // AddAggrementContent(document, writer, paragraphText, priorAgencyMarketingList, estimatesList, additionaldisclosure, methodOfSaleList);
-
-                AddAggrementContent(document, writer, paragraphText, priorAgencyMarketingList, estimatesList, additionaldisclosure, methodOfSaleList, clientDetailsList, contractdetailsList, signatureOfClients, id, execution);
-
-                document.Close();
-                //_response.ContentType = MediaTypeNames.Application.Pdf;
-                var contentDisposition = new ContentDisposition
-                {
-                    FileName = "ClientDetails.pdf",
-                    Inline = false
-                };
-
-                System.IO.File.WriteAllBytes(@"C:\Users\HP\Source\Repos\RE360\RE360.API\Document\" + id.ToString() + ".pdf", memoryStream.ToArray());
-                //_response.Headers.Add("Content-Disposition", contentDisposition.ToString());
-                //return File(memoryStream.ToArray(), _response.ContentType);
-
-                try
-                {
-                    string fileName = id.ToString() + ".pdf";
-                    //Path.GetRandomFileName().Replace(".", "") + Path.GetExtension(files.FileName).ToLowerInvariant();
-                    CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(_configuration["BlobStorageSettings:BlobStorageConnStr"].ToString());
-                    CloudBlobClient blobClient = cloudStorageAccount.CreateCloudBlobClient();
-                    CloudBlobContainer container = blobClient.GetContainerReference("agentdoc");
-                    CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileName);
-                    memoryStream.Position = 0;
-                    using (var fileStream = memoryStream)
+                    if (solicitorList.Count == 0)
                     {
-                        await blockBlob.UploadFromStreamAsync(fileStream);
+                        SolicitorDetail obj = new SolicitorDetail();
+                        solicitorList.Add(obj);
                     }
-                    //   return fileName;
-                }
-                catch (Exception ex)
-                {
-                    // return "";
-                    throw;
-                }
+                    for (int i = 0; i < solicitorList.Count; i++)
+                    {
+
+                        AddContentToSolicitordetails(document, writer, solicitorList[i]);
+                        document.Add(new Paragraph("\r\n"));
+                    }
+                    if (particularList.Count == 0)
+                    {
+                        ParticularDetail obj = new ParticularDetail();
+                        particularList.Add(obj);
+                    }
+                    if (legaldetailsList.Count == 0)
+                    {
+                        LegalDetail obj = new LegalDetail();
+                        legaldetailsList.Add(obj);
+                    }
+
+                    document.Add(new Paragraph("\r\n"));
+
+                    AddContentToParticulars(document, writer, particularList, data, legaldetailsList, id);
+
+
+                    document.NewPage();
+
+                    PdfPCell leftCell1 = new PdfPCell(new Phrase("PROPERTY INFORMATION", GetFont()));
+                    leftCell1.Border = Rectangle.NO_BORDER;
+
+                    table.AddCell(leftCell1);
+                    document.Add(table);
+
+                    var legalDetailsCheckboxList = data.Where(x => x.Name == "Legal Detail Title Type").ToList();
+                    int propertyID = _context.PropertyAttributeType.Where(x => x.Name == "Legal Detail Title Type").Select(x => x.ID).FirstOrDefault();
+                    var chkboxlistForLegalDetails = new List<PropertyAttributeTypeWithLegalParticularDetailModel>();
+                    using (var connection = new SqlConnection(_configuration["ConnectionStrings:ConnStr"].ToString()))
+                    {
+                        var sql = string.Format("SELECT PAT.ID as PropertyAttributeTypeID,PA.Name as PropertyAttributeName,PA.ID as PropertyAttributeID, LD.TitleTypeID,LD.PID, case when ISNULL(LD.TitleTypeID,0)=0 THEN 0 ELSE 1 END as Checkbox FROM PropertyAttributeType as PAT INNER JOIN PropertyAttribute as PA  ON PAT.ID = PA.PropertyAttributeTypeID LEFT JOIN legaldetail as LD on PA.id = LD.TitleTypeID and  LD.PID={0}", id + " WHERE  PA.PropertyAttributeTypeID=" + propertyID);
+                        chkboxlistForLegalDetails = connection.Query<PropertyAttributeTypeWithLegalParticularDetailModel>(sql).ToList();
+                    }
+
+
+
+                    PdfPTable legalstable = new PdfPTable(1);
+                    PdfPCell outercell1 = new PdfPCell();
+                    legalstable.DefaultCell.Border = 0;
+                    outercell1.BorderColor = BaseColor.DARK_GRAY;
+                    outercell1.FixedHeight = 134f;
+                    legalstable.WidthPercentage = 108; // Set the width percentage of the parent table        
+                    legalstable.SpacingBefore = 2f;
+                    legalstable.SpacingAfter = 5f;
+                    outercell1.CellEvent = new RectangleOverPdfPCellBorder("Legal details", 30f, 747, 65f, 20f, 32f, 760f);
+
+
+                    PdfPTable innerTable1 = new PdfPTable(2);
+                    innerTable1.DefaultCell.Border = 0;
+                    innerTable1.WidthPercentage = 100f;
+                    innerTable1.SpacingBefore = 10f;
+
+                    PdfContentByte cb2 = writer.DirectContent;
+                    BaseFont bf2 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
+                    string text2 = "Title Type";
+                    cb2.BeginText();
+                    //put the alignment and coordinates here
+                    cb2.SetFontAndSize(bf2, 8f);
+                    cb2.ShowTextAligned(2, text2, 60, 733, 0);
+                    cb2.EndText();
+
+
+                    // Create the first inner cell
+                    PdfPCell innerCell3 = new PdfPCell();
+                    innerCell3.Border = 0;
+                    innerCell3.HorizontalAlignment = Element.ALIGN_CENTER;
+                    innerCell3.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    innerCell3.FixedHeight = cellHeight;
+                    innerTable1.AddCell(innerCell3);
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 720, 23, 730), chkboxlistForLegalDetails[0].Checkbox, 23, 720);
+                    PdfContentByte content42 = writer.DirectContent;
+                    BaseFont baseF14 = BaseFont.CreateFont();
+                    content42.SetFontAndSize(baseF14, 8);
+                    content42.BeginText();
+                    content42.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForLegalDetails[0].PropertyAttributeName, 53, 720, 0);
+                    content42.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 705, 23, 715), chkboxlistForLegalDetails[1].Checkbox, 23, 705);
+                    PdfContentByte content43 = writer.DirectContent;
+                    BaseFont baseF15 = BaseFont.CreateFont();
+                    content43.SetFontAndSize(baseF15, 8);
+                    content43.BeginText();
+                    content43.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForLegalDetails[1].PropertyAttributeName, 73, 705, 0);
+                    content43.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 700, 23, 690), chkboxlistForLegalDetails[2].Checkbox, 23, 690);
+                    PdfContentByte content44 = writer.DirectContent;
+                    BaseFont baseF16 = BaseFont.CreateFont();
+                    content44.SetFontAndSize(baseF16, 8);
+                    content44.BeginText();
+                    content44.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForLegalDetails[2].PropertyAttributeName, 73, 692, 0);
+                    content44.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 685, 23, 675), chkboxlistForLegalDetails[3].Checkbox, 23, 675);
+                    PdfContentByte content45 = writer.DirectContent;
+                    BaseFont baseF17 = BaseFont.CreateFont();
+                    content45.SetFontAndSize(baseF17, 8);
+                    content45.BeginText();
+                    content45.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForLegalDetails[3].PropertyAttributeName, 53, 678, 0);
+                    content45.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 670, 23, 660), chkboxlistForLegalDetails[4].Checkbox, 23, 660);
+                    PdfContentByte content46 = writer.DirectContent;
+                    BaseFont baseF18 = BaseFont.CreateFont();
+                    content46.SetFontAndSize(baseF18, 8);
+                    content46.BeginText();
+                    content46.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForLegalDetails[4].PropertyAttributeName, 70, 663, 0);
+                    content46.EndText();
+
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 655, 23, 645), chkboxlistForLegalDetails[5].Checkbox, 23, 645);
+                    PdfContentByte content47 = writer.DirectContent;
+                    BaseFont baseF19 = BaseFont.CreateFont();
+                    content47.SetFontAndSize(baseF19, 8);
+                    content47.BeginText();
+                    content47.ShowTextAligned(PdfContentByte.ALIGN_CENTER, legalDetailsCheckboxList[5].PropertyAttributeName, 68, 648, 0);
+                    content47.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 640, 23, 630), chkboxlistForLegalDetails[6].Checkbox, 23, 630);
+                    PdfContentByte content48 = writer.DirectContent;
+                    BaseFont baseF20 = BaseFont.CreateFont();
+                    content48.SetFontAndSize(baseF20, 8);
+                    content48.BeginText();
+                    content48.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForLegalDetails[6].PropertyAttributeName, 45, 633, 0);
+                    content48.EndText();
+
+                    ////ADDING MORE FIELDS IN CELL
+                    TextField tf54 = new TextField(writer, new Rectangle(170, 745, 254, 730), legaldetailsList[0].LotNo);
+                    tf54.BorderColor = new BaseColor(232, 232, 232);
+                    tf54.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf54.Text = legaldetailsList[0].LotNo == null ? " " : legaldetailsList[0].LotNo.ToString();
+                    tf54.FontSize = 8;
+                    tf54.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf54.GetTextField());
+                    PdfContentByte overContent58 = writer.DirectContent;
+                    BaseFont baseFont58 = BaseFont.CreateFont();
+                    overContent58.SetFontAndSize(baseFont58, 10);
+                    BaseFont overContent1 = BaseFont.CreateFont();
+                    overContent58.SetFontAndSize(overContent1, 8);
+                    overContent58.BeginText();
+                    overContent58.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Lot", 160, 733, 0);
+                    overContent58.EndText();
+
+                    TextField tf58 = new TextField(writer, new Rectangle(280, 745, 358, 730), "DP");
+                    tf58.BorderColor = new BaseColor(232, 232, 232);
+                    tf58.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf58.FontSize = 8;
+                    tf58.Text = legaldetailsList[0].DepositedPlan == null ? " " : legaldetailsList[0].DepositedPlan.ToString();
+                    tf58.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf58.GetTextField());
+                    PdfContentByte overContent59 = writer.DirectContent;
+                    BaseFont baseFont59 = BaseFont.CreateFont();
+                    overContent59.SetFontAndSize(baseFont59, 8);
+                    overContent59.BeginText();
+                    overContent59.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "DP", 270, 733, 0);
+                    overContent59.EndText();
+
+                    TextField tf60 = new TextField(writer, new Rectangle(380, 745, 455, 730), "Title");
+                    tf60.BorderColor = new BaseColor(232, 232, 232);
+                    tf60.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf60.FontSize = 8;
+                    tf60.Text = legaldetailsList[0].TitleIdentifier == null ? " " : legaldetailsList[0].TitleIdentifier.ToString();
+                    tf60.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf60.GetTextField());
+                    PdfContentByte overContent60 = writer.DirectContent;
+                    BaseFont baseFont60 = BaseFont.CreateFont();
+                    overContent60.SetFontAndSize(baseFont60, 8);
+                    overContent60.BeginText();
+                    overContent60.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Title", 369, 733, 0);
+                    overContent60.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(465, 740, 475, 730), legaldetailsList[0].IsPropertyUnitTitle, 465, 730);
+                    PdfContentByte overContent61 = writer.DirectContent;
+                    BaseFont baseFont61 = BaseFont.CreateFont();
+                    overContent61.SetFontAndSize(baseFont61, 8);
+                    overContent61.BeginText();
+                    overContent61.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Property is a unit title", 521, 730, 0);
+                    overContent61.EndText();
+
+                    TextField tf61 = new TextField(writer, new Rectangle(228, 720, 565, 703), "Registered");
+                    tf61.BorderColor = new BaseColor(232, 232, 232);
+                    tf61.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf61.Text = legaldetailsList[0].RegisteredOwner == null ? " " : legaldetailsList[0].RegisteredOwner;
+                    tf61.FontSize = 8;
+                    tf61.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf61.GetTextField());
+                    PdfContentByte overContent62 = writer.DirectContent;
+                    BaseFont baseFont62 = BaseFont.CreateFont();
+                    overContent61.SetFontAndSize(baseFont62, 8);
+                    overContent61.BeginText();
+                    overContent61.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Registered owners", 190, 710, 0);
+                    overContent61.EndText();
+                    PdfContentByte overContent63 = writer.DirectContent;
+                    BaseFont baseFont63 = BaseFont.CreateFont();
+                    overContent63.SetFontAndSize(baseFont63, 8);
+                    overContent63.BeginText();
+                    overContent63.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "(Full name of client/trustees, used for legal documentation)", 260, 690, 0);
+                    overContent63.EndText();
+
+                    TextField tf64 = new TextField(writer, new Rectangle(222, 668, 393, 683), "Additional");
+                    tf64.BorderColor = new BaseColor(232, 232, 232);
+                    tf64.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf64.FontSize = 8;
+                    tf64.Text = legaldetailsList[0].AdditionalDetails == null ? " " : legaldetailsList[0].AdditionalDetails;
+                    tf64.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf64.GetTextField());
+                    PdfContentByte overContent64 = writer.DirectContent;
+                    BaseFont baseFont64 = BaseFont.CreateFont();
+                    overContent64.SetFontAndSize(baseFont64, 8);
+                    overContent64.BeginText();
+                    overContent64.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Additional details", 188, 670, 0);
+                    overContent64.EndText();
+
+                    TextField tf65 = new TextField(writer, new Rectangle(460, 668, 560, 683), "Land value $");
+                    tf65.BorderColor = new BaseColor(232, 232, 232);
+                    tf65.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf65.Text = legaldetailsList[0].LandValue == null ? " " : legaldetailsList[0].LandValue.ToString();
+                    tf65.FontSize = 8;
+                    tf65.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf65.GetTextField());
+                    PdfContentByte overContent65 = writer.DirectContent;
+                    BaseFont baseFont65 = BaseFont.CreateFont();
+                    overContent65.SetFontAndSize(baseFont65, 8);
+                    overContent65.BeginText();
+                    overContent65.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Land value $", 428, 670, 0);
+                    overContent65.EndText();
+
+                    TextField tf66 = new TextField(writer, new Rectangle(232, 655, 290, 640), "Improvement");
+                    tf66.BorderColor = new BaseColor(232, 232, 232);
+                    tf66.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf66.Text = legaldetailsList[0].ImprovementValue == null ? " " : legaldetailsList[0].ImprovementValue.ToString();
+                    tf66.FontSize = 8;
+                    tf66.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf66.GetTextField());
+                    PdfContentByte overContent66 = writer.DirectContent;
+                    BaseFont baseFont66 = BaseFont.CreateFont();
+                    overContent66.SetFontAndSize(baseFont66, 8);
+                    overContent66.BeginText();
+                    overContent66.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Improvement value $", 192, 645, 0);
+                    overContent66.EndText();
+
+                    TextField tf67 = new TextField(writer, new Rectangle(362, 655, 430, 640), "Rateable");
+                    tf67.BorderColor = new BaseColor(232, 232, 232);
+                    tf67.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf67.FontSize = 8;
+                    tf67.Text = legaldetailsList[0].RateableValue == null ? " " : legaldetailsList[0].RateableValue.ToString();
+                    tf67.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf67.GetTextField());
+                    PdfContentByte overContent67 = writer.DirectContent;
+                    BaseFont baseFont67 = BaseFont.CreateFont();
+                    overContent67.SetFontAndSize(baseFont67, 8);
+                    overContent67.BeginText();
+                    overContent67.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Rateable value $ ", 330, 645, 0);
+                    overContent67.EndText();
+
+
+
+                    TextField tf68 = new TextField(writer, new Rectangle(520, 655, 565, 640), "Rating");
+                    tf68.BorderColor = new BaseColor(232, 232, 232);
+                    tf68.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf68.FontSize = 8;
+
+                    // Cast RatingValuationDate to DateTime and format the date as mm-yyyy
+                    string formattedDate = legaldetailsList[0].RatingValuationDate == null ? " " : ((DateTime)legaldetailsList[0].RatingValuationDate).ToString("MM-yyyy");
+                    tf68.Text = formattedDate;
+
+                    tf68.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf68.GetTextField());
+                    PdfContentByte overContent68 = writer.DirectContent;
+                    BaseFont baseFont68 = BaseFont.CreateFont();
+                    overContent68.SetFontAndSize(baseFont68, 8);
+                    overContent68.BeginText();
+                    overContent68.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Rating valuation date", 475, 645, 0);
+                    overContent68.EndText();
 
 
 
 
 
-            } 
+
+                    PdfPCell innerCell4 = new PdfPCell();
+                    innerCell4.FixedHeight = cellHeight;
+                    innerCell4.Border = 0;
+                    innerCell4.HorizontalAlignment = Element.ALIGN_CENTER;
+                    innerCell4.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    innerTable1.AddCell(innerCell3);
+                    outercell1.AddElement(innerTable1);
+                    legalstable.AddCell(outercell1);
+                    document.Add(legalstable);
+
+                    Phrase phrase2 = new Phrase();
+                    Chunk chunk1 = new Chunk(" ");
+
+                    var para1 = new Paragraph(chunk1);
+                    para1.PaddingTop = 2f;
+                    para1.Alignment = Element.ALIGN_TOP;
+                    para1.Font.Color = BaseColor.BLACK;
+
+                    //ADD CONTRACT DETAILS
+                    PdfPTable parentTable1 = new PdfPTable(3);
+                    parentTable1.DefaultCell.Border = 0;
+                    parentTable1.WidthPercentage = 108; // Set the width percentage of the parent table        
+                    parentTable1.SpacingBefore = 10f;
+                    parentTable1.SpacingAfter = 20f;
+
+                    float[] testcolumnWidths = new float[] { 50f, 1f, 50f };
+                    parentTable1.SetWidths(testcolumnWidths);
+
+
+                    PdfPCell cell12 = new PdfPCell();
+
+                    cell12.AddElement(para1);
+                    cell12.AddElement(phrase2);
+                    cell12.HorizontalAlignment = PdfPCell.ALIGN_CENTER;
+                    cell12.VerticalAlignment = PdfPCell.ALIGN_MIDDLE;
+                    cell12.PaddingTop = 53;
+                    cell12.BorderColor = BaseColor.DARK_GRAY;
+                    cell12.BorderWidth = 1f;
+
+
+
+
+                    cell12.CellEvent = new RectangleOverPdfPCellBorder("Contract Details", 30f, 596f, 80f, 20f, 32f, 608f);
+                    PdfPCell cell21 = new PdfPCell();
+
+                    cell21.HorizontalAlignment = PdfPCell.ALIGN_CENTER;
+                    cell21.VerticalAlignment = PdfPCell.ALIGN_MIDDLE;
+                    cell21.BorderColor = BaseColor.DARK_GRAY;
+                    cell21.BorderWidth = 1f;
+                    cell21.CellEvent = new RectangleOverPdfPCellBorder("Rates", 310f, 596f, 30f, 20f, 312f, 608f);
+                    //cell21.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Rates", 310f, 20f, 80f, 595f); //380, 630, 322, 645
+                    parentTable1.AddCell(cell12);
+                    //dummy cell created to have an empty space with width `0.1f` which was declared //above.
+                    PdfPCell cell0222 = new PdfPCell(new Phrase(" "));
+                    cell0222.Border = 0;
+                    parentTable1.AddCell(cell0222);
+                    parentTable1.AddCell(cell21);
+
+                    PdfPTable mainTable1 = new PdfPTable(1);
+                    mainTable1.DefaultCell.Border = 0;
+                    mainTable1.WidthPercentage = 108; // Set the width percentage of the main table
+
+                    // Add the parent table to the main table
+                    mainTable1.AddCell(parentTable1);
+                    mainTable1.DefaultCell.Border = 0;
+
+
+                    // Add the main table to the document
+                    document.Add(mainTable1);
+
+
+
+
+
+                    //ADD TEXT FIELDS FOR CONTRACT DETAILS
+                    TextField tf70 = new TextField(writer, new Rectangle(105, 590, 280, 575), "Authoritystart ");
+                    tf70.BorderColor = new BaseColor(232, 232, 232);
+                    tf70.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf70.FontSize = 8;
+                    //tf70.Text = ((DateTime)FinalList.contractDetail.AuthorityStartDate).ToString("dd-MM-yyyy");
+                    if (FinalList != null && FinalList.contractDetail != null && FinalList.contractDetail.AuthorityStartDate != null)
+                    {
+                        string formattedDate1 = ((DateTime)FinalList.contractDetail.AuthorityStartDate).ToString("dd-MM-yyyy");
+                        tf70.Text = formattedDate1;
+                    }
+                    else
+                    {
+                        tf70.Text = " "; // Set a default value if the data is not available
+                    }
+
+
+                    tf70.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf70.GetTextField());
+                    PdfContentByte overContent70 = writer.DirectContent;
+                    BaseFont baseFont70 = BaseFont.CreateFont();
+                    overContent70.SetFontAndSize(baseFont70, 8);
+                    overContent70.BeginText();
+                    overContent70.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Authority start date", 90, 580, 0);
+                    overContent70.EndText();
+
+
+                    TextField tf71 = new TextField(writer, new Rectangle(105, 568, 280, 553), "Authorityend");
+                    tf71.BorderColor = new BaseColor(232, 232, 232);
+                    tf71.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf71.FontSize = 8;
+
+                    if (FinalList != null && FinalList.contractDetail != null && FinalList.contractDetail.AuthorityEndDate != null)
+                    {
+                        string formattedDate2 = ((DateTime)FinalList.contractDetail.AuthorityEndDate).ToString("dd-MM-yyyy");
+                        tf71.Text = formattedDate2;
+                    }
+                    else
+                    {
+                        tf71.Text = " "; // Set a default value if the data is not available
+                    }
+                    tf71.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf71.GetTextField());
+                    PdfContentByte overContent71 = writer.DirectContent;
+                    BaseFont baseFont71 = BaseFont.CreateFont();
+                    overContent71.SetFontAndSize(baseFont71, 8);
+                    overContent71.BeginText();
+                    overContent71.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Authority end date", 90, 555, 0);
+                    overContent71.EndText();
+
+                    TextField tf72 = new TextField(writer, new Rectangle(130, 545, 245, 530), " marketing spend $ ");
+                    tf72.BorderColor = new BaseColor(232, 232, 232);
+                    tf72.BackgroundColor = new BaseColor(232, 232, 232);
+                    // tf72.Text = FinalList.contractDetail.AgreedMarketSpend.ToString();
+                    if (FinalList != null && FinalList.contractDetail != null && FinalList.contractDetail.AgreedMarketSpend != null)
+                    {
+                        string AgreedMarketSpend = FinalList.contractDetail.AgreedMarketSpend.ToString();
+                        tf72.Text = AgreedMarketSpend;
+                    }
+                    else
+                    {
+                        tf72.Text = " "; // Set a default value if the data is not available
+                    }
+                    tf72.FontSize = 8;
+
+                    tf72.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf72.GetTextField());
+                    PdfContentByte overContent72 = writer.DirectContent;
+                    BaseFont baseFont72 = BaseFont.CreateFont();
+                    overContent72.SetFontAndSize(baseFont72, 8);
+                    overContent72.BeginText();
+                    overContent72.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Agreed marketing spend $ ", 120, 533, 0);
+                    overContent72.EndText();
+
+                    PdfContentByte overContent73 = writer.DirectContent;
+                    BaseFont baseFont73 = BaseFont.CreateFont();
+                    overContent73.SetFontAndSize(baseFont73, 8);
+                    overContent73.BeginText();
+                    overContent73.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "(inc. GST) ", 285, 533, 0);
+                    overContent73.EndText();
+
+                    //ADDING MORE CONTRACT DETAILS
+
+                    TextField tf74 = new TextField(writer, new Rectangle(345, 590, 550, 575), "Water");
+                    tf74.BorderColor = new BaseColor(232, 232, 232);
+                    tf74.BackgroundColor = new BaseColor(232, 232, 232);
+                    if (FinalList != null && FinalList.contractRate != null && FinalList.contractRate.Water != null)
+                    {
+                        string Water = FinalList.contractRate.Water.ToString();
+                        tf74.Text = Water;
+                    }
+                    else
+                    {
+                        tf74.Text = " "; // Set a default value if the data is not available
+                    }
+                    //tf74.Text = FinalList.contractRate.Water.ToString();
+                    tf74.FontSize = 8;
+                    tf74.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf74.GetTextField());
+                    PdfContentByte overContent74 = writer.DirectContent;
+                    BaseFont baseFont74 = BaseFont.CreateFont();
+                    overContent74.SetFontAndSize(baseFont74, 8);
+                    overContent74.BeginText();
+                    overContent74.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Water $", 335, 580, 0);
+                    overContent74.EndText();
+                    PdfContentByte overContent76 = writer.DirectContent;
+                    BaseFont baseFont76 = BaseFont.CreateFont();
+                    overContent76.SetFontAndSize(baseFont76, 8);
+                    overContent76.BeginText();
+                    overContent76.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "pa", 565, 580, 0);
+                    overContent76.EndText();
+
+
+                    TextField tf75 = new TextField(writer, new Rectangle(345, 568, 550, 553), "Council");
+                    tf75.BorderColor = new BaseColor(232, 232, 232);
+                    tf75.BackgroundColor = new BaseColor(232, 232, 232);
+                    //tf75.Text = FinalList.contractRate.Council.ToString();
+                    if (FinalList != null && FinalList.contractRate != null && FinalList.contractRate.Council != null)
+                    {
+                        string Council = FinalList.contractRate.Council.ToString();
+                        tf75.Text = Council;
+                    }
+                    else
+                    {
+                        tf75.Text = " "; // Set a default value if the data is not available
+                    }
+                    tf75.FontSize = 8;
+                    tf75.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf75.GetTextField());
+                    PdfContentByte overContent75 = writer.DirectContent;
+                    BaseFont baseFont75 = BaseFont.CreateFont();
+                    overContent75.SetFontAndSize(baseFont75, 8);
+                    overContent75.BeginText();
+                    overContent75.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Council $", 340, 555, 0);
+                    overContent75.EndText();
+                    PdfContentByte overContent77 = writer.DirectContent;
+                    BaseFont baseFont77 = BaseFont.CreateFont();
+                    overContent77.SetFontAndSize(baseFont77, 8);
+                    overContent77.BeginText();
+                    overContent77.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "pa", 565, 555, 0);
+                    overContent77.EndText();
+
+                    TextField tf78 = new TextField(writer, new Rectangle(345, 545, 490, 525), "other");
+                    tf78.BorderColor = new BaseColor(232, 232, 232);
+                    tf78.BackgroundColor = new BaseColor(232, 232, 232);
+                    //tf78.Text = FinalList.contractRate.OtherValue.ToString();
+                    if (FinalList != null && FinalList.contractRate != null && FinalList.contractRate.OtherValue != null)
+                    {
+                        string OtherValue = FinalList.contractRate.OtherValue.ToString();
+                        tf78.Text = OtherValue;
+                    }
+                    else
+                    {
+                        tf78.Text = " "; // Set a default value if the data is not available
+                    }
+                    tf78.FontSize = 8;
+                    tf78.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf78.GetTextField());
+                    PdfContentByte overContent78 = writer.DirectContent;
+                    BaseFont baseFont78 = BaseFont.CreateFont();
+                    overContent78.SetFontAndSize(baseFont78, 8);
+                    overContent78.BeginText();
+                    overContent78.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Other $", 335, 533, 0);
+                    overContent78.EndText();
+                    if (FinalList != null && FinalList.contractRate != null)
+                    {
+                        bool isPerAnnum = FinalList.contractRate.IsPerAnnum;
+
+                        // Assuming AddCheckboxField function works similarly to your AddTextField function
+                        AddCheckboxField(document, writer, "myCheckbox", new Rectangle(500, 543, 512, 530), isPerAnnum, 500, 530);
+                    }
+                    else
+                    {
+                        // If the data is not available, you might want to decide the default state of the checkbox
+                        // For example, you could set it to unchecked
+                        AddCheckboxField(document, writer, "myCheckbox", new Rectangle(500, 543, 512, 530), false, 500, 530);
+                    }
+
+                    // AddCheckboxField(document, writer, "myCheckbox", new Rectangle(500, 543, 512, 530), FinalList.contractRate.IsPerAnnum, 500, 530);
+                    //AddCheckboxField(document, writer, "myCheckbox", new Rectangle(500, 543, 512, 530), FinalList.contractRate.IsPerAnnum, 500, 530);
+
+                    PdfContentByte overContent80 = writer.DirectContent;
+                    BaseFont baseFont80 = BaseFont.CreateFont();
+                    overContent80.SetFontAndSize(baseFont80, 8);
+                    overContent80.BeginText();
+                    overContent80.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "pa", 525, 535, 0);
+                    overContent80.EndText();
+                    if (FinalList != null && FinalList.contractRate != null)
+                    {
+                        bool IsPerQuarter = FinalList.contractRate.IsPerQuarter;
+
+                        // Assuming AddCheckboxField function works similarly to your AddTextField function
+                        AddCheckboxField(document, writer, "myCheckbox", new Rectangle(538, 543, 550, 530), IsPerQuarter, 538, 530);
+                    }
+                    else
+                    {
+                        // If the data is not available, you might want to decide the default state of the checkbox
+                        // For example, you could set it to unchecked
+                        AddCheckboxField(document, writer, "myCheckbox", new Rectangle(538, 543, 550, 530), false, 538, 530);
+                    }
+                    // AddCheckboxField(document, writer, "myCheckbox", new Rectangle(550, 543, 538, 530), FinalList.contractRate.IsPerQuarter, 538, 530);
+                    //AddCheckboxField(document, writer, "myCheckbox", new Rectangle(550, 543, 538, 530), FinalList.contractRate.IsPerQuarter, 538, 530);
+
+                    PdfContentByte overContent79 = writer.DirectContent;
+                    BaseFont baseFont79 = BaseFont.CreateFont();
+                    overContent79.SetFontAndSize(baseFont79, 8);
+                    overContent79.BeginText();
+                    overContent79.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "pq", 565, 535, 0);
+                    overContent79.EndText();
+
+
+                    //METHOD OF SALE DETAILS
+                    var methodOfSaleCheckboxAgencyList = data.Where(x => x.Name == "Method Of Sale Agency Type").ToList();
+                    int propertyID1 = _context.PropertyAttributeType.Where(x => x.Name == "Method Of Sale Agency Type").Select(x => x.ID).FirstOrDefault();
+                    var chkboxlistForAgencyType = new List<PropertyAttributeTypeWithMethodOfSaleModel>();
+                    using (var connection = new SqlConnection(_configuration["ConnectionStrings:ConnStr"].ToString()))
+                    {
+                        var sql = string.Format("SELECT PAT.ID,PA.Name as PropertyAttributeName, PA.PropertyAttributeTypeID,PA.Name ,PA.ID as PropertyAttributeID,MOS.AgencyTypeID,MOS.MethodOfSaleID, MOS.AgencyOtherTypeRemark, MOS.Price, MOS.PriceRemark, MOS.AuctionDate, MOS.AuctionTime, MOS.AuctionVenue, MOS.Auctioneer, MOS.TenderDate, MOS.TenderTime, MOS.IsMortgageeSale, MOS.IsAsIs, MOS.IsAuctionUnlessSoldPrior, MOS.IsTenderUnlessSoldPrior,MOS.IsAuctionOnSite,MOS.TenderVenue,MOS.PID, case when ISNULL(MOS.AgencyTypeID,0)=0 THEN 0 ELSE 1 END as Checkbox FROM PropertyAttributeType as PAT  INNER JOIN PropertyAttribute as PA  ON PAT.ID = PA.PropertyAttributeTypeID left join MethodOfSale as MOS on PA.id = MOS.AgencyTypeID  AND MOS.PID={0}", id + " WHERE  PA.PropertyAttributeTypeID=" + propertyID1);
+                        chkboxlistForAgencyType = connection.Query<PropertyAttributeTypeWithMethodOfSaleModel>(sql).ToList();
+                    }
+
+                    foreach (var item in chkboxlistForAgencyType)
+                    {
+                        if (item.PropertyAttributeName == "Sole") { isSoleSelected = item.Checkbox; }
+                        if (item.PropertyAttributeName == "General") { isGeneralSelected = item.Checkbox; }
+                    }
+
+                    var methodOfSaleCheckboxList = data.Where(x => x.Name == "Method Of Sale").ToList();
+                    int propertyID2 = _context.PropertyAttributeType.Where(x => x.Name == "Method Of Sale").Select(x => x.ID).FirstOrDefault();
+                    var chkboxlistForMethodOfSale = new List<PropertyAttributeTypeWithMethodOfSaleModel>();
+                    using (var connection = new SqlConnection(_configuration["ConnectionStrings:ConnStr"].ToString()))
+                    {
+                        var sql = string.Format("SELECT PAT.ID,PA.Name as PropertyAttributeName, PA.PropertyAttributeTypeID,PA.Name ,PA.ID as PropertyAttributeID,MOS.AgencyTypeID,MOS.MethodOfSaleID, MOS.AgencyOtherTypeRemark, MOS.Price, MOS.PriceRemark, MOS.AuctionDate, MOS.AuctionTime, MOS.AuctionVenue, MOS.Auctioneer, MOS.TenderDate, MOS.TenderTime, MOS.IsMortgageeSale, MOS.IsAsIs, MOS.IsAuctionUnlessSoldPrior, MOS.IsTenderUnlessSoldPrior,MOS.IsAuctionOnSite,MOS.TenderVenue,MOS.PID, case when ISNULL(MOS.MethodOfSaleID,0)=0 THEN 0 ELSE 1 END as Checkbox FROM PropertyAttributeType as PAT  INNER JOIN PropertyAttribute as PA  ON PAT.ID = PA.PropertyAttributeTypeID left join MethodOfSale as MOS on PA.id = MOS.MethodOfSaleID  AND MOS.PID={0}", id + "  WHERE  PA.PropertyAttributeTypeID=" + propertyID2);
+                        chkboxlistForMethodOfSale = connection.Query<PropertyAttributeTypeWithMethodOfSaleModel>(sql).ToList();
+                    }
+
+                    foreach (var item in chkboxlistForMethodOfSale)
+                    {
+                        if (item.PropertyAttributeName == "Price") { isPriceSelected = item.Checkbox; }
+                        if (item.PropertyAttributeName == "No price") { isNoPriceSelected = item.Checkbox; }
+                        if (item.PropertyAttributeName == "Auction") { isAuctionSelected = item.Checkbox; }
+                        if (item.PropertyAttributeName == "Tender") { isTenderSelected = item.Checkbox; }
+                        if (item.PropertyAttributeName == "Deadline sale") { isDeadlinesaleSelected = item.Checkbox; }
+                        if (item.PropertyAttributeName == "Unless sold prior") { isUnlesssoldpriorSelected = item.Checkbox; }
+                    }
+
+
+                    PdfPTable methodOfTable = new PdfPTable(1);
+
+                    PdfPCell outercell21 = new PdfPCell();
+                    methodOfTable.DefaultCell.Border = 0;
+                    outercell21.BorderColor = BaseColor.DARK_GRAY;
+                    outercell21.FixedHeight = 123f;
+                    methodOfTable.WidthPercentage = 108; // Set the width percentage of the parent table        
+                    methodOfTable.SpacingBefore = 12f;
+                    methodOfTable.SpacingAfter = 10f;
+                    outercell21.CellEvent = new RectangleOverPdfPCellBorder("Method of Sale", 30f, 490f, 77f, 20f, 32f, 500f);
+                    //outercell21.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Method of Sale", 50f, 20f, 80f, 490f);
+                    //particulartable.AddCell(outercell);
+
+                    PdfPTable innerTable21 = new PdfPTable(2);
+                    innerTable21.DefaultCell.Border = 0;
+                    innerTable21.WidthPercentage = 100f;
+                    innerTable21.SpacingBefore = 10f;
+
+                    PdfContentByte cb21 = writer.DirectContent;
+                    BaseFont bf21 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
+                    string text21 = "Agency Type";
+                    cb21.BeginText();
+                    cb21.SetFontAndSize(bf21, 8);
+                    // put the alignment and coordinates here
+                    cb21.ShowTextAligned(1, text21, 55, 482, 0);
+                    cb21.EndText();
+                    // Create the first inner cell
+                    PdfPCell innerCell21 = new PdfPCell();
+                    innerCell21.FixedHeight = cellHeight;
+                    innerCell21.Border = 0;
+                    innerCell21.HorizontalAlignment = Element.ALIGN_CENTER;
+                    innerCell21.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    innerTable21.AddCell(innerCell21);
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(25, 465, 35, 475), chkboxlistForAgencyType[0].Checkbox, 25, 465);
+                    PdfContentByte content21 = writer.DirectContent;
+                    BaseFont baseF21 = BaseFont.CreateFont();
+                    content21.SetFontAndSize(baseF21, 8);
+                    content21.BeginText();
+                    content21.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForAgencyType[0].PropertyAttributeName, 49, 466, 0);
+                    content21.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(25, 450, 35, 460), chkboxlistForAgencyType[1].Checkbox, 25, 450);
+                    PdfContentByte content56 = writer.DirectContent;
+                    BaseFont baseF56 = BaseFont.CreateFont();
+                    content56.SetFontAndSize(baseF56, 8);
+                    content56.BeginText();
+                    content56.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForAgencyType[1].PropertyAttributeName, 55, 452, 0);
+                    content56.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(25, 435, 35, 445), chkboxlistForAgencyType[2].Checkbox, 25, 435);
+                    PdfContentByte content57 = writer.DirectContent;
+                    BaseFont baseF57 = BaseFont.CreateFont();
+                    content57.SetFontAndSize(baseF57, 8);
+                    content57.BeginText();
+                    content57.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForAgencyType[2].PropertyAttributeName, 62, 436, 0);
+                    content57.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(25, 418, 35, 428), chkboxlistForAgencyType[3].Checkbox, 25, 418);
+                    PdfContentByte content58 = writer.DirectContent;
+                    BaseFont baseF58 = BaseFont.CreateFont();
+                    content58.SetFontAndSize(baseF58, 8);
+                    content58.BeginText();
+                    content58.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForAgencyType[3].PropertyAttributeName, 49, 419, 0);
+                    content58.EndText();
+
+                    TextField tf85 = new TextField(writer, new Rectangle(25, 410, 110, 390), "Other");
+                    tf85.BorderColor = new BaseColor(232, 232, 232);
+                    tf85.BackgroundColor = new BaseColor(232, 232, 232);
+                    if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.AgencyOtherTypeRemark != null)
+                    {
+                        string AgencyOtherTypeRemark = FinalList.methodOfSale.AgencyOtherTypeRemark.ToString();
+                        tf85.Text = AgencyOtherTypeRemark;
+                    }
+                    else
+                    {
+                        tf85.Text = " "; // Set a default value if the data is not available
+                    }
+                    // tf85.Text = FinalList.methodOfSale.AgencyOtherTypeRemark.ToString();
+                    tf85.FontSize = 8;
+                    tf85.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf85.GetTextField());
+
+
+
+                    PdfContentByte cb22 = writer.DirectContent;
+                    BaseFont bf22 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
+                    string text22 = "Method of sale";
+                    cb22.BeginText();
+                    cb22.SetFontAndSize(bf22, 8);
+                    // 2ut the alignment and coordinates here
+                    cb22.ShowTextAligned(1, text22, 180, 482, 0);
+                    cb22.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(150, 465, 160, 475), chkboxlistForMethodOfSale[0].Checkbox, 150, 465);
+                    PdfContentByte content25 = writer.DirectContent;
+                    BaseFont baseF25 = BaseFont.CreateFont();
+                    content25.SetFontAndSize(baseF25, 8);
+                    content25.BeginText();
+                    content25.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForMethodOfSale[0].PropertyAttributeName, 174, 465, 0);
+                    content25.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(220, 465, 230, 475), chkboxlistForMethodOfSale[3].Checkbox, 220, 465);
+                    PdfContentByte content27 = writer.DirectContent;
+                    BaseFont baseF27 = BaseFont.CreateFont();
+                    content27.SetFontAndSize(baseF25, 8);
+                    content27.BeginText();
+                    content27.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForMethodOfSale[3].PropertyAttributeName, 250, 465, 0);
+                    content27.EndText();
+
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(150, 450, 160, 460), chkboxlistForMethodOfSale[1].Checkbox, 150, 450);
+                    PdfContentByte content26 = writer.DirectContent;
+                    BaseFont baseF26 = BaseFont.CreateFont();
+                    content26.SetFontAndSize(baseF26, 8);
+                    content26.BeginText();
+                    content26.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForMethodOfSale[1].PropertyAttributeName, 180, 452, 0);
+                    content26.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(220, 450, 230, 460), chkboxlistForMethodOfSale[4].Checkbox, 220, 450);
+                    PdfContentByte content29 = writer.DirectContent;
+                    BaseFont baseF29 = BaseFont.CreateFont();
+                    content29.SetFontAndSize(baseF29, 8);
+                    content29.BeginText();
+                    content29.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForMethodOfSale[4].PropertyAttributeName, 250, 452, 0);
+                    content29.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(150, 435, 160, 445), chkboxlistForMethodOfSale[2].Checkbox, 150, 435);
+                    PdfContentByte content28 = writer.DirectContent;
+                    BaseFont baseF28 = BaseFont.CreateFont();
+                    content28.SetFontAndSize(baseF28, 8);
+                    content28.BeginText();
+                    content28.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForMethodOfSale[2].PropertyAttributeName, 190, 436, 0);
+                    content28.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(220, 435, 230, 445), chkboxlistForMethodOfSale[5].Checkbox, 220, 435);
+                    PdfContentByte content30 = writer.DirectContent;
+                    BaseFont baseF30 = BaseFont.CreateFont();
+                    content30.SetFontAndSize(baseF30, 8);
+                    content30.BeginText();
+                    content30.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForMethodOfSale[5].PropertyAttributeName, 268, 436, 0);
+                    content30.EndText();
+
+                    PdfContentByte content63 = writer.DirectContent;
+                    BaseFont baseF63 = BaseFont.CreateFont();
+                    content63.SetFontAndSize(baseF63, 8);
+                    content63.BeginText();
+                    content63.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Price (specific amount)", 195, 419, 0);
+                    content63.EndText();
+
+                    PdfContentByte content64 = writer.DirectContent;
+                    BaseFont baseF64 = BaseFont.CreateFont();
+                    content64.SetFontAndSize(baseF63, 8);
+                    content64.BeginText();
+                    content64.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "$", 150, 395, 0);
+                    content64.EndText();
+                    TextField tf87 = new TextField(writer, new Rectangle(300, 410, 160, 390), "$ textbox");
+                    tf87.BorderColor = new BaseColor(232, 232, 232);
+                    tf87.BackgroundColor = new BaseColor(232, 232, 232);
+
+
+
+
+
+
+                    // tf87.Text = FinalList.methodOfSale.Price.ToString();
+                    if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.Price != null)
+                    {
+                        string Price = isPriceSelected == true ? FinalList.methodOfSale.Price.ToString() : "";
+                        tf87.Text = Price;
+                    }
+                    else
+                    {
+                        tf87.Text = " "; // Set a default value if the data is not available
+                    }
+                    tf87.FontSize = 8;
+                    tf87.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf87.GetTextField());
+
+
+
+
+
+
+
+
+                    PdfContentByte cb23 = writer.DirectContent;
+                    BaseFont bf23 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
+                    string text23 = "Auction";
+                    cb23.BeginText();
+                    cb23.SetFontAndSize(bf23, 8);
+                    // 3ut the alignment and coordinates here
+                    cb23.ShowTextAligned(1, text23, 325, 482, 0);
+                    cb23.EndText();
+
+
+
+
+
+                    string logoPath1 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
+                    iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(logoPath1);
+                    if (System.IO.File.Exists(logoPath1))
+                    {
+                        logo1.ScaleAbsolute(15f, 15f);
+                        logo1.SetAbsolutePosition(308, 465);
+
+
+                        document.Add(logo1);
+                    }
+
+                    TextField tf89 = new TextField(writer, new Rectangle(325, 478, 360, 465), "Auction Date");
+                    tf89.BorderColor = new BaseColor(232, 232, 232);
+                    tf89.BackgroundColor = new BaseColor(232, 232, 232);
+                    //tf89.Text = ((DateTime)FinalList.methodOfSale.AuctionDate).ToString("dd-MM-yyyy");
+                    if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.AuctionDate != null)
+                    {
+                        string AuctionDate = isAuctionSelected == true ? ((DateTime)FinalList.methodOfSale.AuctionDate).ToString("dd-MM-yyyy") : " ";
+                        tf89.Text = AuctionDate;
+                    }
+                    else
+                    {
+                        tf89.Text = " "; // Set a default value if the data is not available
+                    }
+                    // tf89.FontSize= 8;
+                    tf89.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf89.GetTextField());
+
+                    string logoPath2 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Clock.png");
+                    iTextSharp.text.Image logo2 = iTextSharp.text.Image.GetInstance(logoPath2);
+                    if (System.IO.File.Exists(logoPath2))
+                    {
+                        logo2.ScaleAbsolute(15f, 15f);
+                        logo2.SetAbsolutePosition(365, 465);
+
+
+                        document.Add(logo2);
+                    }
+
+                    TextField tf90 = new TextField(writer, new Rectangle(385, 478, 420, 465), "Auction Time");
+                    tf90.BorderColor = new BaseColor(232, 232, 232);
+                    tf90.BackgroundColor = new BaseColor(232, 232, 232);
+                    // tf90.FontSize = 8;
+                    //tf90.Text = DateTimeOffset.Parse(FinalList.methodOfSale.AuctionTime).ToString("hh:mm tt");
+                    if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.AuctionTime != null)
+                    {
+                        string AuctionTime = isAuctionSelected == true ? DateTimeOffset.Parse(FinalList.methodOfSale.AuctionTime).ToString("hh:mm tt") : "";
+                        tf90.Text = AuctionTime;
+                    }
+                    else
+                    {
+                        tf90.Text = " "; // Set a default value if the data is not available
+                    }
+                    tf90.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf90.GetTextField());
+
+
+                    TextField tf91 = new TextField(writer, new Rectangle(335, 455, 410, 435), "Venue");
+                    tf91.BorderColor = new BaseColor(232, 232, 232);
+                    tf91.BackgroundColor = new BaseColor(232, 232, 232);
+                    //tf91.Text = FinalList.methodOfSale.TenderVenue;
+                    if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.TenderVenue != null)
+                    {
+                        string TenderVenue = isAuctionSelected == true ? FinalList.methodOfSale.TenderVenue : "";
+                        tf91.Text = TenderVenue;
+                    }
+                    else
+                    {
+                        tf91.Text = " "; // Set a default value if the data is not available
+                    }
+
+
+                    tf91.Options = TextField.READ_ONLY;
+                    tf91.FontSize = 8;
+                    writer.AddAnnotation(tf91.GetTextField());
+                    PdfContentByte overContent91 = writer.DirectContent;
+                    BaseFont baseFont91 = BaseFont.CreateFont();
+                    overContent91.SetFontAndSize(baseFont91, 8);
+                    overContent91.BeginText();
+                    overContent91.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Venue", 330, 436, 0);
+                    overContent91.EndText();
+
+                    TextField tf92 = new TextField(writer, new Rectangle(350, 420, 425, 400), "Auctioneer Venue");
+                    tf92.BorderColor = new BaseColor(232, 232, 232);
+                    tf92.BackgroundColor = new BaseColor(232, 232, 232);
+                    //tf92.Text = FinalList.methodOfSale.AuctionVenue;
+                    if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.AuctionVenue != null)
+                    {
+                        string AuctionVenue = isAuctionSelected == true ? FinalList.methodOfSale.AuctionVenue : "";
+                        tf92.Text = AuctionVenue;
+                    }
+                    else
+                    {
+                        tf92.Text = " "; // Set a default value if the data is not available
+                    }
+                    tf92.FontSize = 8;
+                    tf92.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf92.GetTextField());
+                    PdfContentByte overContent92 = writer.DirectContent;
+                    BaseFont baseFont92 = BaseFont.CreateFont();
+                    overContent92.SetFontAndSize(baseFont91, 8);
+                    overContent92.BeginText();
+                    overContent92.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Auctioneer", 348, 410, 0);
+                    overContent92.EndText();
+
+                    PdfContentByte cb24 = writer.DirectContent;
+                    BaseFont bf24 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
+                    string text24 = "Tender";
+                    cb24.BeginText();
+                    cb24.SetFontAndSize(bf24, 8);
+                    // 4ut the alignment and coordinates here
+                    cb24.ShowTextAligned(1, text24, 450, 482, 0);
+                    cb24.EndText();
+
+                    string logoPath3 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
+                    iTextSharp.text.Image logo3 = iTextSharp.text.Image.GetInstance(logoPath3);
+                    if (System.IO.File.Exists(logoPath3))
+                    {
+                        logo3.ScaleAbsolute(15f, 15f);
+                        logo3.SetAbsolutePosition(437, 465);
+                        document.Add(logo3);
+                    }
+                    TextField tf94 = new TextField(writer, new Rectangle(455, 478, 490, 465), "Tender Date");
+                    tf94.BorderColor = new BaseColor(232, 232, 232);
+                    tf94.BackgroundColor = new BaseColor(232, 232, 232);
+                    // tf94.Text = ((DateTime)FinalList.methodOfSale.TenderDate).ToString("dd-MM-yyyy");
+                    if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.TenderDate != null)
+                    {
+                        string TenderDate = isTenderSelected == true ? ((DateTime)FinalList.methodOfSale.TenderDate).ToString("dd-MM-yyyy") : "";
+                        tf94.Text = TenderDate;
+                    }
+                    else
+                    {
+                        tf94.Text = " "; // Set a default value if the data is not available
+                    }
+                    //  tf94.FontSize = 8;
+                    tf94.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf94.GetTextField());
+
+                    string logoPath4 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Clock.png");
+                    iTextSharp.text.Image logo4 = iTextSharp.text.Image.GetInstance(logoPath4);
+                    if (System.IO.File.Exists(logoPath4))
+                    {
+                        logo4.ScaleAbsolute(15f, 15f);
+                        logo4.SetAbsolutePosition(500, 465);
+
+
+                        document.Add(logo4);
+                    }
+                    TextField tf95 = new TextField(writer, new Rectangle(520, 478, 560, 465), "TenderTime");
+                    tf95.BorderColor = new BaseColor(232, 232, 232);
+                    tf95.BackgroundColor = new BaseColor(232, 232, 232);
+                    //  tf95.FontSize = 8;
+                    // tf95.Text = DateTimeOffset.Parse(FinalList.methodOfSale.TenderTime).ToString("hh:mm tt");
+                    if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.TenderTime != null)
+                    {
+                        string TenderTime = isTenderSelected == true ? DateTimeOffset.Parse(FinalList.methodOfSale.TenderTime).ToString("hh:mm tt") : "";
+                        tf95.Text = TenderTime;
+                    }
+                    else
+                    {
+                        tf95.Text = " "; // Set a default value if the data is not available
+                    }
+                    tf95.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf95.GetTextField());
+
+
+                    PdfContentByte cb25 = writer.DirectContent;
+                    BaseFont bf25 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
+                    string text25 = "Deadline sale date";
+                    cb25.BeginText();
+                    cb25.SetFontAndSize(bf25, 8);
+                    // 4ut the alignment and coordinates here
+                    cb25.ShowTextAligned(1, text25, 480, 440, 0);
+                    cb25.EndText();
+
+                    string logoPath5 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
+                    iTextSharp.text.Image logo5 = iTextSharp.text.Image.GetInstance(logoPath5);
+                    if (System.IO.File.Exists(logoPath5))
+                    {
+                        logo5.ScaleAbsolute(15f, 15f);
+                        logo5.SetAbsolutePosition(437, 420);
+                        document.Add(logo5);
+                    }
+
+                    TextField tf96 = new TextField(writer, new Rectangle(455, 435, 490, 420), "Deadline Date");
+                    tf96.BorderColor = new BaseColor(232, 232, 232);
+                    tf96.BackgroundColor = new BaseColor(232, 232, 232);
+                    // tf96.Text = ((DateTime)FinalList.methodOfSale.DeadLineDate).ToString("dd-MM-yyyy");
+                    if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.DeadLineDate != null)
+                    {
+                        string DeadLineDate = isDeadlinesaleSelected == true ? ((DateTime)FinalList.methodOfSale.DeadLineDate).ToString("dd-MM-yyyy") : "";
+                        tf96.Text = DeadLineDate;
+                    }
+                    else
+                    {
+                        tf96.Text = " "; // Set a default value if the data is not available
+                    }
+                    tf96.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf96.GetTextField());
+
+                    string logoPath6 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Clock.png");
+                    iTextSharp.text.Image logo6 = iTextSharp.text.Image.GetInstance(logoPath6);
+                    if (System.IO.File.Exists(logoPath6))
+                    {
+                        logo6.ScaleAbsolute(15f, 15f);
+                        logo6.SetAbsolutePosition(500, 420);
+                        document.Add(logo6);
+                    }
+
+                    TextField tf97 = new TextField(writer, new Rectangle(520, 435, 560, 420), "Deadline Time");
+                    tf97.BorderColor = new BaseColor(232, 232, 232);
+                    tf97.BackgroundColor = new BaseColor(232, 232, 232);
+                    //  tf97.FontSize = 8;
+                    //tf97.Text = DateTimeOffset.Parse(FinalList.methodOfSale.DeadLineTime).ToString("hh:mm:ss tt");
+                    if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.DeadLineTime != null)
+                    {
+                        string DeadLineTime = isDeadlinesaleSelected == true ? DateTimeOffset.Parse(FinalList.methodOfSale.DeadLineTime).ToString("hh:mm tt") : "";
+                        tf97.Text = DeadLineTime;
+                    }
+                    else
+                    {
+                        tf97.Text = " "; // Set a default value if the data is not available
+                    }
+                    tf97.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf97.GetTextField());
+
+                    if (methodOfSaleList != null && methodOfSaleList.Count > 0)
+                    {
+                        bool isMortgageeSale = methodOfSaleList[0].IsMortgageeSale;
+
+                        AddCheckboxField(document, writer, "myCheckbox", new Rectangle(437, 410, 448, 400), isMortgageeSale, 437, 400);
+                    }
+                    else
+                    {
+                        // Handle the case when methodOfSaleList is null or empty
+                        // For example, you might want to provide a default value for the checkbox
+                        AddCheckboxField(document, writer, "myCheckbox", new Rectangle(437, 410, 448, 400), false, 437, 400);
+                    }
+
+
+                    // AddCheckboxField(document, writer, "myCheckbox", new Rectangle(437, 410, 448, 400), methodOfSaleList[0].IsMortgageeSale, 437, 400);
+                    PdfContentByte content59 = writer.DirectContent;
+                    BaseFont baseF59 = BaseFont.CreateFont();
+                    content59.SetFontAndSize(baseF59, 8);
+                    content59.BeginText();
+                    content59.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Mortgagee sale", 480, 403, 0);
+                    content59.EndText();
+
+
+
+                    if (methodOfSaleList != null && methodOfSaleList.Count > 0)
+                    {
+                        bool isAsIs = methodOfSaleList[0].IsAsIs;
+
+                        AddCheckboxField(document, writer, "myCheckbox", new Rectangle(437, 395, 448, 385), isAsIs, 437, 400);
+                    }
+                    else
+                    {
+                        // Handle the case when methodOfSaleList is null or empty
+                        // For example, you might want to provide a default value for the checkbox
+                        AddCheckboxField(document, writer, "myCheckbox", new Rectangle(437, 395, 448, 385), false, 437, 400);
+                    }
+                    // AddCheckboxField(document, writer, "myCheckbox", new Rectangle(437, 395, 448, 385), methodOfSaleList[0].IsAsIs, 437, 385);
+                    PdfContentByte content60 = writer.DirectContent;
+                    BaseFont baseF60 = BaseFont.CreateFont();
+                    content60.SetFontAndSize(baseF60, 8);
+                    content60.BeginText();
+                    content60.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "As is, where is", 480, 389, 0);
+                    content60.EndText();
+
+
+
+                    //CODE FOR CHATTELS CHECKBOXES
+
+                    // Create the second inner cell
+                    PdfPCell innerCell22 = new PdfPCell();
+                    innerCell22.FixedHeight = cellHeight;
+                    innerCell22.Border = 0;
+                    innerCell22.HorizontalAlignment = Element.ALIGN_CENTER;
+                    innerCell22.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    innerTable21.AddCell(innerCell22);
+                    outercell21.AddElement(innerTable21);
+                    methodOfTable.AddCell(outercell21);
+                    document.Add(methodOfTable);
+
+                    // Step 4: Create a new Table with 5 columns
+                    PdfPTable multipleMainTable = new PdfPTable(5);
+
+                    multipleMainTable.SpacingBefore = 10f;
+                    multipleMainTable.WidthPercentage = 108;
+                    multipleMainTable.DefaultCell.Border = 0;
+                    float[] columnWidths = new float[] { 36f, 30f, 30f, 30f, 30f };
+                    multipleMainTable.SetWidths(columnWidths);
+                    // Step 5: Create the cells for each column using nested tables
+
+                    var chattelslist = data.Where(w => w.Name == "Chattels").ToList();
+
+
+                    // Column 1 
+                    PdfPTable col1Table = new PdfPTable(1);
+                    PdfPCell cell11 = new PdfPCell(new Phrase());
+                    cell11.FixedHeight = 305f; // Set the height of the cell
+                    col1Table.DefaultCell.Border = 0;
+
+                    cell11.BorderColor = BaseColor.BLACK;
+                    cell11.Padding = 10;
+
+                    //col1Table.WidthPercentage = 100; // Set the width percentage of the parent table        
+                    col1Table.SpacingBefore = 3f;
+                    col1Table.SpacingAfter = 3f;
+                    cell11.CellEvent = new RectangleOverPdfPCellBorder("Chattels", 30f, 340f, 43f, 20f, 32f, 355f);
+                    //cell11.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Chattels", 40f, 20f, 80f, 340f);
+
+                    col1Table.AddCell(cell11);
+                    multipleMainTable.AddCell(col1Table);
+
+                    //CHECKBOX FIELDS
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 320, 23, 310), chattelslist[0].Checkbox, 23, 310);
+                    PdfContentByte content211 = writer.DirectContent;
+                    BaseFont baseF211 = BaseFont.CreateFont();
+                    content211.SetFontAndSize(baseF211, 8);
+                    content211.BeginText();
+                    content211.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[0].PropertyAttributeName, 49, 312, 0);
+                    content211.EndText();
+                    TextField tf211 = new TextField(writer, new Rectangle(110, 325, 130, 310), "Blinds");
+                    tf211.BorderColor = new BaseColor(232, 232, 232);
+                    tf211.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf211.Options = TextField.READ_ONLY;
+                    // tf211.Text = chattelslist[0].Count.ToString();
+                    if (chattelslist.Count > 0)
+                    {
+                        tf211.Text = chattelslist[0].Count != 0 ? chattelslist[0].Count.ToString() : "";
+                    }
+                    else
+                    {
+                        // Handle the case when othercommentList is empty
+                        tf211.Text = ""; // Set a default value or handle it based on your requirements
+                    }
+
+                    tf211.FontSize = 8;
+                    tf211.TextColor = BaseColor.BLACK;
+                    writer.AddAnnotation(tf211.GetTextField());
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 305, 23, 295), chattelslist[1].Checkbox, 23, 295);
+                    PdfContentByte content212 = writer.DirectContent;
+                    BaseFont baseF212 = BaseFont.CreateFont();
+                    content212.SetFontAndSize(baseF212, 8);
+                    content212.BeginText();
+                    content212.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[1].PropertyAttributeName, 61, 297, 0);
+                    content212.EndText();
+                    TextField tf212 = new TextField(writer, new Rectangle(110, 308, 130, 295), "Burglar");
+                    tf212.BorderColor = new BaseColor(232, 232, 232);
+                    tf212.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf212.Options = TextField.READ_ONLY;
+                    tf212.Text = chattelslist[1].Count != 0 ? chattelslist[1].Count.ToString() : "";
+                    tf212.TextColor = BaseColor.BLACK;
+                    tf212.FontSize = 8;
+                    writer.AddAnnotation(tf212.GetTextField());
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 290, 23, 280), chattelslist[2].Checkbox, 23, 280);
+                    PdfContentByte content213 = writer.DirectContent;
+                    BaseFont baseF213 = BaseFont.CreateFont();
+                    content213.SetFontAndSize(baseF213, 8);
+                    content213.BeginText();
+                    content213.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[2].PropertyAttributeName, 49, 282, 0);
+                    content213.EndText();
+                    TextField tf2160 = new TextField(writer, new Rectangle(110, 294, 130, 280), "Drapes");
+                    tf2160.BorderColor = new BaseColor(232, 232, 232);
+                    tf2160.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf2160.Options = TextField.READ_ONLY;
+                    tf2160.Text = chattelslist[2].Count != 0 ? chattelslist[2].Count.ToString() : "";
+                    tf2160.TextColor = BaseColor.BLACK;
+                    tf2160.FontSize = 8; ;
+                    writer.AddAnnotation(tf2160.GetTextField());
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 275, 23, 265), chattelslist[3].Checkbox, 23, 265);
+                    PdfContentByte content214 = writer.DirectContent;
+                    BaseFont baseF214 = BaseFont.CreateFont();
+                    content214.SetFontAndSize(baseF214, 8);
+                    content214.BeginText();
+                    content214.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[3].PropertyAttributeName, 49, 267, 0);
+                    content214.EndText();
+                    TextField tf216 = new TextField(writer, new Rectangle(110, 278, 130, 265), "Fixed");
+                    tf216.BorderColor = new BaseColor(232, 232, 232);
+                    tf216.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf216.Options = TextField.READ_ONLY;
+                    tf216.Text = chattelslist[3].Count != 0 ? chattelslist[3].Count.ToString() : "";
+                    tf216.TextColor = BaseColor.BLACK;
+                    tf216.FontSize = 8;
+                    writer.AddAnnotation(tf216.GetTextField());
+
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 260, 23, 250), chattelslist[4].Checkbox, 23, 250);
+                    PdfContentByte content215 = writer.DirectContent;
+                    BaseFont baseF215 = BaseFont.CreateFont();
+                    content215.SetFontAndSize(baseF215, 8);
+                    content215.BeginText();
+                    content215.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[4].PropertyAttributeName, 59, 252, 0);
+                    content215.EndText();
+                    TextField tf215 = new TextField(writer, new Rectangle(110, 263, 130, 250), "Dishwasher");
+                    tf215.BorderColor = new BaseColor(232, 232, 232);
+                    tf215.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf215.Options = TextField.READ_ONLY;
+                    tf215.Text = chattelslist[4].Count != 0 ? chattelslist[4].Count.ToString() : "";
+                    tf215.TextColor = BaseColor.BLACK;
+                    tf215.FontSize = 8;
+                    writer.AddAnnotation(tf215.GetTextField());
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 245, 23, 235), chattelslist[5].Checkbox, 23, 235);
+                    PdfContentByte content216 = writer.DirectContent;
+                    BaseFont baseF216 = BaseFont.CreateFont();
+                    content216.SetFontAndSize(baseF216, 8);
+                    content216.BeginText();
+                    content216.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[5].PropertyAttributeName, 71, 237, 0);
+                    content216.EndText();
+                    TextField tf2163 = new TextField(writer, new Rectangle(110, 248, 130, 235), "Fixed");
+                    tf2163.BorderColor = new BaseColor(232, 232, 232);
+                    tf2163.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf2163.Options = TextField.READ_ONLY;
+                    tf2163.Text = chattelslist[5].Count != 0 ? chattelslist[5].Count.ToString() : "";
+                    tf2163.TextColor = BaseColor.BLACK;
+                    tf2163.FontSize = 8;
+                    writer.AddAnnotation(tf2163.GetTextField());
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 230, 23, 220), chattelslist[6].Checkbox, 23, 220);
+                    PdfContentByte content217 = writer.DirectContent;
+                    BaseFont baseF217 = BaseFont.CreateFont();
+                    content217.SetFontAndSize(baseF217, 8);
+                    content217.BeginText();
+                    content217.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[6].PropertyAttributeName, 61, 222, 0);
+                    content217.EndText();
+                    TextField tf214 = new TextField(writer, new Rectangle(110, 233, 130, 220), "Garden");
+                    tf214.BorderColor = new BaseColor(232, 232, 232);
+                    tf214.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf214.Options = TextField.READ_ONLY;
+                    tf214.Text = chattelslist[6].Count != 0 ? chattelslist[6].Count.ToString() : "";
+                    tf214.TextColor = BaseColor.BLACK;
+                    tf214.FontSize = 8;
+                    writer.AddAnnotation(tf214.GetTextField());
+
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 215, 23, 205), chattelslist[7].Checkbox, 23, 205);
+                    PdfContentByte content218 = writer.DirectContent;
+                    BaseFont baseF218 = BaseFont.CreateFont();
+                    content218.SetFontAndSize(baseF218, 8);
+                    content218.BeginText();
+                    content218.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[7].PropertyAttributeName, 74, 207, 0);
+                    content218.EndText();
+                    TextField tf218 = new TextField(writer, new Rectangle(110, 218, 130, 202), "Garage");
+                    tf218.BorderColor = new BaseColor(232, 232, 232);
+                    tf218.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf218.Options = TextField.READ_ONLY;
+                    tf218.Text = chattelslist[7].Count != 0 ? chattelslist[7].Count.ToString() : "";
+                    tf218.TextColor = BaseColor.BLACK;
+                    tf218.FontSize = 8;
+                    writer.AddAnnotation(tf218.GetTextField());
+
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 200, 23, 190), chattelslist[8].Checkbox, 23, 190);
+                    PdfContentByte content219 = writer.DirectContent;
+                    BaseFont baseF219 = BaseFont.CreateFont();
+                    content219.SetFontAndSize(baseF219, 8);
+                    content219.BeginText();
+                    content219.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[8].PropertyAttributeName, 69, 192, 0);
+                    content219.EndText();
+                    TextField tf219 = new TextField(writer, new Rectangle(110, 200, 130, 185), "Heated");
+                    tf219.BorderColor = new BaseColor(232, 232, 232);
+                    tf219.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf219.Options = TextField.READ_ONLY;
+                    tf219.Text = chattelslist[8].Count != 0 ? chattelslist[8].Count.ToString() : "";
+                    tf219.TextColor = BaseColor.BLACK;
+                    tf219.FontSize = 8;
+                    writer.AddAnnotation(tf219.GetTextField());
+
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 185, 23, 175), chattelslist[9].Checkbox, 23, 175);
+                    PdfContentByte content220 = writer.DirectContent;
+                    BaseFont baseF220 = BaseFont.CreateFont();
+                    content220.SetFontAndSize(baseF220, 8);
+                    content220.BeginText();
+                    content220.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[9].PropertyAttributeName, 61, 177, 0);
+                    content220.EndText();
+                    TextField tf2190 = new TextField(writer, new Rectangle(110, 184, 130, 170), "Heated");
+                    tf2190.BorderColor = new BaseColor(232, 232, 232);
+                    tf2190.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf2190.Options = TextField.READ_ONLY;
+                    tf2190.Text = chattelslist[9].Count != 0 ? chattelslist[9].Count.ToString() : "";
+                    tf2190.TextColor = BaseColor.BLACK;
+                    tf2190.FontSize = 8;
+                    writer.AddAnnotation(tf2190.GetTextField());
+
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 170, 23, 160), chattelslist[10].Checkbox, 23, 160);
+                    PdfContentByte content221 = writer.DirectContent;
+                    BaseFont baseF221 = BaseFont.CreateFont();
+                    content221.SetFontAndSize(baseF221, 8);
+                    content221.BeginText();
+                    content221.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[10].PropertyAttributeName, 59, 162, 0);
+                    content221.EndText();
+                    TextField tf221 = new TextField(writer, new Rectangle(110, 168, 130, 157), "Heated");
+                    tf221.BorderColor = new BaseColor(232, 232, 232);
+                    tf221.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf221.Options = TextField.READ_ONLY;
+                    tf221.Text = chattelslist[10].Count != 0 ? chattelslist[10].Count.ToString() : "";
+                    tf221.TextColor = BaseColor.BLACK;
+                    tf221.FontSize = 8;
+                    writer.AddAnnotation(tf221.GetTextField());
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 155, 23, 145), chattelslist[11].Checkbox, 23, 145);
+                    PdfContentByte content222 = writer.DirectContent;
+                    BaseFont baseF222 = BaseFont.CreateFont();
+                    content222.SetFontAndSize(baseF222, 8);
+                    content222.BeginText();
+                    content222.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[11].PropertyAttributeName, 52, 147, 0);
+                    content222.EndText();
+                    TextField tf222 = new TextField(writer, new Rectangle(110, 155, 130, 144), "Fireplace");
+                    tf222.BorderColor = new BaseColor(232, 232, 232);
+                    tf222.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf222.Options = TextField.READ_ONLY;
+                    tf222.Text = chattelslist[11].Count != 0 ? chattelslist[11].Count.ToString() : "";
+                    tf222.TextColor = BaseColor.BLACK;
+                    writer.AddAnnotation(tf222.GetTextField());
+
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 140, 23, 130), chattelslist[12].Checkbox, 23, 130);
+                    PdfContentByte content223 = writer.DirectContent;
+                    BaseFont baseF223 = BaseFont.CreateFont();
+                    content223.SetFontAndSize(baseF223, 8);
+                    content223.BeginText();
+                    content223.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[12].PropertyAttributeName, 59, 132, 0);
+                    content223.EndText();
+                    TextField tf223 = new TextField(writer, new Rectangle(110, 142, 130, 129), "Rangehood");
+                    tf223.BorderColor = new BaseColor(232, 232, 232);
+                    tf223.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf223.Options = TextField.READ_ONLY;
+                    tf223.Text = chattelslist[12].Count != 0 ? chattelslist[12].Count.ToString() : "";
+                    tf223.TextColor = BaseColor.BLACK;
+                    tf223.FontSize = 8;
+                    writer.AddAnnotation(tf223.GetTextField());
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 125, 23, 115), chattelslist[13].Checkbox, 23, 115);
+                    PdfContentByte content228 = writer.DirectContent;
+                    BaseFont baseF228 = BaseFont.CreateFont();
+                    content228.SetFontAndSize(baseF228, 8);
+                    content228.BeginText();
+                    content228.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[13].PropertyAttributeName, 46, 117, 0);
+                    content228.EndText();
+                    TextField tf228 = new TextField(writer, new Rectangle(110, 128, 130, 114), "Stove");
+                    tf228.BorderColor = new BaseColor(232, 232, 232);
+                    tf228.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf228.Options = TextField.READ_ONLY;
+                    tf228.Text = chattelslist[13].Count != 0 ? chattelslist[13].Count.ToString() : "";
+                    tf228.TextColor = BaseColor.BLACK;
+                    tf228.FontSize = 8;
+                    writer.AddAnnotation(tf228.GetTextField());
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 110, 23, 100), chattelslist[14].Checkbox, 23, 100);
+                    PdfContentByte content224 = writer.DirectContent;
+                    BaseFont baseF224 = BaseFont.CreateFont();
+                    content224.SetFontAndSize(baseF224, 8);
+                    content224.BeginText();
+                    content224.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[14].PropertyAttributeName, 51, 102, 0);
+                    content224.EndText();
+                    TextField tf224 = new TextField(writer, new Rectangle(110, 113, 130, 100), "TV");
+                    tf224.BorderColor = new BaseColor(232, 232, 232);
+                    tf224.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf224.Options = TextField.READ_ONLY;
+                    tf224.Text = chattelslist[14].Count != 0 ? chattelslist[14].Count.ToString() : "";
+                    tf224.TextColor = BaseColor.BLACK;
+                    tf224.FontSize = 8;
+                    writer.AddAnnotation(tf224.GetTextField());
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 95, 23, 85), chattelslist[15].Checkbox, 23, 85);
+                    PdfContentByte content225 = writer.DirectContent;
+                    BaseFont baseF225 = BaseFont.CreateFont();
+                    content225.SetFontAndSize(baseF225, 8);
+                    content225.BeginText();
+                    content225.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[15].PropertyAttributeName, 67, 87, 0);
+                    content225.EndText();
+                    TextField tf225 = new TextField(writer, new Rectangle(110, 98, 130, 84), "Waste");
+                    tf225.BorderColor = new BaseColor(232, 232, 232);
+                    tf225.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf225.Options = TextField.READ_ONLY;
+                    tf225.Text = chattelslist[15].Count != 0 ? chattelslist[15].Count.ToString() : "";
+                    tf225.TextColor = BaseColor.BLACK;
+                    tf225.FontSize = 8;
+                    writer.AddAnnotation(tf225.GetTextField());
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 80, 23, 70), chattelslist[16].Checkbox, 23, 70);
+                    PdfContentByte content226 = writer.DirectContent;
+                    BaseFont baseF226 = BaseFont.CreateFont();
+                    content226.SetFontAndSize(baseF226, 8);
+                    content226.BeginText();
+                    content226.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[16].PropertyAttributeName, 49, 72, 0);
+                    content226.EndText();
+                    TextField tf2270 = new TextField(writer, new Rectangle(110, 82, 130, 69), "Central");
+                    tf2270.BorderColor = new BaseColor(232, 232, 232);
+                    tf2270.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf2270.Options = TextField.READ_ONLY;
+                    tf2270.Text = chattelslist[16].Count != 0 ? chattelslist[16].Count.ToString() : "";
+                    tf2270.TextColor = BaseColor.BLACK;
+                    tf2270.FontSize = 8;
+                    writer.AddAnnotation(tf2270.GetTextField());
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 65, 23, 55), chattelslist[17].Checkbox, 23, 55);
+                    PdfContentByte content227 = writer.DirectContent;
+                    BaseFont baseF227 = BaseFont.CreateFont();
+                    content227.SetFontAndSize(baseF227, 8);
+                    content227.BeginText();
+                    content227.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[17].PropertyAttributeName, 68, 57, 0);
+                    content227.EndText();
+                    TextField tf227 = new TextField(writer, new Rectangle(110, 68, 130, 55), "Central");
+                    tf227.BorderColor = new BaseColor(232, 232, 232);
+                    tf227.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf227.Options = TextField.READ_ONLY;
+                    tf227.Text = chattelslist[17].Count != 0 ? chattelslist[17].Count.ToString() : "";
+                    tf227.TextColor = BaseColor.BLACK;
+                    tf227.FontSize = 8;
+                    writer.AddAnnotation(tf227.GetTextField());
+
+
+                    //CODE FOR INSULATION CHECKBOXES
+
+
+                    var insulationlist = data.Where(w => w.Name == "Insulation").ToList();
+                    // Column 2
+
+                    PdfPTable col2Table = new PdfPTable(1);
+
+                    PdfPCell cell211 = new PdfPCell(new Phrase());
+                    cell211.FixedHeight = 98f; // Set the height of the cell
+                    cell211.BorderColor = BaseColor.BLACK;
+                    cell211.CellEvent = new RectangleOverPdfPCellBorder("Insulation", 165f, 344f, 50f, 20f, 168f, 358f);
+                    //cell211.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Insulation", 175f, 20f, 70f, 345f);
+                    col2Table.AddCell(cell211);
+
+                    //AddCheckboxField(document, writer, "myCheckbox", new Rectangle(180, 280, 180, 320), true, 40, 310);
+                    //AddCheckboxField(document, writer, "myCheckbox", new Rectangle(150, 490, 190, 320), true, 150, 465);
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 330, 165, 340), insulationlist[0].Checkbox, 155, 330);
+                    PdfContentByte content229 = writer.DirectContent;
+                    BaseFont baseF229 = BaseFont.CreateFont();
+                    content229.SetFontAndSize(baseF229, 8);
+                    content229.BeginText();
+                    content229.ShowTextAligned(PdfContentByte.ALIGN_CENTER, insulationlist[0].PropertyAttributeName, 180, 330, 0);
+                    content229.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 315, 165, 325), insulationlist[1].Checkbox, 155, 315);
+                    PdfContentByte content230 = writer.DirectContent;
+                    BaseFont baseF230 = BaseFont.CreateFont();
+                    content230.SetFontAndSize(baseF230, 8);
+                    content230.BeginText();
+                    content230.ShowTextAligned(PdfContentByte.ALIGN_CENTER, insulationlist[1].PropertyAttributeName, 180, 315, 0);
+                    content230.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 300, 165, 310), insulationlist[2].Checkbox, 155, 300);
+                    PdfContentByte content231 = writer.DirectContent;
+                    BaseFont baseF231 = BaseFont.CreateFont();
+                    content231.SetFontAndSize(baseF231, 8);
+                    content231.BeginText();
+                    content231.ShowTextAligned(PdfContentByte.ALIGN_CENTER, insulationlist[2].PropertyAttributeName, 180, 300, 0);
+                    content231.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 285, 165, 295), insulationlist[3].Checkbox, 155, 285);
+                    PdfContentByte content232 = writer.DirectContent;
+                    BaseFont baseF232 = BaseFont.CreateFont();
+                    content232.SetFontAndSize(baseF232, 8);
+                    content232.BeginText();
+                    content232.ShowTextAligned(PdfContentByte.ALIGN_CENTER, insulationlist[3].PropertyAttributeName, 180, 285, 0);
+                    content232.EndText();
+
+                    TextField tf231 = new TextField(writer, new Rectangle(156, 265, 250, 280), "Other");
+                    tf231.BorderColor = new BaseColor(232, 232, 232);
+                    tf231.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf231.Options = TextField.READ_ONLY;
+                    tf231.Text = insulationlist[3].Remarks;
+                    tf231.TextColor = BaseColor.BLACK;
+                    tf231.FontSize = 8;
+                    writer.AddAnnotation(tf231.GetTextField());
+
+
+
+                    PdfPCell blankCell16 = new PdfPCell(new Phrase(Chunk.NEWLINE));
+                    blankCell16.Border = PdfPCell.NO_BORDER;
+                    blankCell16.FixedHeight = 10f;
+                    col2Table.AddCell(blankCell16);
+
+
+                    // CODE FOR HEATING CHECKBOXES
+
+                    var heatinglist = data.Where(w => w.Name == "Heating").ToList();
+
+                    PdfPCell cell212 = new PdfPCell(new Phrase());
+                    cell212.FixedHeight = 180f; // Set the height of the cell
+                    cell212.BorderColor = BaseColor.DARK_GRAY;
+                    cell212.CellEvent = new RectangleOverPdfPCellBorder("Heating", 165f, 246f, 40f, 15f, 168f, 246f);
+                    //cell212.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Heating", 170f, 15f, 70f, 240f);
+                    col2Table.AddCell(cell212);
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 225, 165, 235), heatinglist[0].Checkbox, 155, 225);
+                    PdfContentByte content233 = writer.DirectContent;
+                    BaseFont baseF233 = BaseFont.CreateFont();
+                    content233.SetFontAndSize(baseF233, 8);
+                    content233.BeginText();
+                    content233.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[0].PropertyAttributeName, 185, 225, 0);
+                    content233.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 210, 165, 220), heatinglist[1].Checkbox, 155, 210);
+                    PdfContentByte content234 = writer.DirectContent;
+                    BaseFont baseF234 = BaseFont.CreateFont();
+                    content234.SetFontAndSize(baseF234, 8);
+                    content234.BeginText();
+                    content234.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[1].PropertyAttributeName, 195, 210, 0);
+                    content234.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 195, 165, 205), heatinglist[2].Checkbox, 155, 195);
+                    PdfContentByte content235 = writer.DirectContent;
+                    BaseFont baseF235 = BaseFont.CreateFont();
+                    content235.SetFontAndSize(baseF235, 8);
+                    content235.BeginText();
+                    content235.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[2].PropertyAttributeName, 205, 195, 0);
+                    content235.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 180, 165, 190), heatinglist[3].Checkbox, 155, 180);
+                    PdfContentByte content236 = writer.DirectContent;
+                    BaseFont baseF236 = BaseFont.CreateFont();
+                    content236.SetFontAndSize(baseF236, 8);
+                    content236.BeginText();
+                    content236.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[3].PropertyAttributeName, 185, 180, 0);
+                    content236.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 165, 165, 175), heatinglist[4].Checkbox, 155, 165);
+                    PdfContentByte content237 = writer.DirectContent;
+                    BaseFont baseF237 = BaseFont.CreateFont();
+                    content237.SetFontAndSize(baseF237, 8);
+                    content237.BeginText();
+                    content237.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[4].PropertyAttributeName, 200, 165, 0);
+                    content237.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 150, 165, 160), heatinglist[5].Checkbox, 155, 150);
+                    PdfContentByte content238 = writer.DirectContent;
+                    BaseFont baseF238 = BaseFont.CreateFont();
+                    content238.SetFontAndSize(baseF238, 8);
+                    content238.BeginText();
+                    content238.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[5].PropertyAttributeName, 190, 150, 0);
+                    content238.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 135, 165, 145), heatinglist[6].Checkbox, 155, 135);
+                    PdfContentByte content239 = writer.DirectContent;
+                    BaseFont baseF239 = BaseFont.CreateFont();
+                    content239.SetFontAndSize(baseF239, 8);
+                    content239.BeginText();
+                    content239.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[6].PropertyAttributeName, 190, 135, 0);
+                    content239.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 120, 165, 130), heatinglist[7].Checkbox, 155, 120);
+                    PdfContentByte content240 = writer.DirectContent;
+                    BaseFont baseF240 = BaseFont.CreateFont();
+                    content240.SetFontAndSize(baseF240, 8);
+                    content240.BeginText();
+                    content240.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[7].PropertyAttributeName, 180, 120, 0);
+                    content240.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 105, 165, 115), heatinglist[8].Checkbox, 155, 105);
+                    PdfContentByte content241 = writer.DirectContent;
+                    BaseFont baseF241 = BaseFont.CreateFont();
+                    content241.SetFontAndSize(baseF241, 8);
+                    content241.BeginText();
+                    content241.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[8].PropertyAttributeName, 185, 105, 0);
+                    content241.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 90, 165, 100), heatinglist[9].Checkbox, 155, 90);
+                    PdfContentByte content242 = writer.DirectContent;
+                    BaseFont baseF242 = BaseFont.CreateFont();
+                    content242.SetFontAndSize(baseF242, 8);
+                    content242.BeginText();
+                    content242.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[9].PropertyAttributeName, 190, 90, 0);
+                    content242.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 75, 165, 85), heatinglist[10].Checkbox, 155, 75);
+                    PdfContentByte content243 = writer.DirectContent;
+                    BaseFont baseF243 = BaseFont.CreateFont();
+                    content243.SetFontAndSize(baseF243, 8);
+                    content243.BeginText();
+                    content243.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[10].PropertyAttributeName, 180, 75, 0);
+                    content243.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 60, 165, 70), heatinglist[11].Checkbox, 155, 60);
+                    PdfContentByte content295 = writer.DirectContent;
+                    BaseFont baseF295 = BaseFont.CreateFont();
+                    content295.SetFontAndSize(baseF295, 8);
+                    content295.BeginText();
+                    content295.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[11].PropertyAttributeName, 190, 60, 0);
+                    content295.EndText();
+
+                    multipleMainTable.AddCell(col2Table);
+
+                    //CODE FOR INTERIOR CONDITION CHECKBOXES
+
+                    var interiorConditionlist = data.Where(w => w.Name == "Interior Condition").ToList();
+
+                    // Column 3
+                    PdfPTable col3Table = new PdfPTable(1);
+                    PdfPCell cell31 = new PdfPCell(new Phrase());
+                    cell31.FixedHeight = 80f; // Set the height of the cell
+                    cell31.BorderColor = BaseColor.BLACK;
+                    cell31.CellEvent = new RectangleOverPdfPCellBorder("Interior condition", 267f, 344f, 85f, 20f, 269f, 355f);
+                    //cell31.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Interior condition", 270f, 20f, 70f, 345f);
+                    col3Table.AddCell(cell31);
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 330, 272, 340), interiorConditionlist[0].Checkbox, 262, 330);
+                    PdfContentByte content245 = writer.DirectContent;
+                    BaseFont baseF245 = BaseFont.CreateFont();
+                    content245.SetFontAndSize(baseF245, 8);
+                    content245.BeginText();
+                    content245.ShowTextAligned(PdfContentByte.ALIGN_CENTER, interiorConditionlist[0].PropertyAttributeName, 292, 330, 0);
+                    content245.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 315, 272, 325), interiorConditionlist[1].Checkbox, 262, 315);
+                    PdfContentByte content246 = writer.DirectContent;
+                    BaseFont baseF246 = BaseFont.CreateFont();
+                    content246.SetFontAndSize(baseF246, 8);
+                    content246.BeginText();
+                    content246.ShowTextAligned(PdfContentByte.ALIGN_CENTER, interiorConditionlist[1].PropertyAttributeName, 292, 315, 0);
+                    content246.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 300, 272, 310), interiorConditionlist[2].Checkbox, 262, 300);
+                    PdfContentByte content247 = writer.DirectContent;
+                    BaseFont baseF247 = BaseFont.CreateFont();
+                    content247.SetFontAndSize(baseF247, 8);
+                    content247.BeginText();
+                    content247.ShowTextAligned(PdfContentByte.ALIGN_CENTER, interiorConditionlist[2].PropertyAttributeName, 286, 300, 0);
+                    content247.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 285, 272, 295), interiorConditionlist[3].Checkbox, 262, 285);
+                    PdfContentByte content248 = writer.DirectContent;
+                    BaseFont baseF248 = BaseFont.CreateFont();
+                    content248.SetFontAndSize(baseF248, 8);
+                    content248.BeginText();
+                    content248.ShowTextAligned(PdfContentByte.ALIGN_CENTER, interiorConditionlist[3].PropertyAttributeName, 286, 285, 0);
+                    content248.EndText();
+
+
+                    PdfPCell blankCell17 = new PdfPCell(new Phrase(Chunk.NEWLINE));
+                    blankCell17.Border = PdfPCell.NO_BORDER;
+                    blankCell17.FixedHeight = 10f;
+                    col3Table.AddCell(blankCell17);
+
+                    //CODE FOR EXTERIOR CHECKBOXES
+
+                    var exteriorList = data.Where(w => w.Name == "Exterior").ToList();
+
+                    PdfPCell cell32 = new PdfPCell(new Phrase());
+                    cell32.FixedHeight = 55f; // Set the height of the cell
+                    cell32.BorderColor = BaseColor.DARK_GRAY;
+                    cell32.CellEvent = new RectangleOverPdfPCellBorder("Exterior", 270f, 265f, 45f, 14f, 272f, 265f);
+                    //cell32.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Exterior", 270f, 20f, 70f, 255f);
+                    col3Table.AddCell(cell32);
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 240, 272, 230), exteriorList[0].Checkbox, 262, 230);
+                    PdfContentByte content249 = writer.DirectContent;
+                    BaseFont baseF249 = BaseFont.CreateFont();
+                    content249.SetFontAndSize(baseF249, 8);
+                    content249.BeginText();
+                    content249.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[0].PropertyAttributeName, 309, 230, 0);
+                    content249.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 225, 272, 215), exteriorList[1].Checkbox, 262, 215);
+                    PdfContentByte content250 = writer.DirectContent;
+                    BaseFont baseF250 = BaseFont.CreateFont();
+                    content250.SetFontAndSize(baseF250, 8);
+                    content250.BeginText();
+                    content250.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[1].PropertyAttributeName, 317, 215, 0);
+                    content250.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 210, 272, 200), exteriorList[2].Checkbox, 262, 200);
+                    PdfContentByte content251 = writer.DirectContent;
+                    BaseFont baseF251 = BaseFont.CreateFont();
+                    content251.SetFontAndSize(baseF251, 8);
+                    content251.BeginText();
+                    content251.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[2].PropertyAttributeName, 312, 200, 0);
+                    content251.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 195, 272, 185), exteriorList[3].Checkbox, 262, 185);
+                    PdfContentByte content252 = writer.DirectContent;
+                    BaseFont baseF252 = BaseFont.CreateFont();
+                    content252.SetFontAndSize(baseF252, 8);
+                    content252.BeginText();
+                    content252.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[3].PropertyAttributeName, 304, 185, 0);
+                    content252.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 180, 272, 170), exteriorList[4].Checkbox, 262, 170);
+                    PdfContentByte content253 = writer.DirectContent;
+                    BaseFont baseF253 = BaseFont.CreateFont();
+                    content253.SetFontAndSize(baseF253, 8);
+                    content253.BeginText();
+                    content253.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[4].PropertyAttributeName, 314, 170, 0);
+                    content253.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 165, 272, 155), exteriorList[5].Checkbox, 262, 155);
+                    PdfContentByte content254 = writer.DirectContent;
+                    BaseFont baseF254 = BaseFont.CreateFont();
+                    content254.SetFontAndSize(baseF254, 8);
+                    content254.BeginText();
+                    content254.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[5].PropertyAttributeName, 302, 155, 0);
+                    content254.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 150, 272, 140), exteriorList[6].Checkbox, 262, 140);
+                    PdfContentByte content255 = writer.DirectContent;
+                    BaseFont baseF255 = BaseFont.CreateFont();
+                    content255.SetFontAndSize(baseF255, 8);
+                    content255.BeginText();
+                    content255.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[6].PropertyAttributeName, 299, 140, 0);
+                    content255.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 135, 272, 125), exteriorList[7].Checkbox, 262, 125);
+                    PdfContentByte content256 = writer.DirectContent;
+                    BaseFont baseF256 = BaseFont.CreateFont();
+                    content256.SetFontAndSize(baseF256, 8);
+                    content256.BeginText();
+                    content256.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[7].PropertyAttributeName, 290, 125, 0);
+                    content256.EndText();
+
+                    PdfContentByte cb221 = writer.DirectContent;
+                    BaseFont bf221 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
+                    string text221 = "Other comments";
+                    cb221.BeginText();
+                    cb221.SetFontAndSize(bf221, 8);
+                    // 2ut the alignment and coordinates here
+                    cb221.ShowTextAligned(1, text221, 295, 110, 0);
+                    cb221.EndText();
+                    TextField tf321 = new TextField(writer, new Rectangle(262, 105, 350, 90), "Central");
+                    tf321.BorderColor = new BaseColor(232, 232, 232);
+                    tf321.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf321.Options = TextField.READ_ONLY;
+                    tf321.Text = exteriorList[7].Remarks;
+                    tf321.TextColor = BaseColor.BLACK;
+                    tf321.FontSize = 8;
+                    writer.AddAnnotation(tf321.GetTextField());
+
+                    multipleMainTable.AddCell(col3Table);
+
+
+
+                    //CODE FOR FLOORING CHECKBOXES
+
+                    var flooringlist = data.Where(w => w.Name == "Floring").ToList();
+                    // Column 4
+                    PdfPTable col4Table = new PdfPTable(1);
+                    PdfPCell cell41 = new PdfPCell(new Phrase());
+                    cell41.FixedHeight = 125f; // Set the height of the cell
+                    cell41.BorderColor = BaseColor.BLACK;
+                    cell41.CellEvent = new RectangleOverPdfPCellBorder("Flooring", 370f, 343f, 44f, 20f, 372f, 358f);
+                    //cell41.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Flooring", 370f, 20f, 70f, 345f);
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 330, 380, 340), flooringlist[0].Checkbox, 370, 330);
+                    PdfContentByte content257 = writer.DirectContent;
+                    BaseFont baseF257 = BaseFont.CreateFont();
+                    content257.SetFontAndSize(baseF257, 8);
+                    content257.BeginText();
+                    content257.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[0].PropertyAttributeName, 393, 330, 0);
+                    content257.EndText();
+
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 315, 380, 325), flooringlist[1].Checkbox, 370, 315);
+                    PdfContentByte content258 = writer.DirectContent;
+                    BaseFont baseF258 = BaseFont.CreateFont();
+                    content258.SetFontAndSize(baseF258, 8);
+                    content258.BeginText();
+                    content258.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[1].PropertyAttributeName, 396, 315, 0);
+                    content258.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 300, 380, 310), flooringlist[2].Checkbox, 370, 300);
+                    PdfContentByte content259 = writer.DirectContent;
+                    BaseFont baseF259 = BaseFont.CreateFont();
+                    content259.SetFontAndSize(baseF259, 8);
+                    content259.BeginText();
+                    content259.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[2].PropertyAttributeName, 390, 300, 0);
+                    content259.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 285, 380, 295), flooringlist[3].Checkbox, 370, 285);
+                    PdfContentByte content260 = writer.DirectContent;
+                    BaseFont baseF260 = BaseFont.CreateFont();
+                    content260.SetFontAndSize(baseF260, 8);
+                    content260.BeginText();
+                    content260.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[3].PropertyAttributeName, 393, 285, 0);
+                    content260.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 270, 380, 280), flooringlist[4].Checkbox, 370, 270);
+                    PdfContentByte content261 = writer.DirectContent;
+                    BaseFont baseF261 = BaseFont.CreateFont();
+                    content261.SetFontAndSize(baseF261, 8);
+                    content261.BeginText();
+                    content261.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[4].PropertyAttributeName, 390, 270, 0);
+                    content261.EndText();
+
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 255, 380, 265), flooringlist[5].Checkbox, 370, 255);
+                    PdfContentByte content262 = writer.DirectContent;
+                    BaseFont baseF262 = BaseFont.CreateFont();
+                    content262.SetFontAndSize(baseF262, 8);
+                    content262.BeginText();
+                    content262.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[5].PropertyAttributeName, 393, 255, 0);
+                    content262.EndText();
+
+                    TextField tf232 = new TextField(writer, new Rectangle(370, 250, 450, 240), "Other");
+                    tf232.BorderColor = new BaseColor(232, 232, 232);
+                    tf232.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf232.Options = TextField.READ_ONLY;
+                    tf232.Text = flooringlist[5].Remarks;
+                    tf232.TextColor = BaseColor.BLACK;
+                    tf232.FontSize = 8;
+                    writer.AddAnnotation(tf232.GetTextField());
+
+
+
+
+                    //CODE FOR GARAGE CHECKBOXES
+
+                    var garagelist = data.Where(w => w.Name == "Garage").ToList();
+
+                    PdfPCell cell42 = new PdfPCell(new Phrase());
+                    cell42.FixedHeight = 60f; // Set the height of the cell
+                    cell42.BorderColor = BaseColor.DARK_GRAY;
+                    cell42.CellEvent = new RectangleOverPdfPCellBorder("Garage", 370f, 220f, 38f, 14f, 372f, 220f);
+                    //cell42.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Garage", 370f, 15f, 70f, 218f);
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 200, 380, 190), garagelist[0].Checkbox, 370, 190);
+                    PdfContentByte content263 = writer.DirectContent;
+                    BaseFont baseF263 = BaseFont.CreateFont();
+                    content263.SetFontAndSize(baseF263, 8);
+                    content263.BeginText();
+                    content263.ShowTextAligned(PdfContentByte.ALIGN_CENTER, garagelist[0].PropertyAttributeName, 397, 190, 0);
+                    content263.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 185, 380, 175), garagelist[1].Checkbox, 370, 175);
+                    PdfContentByte content264 = writer.DirectContent;
+                    BaseFont baseF264 = BaseFont.CreateFont();
+                    content264.SetFontAndSize(baseF264, 8);
+                    content264.BeginText();
+                    content264.ShowTextAligned(PdfContentByte.ALIGN_CENTER, garagelist[1].PropertyAttributeName, 400, 175, 0);
+                    content264.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 170, 380, 160), garagelist[2].Checkbox, 370, 160);
+                    PdfContentByte content265 = writer.DirectContent;
+                    BaseFont baseF265 = BaseFont.CreateFont();
+                    content265.SetFontAndSize(baseF265, 8);
+                    content265.BeginText();
+                    content265.ShowTextAligned(PdfContentByte.ALIGN_CENTER, garagelist[2].PropertyAttributeName, 400, 160, 0);
+                    content265.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 155, 380, 145), garagelist[3].Checkbox, 370, 145);
+                    PdfContentByte content266 = writer.DirectContent;
+                    BaseFont baseF266 = BaseFont.CreateFont();
+                    content266.SetFontAndSize(baseF266, 8);
+                    content266.BeginText();
+                    content266.ShowTextAligned(PdfContentByte.ALIGN_CENTER, garagelist[3].PropertyAttributeName, 413, 145, 0);
+                    content266.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 140, 380, 130), garagelist[4].Checkbox, 370, 130);
+                    PdfContentByte content267 = writer.DirectContent;
+                    BaseFont baseF267 = BaseFont.CreateFont();
+                    content267.SetFontAndSize(baseF267, 8);
+                    content267.BeginText();
+                    content267.ShowTextAligned(PdfContentByte.ALIGN_CENTER, garagelist[4].PropertyAttributeName, 415, 130, 0);
+                    content267.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 125, 380, 115), garagelist[5].Checkbox, 370, 115);
+                    PdfContentByte content268 = writer.DirectContent;
+                    BaseFont baseF268 = BaseFont.CreateFont();
+                    content268.SetFontAndSize(baseF268, 8);
+                    content268.BeginText();
+                    content268.ShowTextAligned(PdfContentByte.ALIGN_CENTER, garagelist[5].PropertyAttributeName, 413, 115, 0);
+                    content268.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 110, 380, 100), garagelist[6].Checkbox, 370, 100);
+                    PdfContentByte content269 = writer.DirectContent;
+                    BaseFont baseF269 = BaseFont.CreateFont();
+                    content269.SetFontAndSize(baseF269, 8);
+                    content269.BeginText();
+                    content269.ShowTextAligned(PdfContentByte.ALIGN_CENTER, garagelist[6].PropertyAttributeName, 405, 100, 0);
+                    content269.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 95, 380, 85), garagelist[7].Checkbox, 370, 85);
+                    PdfContentByte content270 = writer.DirectContent;
+                    BaseFont baseF270 = BaseFont.CreateFont();
+                    content270.SetFontAndSize(baseF270, 8);
+                    content270.BeginText();
+                    content270.ShowTextAligned(PdfContentByte.ALIGN_CENTER, garagelist[7].PropertyAttributeName, 400, 85, 0);
+                    content270.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 80, 380, 70), garagelist[8].Checkbox, 370, 70);
+                    PdfContentByte content271 = writer.DirectContent;
+                    BaseFont baseF271 = BaseFont.CreateFont();
+                    content271.SetFontAndSize(baseF271, 8);
+                    content271.BeginText();
+                    content271.ShowTextAligned(PdfContentByte.ALIGN_CENTER, garagelist[8].PropertyAttributeName, 422, 70, 0);
+                    content271.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 65, 380, 55), garagelist[9].Checkbox, 370, 55);
+                    PdfContentByte content272 = writer.DirectContent;
+                    BaseFont baseF272 = BaseFont.CreateFont();
+                    content272.SetFontAndSize(baseF272, 8);
+                    content272.BeginText();
+                    content272.ShowTextAligned(PdfContentByte.ALIGN_CENTER, garagelist[9].PropertyAttributeName, 410, 55, 0);
+                    content272.EndText();
+
+                    col4Table.AddCell(cell41);
+
+                    PdfPCell blankCell18 = new PdfPCell(new Phrase(Chunk.NEWLINE));
+                    blankCell18.Border = PdfPCell.NO_BORDER;
+                    blankCell18.FixedHeight = 10f;
+                    col4Table.AddCell(blankCell18);
+
+                    col4Table.AddCell(cell42);
+                    multipleMainTable.AddCell(col4Table);
+
+
+
+
+                    //CODE FOR WATER CHECKBOXES
+
+                    var waterlist = data.Where(w => w.Name == "Water").ToList();
+                    // Column 5
+                    PdfPTable col5Table = new PdfPTable(1);
+                    PdfPCell cell51 = new PdfPCell(new Phrase());
+                    cell51.FixedHeight = 93f; // Set the height of the cell
+                    cell51.CellEvent = new RectangleOverPdfPCellBorder("Water", 485f, 344f, 35f, 20f, 487f, 355f);
+                    //cell51.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Water", 485f, 20f, 70f, 345f);
+                    cell51.BorderColor = BaseColor.DARK_GRAY;
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 335, 490, 345), waterlist[0].Checkbox, 480, 335);
+                    PdfContentByte content273 = writer.DirectContent;
+                    BaseFont baseF273 = BaseFont.CreateFont();
+                    content273.SetFontAndSize(baseF273, 8);
+                    content273.BeginText();
+                    content273.ShowTextAligned(PdfContentByte.ALIGN_CENTER, waterlist[0].PropertyAttributeName, 502, 335, 0);
+                    content273.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 320, 490, 330), waterlist[1].Checkbox, 480, 320);
+                    PdfContentByte content274 = writer.DirectContent;
+                    BaseFont baseF274 = BaseFont.CreateFont();
+                    content274.SetFontAndSize(baseF274, 8);
+                    content274.BeginText();
+                    content274.ShowTextAligned(PdfContentByte.ALIGN_CENTER, waterlist[1].PropertyAttributeName, 502, 320, 0);
+                    content274.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 305, 490, 315), waterlist[2].Checkbox, 480, 305);
+                    PdfContentByte content275 = writer.DirectContent;
+                    BaseFont baseF275 = BaseFont.CreateFont();
+                    content275.SetFontAndSize(baseF275, 8);
+                    content275.BeginText();
+                    content275.ShowTextAligned(PdfContentByte.ALIGN_CENTER, waterlist[2].PropertyAttributeName, 502, 305, 0);
+                    content275.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 290, 490, 300), waterlist[3].Checkbox, 480, 290);
+                    PdfContentByte content276 = writer.DirectContent;
+                    BaseFont baseF276 = BaseFont.CreateFont();
+                    content276.SetFontAndSize(baseF276, 8);
+                    content276.BeginText();
+                    content276.ShowTextAligned(PdfContentByte.ALIGN_CENTER, waterlist[3].PropertyAttributeName, 502, 290, 0);
+                    content276.EndText();
+
+
+                    TextField tf233 = new TextField(writer, new Rectangle(480, 270, 550, 285), "Central");
+                    tf233.BorderColor = new BaseColor(232, 232, 232);
+                    tf233.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf233.Options = TextField.READ_ONLY;
+                    tf233.Text = waterlist[3].Remarks;
+                    tf233.TextColor = BaseColor.BLACK;
+                    tf233.FontSize = 8;
+                    writer.AddAnnotation(tf233.GetTextField());
+                    col5Table.AddCell(cell51);
+
+
+                    PdfPCell blankCell19 = new PdfPCell(new Phrase(Chunk.NEWLINE));
+                    blankCell19.Border = PdfPCell.NO_BORDER;
+                    blankCell19.FixedHeight = 10f;
+                    col5Table.AddCell(blankCell19);
+
+
+
+
+
+                    //CODE FOR FRONTAGE CHECKBOXES
+
+                    var frontageList = data.Where(w => w.Name == "Frontage").ToList();
+
+                    PdfPCell cell52 = new PdfPCell(new Phrase());
+                    cell52.FixedHeight = 50f; // Set the height of the cell
+                    cell52.BorderColor = BaseColor.DARK_GRAY;
+                    cell52.CellEvent = new RectangleOverPdfPCellBorder("Frontage", 485f, 250f, 48f, 15f, 487f, 250f);
+                    //cell52.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Frontage", 485f, 15f, 70f, 245f);
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 235, 490, 245), frontageList[0].Checkbox, 480, 235);
+                    PdfContentByte content277 = writer.DirectContent;
+                    BaseFont baseF277 = BaseFont.CreateFont();
+                    content277.SetFontAndSize(baseF277, 8);
+                    content277.BeginText();
+                    content277.ShowTextAligned(PdfContentByte.ALIGN_CENTER, frontageList[0].PropertyAttributeName, 502, 235, 0);
+                    content277.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 220, 490, 230), frontageList[1].Checkbox, 480, 220);
+                    PdfContentByte content278 = writer.DirectContent;
+                    BaseFont baseF278 = BaseFont.CreateFont();
+                    content278.SetFontAndSize(baseF278, 8);
+                    content278.BeginText();
+                    content278.ShowTextAligned(PdfContentByte.ALIGN_CENTER, frontageList[1].PropertyAttributeName, 502, 220, 0);
+                    content278.EndText();
+
+                    col5Table.AddCell(cell52);
+
+
+                    PdfPCell blankCell20 = new PdfPCell(new Phrase(Chunk.NEWLINE));
+                    blankCell20.Border = PdfPCell.NO_BORDER;
+                    blankCell20.FixedHeight = 10f;
+                    col5Table.AddCell(blankCell20);
+
+
+
+                    //CODE FOR LEVELS CHECKBOXES
+
+                    var levelsList = data.Where(w => w.Name == "Level").ToList();
+
+                    PdfPCell cell53 = new PdfPCell(new Phrase());
+                    cell53.FixedHeight = 55f; // Set the height of the cell
+                    cell53.BorderColor = BaseColor.DARK_GRAY;
+                    cell53.CellEvent = new RectangleOverPdfPCellBorder("Levels", 485f, 190f, 40f, 15f, 485f, 193f);
+                    //cell53.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Levels", 485f, 15f, 70f, 190f);
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 175, 490, 185), levelsList[0].Checkbox, 480, 175);
+                    PdfContentByte content279 = writer.DirectContent;
+                    BaseFont baseF279 = BaseFont.CreateFont();
+                    content279.SetFontAndSize(baseF279, 8);
+                    content279.BeginText();
+                    content279.ShowTextAligned(PdfContentByte.ALIGN_CENTER, levelsList[0].PropertyAttributeName, 518, 175, 0);
+                    content279.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 160, 490, 170), levelsList[1].Checkbox, 480, 160);
+                    PdfContentByte content280 = writer.DirectContent;
+                    BaseFont baseF280 = BaseFont.CreateFont();
+                    content280.SetFontAndSize(baseF280, 8);
+                    content280.BeginText();
+                    content280.ShowTextAligned(PdfContentByte.ALIGN_CENTER, levelsList[1].PropertyAttributeName, 518, 160, 0);
+                    content280.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 145, 490, 155), levelsList[2].Checkbox, 480, 145);
+                    PdfContentByte content281 = writer.DirectContent;
+                    BaseFont baseF281 = BaseFont.CreateFont();
+                    content281.SetFontAndSize(baseF281, 8);
+                    content281.BeginText();
+                    content281.ShowTextAligned(PdfContentByte.ALIGN_CENTER, levelsList[2].PropertyAttributeName, 518, 145, 0);
+                    content281.EndText();
+
+
+                    //CODE FOR AMENITIES CHECKBOXES
+
+                    var amenitiesList = data.Where(w => w.Name == "Amenities").ToList();
+
+                    PdfPCell cell54 = new PdfPCell(new Phrase());
+                    cell54.FixedHeight = 30f; // Set the height of the cell
+                    cell54.BorderColor = BaseColor.BLACK;
+                    cell54.CellEvent = new RectangleOverPdfPCellBorder("Amenities", 485f, 120f, 40f, 20f, 485f, 120f);
+                    //cell54.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Amenities", 485f, 15f, 70f, 120f);
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 100, 490, 110), amenitiesList[0].Checkbox, 480, 100);
+                    PdfContentByte content282 = writer.DirectContent;
+                    BaseFont baseF282 = BaseFont.CreateFont();
+                    content282.SetFontAndSize(baseF282, 8);
+                    content282.BeginText();
+                    content282.ShowTextAligned(PdfContentByte.ALIGN_CENTER, amenitiesList[0].PropertyAttributeName, 518, 100, 0);
+                    content282.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 85, 490, 95), amenitiesList[1].Checkbox, 480, 85);
+                    PdfContentByte content283 = writer.DirectContent;
+                    BaseFont baseF283 = BaseFont.CreateFont();
+                    content283.SetFontAndSize(baseF283, 8);
+                    content283.BeginText();
+                    content283.ShowTextAligned(PdfContentByte.ALIGN_CENTER, amenitiesList[1].PropertyAttributeName, 522, 85, 0);
+                    content283.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 70, 490, 80), amenitiesList[2].Checkbox, 480, 70);
+                    PdfContentByte content284 = writer.DirectContent;
+                    BaseFont baseF284 = BaseFont.CreateFont();
+                    content284.SetFontAndSize(baseF284, 8);
+                    content284.BeginText();
+                    content284.ShowTextAligned(PdfContentByte.ALIGN_CENTER, amenitiesList[2].PropertyAttributeName, 520, 70, 0);
+                    content284.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 55, 490, 65), amenitiesList[3].Checkbox, 480, 55);
+                    PdfContentByte content285 = writer.DirectContent;
+                    BaseFont baseF285 = BaseFont.CreateFont();
+                    content285.SetFontAndSize(baseF283, 8);
+                    content285.BeginText();
+                    content285.ShowTextAligned(PdfContentByte.ALIGN_CENTER, amenitiesList[3].PropertyAttributeName, 521, 55, 0);
+                    content285.EndText();
+
+                    col5Table.AddCell(cell53);
+
+                    PdfPCell blankCell21 = new PdfPCell(new Phrase(Chunk.NEWLINE));
+                    blankCell21.Border = PdfPCell.NO_BORDER;
+                    blankCell21.FixedHeight = 10f;
+                    col5Table.AddCell(blankCell21);
+
+                    col5Table.AddCell(cell54);
+                    multipleMainTable.AddCell(col5Table);
+                    col1Table.DefaultCell.Border = 0;
+                    col2Table.DefaultCell.Border = 0;
+                    col3Table.DefaultCell.Border = 0;
+                    col4Table.DefaultCell.Border = 0;
+                    col5Table.DefaultCell.Border = 0;
+                    // Add the main table to the document
+                    document.Add(multipleMainTable);
+
+
+                    PdfPCell leftCell2 = new PdfPCell(new Phrase("PROPERTY INFORMATION", GetFont()));
+                    leftCell2.Border = Rectangle.NO_BORDER;
+
+                    table.AddCell(leftCell2);
+                    document.Add(table);
+
+
+
+                    PdfPTable multipleMainTable1 = new PdfPTable(5);
+                    multipleMainTable1.WidthPercentage = 108;
+                    multipleMainTable1.SpacingBefore = 10f;
+                    multipleMainTable1.DefaultCell.Border = 0;
+
+                    float[] columnWidths1 = new float[] { 36f, 36f, 30f, 30f, 30f };
+                    multipleMainTable1.SetWidths(columnWidths1);
+                    // Step 5: Create the cells for each column using nested tables
+
+                    // Column 1
+                    PdfPTable col1Table1 = new PdfPTable(1);
+                    col1Table1.SpacingBefore = 5f;
+                    col1Table1.SpacingAfter = 5f;
+                    PdfPCell cell111 = new PdfPCell(new Phrase());
+                    cell111.FixedHeight = 100f; // Set the height of the cell
+                    cell111.BorderColor = BaseColor.BLACK;
+                    //cell111.Padding = 10;
+                    col1Table1.AddCell(cell111);
+
+
+                    //CHECKBOX FIELDS FOR CHATTELS
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 720, 23, 730), chattelslist[18].Checkbox, 23, 720);
+                    PdfContentByte content301 = writer.DirectContent;
+                    BaseFont baseF301 = BaseFont.CreateFont();
+                    content301.SetFontAndSize(baseF301, 8);
+                    content301.BeginText();
+                    content301.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[18].PropertyAttributeName, 55, 720, 0);
+                    content301.EndText();
+                    TextField tf301 = new TextField(writer, new Rectangle(115, 720, 135, 735), "Wall oven");
+                    tf301.BorderColor = new BaseColor(232, 232, 232);
+                    tf301.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf301.Options = TextField.READ_ONLY;
+                    tf301.Text = chattelslist[18].Count != 0 ? chattelslist[18].Count.ToString() : "";
+                    tf301.TextColor = BaseColor.BLACK;
+                    tf301.FontSize = 8;
+                    writer.AddAnnotation(tf301.GetTextField());
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 705, 23, 715), chattelslist[19].Checkbox, 23, 705);
+                    PdfContentByte content302 = writer.DirectContent;
+                    BaseFont baseF302 = BaseFont.CreateFont();
+                    content302.SetFontAndSize(baseF302, 8);
+                    content302.BeginText();
+                    content302.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[19].PropertyAttributeName, 67, 705, 0);
+                    content302.EndText();
+                    TextField tf302 = new TextField(writer, new Rectangle(115, 705, 135, 718), "Smoke detectors");
+                    tf302.BorderColor = new BaseColor(232, 232, 232);
+                    tf302.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf302.Options = TextField.READ_ONLY;
+                    tf302.Text = chattelslist[19].Count != 0 ? chattelslist[19].Count.ToString() : "";
+                    tf302.TextColor = BaseColor.BLACK;
+                    tf302.FontSize = 8;
+                    writer.AddAnnotation(tf302.GetTextField());
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 690, 23, 700), chattelslist[20].Checkbox, 23, 690);
+                    PdfContentByte content303 = writer.DirectContent;
+                    BaseFont baseF303 = BaseFont.CreateFont();
+                    content303.SetFontAndSize(baseF303, 8);
+                    content303.BeginText();
+                    content303.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[20].PropertyAttributeName, 66, 690, 0);
+                    content303.EndText();
+                    TextField tf303 = new TextField(writer, new Rectangle(115, 687, 135, 703), "Security system");
+                    tf303.BorderColor = new BaseColor(232, 232, 232);
+                    tf303.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf303.Options = TextField.READ_ONLY;
+                    tf303.Text = chattelslist[20].Count != 0 ? chattelslist[20].Count.ToString() : "";
+                    tf303.TextColor = BaseColor.BLACK;
+                    tf303.FontSize = 8;
+                    writer.AddAnnotation(tf303.GetTextField());
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 675, 23, 685), chattelslist[21].Checkbox, 23, 675);
+                    PdfContentByte content304 = writer.DirectContent;
+                    BaseFont baseF304 = BaseFont.CreateFont();
+                    content304.SetFontAndSize(baseF304, 8);
+                    content304.BeginText();
+                    content304.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[21].PropertyAttributeName, 76, 675, 0);
+                    content304.EndText();
+                    TextField tf304 = new TextField(writer, new Rectangle(115, 686, 135, 672), "Bathroom extractorfan");
+                    tf304.BorderColor = new BaseColor(232, 232, 232);
+                    tf304.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf304.Options = TextField.READ_ONLY;
+                    tf304.Text = chattelslist[21].Count != 0 ? chattelslist[21].Count.ToString() : "";
+                    tf304.TextColor = BaseColor.BLACK;
+                    tf304.FontSize = 8;
+                    writer.AddAnnotation(tf304.GetTextField());
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 660, 23, 670), chattelslist[22].Checkbox, 23, 660);
+                    PdfContentByte content305 = writer.DirectContent;
+                    BaseFont baseF305 = BaseFont.CreateFont();
+                    content305.SetFontAndSize(baseF305, 8);
+                    content305.BeginText();
+                    content305.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[22].PropertyAttributeName, 49, 660, 0);
+                    content305.EndText();
+
+                    TextField tf01 = new TextField(writer, new Rectangle(23, 655, 130, 640), "othertestfield");
+                    tf01.BorderColor = new BaseColor(232, 232, 232);
+                    tf01.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf01.Options = TextField.READ_ONLY;
+                    tf01.FontSize = 8;
+                    tf01.Text = chattelslist[22].Remarks;
+                    tf01.TextColor = BaseColor.BLACK;
+                    writer.AddAnnotation(tf01.GetTextField());
+
+
+                    PdfPCell blankCell5 = new PdfPCell(new Phrase(Chunk.NEWLINE));
+                    blankCell5.Border = PdfPCell.NO_BORDER;
+                    blankCell5.FixedHeight = 10f;
+                    col1Table1.AddCell(blankCell5);
+
+                    // CODE FOR OTHER ROOMS CHECKBOXES
+
+                    var otherrroomslist = data.Where(w => w.Name == "Other Rooms").ToList();
+
+                    PdfPCell cell112 = new PdfPCell(new Phrase());
+                    cell112.FixedHeight = 275f; // Set the height of the cell
+                    cell112.BorderColor = BaseColor.BLACK;
+                    cell112.Padding = 10;
+                    cell112.CellEvent = new RectangleOverPdfPCellBorder("Other rooms", 30f, 620f, 68f, 15f, 33f, 624f);
+                    //cell112.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Other rooms", 50f, 20f, 70f, 610);
+                    col1Table1.AddCell(cell112);
+
+
+
+                    //CHECKBOX FIELDS
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 610, 23, 600), otherrroomslist[0].Checkbox, 23, 600);
+                    PdfContentByte content306 = writer.DirectContent;
+                    BaseFont baseF306 = BaseFont.CreateFont();
+                    content306.SetFontAndSize(baseF306, 8);
+                    content306.BeginText();
+                    content306.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[0].PropertyAttributeName, 62, 600, 0);
+                    content306.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 595, 23, 585), (otherrroomslist[1].Checkbox != null ? otherrroomslist[1].Checkbox : false), 23, 585);
+                    PdfContentByte content307 = writer.DirectContent;
+                    BaseFont baseF307 = BaseFont.CreateFont();
+                    content307.SetFontAndSize(baseF307, 8);
+                    content307.BeginText();
+                    content307.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[1].PropertyAttributeName, 64, 585, 0);
+                    content307.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 580, 23, 570), otherrroomslist[2].Checkbox, 23, 570);
+                    PdfContentByte content308 = writer.DirectContent;
+                    BaseFont baseF308 = BaseFont.CreateFont();
+                    content308.SetFontAndSize(baseF308, 8);
+                    content308.BeginText();
+                    content308.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[2].PropertyAttributeName, 51, 570, 0);
+                    content308.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 565, 23, 555), otherrroomslist[3].Checkbox, 23, 555);
+                    PdfContentByte content309 = writer.DirectContent;
+                    BaseFont baseF309 = BaseFont.CreateFont();
+                    content309.SetFontAndSize(baseF309, 8);
+                    content309.BeginText();
+                    content309.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[3].PropertyAttributeName, 57, 555, 0);
+                    content309.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 550, 23, 540), otherrroomslist[4].Checkbox, 23, 540);
+                    PdfContentByte content310 = writer.DirectContent;
+                    BaseFont baseF310 = BaseFont.CreateFont();
+                    content310.SetFontAndSize(baseF310, 8);
+                    content310.BeginText();
+                    content310.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[4].PropertyAttributeName, 49, 540, 0);
+                    content310.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 535, 23, 525), otherrroomslist[5].Checkbox, 23, 525);
+                    PdfContentByte content311 = writer.DirectContent;
+                    BaseFont baseF311 = BaseFont.CreateFont();
+                    content311.SetFontAndSize(baseF311, 8);
+                    content311.BeginText();
+                    content311.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[5].PropertyAttributeName, 56, 525, 0);
+                    content311.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 520, 23, 510), otherrroomslist[6].Checkbox, 23, 510);
+                    PdfContentByte content312 = writer.DirectContent;
+                    BaseFont baseF312 = BaseFont.CreateFont();
+                    content312.SetFontAndSize(baseF312, 8);
+                    content312.BeginText();
+                    content312.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[6].PropertyAttributeName, 57, 510, 0);
+                    content312.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 505, 23, 495), otherrroomslist[7].Checkbox, 23, 495);
+                    PdfContentByte content313 = writer.DirectContent;
+                    BaseFont baseF313 = BaseFont.CreateFont();
+                    content313.SetFontAndSize(baseF313, 8);
+                    content313.BeginText();
+                    content313.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[7].PropertyAttributeName, 63, 495, 0);
+                    content313.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 490, 23, 480), otherrroomslist[8].Checkbox, 23, 480);
+                    PdfContentByte content314 = writer.DirectContent;
+                    BaseFont baseF314 = BaseFont.CreateFont();
+                    content314.SetFontAndSize(baseF314, 8);
+                    content314.BeginText();
+                    content314.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[8].PropertyAttributeName, 55, 480, 0);
+                    content314.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 475, 23, 465), otherrroomslist[9].Checkbox, 23, 465);
+                    PdfContentByte content315 = writer.DirectContent;
+                    BaseFont baseF315 = BaseFont.CreateFont();
+                    content315.SetFontAndSize(baseF315, 8);
+                    content315.BeginText();
+                    content315.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[9].PropertyAttributeName, 63, 465, 0);
+                    content315.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 460, 23, 450), otherrroomslist[10].Checkbox, 23, 450);
+                    PdfContentByte content316 = writer.DirectContent;
+                    BaseFont baseF316 = BaseFont.CreateFont();
+                    content316.SetFontAndSize(baseF316, 8);
+                    content316.BeginText();
+                    content316.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[10].PropertyAttributeName, 59, 450, 0);
+                    content316.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 445, 23, 435), otherrroomslist[11].Checkbox, 23, 435);
+                    PdfContentByte content317 = writer.DirectContent;
+                    BaseFont baseF317 = BaseFont.CreateFont();
+                    content317.SetFontAndSize(baseF317, 8);
+                    content317.BeginText();
+                    content317.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[11].PropertyAttributeName, 50, 435, 0);
+                    content317.EndText();
+
+                    TextField tf02 = new TextField(writer, new Rectangle(23, 430, 130, 410), "Other");
+                    tf02.BorderColor = new BaseColor(232, 232, 232);
+                    tf02.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf02.Options = TextField.READ_ONLY;
+                    tf02.Text = otherrroomslist[11].Remarks;
+                    tf02.TextColor = BaseColor.BLACK;
+                    tf02.FontSize = 8;
+                    writer.AddAnnotation(tf02.GetTextField());
+
+                    PdfContentByte cb01 = writer.DirectContent;
+                    BaseFont bf01 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
+                    string text01 = "Bedrooms";
+                    cb01.BeginText();
+                    cb01.SetFontAndSize(bf01, 8);
+                    // 2ut the alignment and coordinates here
+                    cb01.ShowTextAligned(1, text01, 45, 400, 0);
+                    cb01.EndText();
+
+                    PdfContentByte content286 = writer.DirectContent;
+                    BaseFont baseF286 = BaseFont.CreateFont();
+                    content286.SetFontAndSize(baseF286, 8);
+                    content286.BeginText();
+                    content286.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Double", 33, 390, 0);
+                    content286.EndText();
+                    TextField tf03 = new TextField(writer, new Rectangle(53, 395, 130, 380), "Double");
+                    tf03.BorderColor = new BaseColor(232, 232, 232);
+                    tf03.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf03.Options = TextField.READ_ONLY;
+                    //tf03.Text = othercommentList[0].Double;
+                    if (othercommentList.Count > 0)
+                    {
+                        tf03.Text = othercommentList[0].Double;
+                    }
+                    else
+                    {
+                        // Handle the case when othercommentList is empty
+                        tf03.Text = ""; // Set a default value or handle it based on your requirements
+                    }
+
+                    tf03.TextColor = BaseColor.BLACK;
+                    tf03.FontSize = 8;
+                    writer.AddAnnotation(tf03.GetTextField());
+
+
+                    PdfContentByte content287 = writer.DirectContent;
+                    BaseFont baseF287 = BaseFont.CreateFont();
+                    content287.SetFontAndSize(baseF287, 8);
+                    content287.BeginText();
+                    content287.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Single", 33, 365, 0);
+                    content287.EndText();
+                    TextField tf04 = new TextField(writer, new Rectangle(53, 375, 130, 360), "Single");
+                    tf04.BorderColor = new BaseColor(232, 232, 232);
+                    tf04.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf04.Options = TextField.READ_ONLY;
+                    // tf04.Text = othercommentList[0].Single;
+                    if (othercommentList.Count > 0)
+                    {
+                        tf04.Text = othercommentList[0].Single;
+                    }
+                    else
+                    {
+                        // Handle the case when othercommentList is empty
+                        tf04.Text = ""; // Set a default value or handle it based on your requirements
+                    }
+
+                    tf04.TextColor = BaseColor.BLACK;
+                    tf04.FontSize = 8;
+                    writer.AddAnnotation(tf04.GetTextField());
+
+                    PdfPCell blankCell6 = new PdfPCell(new Phrase(Chunk.NEWLINE));
+                    blankCell6.Border = PdfPCell.NO_BORDER;
+                    blankCell6.FixedHeight = 10f;
+                    col1Table1.AddCell(blankCell6);
+
+
+                    // CODE FOR HOT WATER CHECKBOXES
+
+                    var hotwaterlist = data.Where(w => w.Name == "Hot Water").ToList();
+
+                    PdfPCell cell113 = new PdfPCell(new Phrase());
+                    cell113.FixedHeight = 110f; // Set the height of the cell
+                    cell113.BorderColor = BaseColor.BLACK;
+                    cell113.Padding = 10;
+                    cell113.CellEvent = new RectangleOverPdfPCellBorder("Hot Water", 30f, 334f, 53f, 15f, 33f, 338f);
+                    //cell113.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Hot Water", 50f, 20f, 70f, 328);
+                    col1Table1.AddCell(cell113);
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 330, 23, 320), hotwaterlist[0].Checkbox, 23, 320);
+                    PdfContentByte content318 = writer.DirectContent;
+                    BaseFont baseF318 = BaseFont.CreateFont();
+                    content318.SetFontAndSize(baseF318, 8);
+                    content318.BeginText();
+                    content318.ShowTextAligned(PdfContentByte.ALIGN_CENTER, hotwaterlist[0].PropertyAttributeName, 55, 320, 0);
+                    content318.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 315, 23, 305), hotwaterlist[1].Checkbox, 23, 305);
+                    PdfContentByte content319 = writer.DirectContent;
+                    BaseFont baseF319 = BaseFont.CreateFont();
+                    content319.SetFontAndSize(baseF319, 8);
+                    content319.BeginText();
+                    content319.ShowTextAligned(PdfContentByte.ALIGN_CENTER, hotwaterlist[1].PropertyAttributeName, 48, 305, 0);
+                    content319.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 300, 23, 290), hotwaterlist[2].Checkbox, 23, 290);
+                    PdfContentByte content320 = writer.DirectContent;
+                    BaseFont baseF320 = BaseFont.CreateFont();
+                    content320.SetFontAndSize(baseF320, 8);
+                    content320.BeginText();
+                    content320.ShowTextAligned(PdfContentByte.ALIGN_CENTER, hotwaterlist[1].PropertyAttributeName, 51, 290, 0);
+                    content320.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 285, 23, 275), hotwaterlist[3].Checkbox, 23, 275);
+                    PdfContentByte content321 = writer.DirectContent;
+                    BaseFont baseF321 = BaseFont.CreateFont();
+                    content321.SetFontAndSize(baseF321, 8);
+                    content321.BeginText();
+                    content321.ShowTextAligned(PdfContentByte.ALIGN_CENTER, hotwaterlist[3].PropertyAttributeName, 53, 275, 0);
+                    content321.EndText();
+
+                    TextField tf322 = new TextField(writer, new Rectangle(33, 260, 130, 240), "Other comments");
+                    tf322.BorderColor = new BaseColor(232, 232, 232);
+                    tf322.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf322.Options = TextField.READ_ONLY;
+                    tf322.Text = hotwaterlist[4].Remarks;
+                    tf322.TextColor = BaseColor.BLACK;
+                    tf322.FontSize = 8;
+                    writer.AddAnnotation(tf322.GetTextField());
+
+                    PdfContentByte cb05 = writer.DirectContent;
+                    BaseFont bf05 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
+                    string text05 = "Other comments";
+                    cb05.BeginText();
+                    cb05.SetFontAndSize(bf05, 8);
+                    // 5ut the alignment and coordinates here
+                    cb05.ShowTextAligned(1, text05, 57, 263, 0);
+                    cb05.EndText();
+                    TextField tf05 = new TextField(writer, new Rectangle(40, 237, 150, 220), "Central");
+                    writer.AddAnnotation(tf05.GetTextField());
+
+
+                    multipleMainTable1.AddCell(col1Table1);
+
+                    //// Column 2
+                    PdfPTable col2Table2 = new PdfPTable(1);
+                    PdfPCell cell22 = new PdfPCell(new Phrase());
+                    cell22.FixedHeight = 60f; // Set the height of the cell
+                    cell22.BorderColor = BaseColor.BLACK;
+                    col2Table2.AddCell(cell22);
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 720, 158, 730), heatinglist[12].Checkbox, 148, 720);
+                    PdfContentByte content322 = writer.DirectContent;
+                    BaseFont baseF322 = BaseFont.CreateFont();
+                    content322.SetFontAndSize(baseF322, 8);
+                    content322.BeginText();
+                    content322.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[12].PropertyAttributeName, 185, 720, 0);
+                    content322.EndText();
+
+                    PdfContentByte cb03 = writer.DirectContent;
+                    BaseFont bf03 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
+                    string text03 = "Other comments";
+                    cb03.BeginText();
+                    cb03.SetFontAndSize(bf03, 8);
+                    //03t the alignment and coordinates here
+                    cb03.ShowTextAligned(1, text03, 185, 710, 0);
+                    cb03.EndText();
+                    TextField tf06 = new TextField(writer, new Rectangle(148, 690, 245, 708), "Other comments");
+                    tf06.BorderColor = new BaseColor(232, 232, 232);
+                    tf06.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf06.Options = TextField.READ_ONLY;
+                    tf06.Text = heatinglist[13].Remarks;
+                    tf06.TextColor = BaseColor.BLACK;
+                    tf06.FontSize = 8;
+                    writer.AddAnnotation(tf06.GetTextField());
+
+                    PdfPCell blankCell3 = new PdfPCell(new Phrase(Chunk.NEWLINE));
+                    blankCell3.Border = PdfPCell.NO_BORDER;
+                    blankCell3.FixedHeight = 10f;
+                    col2Table2.AddCell(blankCell3);
+
+
+
+
+                    // CODE FOR KITCHEN CHECKBOXES
+
+                    var kitchenlist = data.Where(w => w.Name == "Kitchen").ToList();
+
+                    PdfPCell cell311 = new PdfPCell(new Phrase());
+                    cell311.FixedHeight = 75f; // Set the height of the cell
+                    cell311.BorderColor = BaseColor.BLACK;
+                    cell311.CellEvent = new RectangleOverPdfPCellBorder("Kitchen", 155f, 665f, 40f, 15f, 158f, 667f);
+                    //cell311.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Kitchen", 170f, 20f, 70f, 655);
+                    col2Table2.AddCell(cell311);
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 645, 158, 655), kitchenlist[0].Checkbox, 148, 645);
+                    PdfContentByte content323 = writer.DirectContent;
+                    BaseFont baseF323 = BaseFont.CreateFont();
+                    content323.SetFontAndSize(baseF323, 8);
+                    content323.BeginText();
+                    content323.ShowTextAligned(PdfContentByte.ALIGN_CENTER, kitchenlist[0].PropertyAttributeName, 177, 645, 0);
+                    content323.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 630, 158, 640), kitchenlist[1].Checkbox, 148, 630);
+                    PdfContentByte content324 = writer.DirectContent;
+                    BaseFont baseF324 = BaseFont.CreateFont();
+                    content324.SetFontAndSize(baseF324, 8);
+                    content324.BeginText();
+                    content324.ShowTextAligned(PdfContentByte.ALIGN_CENTER, kitchenlist[1].PropertyAttributeName, 177, 630, 0);
+                    content324.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 615, 158, 625), kitchenlist[2].Checkbox, 148, 615);
+                    PdfContentByte content325 = writer.DirectContent;
+                    BaseFont baseF325 = BaseFont.CreateFont();
+                    content325.SetFontAndSize(baseF325, 8);
+                    content325.BeginText();
+                    content325.ShowTextAligned(PdfContentByte.ALIGN_CENTER, kitchenlist[2].PropertyAttributeName, 177, 615, 0);
+                    content325.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 600, 158, 610), kitchenlist[3].Checkbox, 148, 600);
+                    PdfContentByte content326 = writer.DirectContent;
+                    BaseFont baseF326 = BaseFont.CreateFont();
+                    content326.SetFontAndSize(baseF326, 8);
+                    content326.BeginText();
+                    content326.ShowTextAligned(PdfContentByte.ALIGN_CENTER, kitchenlist[3].PropertyAttributeName, 182, 600, 0);
+                    content326.EndText();
+
+
+                    PdfPCell blankCell4 = new PdfPCell(new Phrase(Chunk.NEWLINE));
+                    blankCell4.Border = PdfPCell.NO_BORDER;
+                    blankCell4.FixedHeight = 10f;
+                    col2Table2.AddCell(blankCell4);
+
+
+                    // CODE FOR DINING CHECKBOXES
+
+                    var dininglist = data.Where(w => w.Name == "Kitchen").ToList();
+
+                    PdfPCell cell312 = new PdfPCell(new Phrase());
+                    cell312.FixedHeight = 75f; // Set the height of the cell
+                    cell312.BorderColor = BaseColor.BLACK;
+                    cell312.CellEvent = new RectangleOverPdfPCellBorder("Dining", 158f, 580f, 35f, 15f, 158f, 582f);
+                    // cell312.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Dining", 170f, 20f, 70f, 568f);
+
+                    col2Table2.AddCell(cell312);
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 545, 158, 555), dininglist[0].Checkbox, 148, 545);
+                    PdfContentByte content327 = writer.DirectContent;
+                    BaseFont baseF327 = BaseFont.CreateFont();
+                    content327.SetFontAndSize(baseF327, 8);
+                    content327.BeginText();
+                    content327.ShowTextAligned(PdfContentByte.ALIGN_CENTER, dininglist[0].PropertyAttributeName, 191, 545, 0);
+                    content327.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 530, 158, 540), dininglist[1].Checkbox, 148, 530);
+                    PdfContentByte content328 = writer.DirectContent;
+                    BaseFont baseF328 = BaseFont.CreateFont();
+                    content328.SetFontAndSize(baseF328, 8);
+                    content328.BeginText();
+                    content328.ShowTextAligned(PdfContentByte.ALIGN_CENTER, dininglist[1].PropertyAttributeName, 189, 530, 0);
+                    content328.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 515, 158, 525), dininglist[2].Checkbox, 148, 515);
+                    PdfContentByte content329 = writer.DirectContent;
+                    BaseFont baseF329 = BaseFont.CreateFont();
+                    content329.SetFontAndSize(baseF329, 8);
+                    content329.BeginText();
+                    content329.ShowTextAligned(PdfContentByte.ALIGN_CENTER, dininglist[2].PropertyAttributeName, 192, 515, 0);
+                    content329.EndText();
+
+                    PdfPCell blankCell2 = new PdfPCell(new Phrase(Chunk.NEWLINE));
+                    blankCell2.Border = PdfPCell.NO_BORDER;
+                    blankCell2.FixedHeight = 7f;
+                    col2Table2.AddCell(blankCell2);
+
+                    // CODE FOR BATHROOM/TOILET CHECKBOXES
+
+                    var bathroomlist = data.Where(w => w.Name == "Bathroom Toilets").ToList();
+
+                    PdfPCell cell313 = new PdfPCell(new Phrase());
+                    cell313.FixedHeight = 97f; // Set the height of the cell
+                    cell313.BorderColor = BaseColor.BLACK;
+                    cell313.CellEvent = new RectangleOverPdfPCellBorder("Bathroom/toilet", 155f, 495f, 78f, 15f, 158f, 498f);
+                    //cell313.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Bathroom/toilet", 170f, 15f, 70f, 495);
+                    col2Table2.AddCell(cell313);
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 470, 158, 480), bathroomlist[0].Checkbox, 148, 470);
+                    PdfContentByte content330 = writer.DirectContent;
+                    BaseFont baseF330 = BaseFont.CreateFont();
+                    content330.SetFontAndSize(baseF330, 8);
+                    content330.BeginText();
+                    content330.ShowTextAligned(PdfContentByte.ALIGN_CENTER, bathroomlist[0].PropertyAttributeName, 196, 470, 0);
+                    content330.EndText();
+
+                    TextField tf330 = new TextField(writer, new Rectangle(235, 480, 255, 468), "Separate bathrooms");//(33, 445, 23, 435)
+                    tf330.BorderColor = new BaseColor(232, 232, 232);
+                    tf330.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf330.Options = TextField.READ_ONLY;
+                    tf330.Text = bathroomlist[0].Count != 0 ? bathroomlist[0].Count.ToString() : "";
+                    tf330.TextColor = BaseColor.BLACK;
+                    tf330.FontSize = 8;
+                    writer.AddAnnotation(tf330.GetTextField());
+                    //col5Table.AddCell(cell51);
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 455, 158, 465), bathroomlist[1].Checkbox, 148, 455);
+                    PdfContentByte content331 = writer.DirectContent;
+                    BaseFont baseF331 = BaseFont.CreateFont();
+                    content331.SetFontAndSize(baseF331, 8);
+                    content331.BeginText();
+                    content331.ShowTextAligned(PdfContentByte.ALIGN_CENTER, bathroomlist[1].PropertyAttributeName, 189, 455, 0);
+                    content331.EndText();
+
+                    TextField tf331 = new TextField(writer, new Rectangle(235, 465, 255, 453), "Separate WCs");//(33, 445, 23, 435)
+                    tf331.BorderColor = new BaseColor(232, 232, 232);
+                    tf331.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf331.Options = TextField.READ_ONLY;
+                    tf331.Text = bathroomlist[1].Count != 0 ? bathroomlist[1].Count.ToString() : "";
+                    tf331.TextColor = BaseColor.BLACK;
+                    tf331.FontSize = 8;
+                    writer.AddAnnotation(tf331.GetTextField());
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 440, 158, 450), bathroomlist[2].Checkbox, 148, 440);
+                    PdfContentByte content332 = writer.DirectContent;
+                    BaseFont baseF332 = BaseFont.CreateFont();
+                    content332.SetFontAndSize(baseF330, 8);
+                    content332.BeginText();
+                    content332.ShowTextAligned(PdfContentByte.ALIGN_CENTER, bathroomlist[2].PropertyAttributeName, 190, 440, 0);
+                    content332.EndText();
+
+                    TextField tf332 = new TextField(writer, new Rectangle(235, 450, 255, 438), "Separate shower");//(33, 445, 23, 435)
+                    tf332.BorderColor = new BaseColor(232, 232, 232);
+                    tf332.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf332.Options = TextField.READ_ONLY;
+                    tf332.Text = bathroomlist[2].Count != 0 ? bathroomlist[2].Count.ToString() : "";
+                    tf332.TextColor = BaseColor.BLACK;
+                    tf332.FontSize = 8;
+                    writer.AddAnnotation(tf332.GetTextField());
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 425, 158, 435), bathroomlist[3].Checkbox, 148, 425);
+                    PdfContentByte content333 = writer.DirectContent;
+                    BaseFont baseF333 = BaseFont.CreateFont();
+                    content333.SetFontAndSize(baseF330, 8);
+                    content333.BeginText();
+                    content333.ShowTextAligned(PdfContentByte.ALIGN_CENTER, bathroomlist[3].PropertyAttributeName, 197, 425, 0);
+                    content333.EndText();
+
+                    TextField tf333 = new TextField(writer, new Rectangle(235, 435, 255, 423), "Combined bth/WCs ");//(33, 445, 23, 435)
+                    tf333.BorderColor = new BaseColor(232, 232, 232);
+                    tf333.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf333.Options = TextField.READ_ONLY;
+                    tf333.Text = bathroomlist[3].Count != 0 ? bathroomlist[3].Count.ToString() : "";
+                    tf333.TextColor = BaseColor.BLACK;
+                    tf333.FontSize = 8;
+                    writer.AddAnnotation(tf333.GetTextField());
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 410, 158, 420), bathroomlist[4].Checkbox, 148, 410);
+                    PdfContentByte content334 = writer.DirectContent;
+                    BaseFont baseF334 = BaseFont.CreateFont();
+                    content334.SetFontAndSize(baseF330, 8);
+                    content334.BeginText();
+                    content334.ShowTextAligned(PdfContentByte.ALIGN_CENTER, bathroomlist[4].PropertyAttributeName, 178, 410, 0);
+                    content334.EndText();
+
+                    TextField tf334 = new TextField(writer, new Rectangle(235, 420, 255, 410), "Ensuite");//(33, 445, 23, 435)
+                    tf334.BorderColor = new BaseColor(232, 232, 232);
+                    tf334.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf334.Options = TextField.READ_ONLY;
+                    tf334.Text = bathroomlist[4].Count != 0 ? bathroomlist[4].Count.ToString() : "";
+                    tf334.TextColor = BaseColor.BLACK;
+                    tf334.FontSize = 8;
+                    writer.AddAnnotation(tf334.GetTextField());
+
+                    PdfPCell blankCell1 = new PdfPCell(new Phrase(Chunk.NEWLINE));
+                    blankCell1.Border = PdfPCell.NO_BORDER;
+                    blankCell1.FixedHeight = 7f;
+                    col2Table2.AddCell(blankCell1);
+
+
+                    // CODE FOR LOUNGE CHECKBOXES
+
+                    var loungelist = data.Where(w => w.Name == "Lounge").ToList();
+
+                    PdfPCell cell314 = new PdfPCell(new Phrase());
+                    cell314.FixedHeight = 60f; // Set the height of the cell
+                    cell314.BorderColor = BaseColor.BLACK;
+                    cell314.CellEvent = new RectangleOverPdfPCellBorder("Lounge", 158f, 393f, 40f, 14f, 160f, 396f);
+                    //cell314.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Lounge", 170f, 20f, 70f, 385f);
+                    col2Table2.AddCell(cell314);
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 365, 158, 375), loungelist[0].Checkbox, 148, 365);
+                    PdfContentByte content335 = writer.DirectContent;
+                    BaseFont baseF335 = BaseFont.CreateFont();
+                    content335.SetFontAndSize(baseF335, 8);
+                    content335.BeginText();
+                    content335.ShowTextAligned(PdfContentByte.ALIGN_CENTER, loungelist[0].PropertyAttributeName, 204, 365, 0);
+                    content335.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 350, 158, 360), loungelist[1].Checkbox, 148, 350);
+                    PdfContentByte content336 = writer.DirectContent;
+                    BaseFont baseF336 = BaseFont.CreateFont();
+                    content336.SetFontAndSize(baseF336, 8);
+                    content336.BeginText();
+                    content336.ShowTextAligned(PdfContentByte.ALIGN_CENTER, loungelist[1].PropertyAttributeName, 176, 350, 0);
+                    content336.EndText();
+
+                    PdfPCell blankCell = new PdfPCell(new Phrase(Chunk.NEWLINE));
+                    blankCell.Border = PdfPCell.NO_BORDER;
+                    blankCell.FixedHeight = 10f;
+                    col2Table2.AddCell(blankCell);
+
+
+                    // CODE FOR STOVE CHECKBOXES
+
+                    var stovelist = data.Where(w => w.Name == "Stove").ToList();
+
+                    PdfPCell cell315 = new PdfPCell(new Phrase());
+                    cell315.FixedHeight = 30f; // Set the height of the cell
+                    cell315.BorderColor = BaseColor.BLACK;
+                    cell315.CellEvent = new RectangleOverPdfPCellBorder("Stove", 158f, 322f, 30f, 14f, 158f, 325f);
+                    // cell315.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Stove", 170f, 20f, 70f, 316);
+                    col2Table2.AddCell(cell315);
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 310, 158, 320), stovelist[0].Checkbox, 148, 310);
+                    PdfContentByte content337 = writer.DirectContent;
+                    BaseFont baseF337 = BaseFont.CreateFont();
+                    content337.SetFontAndSize(baseF337, 8);
+                    content337.BeginText();
+                    content337.ShowTextAligned(PdfContentByte.ALIGN_CENTER, stovelist[0].PropertyAttributeName, 176, 310, 0);
+                    content337.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 295, 158, 305), stovelist[1].Checkbox, 148, 295);
+                    PdfContentByte content338 = writer.DirectContent;
+                    BaseFont baseF338 = BaseFont.CreateFont();
+                    content338.SetFontAndSize(baseF338, 8);
+                    content338.BeginText();
+                    content338.ShowTextAligned(PdfContentByte.ALIGN_CENTER, stovelist[1].PropertyAttributeName, 179, 295, 0);
+                    content338.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 280, 158, 290), stovelist[2].Checkbox, 148, 280);
+                    PdfContentByte content339 = writer.DirectContent;
+                    BaseFont baseF339 = BaseFont.CreateFont();
+                    content339.SetFontAndSize(baseF339, 8);
+                    content339.BeginText();
+                    content339.ShowTextAligned(PdfContentByte.ALIGN_CENTER, stovelist[2].PropertyAttributeName, 182, 280, 0);
+                    content339.EndText();
+
+                    multipleMainTable1.AddCell(col2Table2);
+
+
+                    // CODE FOR EXTERIOR CONDITION CHECKBOXES
+
+                    var exteriorConditonlist = data.Where(w => w.Name == "Exterior Condition").ToList();
+                    // Column 3
+                    PdfPTable col3Table3 = new PdfPTable(1);
+                    PdfPCell cell44 = new PdfPCell(new Phrase());
+                    cell44.FixedHeight = 70f; // Set the height of the cell
+                    cell44.BorderColor = BaseColor.BLACK;
+                    cell44.CellEvent = new RectangleOverPdfPCellBorder("Exterior condition", 272f, 733f, 85f, 15f, 273f, 735f);
+                    //cell44.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Exterior condition", 265f, 15f, 80f, 733f);
+                    col3Table3.AddCell(cell44);
+
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 720, 285, 730), exteriorConditonlist[0].Checkbox, 275, 720);
+                    PdfContentByte content340 = writer.DirectContent;
+                    BaseFont baseF340 = BaseFont.CreateFont();
+                    content340.SetFontAndSize(baseF340, 8);
+                    content340.BeginText();
+                    content340.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorConditonlist[0].PropertyAttributeName, 307, 720, 0);
+                    content340.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 705, 285, 715), exteriorConditonlist[0].Checkbox, 275, 705);
+                    PdfContentByte content341 = writer.DirectContent;
+                    BaseFont baseF341 = BaseFont.CreateFont();
+                    content341.SetFontAndSize(baseF341, 8);
+                    content341.BeginText();
+                    content341.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorConditonlist[1].PropertyAttributeName, 310, 705, 0);
+                    content341.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 690, 285, 700), exteriorConditonlist[2].Checkbox, 275, 690);
+                    PdfContentByte content342 = writer.DirectContent;
+                    BaseFont baseF342 = BaseFont.CreateFont();
+                    content342.SetFontAndSize(baseF342, 8);
+                    content342.BeginText();
+                    content342.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorConditonlist[2].PropertyAttributeName, 301, 690, 0);
+                    content342.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 675, 285, 685), exteriorConditonlist[3].Checkbox, 275, 675);
+                    PdfContentByte content343 = writer.DirectContent;
+                    BaseFont baseF343 = BaseFont.CreateFont();
+                    content343.SetFontAndSize(baseF343, 8);
+                    content343.BeginText();
+                    content343.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorConditonlist[3].PropertyAttributeName, 299, 675, 0);
+                    content343.EndText();
+
+                    PdfPCell blankCell7 = new PdfPCell(new Phrase(Chunk.NEWLINE));
+                    blankCell7.Border = PdfPCell.NO_BORDER;
+                    blankCell7.FixedHeight = 10f;
+                    col3Table3.AddCell(blankCell7);
+
+
+
+                    // CODE FOR SWIMMING POOL CONDITION CHECKBOXES
+
+                    var swimmingpoollist = data.Where(w => w.Name == "Swimming Pool").ToList();
+                    PdfPCell cell45 = new PdfPCell(new Phrase());
+                    cell45.FixedHeight = 105f; // Set the height of the cell
+                    cell45.BorderColor = BaseColor.BLACK;
+                    cell45.CellEvent = new RectangleOverPdfPCellBorder("Swimming pool", 272f, 650f, 85f, 15f, 273f, 655f);
+                    //cell45.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Swimming pool", 265f, 15f, 80f, 650f);
+                    col3Table3.AddCell(cell45);
+
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 635, 285, 645), swimmingpoollist[0].Checkbox, 275, 635);
+                    PdfContentByte content344 = writer.DirectContent;
+                    BaseFont baseF344 = BaseFont.CreateFont();
+                    content344.SetFontAndSize(baseF344, 8);
+                    content344.BeginText();
+                    content344.ShowTextAligned(PdfContentByte.ALIGN_CENTER, swimmingpoollist[0].PropertyAttributeName, 314, 635, 0);
+                    content344.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 620, 285, 630), swimmingpoollist[1].Checkbox, 275, 620);
+                    PdfContentByte content345 = writer.DirectContent;
+                    BaseFont baseF345 = BaseFont.CreateFont();
+                    content345.SetFontAndSize(baseF345, 8);
+                    content345.BeginText();
+                    content345.ShowTextAligned(PdfContentByte.ALIGN_CENTER, swimmingpoollist[1].PropertyAttributeName, 307, 620, 0);
+                    content345.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 605, 285, 615), swimmingpoollist[2].Checkbox, 275, 605);
+                    PdfContentByte content346 = writer.DirectContent;
+                    BaseFont baseF346 = BaseFont.CreateFont();
+                    content346.SetFontAndSize(baseF346, 8);
+                    content346.BeginText();
+                    content346.ShowTextAligned(PdfContentByte.ALIGN_CENTER, swimmingpoollist[2].PropertyAttributeName, 306, 605, 0);
+                    content346.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 590, 285, 600), swimmingpoollist[3].Checkbox, 275, 590);
+                    PdfContentByte content347 = writer.DirectContent;
+                    BaseFont baseF347 = BaseFont.CreateFont();
+                    content347.SetFontAndSize(baseF347, 8);
+                    content347.BeginText();
+                    content347.ShowTextAligned(PdfContentByte.ALIGN_CENTER, swimmingpoollist[3].PropertyAttributeName, 304, 590, 0);
+                    content347.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 575, 285, 585), swimmingpoollist[4].Checkbox, 275, 575);
+                    PdfContentByte content348 = writer.DirectContent;
+                    BaseFont baseF348 = BaseFont.CreateFont();
+                    content348.SetFontAndSize(baseF348, 8);
+                    content348.BeginText();
+                    content348.ShowTextAligned(PdfContentByte.ALIGN_CENTER, swimmingpoollist[4].PropertyAttributeName, 303, 575, 0);
+                    content348.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 560, 285, 570), swimmingpoollist[5].Checkbox, 275, 560);
+                    PdfContentByte content349 = writer.DirectContent;
+                    BaseFont baseF349 = BaseFont.CreateFont();
+                    content349.SetFontAndSize(baseF349, 8);
+                    content349.BeginText();
+                    content349.ShowTextAligned(PdfContentByte.ALIGN_CENTER, swimmingpoollist[5].PropertyAttributeName, 302, 560, 0);
+                    content349.EndText();
+
+                    PdfPCell blankCell8 = new PdfPCell(new Phrase(Chunk.NEWLINE));
+                    blankCell8.Border = PdfPCell.NO_BORDER;
+                    blankCell8.FixedHeight = 10f;
+                    col3Table3.AddCell(blankCell8);
+
+
+
+
+                    // CODE FOR GENERAL CHECKBOXES
+
+                    var generallist = data.Where(w => w.Name == "General").ToList();
+
+                    PdfPCell cell46 = new PdfPCell(new Phrase());
+                    cell46.FixedHeight = 115f; // Set the height of the cell
+                    cell46.BorderColor = BaseColor.BLACK;
+                    cell46.CellEvent = new RectangleOverPdfPCellBorder("General", 278f, 535f, 45f, 15f, 280f, 538f);
+                    //cell46.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "General", 275f, 20f, 70f, 530f);
+                    col3Table3.AddCell(cell46);
+
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 515, 285, 525), generallist[0].Checkbox, 275, 515);
+                    PdfContentByte content350 = writer.DirectContent;
+                    BaseFont baseF350 = BaseFont.CreateFont();
+                    content350.SetFontAndSize(baseF350, 8);
+                    content350.BeginText();
+                    content350.ShowTextAligned(PdfContentByte.ALIGN_CENTER, generallist[0].PropertyAttributeName, 315, 515, 0);
+                    content350.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 500, 285, 510), generallist[1].Checkbox, 275, 500);
+                    PdfContentByte content351 = writer.DirectContent;
+                    BaseFont baseF351 = BaseFont.CreateFont();
+                    content351.SetFontAndSize(baseF351, 8);
+                    content351.BeginText();
+                    content351.ShowTextAligned(PdfContentByte.ALIGN_CENTER, generallist[1].PropertyAttributeName, 315, 500, 0);
+                    content351.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 485, 285, 495), generallist[2].Checkbox, 275, 485);
+                    PdfContentByte content352 = writer.DirectContent;
+                    BaseFont baseF352 = BaseFont.CreateFont();
+                    content352.SetFontAndSize(baseF352, 8);
+                    content352.BeginText();
+                    content352.ShowTextAligned(PdfContentByte.ALIGN_CENTER, generallist[2].PropertyAttributeName, 313, 485, 0);
+                    content352.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 470, 285, 480), generallist[3].Checkbox, 275, 470);
+                    PdfContentByte content353 = writer.DirectContent;
+                    BaseFont baseF353 = BaseFont.CreateFont();
+                    content353.SetFontAndSize(baseF353, 8);
+                    content353.BeginText();
+                    content353.ShowTextAligned(PdfContentByte.ALIGN_CENTER, generallist[3].PropertyAttributeName, 313, 470, 0);
+                    content353.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 455, 285, 465), generallist[4].Checkbox, 275, 455);
+                    PdfContentByte content354 = writer.DirectContent;
+                    BaseFont baseF354 = BaseFont.CreateFont();
+                    content354.SetFontAndSize(baseF354, 8);
+                    content354.BeginText();
+                    content354.ShowTextAligned(PdfContentByte.ALIGN_CENTER, generallist[4].PropertyAttributeName, 321, 455, 0);
+                    content354.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 440, 285, 450), generallist[5].Checkbox, 275, 440);
+                    PdfContentByte content355 = writer.DirectContent;
+                    BaseFont baseF355 = BaseFont.CreateFont();
+                    content355.SetFontAndSize(baseF355, 8);
+                    content355.BeginText();
+                    content355.ShowTextAligned(PdfContentByte.ALIGN_CENTER, generallist[5].PropertyAttributeName, 321, 440, 0);
+                    content355.EndText();
+
+                    PdfPCell blankCell9 = new PdfPCell(new Phrase(Chunk.NEWLINE));
+                    blankCell9.Border = PdfPCell.NO_BORDER;
+                    blankCell9.FixedHeight = 10f;
+                    col3Table3.AddCell(blankCell9);
+
+
+
+
+                    // CODE FOR ROOOF CHECKBOXES
+
+                    var rooflist = data.Where(w => w.Name == "Roof").ToList();
+
+
+                    PdfPCell cell47 = new PdfPCell(new Phrase());
+                    cell47.FixedHeight = 95f; // Set the height of the cell
+                    cell47.BorderColor = BaseColor.BLACK;
+                    cell47.CellEvent = new RectangleOverPdfPCellBorder("Roof", 278f, 415f, 25f, 15f, 278f, 415f);
+                    //cell47.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Roof", 275f, 20f, 70f, 405f);
+                    col3Table3.AddCell(cell47);
+
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 385, 285, 395), rooflist[0].Checkbox, 275, 385);
+                    PdfContentByte content356 = writer.DirectContent;
+                    BaseFont baseF356 = BaseFont.CreateFont();
+                    content356.SetFontAndSize(baseF356, 8);
+                    content356.BeginText();
+                    content356.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[0].PropertyAttributeName, 299, 385, 0);
+                    content356.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 370, 285, 380), rooflist[1].Checkbox, 275, 370);
+                    PdfContentByte content357 = writer.DirectContent;
+                    BaseFont baseF357 = BaseFont.CreateFont();
+                    content357.SetFontAndSize(baseF357, 8);
+                    content357.BeginText();
+                    content357.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[1].PropertyAttributeName, 312, 370, 0);
+                    content357.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 355, 285, 365), rooflist[2].Checkbox, 275, 355);
+                    PdfContentByte content358 = writer.DirectContent;
+                    BaseFont baseF358 = BaseFont.CreateFont();
+                    content358.SetFontAndSize(baseF358, 8);
+                    content358.BeginText();
+                    content358.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[2].PropertyAttributeName, 310, 355, 0);
+                    content358.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 340, 285, 350), rooflist[3].Checkbox, 275, 340);
+                    PdfContentByte content359 = writer.DirectContent;
+                    BaseFont baseF359 = BaseFont.CreateFont();
+                    content359.SetFontAndSize(baseF359, 8);
+                    content359.BeginText();
+                    content359.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[3].PropertyAttributeName, 309, 340, 0);
+                    content359.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 325, 285, 335), rooflist[4].Checkbox, 275, 325);
+                    PdfContentByte content360 = writer.DirectContent;
+                    BaseFont baseF360 = BaseFont.CreateFont();
+                    content360.SetFontAndSize(baseF360, 8);
+                    content360.BeginText();
+                    content360.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[4].PropertyAttributeName, 309, 325, 0);
+                    content360.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 310, 285, 320), rooflist[5].Checkbox, 275, 310);
+                    PdfContentByte content361 = writer.DirectContent;
+                    BaseFont baseF361 = BaseFont.CreateFont();
+                    content361.SetFontAndSize(baseF361, 8);
+                    content361.BeginText();
+                    content361.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[5].PropertyAttributeName, 318, 310, 0);
+                    content361.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 295, 285, 305), rooflist[6].Checkbox, 275, 295);
+                    PdfContentByte content362 = writer.DirectContent;
+                    BaseFont baseF362 = BaseFont.CreateFont();
+                    content362.SetFontAndSize(baseF362, 8);
+                    content362.BeginText();
+                    content362.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[6].PropertyAttributeName, 308, 295, 0);
+                    content362.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 280, 285, 290), rooflist[7].Checkbox, 275, 280);
+                    PdfContentByte content363 = writer.DirectContent;
+                    BaseFont baseF363 = BaseFont.CreateFont();
+                    content363.SetFontAndSize(baseF363, 8);
+                    content363.BeginText();
+                    content363.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[7].PropertyAttributeName, 310, 280, 0);
+                    content363.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 264, 285, 275), rooflist[8].Checkbox, 275, 264);
+                    PdfContentByte content364 = writer.DirectContent;
+                    BaseFont baseF364 = BaseFont.CreateFont();
+                    content364.SetFontAndSize(baseF364, 8);
+                    content364.BeginText();
+                    content364.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[8].PropertyAttributeName, 327, 264, 0);
+                    content364.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 250, 285, 260), rooflist[9].Checkbox, 275, 250);
+                    PdfContentByte content365 = writer.DirectContent;
+                    BaseFont baseF365 = BaseFont.CreateFont();
+                    content365.SetFontAndSize(baseF365, 8);
+                    content365.BeginText();
+                    content365.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[9].PropertyAttributeName, 306, 250, 0);
+                    content365.EndText();
+
+                    TextField tf07 = new TextField(writer, new Rectangle(275, 230, 350, 245), "Central");
+                    tf07.BorderColor = new BaseColor(232, 232, 232);
+                    tf07.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf07.Options = TextField.READ_ONLY;
+                    tf07.Text = rooflist[9].Remarks;
+                    tf07.TextColor = BaseColor.BLACK;
+                    tf07.FontSize = 8;
+                    writer.AddAnnotation(tf07.GetTextField());
+
+                    multipleMainTable1.AddCell(col3Table3);
+
+
+
+                    //CODE FOR FENCING CHECKBOXES
+
+                    var fencingList = data.Where(w => w.Name == "Fencing").ToList();
+                    // Column 4
+                    PdfPTable col4Table4 = new PdfPTable(1);
+                    PdfPCell cell5 = new PdfPCell(new Phrase());
+                    cell5.FixedHeight = 65f; // Set the height of the cell
+                    cell5.BorderColor = BaseColor.BLACK;
+                    cell5.CellEvent = new RectangleOverPdfPCellBorder("Fencing", 378f, 735f, 40f, 15f, 378f, 738f);
+                    //cell5.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Fencing", 375f, 20f, 70f, 728f);
+                    col4Table4.AddCell(cell5);
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 725, 390, 715), fencingList[0].Checkbox, 380, 715);
+                    PdfContentByte content366 = writer.DirectContent;
+                    BaseFont baseF366 = BaseFont.CreateFont();
+                    content366.SetFontAndSize(baseF366, 8);
+                    content366.BeginText();
+                    content366.ShowTextAligned(PdfContentByte.ALIGN_CENTER, fencingList[0].PropertyAttributeName, 415, 715, 0);
+                    content366.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 710, 390, 700), fencingList[1].Checkbox, 380, 700);
+                    PdfContentByte content367 = writer.DirectContent;
+                    BaseFont baseF367 = BaseFont.CreateFont();
+                    content367.SetFontAndSize(baseF367, 8);
+                    content367.BeginText();
+                    content367.ShowTextAligned(PdfContentByte.ALIGN_CENTER, fencingList[1].PropertyAttributeName, 421, 700, 0);
+                    content367.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 695, 390, 685), fencingList[2].Checkbox, 380, 685);
+                    PdfContentByte content368 = writer.DirectContent;
+                    BaseFont baseF368 = BaseFont.CreateFont();
+                    content368.SetFontAndSize(baseF368, 8);
+                    content368.BeginText();
+                    content368.ShowTextAligned(PdfContentByte.ALIGN_CENTER, fencingList[1].PropertyAttributeName, 420, 685, 0);
+                    content368.EndText();
+
+                    PdfPCell blankCell11 = new PdfPCell(new Phrase(Chunk.NEWLINE));
+                    blankCell11.Border = PdfPCell.NO_BORDER;
+                    blankCell11.FixedHeight = 10f;
+                    col4Table4.AddCell(blankCell11);
+
+
+
+
+                    //CODE FOR ASPECT CHECKBOXES
+
+                    var aspectList = data.Where(w => w.Name == "Aspect").ToList();
+
+                    PdfPCell cell6 = new PdfPCell(new Phrase());
+                    cell6.FixedHeight = 85f; // Set the height of the cell
+                    cell6.BorderColor = BaseColor.BLACK;
+                    cell6.CellEvent = new RectangleOverPdfPCellBorder("Aspect", 378f, 660f, 35f, 15f, 378f, 662f);
+                    //cell6.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Aspect", 375f, 20f, 70f, 650f);
+                    col4Table4.AddCell(cell6);
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 635, 390, 645), aspectList[0].Checkbox, 380, 635);
+                    PdfContentByte content369 = writer.DirectContent;
+                    BaseFont baseF369 = BaseFont.CreateFont();
+                    content369.SetFontAndSize(baseF369, 8);
+                    content369.BeginText();
+                    content369.ShowTextAligned(PdfContentByte.ALIGN_CENTER, aspectList[0].PropertyAttributeName, 414, 635, 0);
+                    content369.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 620, 390, 630), aspectList[1].Checkbox, 380, 620);
+                    PdfContentByte content370 = writer.DirectContent;
+                    BaseFont baseF370 = BaseFont.CreateFont();
+                    content370.SetFontAndSize(baseF370, 8);
+                    content370.BeginText();
+                    content370.ShowTextAligned(PdfContentByte.ALIGN_CENTER, aspectList[1].PropertyAttributeName, 414, 620, 0);
+                    content370.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 605, 390, 615), aspectList[2].Checkbox, 380, 605);
+                    PdfContentByte content371 = writer.DirectContent;
+                    BaseFont baseF371 = BaseFont.CreateFont();
+                    content371.SetFontAndSize(baseF371, 8);
+                    content371.BeginText();
+                    content371.ShowTextAligned(PdfContentByte.ALIGN_CENTER, aspectList[2].PropertyAttributeName, 414, 605, 0);
+                    content371.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 590, 390, 600), aspectList[3].Checkbox, 380, 590);
+                    PdfContentByte content372 = writer.DirectContent;
+                    BaseFont baseF372 = BaseFont.CreateFont();
+                    content372.SetFontAndSize(baseF372, 8);
+                    content372.BeginText();
+                    content372.ShowTextAligned(PdfContentByte.ALIGN_CENTER, aspectList[3].PropertyAttributeName, 414, 590, 0);
+                    content372.EndText();
+
+                    PdfPCell blankCell10 = new PdfPCell(new Phrase(Chunk.NEWLINE));
+                    blankCell10.Border = PdfPCell.NO_BORDER;
+                    blankCell10.FixedHeight = 10f;
+                    col4Table4.AddCell(blankCell10);
+
+
+
+                    //CODE FOR VIEWS CHECKBOXES
+
+                    var viewsList = data.Where(w => w.Name == "Views").ToList();
+
+                    PdfPCell cell7 = new PdfPCell(new Phrase());
+                    cell7.FixedHeight = 190f; // Set the height of the cell
+                    cell7.BorderColor = BaseColor.BLACK;
+                    cell7.CellEvent = new RectangleOverPdfPCellBorder("Views", 378f, 563f, 30f, 15f, 378f, 565f);
+                    //cell7.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Views", 375f, 15f, 70f, 560f);
+                    col4Table4.AddCell(cell7);
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 535, 390, 545), viewsList[0].Checkbox, 380, 535);
+                    PdfContentByte content373 = writer.DirectContent;
+                    BaseFont baseF373 = BaseFont.CreateFont();
+                    content373.SetFontAndSize(baseF373, 8);
+                    content373.BeginText();
+                    content373.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[0].PropertyAttributeName, 405, 535, 0);
+                    content373.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 520, 390, 530), viewsList[1].Checkbox, 380, 520);
+                    PdfContentByte content374 = writer.DirectContent;
+                    BaseFont baseF374 = BaseFont.CreateFont();
+                    content374.SetFontAndSize(baseF374, 8);
+                    content374.BeginText();
+                    content374.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[1].PropertyAttributeName, 405, 520, 0);
+                    content374.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 505, 390, 515), viewsList[2].Checkbox, 380, 505);
+                    PdfContentByte content375 = writer.DirectContent;
+                    BaseFont baseF375 = BaseFont.CreateFont();
+                    content375.SetFontAndSize(baseF375, 8);
+                    content375.BeginText();
+                    content375.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[2].PropertyAttributeName, 407, 505, 0);
+                    content375.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 490, 390, 500), viewsList[3].Checkbox, 380, 490);
+                    PdfContentByte content376 = writer.DirectContent;
+                    BaseFont baseF376 = BaseFont.CreateFont();
+                    content376.SetFontAndSize(baseF376, 8);
+                    content376.BeginText();
+                    content376.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[3].PropertyAttributeName, 408, 490, 0);
+                    content376.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 475, 390, 485), viewsList[4].Checkbox, 380, 475);
+                    PdfContentByte content377 = writer.DirectContent;
+                    BaseFont baseF377 = BaseFont.CreateFont();
+                    content377.SetFontAndSize(baseF377, 8);
+                    content377.BeginText();
+                    content377.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[4].PropertyAttributeName, 409, 475, 0);
+                    content377.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 460, 390, 470), viewsList[5].Checkbox, 380, 460);
+                    PdfContentByte content378 = writer.DirectContent;
+                    BaseFont baseF378 = BaseFont.CreateFont();
+                    content378.SetFontAndSize(baseF378, 8);
+                    content378.BeginText();
+                    content378.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[5].PropertyAttributeName, 408, 460, 0);
+                    content378.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 445, 390, 455), viewsList[6].Checkbox, 380, 445);
+                    PdfContentByte content379 = writer.DirectContent;
+                    BaseFont baseF379 = BaseFont.CreateFont();
+                    content379.SetFontAndSize(baseF379, 8);
+                    content379.BeginText();
+                    content379.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[6].PropertyAttributeName, 410, 445, 0);
+                    content379.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 430, 390, 440), viewsList[7].Checkbox, 380, 430);
+                    PdfContentByte content380 = writer.DirectContent;
+                    BaseFont baseF380 = BaseFont.CreateFont();
+                    content380.SetFontAndSize(baseF380, 8);
+                    content380.BeginText();
+                    content380.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[7].PropertyAttributeName, 405, 430, 0);
+                    content380.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 415, 390, 425), viewsList[8].Checkbox, 380, 415);
+                    PdfContentByte content381 = writer.DirectContent;
+                    BaseFont baseF381 = BaseFont.CreateFont();
+                    content381.SetFontAndSize(baseF381, 8);
+                    content381.BeginText();
+                    content381.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[8].PropertyAttributeName, 415, 415, 0);
+                    content381.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 400, 390, 410), viewsList[9].Checkbox, 380, 400);
+                    PdfContentByte content382 = writer.DirectContent;
+                    BaseFont baseF382 = BaseFont.CreateFont();
+                    content382.SetFontAndSize(baseF382, 8);
+                    content382.BeginText();
+                    content382.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[9].PropertyAttributeName, 412, 400, 0);
+                    content382.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 385, 390, 395), viewsList[10].Checkbox, 380, 385);
+                    PdfContentByte content383 = writer.DirectContent;
+                    BaseFont baseF383 = BaseFont.CreateFont();
+                    content383.SetFontAndSize(baseF383, 8);
+                    content383.BeginText();
+                    content383.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Other", 412, 385, 0);
+                    content383.EndText();
+
+                    PdfPCell blankCell12 = new PdfPCell(new Phrase(Chunk.NEWLINE));
+                    blankCell12.Border = PdfPCell.NO_BORDER;
+                    blankCell12.FixedHeight = 10f;
+                    col4Table4.AddCell(blankCell12);
+
+
+                    //CODE FOR SEWAGE CHECKBOXES
+
+
+
+
+
+                    var sewageList = data.Where(w => w.Name == "Sewage system").ToList();
+
+                    PdfPCell cell71 = new PdfPCell(new Phrase());
+                    cell71.FixedHeight = 100f; // Set the height of the cell
+                    cell71.BorderColor = BaseColor.BLACK;
+                    cell71.CellEvent = new RectangleOverPdfPCellBorder("Sewage system", 378f, 363f, 75f, 15f, 378f, 365f);
+                    //cell71.CellEvent = new RectangleCellEvent(BaseColor.GREEN, BaseColor.BLUE, "Sewage system", 375f, 20f, 70f, 355f);
+                    col4Table4.AddCell(cell71);
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 350, 390, 360), sewageList[0].Checkbox, 380, 350);
+                    PdfContentByte content384 = writer.DirectContent;
+                    BaseFont baseF384 = BaseFont.CreateFont();
+                    content384.SetFontAndSize(baseF384, 8);
+                    content384.BeginText();
+                    content384.ShowTextAligned(PdfContentByte.ALIGN_CENTER, sewageList[0].PropertyAttributeName, 411, 350, 0);
+                    content384.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 335, 390, 345), sewageList[1].Checkbox, 380, 335);
+                    PdfContentByte content385 = writer.DirectContent;
+                    BaseFont baseF385 = BaseFont.CreateFont();
+                    content385.SetFontAndSize(baseF385, 8);
+                    content385.BeginText();
+                    content385.ShowTextAligned(PdfContentByte.ALIGN_CENTER, sewageList[1].PropertyAttributeName, 411, 335, 0);
+                    content385.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 320, 390, 330), sewageList[2].Checkbox, 380, 320);
+                    PdfContentByte content386 = writer.DirectContent;
+                    BaseFont baseF386 = BaseFont.CreateFont();
+                    content386.SetFontAndSize(baseF386, 8);
+                    content386.BeginText();
+                    content386.ShowTextAligned(PdfContentByte.ALIGN_CENTER, sewageList[2].PropertyAttributeName, 415, 320, 0);
+                    content386.EndText();
+
+                    AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 305, 390, 315), sewageList[3].Checkbox, 380, 305);
+                    PdfContentByte content387 = writer.DirectContent;
+                    BaseFont baseF387 = BaseFont.CreateFont();
+                    content387.SetFontAndSize(baseF387, 8);
+                    content387.BeginText();
+                    content387.ShowTextAligned(PdfContentByte.ALIGN_CENTER, sewageList[3].PropertyAttributeName, 411, 305, 0);
+                    content387.EndText();
+
+                    TextField tf08 = new TextField(writer, new Rectangle(380, 285, 450, 300), "Other");
+                    tf08.BorderColor = new BaseColor(232, 232, 232);
+                    tf08.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf08.Options = TextField.READ_ONLY;
+                    tf08.Text = sewageList[3].Remarks;
+                    tf08.TextColor = BaseColor.BLACK;
+                    tf08.FontSize = 8;
+                    writer.AddAnnotation(tf08.GetTextField());
+
+                    multipleMainTable1.AddCell(col4Table4);
+
+                    //CODE FOR OTHER COMMENT SECTIONS
+                    //var othercommentList = _context.PropertyInformationDetail.Where(w => w.PID == id).ToList();
+                    // Column 5
+                    PdfPTable col5Table5 = new PdfPTable(1);
+                    PdfPCell cell8 = new PdfPCell(new Phrase());
+                    cell8.FixedHeight = 215f; // Set the height of the cell
+                    cell8.BorderColor = BaseColor.BLACK;
+                    cell8.CellEvent = new RectangleOverPdfPCellBorder("Other", 480f, 740f, 40f, 15f, 482f, 740f);
+                    //cell8.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Other", 478f, 20f, 70f, 728f);
+                    col5Table5.AddCell(cell8);
+
+                    PdfContentByte content01 = writer.DirectContent;
+                    BaseFont baseF01 = BaseFont.CreateFont();
+                    content01.SetFontAndSize(baseF01, 8);
+                    content01.BeginText();
+                    content01.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Other Comments:", 515, 715, 0);
+                    content01.EndText();
+                    TextField tf09 = new TextField(writer, new Rectangle(485, 660, 565, 705), "Central");
+                    tf09.BorderColor = new BaseColor(232, 232, 232);
+                    tf09.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf09.Options = TextField.READ_ONLY | TextField.MULTILINE;
+                    // tf09.Text = othercommentList[0].Comment;
+                    if (othercommentList.Count > 0)
+                    {
+                        tf09.Text = othercommentList[0].Comment;
+                    }
+                    else
+                    {
+                        // Handle the case when othercommentList is empty
+                        tf09.Text = ""; // Set a default value or handle it based on your requirements
+                    }
+
+                    tf09.TextColor = BaseColor.BLACK;
+                    tf09.FontSize = 8;
+                    writer.AddAnnotation(tf09.GetTextField());
+
+                    PdfContentByte content02 = writer.DirectContent;
+                    BaseFont baseF02 = BaseFont.CreateFont();
+                    content02.SetFontAndSize(baseF02, 8);
+                    content02.BeginText();
+                    content02.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Other features/additionals:", 526, 650, 0);
+                    content02.EndText();
+                    TextField tf010 = new TextField(writer, new Rectangle(485, 600, 565, 640), "Other features/additionals");
+                    tf010.BorderColor = new BaseColor(232, 232, 232);
+                    tf010.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf010.Options = TextField.READ_ONLY | TextField.MULTILINE;
+                    //tf010.Text = othercommentList[0].AdditionalFeature;
+                    if (othercommentList.Count > 0)
+                    {
+                        tf010.Text = othercommentList[0].AdditionalFeature;
+                    }
+                    else
+                    {
+                        // Handle the case when othercommentList is empty
+                        tf010.Text = ""; // Set a default value or handle it based on your requirements
+                    }
+                    tf010.TextColor = BaseColor.BLACK;
+                    tf010.FontSize = 8;
+                    writer.AddAnnotation(tf010.GetTextField());
+
+                    PdfContentByte content03 = writer.DirectContent;
+                    BaseFont baseF03 = BaseFont.CreateFont();
+                    content03.SetFontAndSize(baseF03, 8);
+                    content03.BeginText();
+                    content03.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Excluded chattels:", 515, 590, 0);
+                    content03.EndText();
+                    TextField tf011 = new TextField(writer, new Rectangle(485, 540, 565, 580), "Central");
+                    tf011.BorderColor = new BaseColor(232, 232, 232);
+                    tf011.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf011.Options = TextField.READ_ONLY | TextField.MULTILINE;
+                    // tf011.Text = othercommentList[0].ExcludedChattels;
+                    if (othercommentList.Count > 0)
+                    {
+                        tf011.Text = othercommentList[0].ExcludedChattels;
+                    }
+                    else
+                    {
+                        // Handle the case when othercommentList is empty
+                        tf011.Text = ""; // Set a default value or handle it based on your requirements
+                    }
+                    tf011.TextColor = BaseColor.BLACK;
+                    tf011.FontSize = 8;
+                    writer.AddAnnotation(tf011.GetTextField());
+
+
+                    PdfPCell blankCell13 = new PdfPCell(new Phrase(Chunk.NEWLINE));
+                    blankCell13.Border = PdfPCell.NO_BORDER;
+                    blankCell13.FixedHeight = 10f;
+                    col5Table5.AddCell(blankCell13);
+
+                    PdfPCell cell10 = new PdfPCell(new Phrase());
+                    cell10.FixedHeight = 100f; // Set the height of the cell
+                    cell10.BorderColor = BaseColor.BLACK;
+                    cell10.CellEvent = new RectangleOverPdfPCellBorder("Internal remarks", 480f, 513f, 80f, 14f, 482f, 513f);
+                    // cell10.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Internal remarks", 478f, 20f, 70f, 500f);
+                    col5Table5.AddCell(cell10);
+
+                    TextField tf012 = new TextField(writer, new Rectangle(485, 350, 565, 495), "Internal remarks");
+                    tf012.BorderColor = new BaseColor(232, 232, 232);
+                    tf012.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf012.Options = TextField.READ_ONLY | TextField.MULTILINE;
+                    // tf012.Text = othercommentList[0].InternalRemark;
+                    if (othercommentList.Count > 0)
+                    {
+                        tf012.Text = othercommentList[0].InternalRemark;
+                    }
+                    else
+                    {
+                        // Handle the case when othercommentList is empty
+                        tf012.Text = ""; // Set a default value or handle it based on your requirements
+                    }
+                    tf012.TextColor = BaseColor.BLACK;
+                    tf012.FontSize = 8;
+                    writer.AddAnnotation(tf012.GetTextField());
+
+                    col1Table1.DefaultCell.Border = 0;
+                    col2Table2.DefaultCell.Border = 0;
+                    col3Table3.DefaultCell.Border = 0;
+                    col4Table4.DefaultCell.Border = 0;
+                    col5Table5.DefaultCell.Border = 0;
+                    multipleMainTable1.AddCell(col5Table5);
+
+                    // Add the main table to the document
+                    document.Add(multipleMainTable1);
+
+
+
+                    //tenancy Details
+                    PdfPTable tenancyTable = new PdfPTable(1);
+
+                    PdfPCell tenancyoutercell21 = new PdfPCell();
+                    tenancyTable.DefaultCell.Border = 0;
+                    tenancyoutercell21.BorderColor = BaseColor.BLACK;
+                    tenancyoutercell21.FixedHeight = 120f;
+                    tenancyTable.WidthPercentage = 108; // Set the width percentage of the parent table        
+                    tenancyTable.SpacingBefore = 12f;
+                    tenancyTable.SpacingAfter = 10f;
+                    //tenancyoutercell21.CellEvent = new RectangleOverPdfPCellBorder("Tenancy details", 33f, 210f, 80f, 14f, 482f, 200f);
+                    tenancyoutercell21.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Tenancy details", 33f, 20f, 80f, 200f);
+                    //particulartable.AddCell(outercell);
+
+                    PdfPTable tenancyinnerTable21 = new PdfPTable(2);
+                    tenancyinnerTable21.DefaultCell.Border = 0;
+                    tenancyinnerTable21.WidthPercentage = 100f;
+                    tenancyinnerTable21.SpacingBefore = 10f;
+
+
+
+                    PdfContentByte cb015 = writer.DirectContent;
+                    BaseFont bf015 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
+                    string text015 = "Status";
+
+                    cb015.BeginText();
+                    cb015.SetFontAndSize(bf015, 8);
+                    //015ut the alignment and coordinates here
+                    cb015.ShowTextAligned(1, text015, 40, 192, 0);
+                    cb015.EndText();
+                    // Create the first inner cell
+                    PdfPCell tenancyinnerCell21 = new PdfPCell();
+                    tenancyinnerCell21.FixedHeight = cellHeight;
+                    tenancyinnerCell21.Border = 0;
+                    tenancyinnerCell21.HorizontalAlignment = Element.ALIGN_CENTER;
+                    tenancyinnerCell21.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    tenancyinnerTable21.AddCell(innerCell21);
+
+                    //fields and checkboxes
+                    if (tenancyDetailsList != null && tenancyDetailsList.Count > 0)
+                    {
+                        bool isVacant = tenancyDetailsList[0].IsVacant;
+
+                        AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 175, 23, 185), isVacant, 23, 175);
+                    }
+                    else
+                    {
+                        // Handle the case when methodOfSaleList is null or empty
+                        // For example, you might want to provide a default value for the checkbox
+                        AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 175, 23, 185), false, 23, 175);
+                    }
+                    //AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 175, 23, 185), FinalList.tenancyDetail.IsVacant, 23, 175);
+                    //AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 175, 23, 185), FinalList.tenancyDetail.IsVacant, 23, 175);
+                    PdfContentByte content08 = writer.DirectContent;
+                    BaseFont baseF08 = BaseFont.CreateFont();
+                    content08.SetFontAndSize(baseF08, 8);
+                    content08.BeginText();
+                    content08.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Vacant", 50, 175, 0);
+                    content08.EndText();
+
+
+                    if (tenancyDetailsList != null && tenancyDetailsList.Count > 0)
+                    {
+                        bool isTananted = tenancyDetailsList[0].IsTananted;
+
+                        AddCheckboxField(document, writer, "myCheckbox", new Rectangle(90, 175, 80, 185), isTananted, 23, 175);
+                    }
+                    else
+                    {
+                        // Handle the case when methodOfSaleList is null or empty
+                        // For example, you might want to provide a default value for the checkbox
+                        AddCheckboxField(document, writer, "myCheckbox", new Rectangle(90, 175, 80, 185), false, 23, 175);
+                    }
+                    // AddCheckboxField(document, writer, "myCheckbox", new Rectangle(90, 175, 80, 185), FinalList.tenancyDetail.IsTananted, 23, 175);
+                    //AddCheckboxField(document, writer, "myCheckbox", new Rectangle(90, 175, 80, 185), FinalList.tenancyDetail.IsTananted, 23, 175);
+                    PdfContentByte content09 = writer.DirectContent;
+                    BaseFont baseF09 = BaseFont.CreateFont();
+                    content09.SetFontAndSize(baseF09, 8);
+                    content09.BeginText();
+                    content09.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Tenanted", 110, 175, 0);
+                    content09.EndText();
+
+                    PdfContentByte content010 = writer.DirectContent;
+                    BaseFont baseF010 = BaseFont.CreateFont();
+                    content010.SetFontAndSize(baseF010, 8);
+                    content010.BeginText();
+                    content010.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Start", 33, 150, 0);
+                    content010.EndText();
+                    string logoPath11 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
+                    iTextSharp.text.Image logo11 = iTextSharp.text.Image.GetInstance(logoPath11);
+                    if (System.IO.File.Exists(logoPath11))
+                    {
+                        logo11.ScaleAbsolute(15f, 15f);
+                        logo11.SetAbsolutePosition(43, 150);
+
+
+                        document.Add(logo11);
+                    }
+                    TextField tf013 = new TextField(writer, new Rectangle(59, 170, 150, 150), "start");
+                    tf013.BorderColor = new BaseColor(232, 232, 232);
+                    tf013.BackgroundColor = new BaseColor(232, 232, 232);
+                    if (FinalList.tenancyDetail != null && FinalList.tenancyDetail.TenancyStartDate != null)
+                    {
+                        tf013.Text = ((DateTime)FinalList.tenancyDetail.TenancyStartDate).ToString("dd-MM-yyyy");
+                    }
+                    else
+                    {
+                        tf013.Text = "";
+                    }
+
+                    tf013.FontSize = 8;
+                    tf013.Options = TextField.READ_ONLY;
+
+
+                    tf013.FontSize = 8;
+                    tf013.Options = TextField.READ_ONLY;
+
+
+                    writer.AddAnnotation(tf013.GetTextField());
+
+
+
+                    PdfContentByte content011 = writer.DirectContent;
+                    BaseFont baseF011 = BaseFont.CreateFont();
+                    content011.SetFontAndSize(baseF011, 8);
+                    content011.BeginText();
+                    content011.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "End", 33, 115, 0);
+                    content011.EndText();
+                    string logoPath22 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
+                    iTextSharp.text.Image logo22 = iTextSharp.text.Image.GetInstance(logoPath22);
+                    if (System.IO.File.Exists(logoPath22))
+                    {
+                        logo22.ScaleAbsolute(15f, 15f);
+                        logo22.SetAbsolutePosition(43, 115);
+
+
+                        document.Add(logo22);
+                    }
+                    TextField tf014 = new TextField(writer, new Rectangle(59, 140, 150, 120), "end");
+                    tf014.BorderColor = new BaseColor(232, 232, 232);
+                    tf014.BackgroundColor = new BaseColor(232, 232, 232);
+                    if (FinalList.tenancyDetail != null && FinalList.tenancyDetail.TenancyEndDate != null)
+                    {
+                        tf014.Text = ((DateTime)FinalList.tenancyDetail.TenancyEndDate).ToString("dd-MM-yyyy");
+                    }
+                    else
+                    {
+                        tf014.Text = "";
+                    }
+                    // tf014.Text = ((DateTime)FinalList.tenancyDetail.TenancyEndDate).ToString("dd-MM-yyyy");
+                    tf014.FontSize = 8;
+                    tf014.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf014.GetTextField());
+
+                    PdfContentByte cb016 = writer.DirectContent;
+                    BaseFont bf016 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
+                    string text016 = "Tenant details";
+                    cb016.BeginText();
+                    cb016.SetFontAndSize(bf016, 8);
+                    //016ut the alignment and coordinates here
+                    cb016.ShowTextAligned(1, text016, 230, 195, 0);
+                    cb016.EndText();
+
+                    PdfContentByte content012 = writer.DirectContent;
+                    BaseFont baseF012 = BaseFont.CreateFont();
+                    content012.SetFontAndSize(baseF012, 8);
+                    content012.BeginText();
+                    content012.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Name", 190, 175, 0);
+                    content012.EndText();
+                    TextField tf016 = new TextField(writer, new Rectangle(348, 190, 210, 170), "Name");
+                    tf016.BorderColor = new BaseColor(232, 232, 232);
+                    tf016.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf016.Options = TextField.READ_ONLY;
+                    tf016.FontSize = 8;
+                    //tf016.Text = FinalList.tenancyDetail.Name;
+                    if (FinalList != null && FinalList.tenancyDetail != null && FinalList.tenancyDetail.Name != null)
+                    {
+                        string Name = FinalList.tenancyDetail.Name.ToString();
+                        tf016.Text = Name;
+                    }
+                    else
+                    {
+                        tf016.Text = " "; // Set a default value if the data is not available
+                    }
+
+
+                    tf016.TextColor = BaseColor.BLACK;
+                    writer.AddAnnotation(tf016.GetTextField());
+
+                    PdfContentByte content013 = writer.DirectContent;
+                    BaseFont baseF013 = BaseFont.CreateFont();
+                    content013.SetFontAndSize(baseF013, 8);
+                    content013.BeginText();
+                    content013.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Email", 190, 155, 0);
+                    content013.EndText();
+                    TextField tf015 = new TextField(writer, new Rectangle(348, 165, 210, 145), "Email");
+                    tf015.BorderColor = new BaseColor(232, 232, 232);
+                    tf015.BackgroundColor = new BaseColor(232, 232, 232);
+                    if (FinalList != null && FinalList.tenancyDetail != null && FinalList.tenancyDetail.Email != null)
+                    {
+                        string Email = FinalList.tenancyDetail.Email.ToString();
+                        tf015.Text = Email;
+                    }
+                    else
+                    {
+                        tf015.Text = " "; // Set a default value if the data is not available
+                    }
+                    //tf015.Text = FinalList.tenancyDetail.Email;
+
+                    tf015.FontSize = 8;
+                    tf015.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf015.GetTextField());
+
+                    PdfContentByte content014 = writer.DirectContent;
+                    BaseFont baseF014 = BaseFont.CreateFont();
+                    content014.SetFontAndSize(baseF014, 8);
+                    content014.BeginText();
+                    content014.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Phone", 190, 130, 0);
+                    content014.EndText();
+                    TextField tf017 = new TextField(writer, new Rectangle(348, 140, 210, 120), "Phone");
+                    tf017.BorderColor = new BaseColor(232, 232, 232);
+                    tf017.BackgroundColor = new BaseColor(232, 232, 232);
+                    if (FinalList != null && FinalList.tenancyDetail != null && FinalList.tenancyDetail.Phone != null)
+                    {
+                        string Phone = FinalList.tenancyDetail.Phone.ToString();
+                        tf017.Text = Phone;
+                    }
+                    else
+                    {
+                        tf017.Text = " "; // Set a default value if the data is not available
+                    }
+                    // tf017.Text = FinalList.tenancyDetail.Phone;
+                    tf017.FontSize = 8;
+                    tf017.Options = TextField.READ_ONLY;
+                    writer.AddAnnotation(tf017.GetTextField());
+
+
+                    PdfContentByte cb017 = writer.DirectContent;
+                    BaseFont bf017 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
+                    string text017 = "Tenancy details";
+                    cb017.BeginText();
+                    cb017.SetFontAndSize(bf017, 8);
+                    //017ut the alignment and coordinates here
+                    cb017.ShowTextAligned(1, text017, 400, 195, 0);
+                    cb017.EndText();
+                    TextField tf019 = new TextField(writer, new Rectangle(360, 190, 550, 120), "Tenancy details");
+                    tf019.BorderColor = new BaseColor(232, 232, 232);
+                    tf019.BackgroundColor = new BaseColor(232, 232, 232);
+                    tf019.Options = TextField.READ_ONLY | TextField.MULTILINE;
+                    tf019.FontSize = 8f;
+                    tf019.TextColor = BaseColor.BLACK;
+                    //tf019.Options = TextField.MULTILINE;
+
+                    //  tf019.Text = FinalList.tenancyDetail.TenancyDetails;
+                    if (FinalList != null && FinalList.tenancyDetail != null && FinalList.tenancyDetail.TenancyDetails != null)
+                    {
+                        string TenancyDetails = FinalList.tenancyDetail.TenancyDetails;
+                        tf019.Text = TenancyDetails;
+                    }
+                    else
+                    {
+                        tf019.Text = " "; // Set a default value if the data is not available
+                    }
+
+                    writer.AddAnnotation(tf019.GetTextField());
+
+
+
+
+                    PdfPCell tenancyinnerCell22 = new PdfPCell();
+                    tenancyinnerCell22.FixedHeight = cellHeight;
+                    tenancyinnerCell22.Border = 0;
+                    tenancyinnerCell22.HorizontalAlignment = Element.ALIGN_CENTER;
+                    tenancyinnerCell22.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    tenancyinnerTable21.AddCell(innerCell22);
+                    tenancyoutercell21.AddElement(innerTable21);
+                    tenancyTable.AddCell(tenancyoutercell21);
+                    document.Add(tenancyTable);
+
+
+                    //NEW PAGE 
+                    //document.Add(new Paragraph(" "));
+                    document.Add(new Paragraph(" "));
+                    //document.Add(new Paragraph(" "));
+
+
+                    // AddAggrementContent(document, writer, paragraphText, priorAgencyMarketingList, estimatesList, additionaldisclosure, methodOfSaleList);
+
+                    AddAggrementContent(document, writer, paragraphText, priorAgencyMarketingList, estimatesList, additionaldisclosure, methodOfSaleList, clientDetailsList, contractdetailsList, signatureOfClients, id, execution);
+
+                    document.Close();
+                    //_response.ContentType = MediaTypeNames.Application.Pdf;
+                    var contentDisposition = new ContentDisposition
+                    {
+                        FileName = "ClientDetails.pdf",
+                        Inline = false
+                    };
+
+            // System.IO.File.WriteAllBytes(@"C:\Users\HP\Source\Repos\RE360\RE360.API\Document\" + id.ToString() + ".pdf", memoryStream.ToArray());
+            //_response.Headers.Add("Content-Disposition", contentDisposition.ToString());
+            //return File(memoryStream.ToArray(), _response.ContentType);
+            // Save the PDF to a local file
+            //  string localFilePath = @"C:\Users\HP\Source\Repos\RE360\RE360.API\Document\" + id.ToString() + ".pdf";
+            //try
+            //{
+            //    memoryStream.Position = 0; // Reset memoryStream position
+
+            //    // Read memoryStream contents into a byte array
+            //    byte[] pdfBytes = new byte[memoryStream.Length];
+            //    memoryStream.Read(pdfBytes, 0, pdfBytes.Length);
+
+            //    // Save the PDF to a local file
+            //    string localFilePath = @"C:\Users\HP\Source\Repos\RE360\RE360.API\Document\" + id.ToString() + ".pdf";
+            //    System.IO.File.WriteAllBytes(localFilePath, pdfBytes);
+
+            //    // Upload the PDF to Azure Blob Storage
+            //    string fileName = id.ToString() + ".pdf";
+            //    string blobContainerName = "agentdoc";
+            //    CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(_configuration["BlobStorageSettings:BlobStorageConnStr"].ToString());
+            //    CloudBlobClient blobClient = cloudStorageAccount.CreateCloudBlobClient();
+            //    CloudBlobContainer container = blobClient.GetContainerReference(blobContainerName);
+            //    CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileName);
+
+            //    // Upload the file to Azure Blob Storage using the byte array
+            //    using (var azureStream = new MemoryStream(pdfBytes))
+            //    {
+            //        await blockBlob.UploadFromStreamAsync(azureStream);
+            //    }
+
+            //    // return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success" };
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw; // Rethrow the exception to be handled higher up the call stack
+            //}
+
+
+            //try
+            //{
+            //    string fileName = id.ToString() + ".pdf";
+            //    //Path.GetRandomFileName().Replace(".", "") + Path.GetExtension(files.FileName).ToLowerInvariant();
+            //    CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(_configuration["BlobStorageSettings:BlobStorageConnStr"].ToString());
+            //    CloudBlobClient blobClient = cloudStorageAccount.CreateCloudBlobClient();
+            //    CloudBlobContainer container = blobClient.GetContainerReference("agentdoc");
+            //    CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileName);
+            //    memoryStream.Position = 0;
+            //    using (var fileStream = memoryStream)
+            //    {
+            //        await blockBlob.UploadFromStreamAsync(fileStream);
+            //    }
+            //    //   return fileName;
+            //}
+            //catch (Exception ex)
+            //{
+            //    // return "";
+            //    throw;
+            //}
+
+
+            //try
+            //{
+            //    string fileName = id.ToString() + ".pdf";
+
+            //    // Assuming memoryStream is already populated with the PDF content
+
+            //    // Reset memoryStream position to the beginning
+            //    memoryStream.Position = 0;
+
+            //    // Upload the file to Azure Blob Storage
+            //    CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(_configuration["BlobStorageSettings:BlobStorageConnStr"].ToString());
+            //    CloudBlobClient blobClient = cloudStorageAccount.CreateCloudBlobClient();
+            //    CloudBlobContainer container = blobClient.GetContainerReference("agentdoc");
+            //    CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileName);
+
+            //    using (var fileStream = memoryStream)
+            //    {
+            //        await blockBlob.UploadFromStreamAsync(fileStream);
+            //    }
+
+            //    // Optionally, return the uploaded file name
+            //    // return fileName;
+            //}
+            //catch (Exception ex)
+            //{
+            //    // Handle the exception appropriately, e.g., log it or return an error response
+            //    // throw;
+            //}
+           
         }
+
+
         public enum FieldType
         {
             Text,

@@ -21,6 +21,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Identity;
 using static iTextSharp.text.pdf.AcroFields;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage;
 
 namespace RE360.API.Repositories
 {
@@ -850,6 +852,93 @@ namespace RE360.API.Repositories
 
 
 
+        //public async Task<APIResponseModel> GeneratePDF(int id, IConfiguration configuration)
+        //{
+        //    try
+        //    {
+        //        Guid guAgentID;
+        //        Guid item = _context.ListingAddress.Where(x => x.ID == id).FirstOrDefault().AgentID;
+
+        //        Guid.TryParse(item.ToString(), out guAgentID);
+
+        //        ApplicationUser user = await _userManager.FindByIdAsync(guAgentID.ToString());
+        //        GeneratePDF pDFHelper = new GeneratePDF(user, _context, configuration);
+
+        //        using (var memoryStream = new MemoryStream())
+        //        {
+        //            await pDFHelper.DownloadPDF(id, memoryStream);
+
+        //            // Upload the PDF to Azure Blob Storage
+        //            string fileName = id.ToString() + ".pdf";
+        //            string blobContainerName = "agentdoc";
+        //            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(_configuration["BlobStorageSettings:BlobStorageConnStr"].ToString());
+        //            CloudBlobClient blobClient = cloudStorageAccount.CreateCloudBlobClient();
+        //            CloudBlobContainer container = blobClient.GetContainerReference(blobContainerName);
+        //            CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileName);
+
+        //            // Upload the file to Azure Blob Storage using the saved memoryStream
+        //            memoryStream.Position = 0; // Reset memoryStream position
+        //            await blockBlob.UploadFromStreamAsync(memoryStream);
+        //        }
+
+        //        return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success" };
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
+        //    }
+        //}
+
+
+        //public async Task<APIResponseModel> GeneratePDF(int id, IConfiguration configuration)
+        //{
+        //    try
+        //    {
+        //        Guid guAgentID;
+        //        Guid item = _context.ListingAddress.Where(x => x.ID == id).FirstOrDefault().AgentID;
+
+        //        Guid.TryParse(item.ToString(), out guAgentID);
+
+        //        ApplicationUser user = await _userManager.FindByIdAsync(guAgentID.ToString());
+        //        GeneratePDF pDFHelper = new GeneratePDF(user, _context, configuration);
+
+        //        using (var memoryStream = new MemoryStream())
+        //        {
+        //            await pDFHelper.DownloadPDF(id, memoryStream);
+
+        //            // Reset memoryStream position
+        //            memoryStream.Position = 0;
+
+        //            // Read memoryStream contents into a byte array
+        //            byte[] pdfBytes = new byte[memoryStream.Length];
+        //            memoryStream.Read(pdfBytes, 0, pdfBytes.Length);
+
+        //            // Save the PDF to a local file
+        //            string localFilePath = @"C:\Users\HP\Source\Repos\RE360\RE360.API\Document\" + id.ToString() + ".pdf";
+        //            System.IO.File.WriteAllBytes(localFilePath, pdfBytes);
+
+        //            // Upload the PDF to Azure Blob Storage
+        //            string fileName = id.ToString() + ".pdf";
+        //            string blobContainerName = "agentdoc";
+        //            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(_configuration["BlobStorageSettings:BlobStorageConnStr"].ToString());
+        //            CloudBlobClient blobClient = cloudStorageAccount.CreateCloudBlobClient();
+        //            CloudBlobContainer container = blobClient.GetContainerReference(blobContainerName);
+        //            CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileName);
+
+        //            // Upload the file to Azure Blob Storage using the byte array
+        //            using (var azureStream = new MemoryStream(pdfBytes))
+        //            {
+        //                await blockBlob.UploadFromStreamAsync(azureStream);
+        //            }
+        //        }
+
+        //        return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success" };
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
+        //    }
+        //}
         public async Task<APIResponseModel> GeneratePDF(int id, IConfiguration configuration)
         {
             try
@@ -861,14 +950,96 @@ namespace RE360.API.Repositories
 
                 ApplicationUser user = await _userManager.FindByIdAsync(guAgentID.ToString());
                 GeneratePDF pDFHelper = new GeneratePDF(user, _context, configuration);
-                pDFHelper.DownloadPDF(id);
+
+                using (var memoryStream = new MemoryStream())
+                {
+                    await pDFHelper.DownloadPDF(id, memoryStream);
+
+                    // Save the PDF to a local file using memoryStream content
+                    string localFilePath = @"C:\Users\HP\Source\Repos\RE360\RE360.API\Document\" + id.ToString() + ".pdf";
+                    System.IO.File.WriteAllBytes(localFilePath, memoryStream.ToArray());
+
+                    // Upload the PDF to Azure Blob Storage
+                    string fileName = id.ToString() + ".pdf";
+                    string blobContainerName = "agentdoc";
+                    CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(_configuration["BlobStorageSettings:BlobStorageConnStr"].ToString());
+                    CloudBlobClient blobClient = cloudStorageAccount.CreateCloudBlobClient();
+                    CloudBlobContainer container = blobClient.GetContainerReference(blobContainerName);
+                    CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileName);
+
+                    // Upload the file to Azure Blob Storage using the memoryStream content
+                    using (var azureStream = new MemoryStream(memoryStream.ToArray()))
+                    {
+                        await blockBlob.UploadFromStreamAsync(azureStream);
+                    }
+                }
+
                 return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success" };
             }
             catch (Exception ex)
             {
+                // Log the exception for further investigation
+                Console.WriteLine($"Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
                 return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
             }
         }
+
+
+
+
+
+        private async Task<string> UploadBlobPdf(MemoryStream memoryStream, string fileName, string blobContainerName)
+        {
+            try
+            {
+                CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(_configuration["BlobStorageSettings:BlobStorageConnStr"].ToString());
+                CloudBlobClient blobClient = cloudStorageAccount.CreateCloudBlobClient();
+                CloudBlobContainer container = blobClient.GetContainerReference(blobContainerName);
+                await container.CreateIfNotExistsAsync();
+                CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileName);
+
+                memoryStream.Position = 0;
+                await blockBlob.UploadFromStreamAsync(memoryStream);
+
+                // Optionally, you can set the appropriate blob properties here, such as Content-Type or metadata
+
+                // Dispose the memory stream
+                memoryStream.Dispose();
+
+                return blockBlob.Uri.ToString(); // Return the blob URL
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception, e.g., log it or throw it back
+                throw;
+            }
+        }
+
+        //private async Task UploadBlobPdf(MemoryStream memoryStream, string fileName, string blobContainerName)
+        //{
+        //    try
+        //    {
+        //        CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(_configuration["BlobStorageSettings:BlobStorageConnStr"].ToString());
+        //        CloudBlobClient blobClient = cloudStorageAccount.CreateCloudBlobClient();
+        //        CloudBlobContainer container = blobClient.GetContainerReference(blobContainerName);
+        //        await container.CreateIfNotExistsAsync(); // Create the container if it doesn't exist
+        //        CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileName);
+
+        //        memoryStream.Position = 0; // Reset the memoryStream position to the beginning
+        //        await blockBlob.UploadFromStreamAsync(memoryStream); // Upload the PDF from the memory stream to the blob
+
+        //        // Optionally, you can set the appropriate blob properties here, such as Content-Type or metadata
+
+        //        // Once the upload is complete, you might want to close/dispose the memoryStream
+        //        memoryStream.Dispose();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Handle the exception, e.g., log it or throw it back
+        //        throw;
+        //    }
+        //}
+
 
 
 

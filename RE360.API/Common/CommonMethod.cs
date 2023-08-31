@@ -174,10 +174,11 @@ namespace RE360.API.Common
             }
             catch (Exception ex)
             {
-                CommonDBHelper.ErrorLog("CommonMethod - UploadBlobFile", ex.Message, ex.StackTrace);
-                throw ex;
+                // Handle the exception, e.g., log it or throw it back
+                throw;
             }
         }
+
 
 
 
