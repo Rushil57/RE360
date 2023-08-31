@@ -198,9 +198,9 @@ namespace RE360.API.Common
             var mailSubject = "Registration";
             var mailBody = "<p>Dear " + firstName + " Agent," +
                             "<br>We are pleased to inform you that your account has been successfully created.<br>" +
-                            "<br>Your User Name is: <b>" + receiverEmailId + "</b>" +
-                            "<br>Your Temporary Password is: <b>" + Password + "</b>" +
-                            "<br><br>Please note that we strongly recommend changing your password the first time you log in using this temporary password for enhanced security." +
+                            "<br>Your user name is: <b>" + receiverEmailId + "</b>" +
+                            "<br>Your temporary password is: <b>" + Password + "</b>" +
+                            "<br><br><b>Note:</b> We are strongly recommend changing your password the first time you log in using this temporary password for enhanced security." +
             "<br><br>Thank you for choosing our services. If you have any questions or require assistance, please do not hesitate to reach out to our support team.";
 
             var sumUp = "<p style='padding-top: 3%;padding-left: 3%;border-left: 1px solid #d5d5ec;'>RE360</p>";
