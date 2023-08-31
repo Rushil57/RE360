@@ -253,6 +253,28 @@ namespace RE360.API.Controllers
         //    return Ok(result);
         //}
 
+        //[HttpGet]
+        //[Route("GeneratePDFURL")]
+        //public async Task<IActionResult> GeneratePDFURL(int pid)
+        //{
+        //    try
+        //    {
+        //        var configuration = HttpContext.RequestServices.GetRequiredService<IConfiguration>();
+
+        //        var result = await _propertyInformationRepository.GeneratePDF(pid, configuration);
+
+        //        var filePath = $"{configuration["BlobStorageSettings:AgentDocPath"]}{pid}.pdf{configuration["BlobStorageSettings:AgentDocToken"]}";
+
+
+        //        return Ok(new { Result = result, FilePath = filePath });
+        //    }
+        //    catch (Exception ex)
+
+        //    { 
+        //        return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while generating PDF URL.");
+        //    }
+        //}
+
         [HttpGet]
         [Route("GeneratePDFURL")]
         public async Task<IActionResult> GeneratePDFURL(int pid)
@@ -265,15 +287,14 @@ namespace RE360.API.Controllers
 
                 var filePath = $"{configuration["BlobStorageSettings:AgentDocPath"]}{pid}.pdf{configuration["BlobStorageSettings:AgentDocToken"]}";
 
-     
                 return Ok(new { Result = result, FilePath = filePath });
             }
             catch (Exception ex)
-
-            { 
+            {
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while generating PDF URL.");
             }
         }
+
 
 
     }
