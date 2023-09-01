@@ -956,8 +956,8 @@ namespace RE360.API.Repositories
                     await pDFHelper.DownloadPDF(id, memoryStream);
 
                     // Save the PDF to a local file using memoryStream content
-                    string localFilePath = @"C:\Users\HP\Source\Repos\RE360\RE360.API\Document\" + id.ToString() + ".pdf";
-                    System.IO.File.WriteAllBytes(localFilePath, memoryStream.ToArray());
+                    //string localFilePath = @"D:\Projects\RE360\RE360\RE360.API\Document\" + id.ToString() + ".pdf";
+                    //System.IO.File.WriteAllBytes(localFilePath, memoryStream.ToArray());
 
                     // Upload the PDF to Azure Blob Storage
                     string fileName = id.ToString() + ".pdf";
@@ -973,8 +973,10 @@ namespace RE360.API.Repositories
                         await blockBlob.UploadFromStreamAsync(azureStream);
                     }
                 }
+                var filePath = $"{configuration["BlobStorageSettings:AgentDocPath"]}{id}.pdf{configuration["BlobStorageSettings:AgentDocToken"]}";
+                var WebUrl = $"{configuration["WebAppUrl"]}User/AgentDocView";
 
-                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success" };
+                return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = new { filePath = filePath, WebUrl = WebUrl } };
             }
             catch (Exception ex)
             {

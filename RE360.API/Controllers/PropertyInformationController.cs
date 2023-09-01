@@ -285,9 +285,9 @@ namespace RE360.API.Controllers
 
                 var result = await _propertyInformationRepository.GeneratePDF(pid, configuration);
 
-                var filePath = $"{configuration["BlobStorageSettings:AgentDocPath"]}{pid}.pdf{configuration["BlobStorageSettings:AgentDocToken"]}";
+                //var filePath = $"{configuration["BlobStorageSettings:AgentDocPath"]}{pid}.pdf{configuration["BlobStorageSettings:AgentDocToken"]}";
 
-                return Ok(new { Result = result, FilePath = filePath });
+                return Ok(result);
             }
             catch (Exception ex)
             {

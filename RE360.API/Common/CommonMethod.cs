@@ -197,7 +197,7 @@ namespace RE360.API.Common
             var port = Convert.ToInt32(_configuration["Smtp:Port"]);
 
             var mailSubject = "Registration";
-            var mailBody = "<p>Dear " + firstName + " Agent," +
+            var mailBody = "<p>Dear " + firstName + "," +
                             "<br>We are pleased to inform you that your account has been successfully created.<br>" +
                             "<br>Your user name is: <b>" + receiverEmailId + "</b>" +
                             "<br>Your temporary password is: <b>" + Password + "</b>" +
