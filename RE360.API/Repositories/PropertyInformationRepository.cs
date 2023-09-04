@@ -974,7 +974,7 @@ namespace RE360.API.Repositories
                     }
                 }
                 var filePath = $"{configuration["BlobStorageSettings:AgentDocPath"]}{id}.pdf{configuration["BlobStorageSettings:AgentDocToken"]}";
-                var WebUrl = $"{configuration["WebAppUrl"]}User/AgentDocView";
+                var WebUrl = $"{configuration["WebAppUrl"]}User/AgentDocView?pid=22";
 
                 return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = new { filePath = filePath, WebUrl = WebUrl } };
             }
@@ -1072,10 +1072,6 @@ namespace RE360.API.Repositories
         //        return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
         //    }
         //}
-
-
-
-
 
     }
 }
