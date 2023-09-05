@@ -69,6 +69,8 @@ namespace RE360.API.Common
             List<ContractDetail> contractdetailsList = new List<ContractDetail>();
             List<ContractRate> contractRatelsList = new List<ContractRate>();
             List<SignaturesOfClient> signatureOfClients = new List<SignaturesOfClient>();
+            List<ClientCommissionDetails> clientCommissionDetails = new List<ClientCommissionDetails>();
+            CalculationOfCommission calculationOfCommissions = new CalculationOfCommission();
             Execution signatureOfAgent = new Execution();
 
             var PropertyAttrList = (from p in _context.PropertyAttributeType
@@ -78,7 +80,8 @@ namespace RE360.API.Common
                                         list = p.PropertyAttribute.ToList()
                                     }).ToList();
 
-            //var clientDetailsList = _context.ClientDetail.Where(x => x.PID == id).ToList();
+            calculationOfCommissions = _context.CalculationOfCommission.Where(x => x.PID == id).FirstOrDefault();
+            clientCommissionDetails = _context.ClientCommissionDetails.Where(x => x.PID == id).ToList();
             methodOfSaleList = _context.MethodOfSale.Where(x => x.PID == id).ToList();
             tenancyDetailsList = _context.TenancyDetail.Where(x => x.PID == id).ToList();
             contractdetailsList = _context.ContractDetail.Where(x => x.PID == id).ToList();
@@ -182,8 +185,6 @@ namespace RE360.API.Common
 
             document.Open();
 
-
-            //writer.PageEvent = new PdfFooter();
             writer.PageEvent = new PdfFooter(_user, signatureOfAgent);
 
 
@@ -204,7 +205,6 @@ namespace RE360.API.Common
 
 
             PdfPTable centertable = new PdfPTable(1);
-            //PdfPCell centerCell = new PdfPCell(new Phrase("CONFIDENTIAL", new Font(Font.FontFamily.COURIER, 17f, Font.BOLDITALIC, new BaseColor(0, 48, 143))));
             PdfPCell centerCell = new PdfPCell(new Phrase(" "));
             centerCell.HorizontalAlignment = Element.ALIGN_CENTER;
             centerCell.Padding = 7.5f;
@@ -222,13 +222,10 @@ namespace RE360.API.Common
             rightCell.HorizontalAlignment = Element.ALIGN_RIGHT;
             rightCell.Border = Rectangle.NO_BORDER;
             righttable.DefaultCell.Border = 0;
-            //   var filePath = _configuration["BlobStorageSettings:DocPath"] + "logopdf.png" + _configuration["BlobStorageSettings:DocToken"];
-            var filePath = _configuration["BlobStorageSettings:DocPath"] + "logopdf.png" + _configuration["BlobStorageSettings:DocToken"];
-            //  string logoPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "logopdf.png");
-
+            if(_user != null && _user.CompanyName == "Company1")
+            {
+                var filePath = _configuration["BlobStorageSettings:DocPath"] + "Company1.png" + _configuration["BlobStorageSettings:DocToken"];
             iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(filePath);
-            //if (System.IO.File.Exists(filePath))
-            //{
             logo.ScaleAbsolute(70f, 70f);
             rightCell.PaddingLeft = 80f;
             rightCell.PaddingBottom = -75f;
@@ -238,8 +235,32 @@ namespace RE360.API.Common
             logo.SetAbsolutePosition(iTextSharp.text.PageSize.A4.Rotate().Width - 0, 20);
             rightCell.AddElement(logo);
 
-            //}
-            //}
+            }
+            else if (_user != null && _user.CompanyName == "Company2")
+            {
+                var filePath = _configuration["BlobStorageSettings:DocPath"] + "Company2.png" + _configuration["BlobStorageSettings:DocToken"];
+                iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(filePath);             
+                logo.ScaleAbsolute(70f, 70f);
+                rightCell.PaddingLeft = 80f;
+                rightCell.PaddingBottom = -75f;
+                rightCell.PaddingTop = 0f;
+                rightCell.PaddingRight = 0f;
+                logo.SetAbsolutePosition(iTextSharp.text.PageSize.A4.Rotate().Width - 0, 20);
+                rightCell.AddElement(logo);
+            }
+            else
+            {
+                var filePath = _configuration["BlobStorageSettings:DocPath"] + "Company3.png" + _configuration["BlobStorageSettings:DocToken"];
+                iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(filePath);
+                logo.ScaleAbsolute(70f, 70f);
+                rightCell.PaddingLeft = 80f;
+                rightCell.PaddingBottom = -75f;
+                rightCell.PaddingTop = 0f;
+                rightCell.PaddingRight = 0f;
+                logo.SetAbsolutePosition(iTextSharp.text.PageSize.A4.Rotate().Width - 0, 20);
+                rightCell.AddElement(logo);
+
+            }
 
             righttable.AddCell(rightCell);
             table.DefaultCell.Border = 0;
@@ -302,6 +323,18 @@ namespace RE360.API.Common
             {
 
                 AddContentToSolicitordetails(document, writer, solicitorList[i]);
+                // document.Add(new Paragraph("\r\n"));
+            }
+            if (solicitorList.Count == 4)
+            {
+                document.Add(new Paragraph("\r\n"));
+                document.Add(new Paragraph("\r\n"));
+                document.Add(new Paragraph("\r\n"));
+                document.Add(new Paragraph("\r\n"));
+                document.Add(new Paragraph("\r\n"));
+                document.Add(new Paragraph("\r\n"));
+                document.Add(new Paragraph("\r\n"));
+                document.Add(new Paragraph("\r\n"));
                 document.Add(new Paragraph("\r\n"));
             }
             if (particularList.Count == 0)
@@ -634,8 +667,9 @@ namespace RE360.API.Common
             cell21.BorderColor = BaseColor.DARK_GRAY;
             cell21.BorderWidth = 1f;
             cell21.CellEvent = new RectangleOverPdfPCellBorder("Rates", 310f, 596f, 30f, 20f, 312f, 608f);
-            //cell21.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Rates", 310f, 20f, 80f, 595f); //380, 630, 322, 645
             parentTable1.AddCell(cell12);
+
+
             //dummy cell created to have an empty space with width `0.1f` which was declared //above.
             PdfPCell cell0222 = new PdfPCell(new Phrase(" "));
             cell0222.Border = 0;
@@ -663,7 +697,6 @@ namespace RE360.API.Common
             tf70.BorderColor = new BaseColor(232, 232, 232);
             tf70.BackgroundColor = new BaseColor(232, 232, 232);
             tf70.FontSize = 8;
-            //tf70.Text = ((DateTime)FinalList.contractDetail.AuthorityStartDate).ToString("dd-MM-yyyy");
             if (FinalList != null && FinalList.contractDetail != null && FinalList.contractDetail.AuthorityStartDate != null)
             {
                 string formattedDate1 = ((DateTime)FinalList.contractDetail.AuthorityStartDate).ToString("dd-MM-yyyy");
@@ -711,7 +744,6 @@ namespace RE360.API.Common
             TextField tf72 = new TextField(writer, new Rectangle(130, 545, 245, 530), " marketing spend $ ");
             tf72.BorderColor = new BaseColor(232, 232, 232);
             tf72.BackgroundColor = new BaseColor(232, 232, 232);
-            // tf72.Text = FinalList.contractDetail.AgreedMarketSpend.ToString();
             if (FinalList != null && FinalList.contractDetail != null && FinalList.contractDetail.AgreedMarketSpend != null)
             {
                 string AgreedMarketSpend = FinalList.contractDetail.AgreedMarketSpend.ToString();
@@ -753,7 +785,6 @@ namespace RE360.API.Common
             {
                 tf74.Text = " "; // Set a default value if the data is not available
             }
-            //tf74.Text = FinalList.contractRate.Water.ToString();
             tf74.FontSize = 8;
             tf74.Options = TextField.READ_ONLY;
             writer.AddAnnotation(tf74.GetTextField());
@@ -774,7 +805,6 @@ namespace RE360.API.Common
             TextField tf75 = new TextField(writer, new Rectangle(345, 568, 550, 553), "Council");
             tf75.BorderColor = new BaseColor(232, 232, 232);
             tf75.BackgroundColor = new BaseColor(232, 232, 232);
-            //tf75.Text = FinalList.contractRate.Council.ToString();
             if (FinalList != null && FinalList.contractRate != null && FinalList.contractRate.Council != null)
             {
                 string Council = FinalList.contractRate.Council.ToString();
@@ -803,7 +833,6 @@ namespace RE360.API.Common
             TextField tf78 = new TextField(writer, new Rectangle(345, 545, 490, 525), "other");
             tf78.BorderColor = new BaseColor(232, 232, 232);
             tf78.BackgroundColor = new BaseColor(232, 232, 232);
-            //tf78.Text = FinalList.contractRate.OtherValue.ToString();
             if (FinalList != null && FinalList.contractRate != null && FinalList.contractRate.OtherValue != null)
             {
                 string OtherValue = FinalList.contractRate.OtherValue.ToString();
@@ -836,9 +865,6 @@ namespace RE360.API.Common
                 AddCheckboxField(document, writer, "myCheckbox", new Rectangle(500, 543, 512, 530), false, 500, 530);
             }
 
-            // AddCheckboxField(document, writer, "myCheckbox", new Rectangle(500, 543, 512, 530), FinalList.contractRate.IsPerAnnum, 500, 530);
-            //AddCheckboxField(document, writer, "myCheckbox", new Rectangle(500, 543, 512, 530), FinalList.contractRate.IsPerAnnum, 500, 530);
-
             PdfContentByte overContent80 = writer.DirectContent;
             BaseFont baseFont80 = BaseFont.CreateFont();
             overContent80.SetFontAndSize(baseFont80, 8);
@@ -858,9 +884,7 @@ namespace RE360.API.Common
                 // For example, you could set it to unchecked
                 AddCheckboxField(document, writer, "myCheckbox", new Rectangle(538, 543, 550, 530), false, 538, 530);
             }
-            // AddCheckboxField(document, writer, "myCheckbox", new Rectangle(550, 543, 538, 530), FinalList.contractRate.IsPerQuarter, 538, 530);
-            //AddCheckboxField(document, writer, "myCheckbox", new Rectangle(550, 543, 538, 530), FinalList.contractRate.IsPerQuarter, 538, 530);
-
+           
             PdfContentByte overContent79 = writer.DirectContent;
             BaseFont baseFont79 = BaseFont.CreateFont();
             overContent79.SetFontAndSize(baseFont79, 8);
@@ -915,9 +939,7 @@ namespace RE360.API.Common
             methodOfTable.SpacingBefore = 12f;
             methodOfTable.SpacingAfter = 10f;
             outercell21.CellEvent = new RectangleOverPdfPCellBorder("Method of Sale", 30f, 490f, 77f, 20f, 32f, 500f);
-            //outercell21.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Method of Sale", 50f, 20f, 80f, 490f);
-            //particulartable.AddCell(outercell);
-
+           
             PdfPTable innerTable21 = new PdfPTable(2);
             innerTable21.DefaultCell.Border = 0;
             innerTable21.WidthPercentage = 100f;
@@ -983,7 +1005,6 @@ namespace RE360.API.Common
             {
                 tf85.Text = " "; // Set a default value if the data is not available
             }
-            // tf85.Text = FinalList.methodOfSale.AgencyOtherTypeRemark.ToString();
             tf85.FontSize = 8;
             tf85.Options = TextField.READ_ONLY;
             writer.AddAnnotation(tf85.GetTextField());
@@ -1065,12 +1086,6 @@ namespace RE360.API.Common
             tf87.BorderColor = new BaseColor(232, 232, 232);
             tf87.BackgroundColor = new BaseColor(232, 232, 232);
 
-
-
-
-
-
-            // tf87.Text = FinalList.methodOfSale.Price.ToString();
             if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.Price != null)
             {
                 string Price = isPriceSelected == true ? FinalList.methodOfSale.Price.ToString() : "";
@@ -1085,12 +1100,6 @@ namespace RE360.API.Common
             writer.AddAnnotation(tf87.GetTextField());
 
 
-
-
-
-
-
-
             PdfContentByte cb23 = writer.DirectContent;
             BaseFont bf23 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
             string text23 = "Auction";
@@ -1100,23 +1109,16 @@ namespace RE360.API.Common
             cb23.ShowTextAligned(1, text23, 325, 482, 0);
             cb23.EndText();
 
-
-
-
             var filePath1 = _configuration["BlobStorageSettings:DocPath"] + "Calender.png" + _configuration["BlobStorageSettings:DocToken"];
-            //  string logoPath1 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
             iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(filePath1);
-            //if (System.IO.File.Exists(filePath1))
-            //{
+
             logo1.ScaleAbsolute(15f, 15f);
             logo1.SetAbsolutePosition(308, 465);
             document.Add(logo1);
-            //}
 
             TextField tf89 = new TextField(writer, new Rectangle(325, 478, 360, 465), "Auction Date");
             tf89.BorderColor = new BaseColor(232, 232, 232);
             tf89.BackgroundColor = new BaseColor(232, 232, 232);
-            //tf89.Text = ((DateTime)FinalList.methodOfSale.AuctionDate).ToString("dd-MM-yyyy");
             if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.AuctionDate != null)
             {
                 string AuctionDate = isAuctionSelected == true ? ((DateTime)FinalList.methodOfSale.AuctionDate).ToString("dd-MM-yyyy") : " ";
@@ -1126,27 +1128,23 @@ namespace RE360.API.Common
             {
                 tf89.Text = " "; // Set a default value if the data is not available
             }
-            // tf89.FontSize= 8;
             tf89.Options = TextField.READ_ONLY;
             writer.AddAnnotation(tf89.GetTextField());
 
             var filePath2 = _configuration["BlobStorageSettings:DocPath"] + "Clock.png" + _configuration["BlobStorageSettings:DocToken"];
-            //   string logoPath2 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Clock.png");
             iTextSharp.text.Image logo2 = iTextSharp.text.Image.GetInstance(filePath2);
-            //if (System.IO.File.Exists(filePath2))
-            //{
+
             logo2.ScaleAbsolute(15f, 15f);
             logo2.SetAbsolutePosition(365, 465);
 
 
             document.Add(logo2);
-            //}
+
 
             TextField tf90 = new TextField(writer, new Rectangle(385, 478, 420, 465), "Auction Time");
             tf90.BorderColor = new BaseColor(232, 232, 232);
             tf90.BackgroundColor = new BaseColor(232, 232, 232);
-            // tf90.FontSize = 8;
-            //tf90.Text = DateTimeOffset.Parse(FinalList.methodOfSale.AuctionTime).ToString("hh:mm tt");
+
             if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.AuctionTime != null)
             {
                 string AuctionTime = isAuctionSelected == true ? DateTimeOffset.Parse(FinalList.methodOfSale.AuctionTime).ToString("hh:mm tt") : "";
@@ -1163,11 +1161,19 @@ namespace RE360.API.Common
             TextField tf91 = new TextField(writer, new Rectangle(335, 455, 410, 435), "Venue");
             tf91.BorderColor = new BaseColor(232, 232, 232);
             tf91.BackgroundColor = new BaseColor(232, 232, 232);
-            //tf91.Text = FinalList.methodOfSale.TenderVenue;
             if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.TenderVenue != null)
             {
-                string TenderVenue = isAuctionSelected == true ? FinalList.methodOfSale.TenderVenue : "";
-                tf91.Text = TenderVenue;
+                if (isAuctionSelected)
+                {
+                    string auctionVenue = isAuctionSelected == true ? FinalList.methodOfSale.AuctionVenue : "";
+                    tf91.Text = auctionVenue;
+                }
+                if (isTenderSelected)
+                {
+                    string TenderVenue = isTenderSelected == true ? FinalList.methodOfSale.TenderVenue : "";
+                    tf91.Text = TenderVenue;
+                }
+
             }
             else
             {
@@ -1188,10 +1194,9 @@ namespace RE360.API.Common
             TextField tf92 = new TextField(writer, new Rectangle(350, 420, 425, 400), "Auctioneer Venue");
             tf92.BorderColor = new BaseColor(232, 232, 232);
             tf92.BackgroundColor = new BaseColor(232, 232, 232);
-            //tf92.Text = FinalList.methodOfSale.AuctionVenue;
-            if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.AuctionVenue != null)
+            if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.Auctioneer != null)
             {
-                string AuctionVenue = isAuctionSelected == true ? FinalList.methodOfSale.AuctionVenue : "";
+                string AuctionVenue = isAuctionSelected == true ? FinalList.methodOfSale.Auctioneer : "";
                 tf92.Text = AuctionVenue;
             }
             else
@@ -1218,18 +1223,15 @@ namespace RE360.API.Common
             cb24.EndText();
 
             var filePath3 = _configuration["BlobStorageSettings:DocPath"] + "Calender.png" + _configuration["BlobStorageSettings:DocToken"];
-            //  string logoPath3 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
             iTextSharp.text.Image logo3 = iTextSharp.text.Image.GetInstance(filePath3);
-            //if (System.IO.File.Exists(filePath3))
-            //{
+
             logo3.ScaleAbsolute(15f, 15f);
             logo3.SetAbsolutePosition(437, 465);
             document.Add(logo3);
-            //}
+
             TextField tf94 = new TextField(writer, new Rectangle(455, 478, 490, 465), "Tender Date");
             tf94.BorderColor = new BaseColor(232, 232, 232);
             tf94.BackgroundColor = new BaseColor(232, 232, 232);
-            // tf94.Text = ((DateTime)FinalList.methodOfSale.TenderDate).ToString("dd-MM-yyyy");
             if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.TenderDate != null)
             {
                 string TenderDate = isTenderSelected == true ? ((DateTime)FinalList.methodOfSale.TenderDate).ToString("dd-MM-yyyy") : "";
@@ -1239,26 +1241,22 @@ namespace RE360.API.Common
             {
                 tf94.Text = " "; // Set a default value if the data is not available
             }
-            //  tf94.FontSize = 8;
             tf94.Options = TextField.READ_ONLY;
             writer.AddAnnotation(tf94.GetTextField());
 
             var filePath4 = _configuration["BlobStorageSettings:DocPath"] + "Clock.png" + _configuration["BlobStorageSettings:DocToken"];
-            // string logoPath4 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Clock.png");
+
             iTextSharp.text.Image logo4 = iTextSharp.text.Image.GetInstance(filePath4);
-            //if (System.IO.File.Exists(filePath4))
-            //{
+
             logo4.ScaleAbsolute(15f, 15f);
             logo4.SetAbsolutePosition(500, 465);
 
 
             document.Add(logo4);
-            //}
             TextField tf95 = new TextField(writer, new Rectangle(520, 478, 560, 465), "TenderTime");
             tf95.BorderColor = new BaseColor(232, 232, 232);
             tf95.BackgroundColor = new BaseColor(232, 232, 232);
-            //  tf95.FontSize = 8;
-            // tf95.Text = DateTimeOffset.Parse(FinalList.methodOfSale.TenderTime).ToString("hh:mm tt");
+
             if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.TenderTime != null)
             {
                 string TenderTime = isTenderSelected == true ? DateTimeOffset.Parse(FinalList.methodOfSale.TenderTime).ToString("hh:mm tt") : "";
@@ -1282,19 +1280,15 @@ namespace RE360.API.Common
             cb25.EndText();
 
             var filePath5 = _configuration["BlobStorageSettings:DocPath"] + "Calender.png" + _configuration["BlobStorageSettings:DocToken"];
-            //  string logoPath5 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
             iTextSharp.text.Image logo5 = iTextSharp.text.Image.GetInstance(filePath5);
-            //if (System.IO.File.Exists(filePath5))
-            //{
             logo5.ScaleAbsolute(15f, 15f);
             logo5.SetAbsolutePosition(437, 420);
             document.Add(logo5);
-            //}
+
 
             TextField tf96 = new TextField(writer, new Rectangle(455, 435, 490, 420), "Deadline Date");
             tf96.BorderColor = new BaseColor(232, 232, 232);
             tf96.BackgroundColor = new BaseColor(232, 232, 232);
-            // tf96.Text = ((DateTime)FinalList.methodOfSale.DeadLineDate).ToString("dd-MM-yyyy");
             if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.DeadLineDate != null)
             {
                 string DeadLineDate = isDeadlinesaleSelected == true ? ((DateTime)FinalList.methodOfSale.DeadLineDate).ToString("dd-MM-yyyy") : "";
@@ -1308,20 +1302,17 @@ namespace RE360.API.Common
             writer.AddAnnotation(tf96.GetTextField());
 
             var filePath6 = _configuration["BlobStorageSettings:DocPath"] + "Clock.png" + _configuration["BlobStorageSettings:DocToken"];
-            //  string logoPath6 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Clock.png");
             iTextSharp.text.Image logo6 = iTextSharp.text.Image.GetInstance(filePath6);
-            //if (System.IO.File.Exists(filePath6))
-            //{
+
             logo6.ScaleAbsolute(15f, 15f);
             logo6.SetAbsolutePosition(500, 420);
             document.Add(logo6);
-            //}
+
 
             TextField tf97 = new TextField(writer, new Rectangle(520, 435, 560, 420), "Deadline Time");
             tf97.BorderColor = new BaseColor(232, 232, 232);
             tf97.BackgroundColor = new BaseColor(232, 232, 232);
-            //  tf97.FontSize = 8;
-            //tf97.Text = DateTimeOffset.Parse(FinalList.methodOfSale.DeadLineTime).ToString("hh:mm:ss tt");
+
             if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.DeadLineTime != null)
             {
                 string DeadLineTime = isDeadlinesaleSelected == true ? DateTimeOffset.Parse(FinalList.methodOfSale.DeadLineTime).ToString("hh:mm tt") : "";
@@ -1347,8 +1338,6 @@ namespace RE360.API.Common
                 AddCheckboxField(document, writer, "myCheckbox", new Rectangle(437, 410, 448, 400), false, 437, 400);
             }
 
-
-            // AddCheckboxField(document, writer, "myCheckbox", new Rectangle(437, 410, 448, 400), methodOfSaleList[0].IsMortgageeSale, 437, 400);
             PdfContentByte content59 = writer.DirectContent;
             BaseFont baseF59 = BaseFont.CreateFont();
             content59.SetFontAndSize(baseF59, 8);
@@ -1357,12 +1346,11 @@ namespace RE360.API.Common
             content59.EndText();
 
 
-
             if (methodOfSaleList != null && methodOfSaleList.Count > 0)
             {
                 bool isAsIs = methodOfSaleList[0].IsAsIs;
 
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(437, 395, 448, 385), isAsIs, 437, 400);
+                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(437, 395, 448, 385), isAsIs, 437, 385);
             }
             else
             {
@@ -1370,7 +1358,6 @@ namespace RE360.API.Common
                 // For example, you might want to provide a default value for the checkbox
                 AddCheckboxField(document, writer, "myCheckbox", new Rectangle(437, 395, 448, 385), false, 437, 400);
             }
-            // AddCheckboxField(document, writer, "myCheckbox", new Rectangle(437, 395, 448, 385), methodOfSaleList[0].IsAsIs, 437, 385);
             PdfContentByte content60 = writer.DirectContent;
             BaseFont baseF60 = BaseFont.CreateFont();
             content60.SetFontAndSize(baseF60, 8);
@@ -1419,7 +1406,6 @@ namespace RE360.API.Common
             col1Table.SpacingBefore = 3f;
             col1Table.SpacingAfter = 3f;
             cell11.CellEvent = new RectangleOverPdfPCellBorder("Chattels", 30f, 340f, 43f, 20f, 32f, 355f);
-            //cell11.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Chattels", 40f, 20f, 80f, 340f);
 
             col1Table.AddCell(cell11);
             multipleMainTable.AddCell(col1Table);
@@ -1437,7 +1423,7 @@ namespace RE360.API.Common
             tf211.BorderColor = new BaseColor(232, 232, 232);
             tf211.BackgroundColor = new BaseColor(232, 232, 232);
             tf211.Options = TextField.READ_ONLY;
-            // tf211.Text = chattelslist[0].Count.ToString();
+
             if (chattelslist.Count > 0)
             {
                 tf211.Text = chattelslist[0].Count != 0 ? chattelslist[0].Count.ToString() : "";
@@ -1742,11 +1728,8 @@ namespace RE360.API.Common
             cell211.FixedHeight = 98f; // Set the height of the cell
             cell211.BorderColor = BaseColor.BLACK;
             cell211.CellEvent = new RectangleOverPdfPCellBorder("Insulation", 165f, 344f, 50f, 20f, 168f, 358f);
-            //cell211.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Insulation", 175f, 20f, 70f, 345f);
             col2Table.AddCell(cell211);
 
-            //AddCheckboxField(document, writer, "myCheckbox", new Rectangle(180, 280, 180, 320), true, 40, 310);
-            //AddCheckboxField(document, writer, "myCheckbox", new Rectangle(150, 490, 190, 320), true, 150, 465);
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 330, 165, 340), insulationlist[0].Checkbox, 155, 330);
             PdfContentByte content229 = writer.DirectContent;
             BaseFont baseF229 = BaseFont.CreateFont();
@@ -1804,7 +1787,6 @@ namespace RE360.API.Common
             cell212.FixedHeight = 180f; // Set the height of the cell
             cell212.BorderColor = BaseColor.DARK_GRAY;
             cell212.CellEvent = new RectangleOverPdfPCellBorder("Heating", 165f, 246f, 40f, 15f, 168f, 246f);
-            //cell212.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Heating", 170f, 15f, 70f, 240f);
             col2Table.AddCell(cell212);
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 225, 165, 235), heatinglist[0].Checkbox, 155, 225);
             PdfContentByte content233 = writer.DirectContent;
@@ -1914,7 +1896,6 @@ namespace RE360.API.Common
             cell31.FixedHeight = 80f; // Set the height of the cell
             cell31.BorderColor = BaseColor.BLACK;
             cell31.CellEvent = new RectangleOverPdfPCellBorder("Interior condition", 267f, 344f, 85f, 20f, 269f, 355f);
-            //cell31.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Interior condition", 270f, 20f, 70f, 345f);
             col3Table.AddCell(cell31);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 330, 272, 340), interiorConditionlist[0].Checkbox, 262, 330);
@@ -1963,7 +1944,6 @@ namespace RE360.API.Common
             cell32.FixedHeight = 55f; // Set the height of the cell
             cell32.BorderColor = BaseColor.DARK_GRAY;
             cell32.CellEvent = new RectangleOverPdfPCellBorder("Exterior", 270f, 265f, 45f, 14f, 272f, 265f);
-            //cell32.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Exterior", 270f, 20f, 70f, 255f);
             col3Table.AddCell(cell32);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 240, 272, 230), exteriorList[0].Checkbox, 262, 230);
@@ -2060,7 +2040,6 @@ namespace RE360.API.Common
             cell41.FixedHeight = 125f; // Set the height of the cell
             cell41.BorderColor = BaseColor.BLACK;
             cell41.CellEvent = new RectangleOverPdfPCellBorder("Flooring", 370f, 343f, 44f, 20f, 372f, 358f);
-            //cell41.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Flooring", 370f, 20f, 70f, 345f);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 330, 380, 340), flooringlist[0].Checkbox, 370, 330);
             PdfContentByte content257 = writer.DirectContent;
@@ -2132,7 +2111,6 @@ namespace RE360.API.Common
             cell42.FixedHeight = 60f; // Set the height of the cell
             cell42.BorderColor = BaseColor.DARK_GRAY;
             cell42.CellEvent = new RectangleOverPdfPCellBorder("Garage", 370f, 220f, 38f, 14f, 372f, 220f);
-            //cell42.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Garage", 370f, 15f, 70f, 218f);
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 200, 380, 190), garagelist[0].Checkbox, 370, 190);
             PdfContentByte content263 = writer.DirectContent;
             BaseFont baseF263 = BaseFont.CreateFont();
@@ -2234,7 +2212,6 @@ namespace RE360.API.Common
             PdfPCell cell51 = new PdfPCell(new Phrase());
             cell51.FixedHeight = 93f; // Set the height of the cell
             cell51.CellEvent = new RectangleOverPdfPCellBorder("Water", 485f, 344f, 35f, 20f, 487f, 355f);
-            //cell51.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Water", 485f, 20f, 70f, 345f);
             cell51.BorderColor = BaseColor.DARK_GRAY;
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 335, 490, 345), waterlist[0].Checkbox, 480, 335);
             PdfContentByte content273 = writer.DirectContent;
@@ -2297,7 +2274,6 @@ namespace RE360.API.Common
             cell52.FixedHeight = 50f; // Set the height of the cell
             cell52.BorderColor = BaseColor.DARK_GRAY;
             cell52.CellEvent = new RectangleOverPdfPCellBorder("Frontage", 485f, 250f, 48f, 15f, 487f, 250f);
-            //cell52.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Frontage", 485f, 15f, 70f, 245f);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 235, 490, 245), frontageList[0].Checkbox, 480, 235);
             PdfContentByte content277 = writer.DirectContent;
@@ -2333,7 +2309,6 @@ namespace RE360.API.Common
             cell53.FixedHeight = 55f; // Set the height of the cell
             cell53.BorderColor = BaseColor.DARK_GRAY;
             cell53.CellEvent = new RectangleOverPdfPCellBorder("Levels", 485f, 190f, 40f, 15f, 485f, 193f);
-            //cell53.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Levels", 485f, 15f, 70f, 190f);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 175, 490, 185), levelsList[0].Checkbox, 480, 175);
             PdfContentByte content279 = writer.DirectContent;
@@ -2368,7 +2343,6 @@ namespace RE360.API.Common
             cell54.FixedHeight = 30f; // Set the height of the cell
             cell54.BorderColor = BaseColor.BLACK;
             cell54.CellEvent = new RectangleOverPdfPCellBorder("Amenities", 485f, 120f, 40f, 20f, 485f, 120f);
-            //cell54.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Amenities", 485f, 15f, 70f, 120f);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 100, 490, 110), amenitiesList[0].Checkbox, 480, 100);
             PdfContentByte content282 = writer.DirectContent;
@@ -2444,7 +2418,6 @@ namespace RE360.API.Common
             PdfPCell cell111 = new PdfPCell(new Phrase());
             cell111.FixedHeight = 100f; // Set the height of the cell
             cell111.BorderColor = BaseColor.BLACK;
-            //cell111.Padding = 10;
             col1Table1.AddCell(cell111);
 
 
@@ -2546,7 +2519,6 @@ namespace RE360.API.Common
             cell112.BorderColor = BaseColor.BLACK;
             cell112.Padding = 10;
             cell112.CellEvent = new RectangleOverPdfPCellBorder("Other rooms", 30f, 620f, 68f, 15f, 33f, 624f);
-            //cell112.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Other rooms", 50f, 20f, 70f, 610);
             col1Table1.AddCell(cell112);
 
 
@@ -2677,7 +2649,6 @@ namespace RE360.API.Common
             tf03.BorderColor = new BaseColor(232, 232, 232);
             tf03.BackgroundColor = new BaseColor(232, 232, 232);
             tf03.Options = TextField.READ_ONLY;
-            //tf03.Text = othercommentList[0].Double;
             if (othercommentList.Count > 0)
             {
                 tf03.Text = othercommentList[0].Double;
@@ -2703,7 +2674,6 @@ namespace RE360.API.Common
             tf04.BorderColor = new BaseColor(232, 232, 232);
             tf04.BackgroundColor = new BaseColor(232, 232, 232);
             tf04.Options = TextField.READ_ONLY;
-            // tf04.Text = othercommentList[0].Single;
             if (othercommentList.Count > 0)
             {
                 tf04.Text = othercommentList[0].Single;
@@ -2733,7 +2703,6 @@ namespace RE360.API.Common
             cell113.BorderColor = BaseColor.BLACK;
             cell113.Padding = 10;
             cell113.CellEvent = new RectangleOverPdfPCellBorder("Hot Water", 30f, 334f, 53f, 15f, 33f, 338f);
-            //cell113.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Hot Water", 50f, 20f, 70f, 328);
             col1Table1.AddCell(cell113);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 330, 23, 320), hotwaterlist[0].Checkbox, 23, 320);
@@ -2839,7 +2808,6 @@ namespace RE360.API.Common
             cell311.FixedHeight = 75f; // Set the height of the cell
             cell311.BorderColor = BaseColor.BLACK;
             cell311.CellEvent = new RectangleOverPdfPCellBorder("Kitchen", 155f, 665f, 40f, 15f, 158f, 667f);
-            //cell311.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Kitchen", 170f, 20f, 70f, 655);
             col2Table2.AddCell(cell311);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 645, 158, 655), kitchenlist[0].Checkbox, 148, 645);
@@ -2889,7 +2857,6 @@ namespace RE360.API.Common
             cell312.FixedHeight = 75f; // Set the height of the cell
             cell312.BorderColor = BaseColor.BLACK;
             cell312.CellEvent = new RectangleOverPdfPCellBorder("Dining", 158f, 580f, 35f, 15f, 158f, 582f);
-            // cell312.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Dining", 170f, 20f, 70f, 568f);
 
             col2Table2.AddCell(cell312);
 
@@ -2930,7 +2897,6 @@ namespace RE360.API.Common
             cell313.FixedHeight = 97f; // Set the height of the cell
             cell313.BorderColor = BaseColor.BLACK;
             cell313.CellEvent = new RectangleOverPdfPCellBorder("Bathroom/toilet", 155f, 495f, 78f, 15f, 158f, 498f);
-            //cell313.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Bathroom/toilet", 170f, 15f, 70f, 495);
             col2Table2.AddCell(cell313);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 470, 158, 480), bathroomlist[0].Checkbox, 148, 470);
@@ -2949,7 +2915,6 @@ namespace RE360.API.Common
             tf330.TextColor = BaseColor.BLACK;
             tf330.FontSize = 8;
             writer.AddAnnotation(tf330.GetTextField());
-            //col5Table.AddCell(cell51);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 455, 158, 465), bathroomlist[1].Checkbox, 148, 455);
             PdfContentByte content331 = writer.DirectContent;
@@ -3033,7 +2998,6 @@ namespace RE360.API.Common
             cell314.FixedHeight = 60f; // Set the height of the cell
             cell314.BorderColor = BaseColor.BLACK;
             cell314.CellEvent = new RectangleOverPdfPCellBorder("Lounge", 158f, 393f, 40f, 14f, 160f, 396f);
-            //cell314.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Lounge", 170f, 20f, 70f, 385f);
             col2Table2.AddCell(cell314);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 365, 158, 375), loungelist[0].Checkbox, 148, 365);
@@ -3066,7 +3030,6 @@ namespace RE360.API.Common
             cell315.FixedHeight = 30f; // Set the height of the cell
             cell315.BorderColor = BaseColor.BLACK;
             cell315.CellEvent = new RectangleOverPdfPCellBorder("Stove", 158f, 322f, 30f, 14f, 158f, 325f);
-            // cell315.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Stove", 170f, 20f, 70f, 316);
             col2Table2.AddCell(cell315);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 310, 158, 320), stovelist[0].Checkbox, 148, 310);
@@ -3105,7 +3068,6 @@ namespace RE360.API.Common
             cell44.FixedHeight = 70f; // Set the height of the cell
             cell44.BorderColor = BaseColor.BLACK;
             cell44.CellEvent = new RectangleOverPdfPCellBorder("Exterior condition", 272f, 733f, 85f, 15f, 273f, 735f);
-            //cell44.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Exterior condition", 265f, 15f, 80f, 733f);
             col3Table3.AddCell(cell44);
 
 
@@ -3155,7 +3117,6 @@ namespace RE360.API.Common
             cell45.FixedHeight = 105f; // Set the height of the cell
             cell45.BorderColor = BaseColor.BLACK;
             cell45.CellEvent = new RectangleOverPdfPCellBorder("Swimming pool", 272f, 650f, 85f, 15f, 273f, 655f);
-            //cell45.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Swimming pool", 265f, 15f, 80f, 650f);
             col3Table3.AddCell(cell45);
 
 
@@ -3223,7 +3184,6 @@ namespace RE360.API.Common
             cell46.FixedHeight = 115f; // Set the height of the cell
             cell46.BorderColor = BaseColor.BLACK;
             cell46.CellEvent = new RectangleOverPdfPCellBorder("General", 278f, 535f, 45f, 15f, 280f, 538f);
-            //cell46.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "General", 275f, 20f, 70f, 530f);
             col3Table3.AddCell(cell46);
 
 
@@ -3292,7 +3252,6 @@ namespace RE360.API.Common
             cell47.FixedHeight = 95f; // Set the height of the cell
             cell47.BorderColor = BaseColor.BLACK;
             cell47.CellEvent = new RectangleOverPdfPCellBorder("Roof", 278f, 415f, 25f, 15f, 278f, 415f);
-            //cell47.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Roof", 275f, 20f, 70f, 405f);
             col3Table3.AddCell(cell47);
 
 
@@ -3398,7 +3357,6 @@ namespace RE360.API.Common
             cell5.FixedHeight = 65f; // Set the height of the cell
             cell5.BorderColor = BaseColor.BLACK;
             cell5.CellEvent = new RectangleOverPdfPCellBorder("Fencing", 378f, 735f, 40f, 15f, 378f, 738f);
-            //cell5.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Fencing", 375f, 20f, 70f, 728f);
             col4Table4.AddCell(cell5);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 725, 390, 715), fencingList[0].Checkbox, 380, 715);
@@ -3441,7 +3399,6 @@ namespace RE360.API.Common
             cell6.FixedHeight = 85f; // Set the height of the cell
             cell6.BorderColor = BaseColor.BLACK;
             cell6.CellEvent = new RectangleOverPdfPCellBorder("Aspect", 378f, 660f, 35f, 15f, 378f, 662f);
-            //cell6.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Aspect", 375f, 20f, 70f, 650f);
             col4Table4.AddCell(cell6);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 635, 390, 645), aspectList[0].Checkbox, 380, 635);
@@ -3491,7 +3448,6 @@ namespace RE360.API.Common
             cell7.FixedHeight = 190f; // Set the height of the cell
             cell7.BorderColor = BaseColor.BLACK;
             cell7.CellEvent = new RectangleOverPdfPCellBorder("Views", 378f, 563f, 30f, 15f, 378f, 565f);
-            //cell7.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Views", 375f, 15f, 70f, 560f);
             col4Table4.AddCell(cell7);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 535, 390, 545), viewsList[0].Checkbox, 380, 535);
@@ -3600,7 +3556,6 @@ namespace RE360.API.Common
             cell71.FixedHeight = 100f; // Set the height of the cell
             cell71.BorderColor = BaseColor.BLACK;
             cell71.CellEvent = new RectangleOverPdfPCellBorder("Sewage system", 378f, 363f, 75f, 15f, 378f, 365f);
-            //cell71.CellEvent = new RectangleCellEvent(BaseColor.GREEN, BaseColor.BLUE, "Sewage system", 375f, 20f, 70f, 355f);
             col4Table4.AddCell(cell71);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 350, 390, 360), sewageList[0].Checkbox, 380, 350);
@@ -3647,30 +3602,39 @@ namespace RE360.API.Common
             multipleMainTable1.AddCell(col4Table4);
 
             //CODE FOR OTHER COMMENT SECTIONS
-            //var othercommentList = _context.PropertyInformationDetail.Where(w => w.PID == id).ToList();
             // Column 5
             PdfPTable col5Table5 = new PdfPTable(1);
             PdfPCell cell8 = new PdfPCell(new Phrase());
             cell8.FixedHeight = 215f; // Set the height of the cell
             cell8.BorderColor = BaseColor.BLACK;
             cell8.CellEvent = new RectangleOverPdfPCellBorder("Other", 480f, 740f, 40f, 15f, 482f, 740f);
-            //cell8.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Other", 478f, 20f, 70f, 728f);
             col5Table5.AddCell(cell8);
 
             PdfContentByte content01 = writer.DirectContent;
-            BaseFont baseF01 = BaseFont.CreateFont();
+            BaseFont baseF01 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
             content01.SetFontAndSize(baseF01, 8);
             content01.BeginText();
-            content01.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Other Comments:", 515, 715, 0);
+            content01.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Other Comments:", 515, 710, 0);
             content01.EndText();
             TextField tf09 = new TextField(writer, new Rectangle(485, 660, 565, 705), "Central");
             tf09.BorderColor = new BaseColor(232, 232, 232);
             tf09.BackgroundColor = new BaseColor(232, 232, 232);
             tf09.Options = TextField.READ_ONLY | TextField.MULTILINE;
-            // tf09.Text = othercommentList[0].Comment;
+
             if (othercommentList.Count > 0)
             {
-                tf09.Text = othercommentList[0].Comment;
+                int maxlength = 60;
+                if (othercommentList[0].Comment.Length > 0)
+                {
+                    var result = othercommentList[0].Comment.Substring(0, maxlength) + "...";
+                    tf09.Text = result;
+                }
+                else
+                {
+                    tf09.Text = othercommentList[0].Comment;
+                }
+
+
             }
             else
             {
@@ -3678,24 +3642,34 @@ namespace RE360.API.Common
                 tf09.Text = ""; // Set a default value or handle it based on your requirements
             }
 
+
             tf09.TextColor = BaseColor.BLACK;
             tf09.FontSize = 8;
             writer.AddAnnotation(tf09.GetTextField());
 
             PdfContentByte content02 = writer.DirectContent;
-            BaseFont baseF02 = BaseFont.CreateFont();
+            BaseFont baseF02 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
             content02.SetFontAndSize(baseF02, 8);
             content02.BeginText();
-            content02.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Other features/additionals:", 526, 650, 0);
+            content02.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Other features/additionals:", 526, 643, 0);
             content02.EndText();
             TextField tf010 = new TextField(writer, new Rectangle(485, 600, 565, 640), "Other features/additionals");
             tf010.BorderColor = new BaseColor(232, 232, 232);
             tf010.BackgroundColor = new BaseColor(232, 232, 232);
             tf010.Options = TextField.READ_ONLY | TextField.MULTILINE;
-            //tf010.Text = othercommentList[0].AdditionalFeature;
+
             if (othercommentList.Count > 0)
             {
-                tf010.Text = othercommentList[0].AdditionalFeature;
+                int maxlength = 50;
+                if (othercommentList[0].AdditionalFeature.Length > 0)
+                {
+
+                    tf010.Text = othercommentList[0].AdditionalFeature.Length > 50 ? othercommentList[0].AdditionalFeature.Substring(0, maxlength) + "..." : othercommentList[0].AdditionalFeature;
+                }
+                else
+                {
+                    tf010.Text = othercommentList[0].AdditionalFeature;
+                }
             }
             else
             {
@@ -3707,19 +3681,28 @@ namespace RE360.API.Common
             writer.AddAnnotation(tf010.GetTextField());
 
             PdfContentByte content03 = writer.DirectContent;
-            BaseFont baseF03 = BaseFont.CreateFont();
+            BaseFont baseF03 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
             content03.SetFontAndSize(baseF03, 8);
             content03.BeginText();
-            content03.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Excluded chattels:", 515, 590, 0);
+            content03.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Excluded chattels:", 515, 583, 0);
             content03.EndText();
             TextField tf011 = new TextField(writer, new Rectangle(485, 540, 565, 580), "Central");
             tf011.BorderColor = new BaseColor(232, 232, 232);
             tf011.BackgroundColor = new BaseColor(232, 232, 232);
             tf011.Options = TextField.READ_ONLY | TextField.MULTILINE;
-            // tf011.Text = othercommentList[0].ExcludedChattels;
+
             if (othercommentList.Count > 0)
             {
-                tf011.Text = othercommentList[0].ExcludedChattels;
+                int maxlength = 60;
+                if (othercommentList[0].ExcludedChattels.Length > 0)
+                {
+                    tf011.Text = othercommentList[0].ExcludedChattels.Length > 60 ? othercommentList[0].ExcludedChattels.Substring(0, maxlength) + "..." : othercommentList[0].ExcludedChattels;
+
+                }
+                else
+                {
+                    tf011.Text = othercommentList[0].ExcludedChattels;
+                }
             }
             else
             {
@@ -3740,17 +3723,26 @@ namespace RE360.API.Common
             cell10.FixedHeight = 100f; // Set the height of the cell
             cell10.BorderColor = BaseColor.BLACK;
             cell10.CellEvent = new RectangleOverPdfPCellBorder("Internal remarks", 480f, 513f, 80f, 14f, 482f, 513f);
-            // cell10.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Internal remarks", 478f, 20f, 70f, 500f);
+
             col5Table5.AddCell(cell10);
 
             TextField tf012 = new TextField(writer, new Rectangle(485, 350, 565, 495), "Internal remarks");
             tf012.BorderColor = new BaseColor(232, 232, 232);
             tf012.BackgroundColor = new BaseColor(232, 232, 232);
             tf012.Options = TextField.READ_ONLY | TextField.MULTILINE;
-            // tf012.Text = othercommentList[0].InternalRemark;
+
             if (othercommentList.Count > 0)
             {
-                tf012.Text = othercommentList[0].InternalRemark;
+                int maxlength = 230;
+                if (othercommentList[0].InternalRemark.Length > 0)
+                {
+
+                    tf012.Text = othercommentList[0].InternalRemark.Length > 230 ? othercommentList[0].InternalRemark.Substring(0, maxlength) + "..." : othercommentList[0].InternalRemark;
+                }
+                else
+                {
+                    tf012.Text = othercommentList[0].InternalRemark;
+                }
             }
             else
             {
@@ -3783,9 +3775,9 @@ namespace RE360.API.Common
             tenancyTable.WidthPercentage = 108; // Set the width percentage of the parent table        
             tenancyTable.SpacingBefore = 12f;
             tenancyTable.SpacingAfter = 10f;
-            //tenancyoutercell21.CellEvent = new RectangleOverPdfPCellBorder("Tenancy details", 33f, 210f, 80f, 14f, 482f, 200f);
+
             tenancyoutercell21.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Tenancy details", 33f, 20f, 80f, 200f);
-            //particulartable.AddCell(outercell);
+
 
             PdfPTable tenancyinnerTable21 = new PdfPTable(2);
             tenancyinnerTable21.DefaultCell.Border = 0;
@@ -3824,8 +3816,7 @@ namespace RE360.API.Common
                 // For example, you might want to provide a default value for the checkbox
                 AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 175, 23, 185), false, 23, 175);
             }
-            //AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 175, 23, 185), FinalList.tenancyDetail.IsVacant, 23, 175);
-            //AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 175, 23, 185), FinalList.tenancyDetail.IsVacant, 23, 175);
+          
             PdfContentByte content08 = writer.DirectContent;
             BaseFont baseF08 = BaseFont.CreateFont();
             content08.SetFontAndSize(baseF08, 8);
@@ -3838,16 +3829,15 @@ namespace RE360.API.Common
             {
                 bool isTananted = tenancyDetailsList[0].IsTananted;
 
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(90, 175, 80, 185), isTananted, 23, 175);
+                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(90, 175, 80, 185), isTananted, 80, 175);
             }
             else
             {
                 // Handle the case when methodOfSaleList is null or empty
                 // For example, you might want to provide a default value for the checkbox
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(90, 175, 80, 185), false, 23, 175);
+                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(90, 175, 80, 185), false, 80, 175);
             }
-            // AddCheckboxField(document, writer, "myCheckbox", new Rectangle(90, 175, 80, 185), FinalList.tenancyDetail.IsTananted, 23, 175);
-            //AddCheckboxField(document, writer, "myCheckbox", new Rectangle(90, 175, 80, 185), FinalList.tenancyDetail.IsTananted, 23, 175);
+         
             PdfContentByte content09 = writer.DirectContent;
             BaseFont baseF09 = BaseFont.CreateFont();
             content09.SetFontAndSize(baseF09, 8);
@@ -3862,16 +3852,15 @@ namespace RE360.API.Common
             content010.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Start", 33, 150, 0);
             content010.EndText();
             var filePath11 = _configuration["BlobStorageSettings:DocPath"] + "Calender.png" + _configuration["BlobStorageSettings:DocToken"];
-            //  string logoPath11 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
+
             iTextSharp.text.Image logo11 = iTextSharp.text.Image.GetInstance(filePath11);
-            //if (System.IO.File.Exists(filePath11))
-            //{
+
             logo11.ScaleAbsolute(15f, 15f);
             logo11.SetAbsolutePosition(43, 150);
 
 
             document.Add(logo11);
-            //}
+
             TextField tf013 = new TextField(writer, new Rectangle(59, 170, 150, 150), "start");
             tf013.BorderColor = new BaseColor(232, 232, 232);
             tf013.BackgroundColor = new BaseColor(232, 232, 232);
@@ -3903,16 +3892,15 @@ namespace RE360.API.Common
             content011.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "End", 33, 115, 0);
             content011.EndText();
             var filePath12 = _configuration["BlobStorageSettings:DocPath"] + "Calender.png" + _configuration["BlobStorageSettings:DocToken"];
-            //  string logoPath22 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Calender.png");
+
             iTextSharp.text.Image logo22 = iTextSharp.text.Image.GetInstance(filePath12);
-            //if (System.IO.File.Exists(filePath12))
-            //{
+
             logo22.ScaleAbsolute(15f, 15f);
             logo22.SetAbsolutePosition(43, 115);
 
 
             document.Add(logo22);
-            //}
+
             TextField tf014 = new TextField(writer, new Rectangle(59, 140, 150, 120), "end");
             tf014.BorderColor = new BaseColor(232, 232, 232);
             tf014.BackgroundColor = new BaseColor(232, 232, 232);
@@ -3924,7 +3912,7 @@ namespace RE360.API.Common
             {
                 tf014.Text = "";
             }
-            // tf014.Text = ((DateTime)FinalList.tenancyDetail.TenancyEndDate).ToString("dd-MM-yyyy");
+
             tf014.FontSize = 8;
             tf014.Options = TextField.READ_ONLY;
             writer.AddAnnotation(tf014.GetTextField());
@@ -3949,7 +3937,7 @@ namespace RE360.API.Common
             tf016.BackgroundColor = new BaseColor(232, 232, 232);
             tf016.Options = TextField.READ_ONLY;
             tf016.FontSize = 8;
-            //tf016.Text = FinalList.tenancyDetail.Name;
+
             if (FinalList != null && FinalList.tenancyDetail != null && FinalList.tenancyDetail.Name != null)
             {
                 string Name = FinalList.tenancyDetail.Name.ToString();
@@ -3982,7 +3970,7 @@ namespace RE360.API.Common
             {
                 tf015.Text = " "; // Set a default value if the data is not available
             }
-            //tf015.Text = FinalList.tenancyDetail.Email;
+
 
             tf015.FontSize = 8;
             tf015.Options = TextField.READ_ONLY;
@@ -4006,7 +3994,7 @@ namespace RE360.API.Common
             {
                 tf017.Text = " "; // Set a default value if the data is not available
             }
-            // tf017.Text = FinalList.tenancyDetail.Phone;
+
             tf017.FontSize = 8;
             tf017.Options = TextField.READ_ONLY;
             writer.AddAnnotation(tf017.GetTextField());
@@ -4026,13 +4014,20 @@ namespace RE360.API.Common
             tf019.Options = TextField.READ_ONLY | TextField.MULTILINE;
             tf019.FontSize = 8f;
             tf019.TextColor = BaseColor.BLACK;
-            //tf019.Options = TextField.MULTILINE;
 
-            //  tf019.Text = FinalList.tenancyDetail.TenancyDetails;
             if (FinalList != null && FinalList.tenancyDetail != null && FinalList.tenancyDetail.TenancyDetails != null)
             {
-                string TenancyDetails = FinalList.tenancyDetail.TenancyDetails;
-                tf019.Text = TenancyDetails;
+                int maxlength = 290;
+                if (FinalList.tenancyDetail.TenancyDetails.Length > 0)
+                {
+                    string TenancyDetails = FinalList.tenancyDetail.TenancyDetails.Length > 290 ? FinalList.tenancyDetail.TenancyDetails.Substring(0, maxlength) + "..." : FinalList.tenancyDetail.TenancyDetails;
+                    tf019.Text = TenancyDetails;
+
+                }
+                else
+                {
+                    tf019.Text = FinalList.tenancyDetail.TenancyDetails;
+                }
             }
             else
             {
@@ -4063,17 +4058,18 @@ namespace RE360.API.Common
 
             // AddAggrementContent(document, writer, paragraphText, priorAgencyMarketingList, estimatesList, additionaldisclosure, methodOfSaleList);
 
-            AddAggrementContent(document, writer, paragraphText, priorAgencyMarketingList, estimatesList, additionaldisclosure, methodOfSaleList, clientDetailsList, contractdetailsList, signatureOfClients, id, execution);
+            AddAggrementContent(document, writer, paragraphText, priorAgencyMarketingList, estimatesList, additionaldisclosure, methodOfSaleList, clientDetailsList, contractdetailsList, signatureOfClients, id, execution, calculationOfCommissions, clientCommissionDetails);
 
             document.Close();
-            //_response.ContentType = MediaTypeNames.Application.Pdf;
+
             var contentDisposition = new ContentDisposition
             {
                 FileName = "ClientDetails.pdf",
                 Inline = false
             };
 
-            // System.IO.File.WriteAllBytes(@"C:\Users\HP\Source\Repos\RE360\RE360.API\Document\" + id.ToString() + ".pdf", memoryStream.ToArray());
+
+            //System.IO.File.WriteAllBytes(@"C:\Users\HP\Source\Repos\RE360\RE360.API\Document\" + id.ToString() + ".pdf", memoryStream.ToArray());
             //_response.Headers.Add("Content-Disposition", contentDisposition.ToString());
             //return File(memoryStream.ToArray(), _response.ContentType);
             // Save the PDF to a local file
@@ -4086,9 +4082,9 @@ namespace RE360.API.Common
             //    byte[] pdfBytes = new byte[memoryStream.Length];
             //    memoryStream.Read(pdfBytes, 0, pdfBytes.Length);
 
-            //    // Save the PDF to a local file
-            //    string localFilePath = @"C:\Users\HP\Source\Repos\RE360\RE360.API\Document\" + id.ToString() + ".pdf";
-            //    System.IO.File.WriteAllBytes(localFilePath, pdfBytes);
+            // Save the PDF to a local file
+            //string localFilePath = @"C:\Users\HP\Source\Repos\RE360\RE360.API\Document\" + id.ToString() + ".pdf";
+            //System.IO.File.WriteAllBytes(localFilePath, pdfBytes);
 
             //    // Upload the PDF to Azure Blob Storage
             //    string fileName = id.ToString() + ".pdf";
@@ -4177,26 +4173,7 @@ namespace RE360.API.Common
         {
             return FontFactory.GetFont(FontFactory.HELVETICA, 10, Font.BOLD);
         }
-        //private static void CreateTextField(PdfWriter writer, Rectangle position, string fieldName,
-        //                                string fieldLabel, int fontSize)
-        //{
-        //    // Create the text field
-        //    TextField textField = new TextField(writer, position, fieldName);
-        //    textField.FontSize = fontSize;
-        //    textField.Alignment = Element.ALIGN_RIGHT;
-
-        //    // Add the text field as an annotation
-        //    writer.AddAnnotation(textField.GetTextField());
-
-        //    // Add the content inside the text field
-        //    PdfContentByte overContent = writer.DirectContent;
-        //    BaseFont baseFont = BaseFont.CreateFont();
-        //    overContent.SetFontAndSize(baseFont, fontSize);
-        //    overContent.BeginText();
-        //    overContent.ShowTextAligned(PdfContentByte.ALIGN_LEFT, fieldLabel, position.Left - 10, position.Bottom, 0);
-        //    overContent.EndText();
-        //}
-
+      
 
         public static void AddCheckboxField(Document document, PdfWriter writer, string fieldName, Rectangle position, bool isChecked, int x, int y)
         {
@@ -4209,18 +4186,16 @@ namespace RE360.API.Common
             {
 
                 var checkmarkImagePath = "https://re360devstoragev2.blob.core.windows.net/document/Checked1.png?si=docaccesspolicy&spr=https&sv=2022-11-02&sr=c&sig=XnHmncbGTgQNOYG89LWZakac17WFiqFBEYNcQwb6%2BX8%3D";
-                //string checkmarkImagePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "Checked1.png");
+               
                 iTextSharp.text.Image checkmarkImage = iTextSharp.text.Image.GetInstance(checkmarkImagePath);
-                // Image checkmarkImage = Image.GetInstance(checkmarkImagePath);
+             
                 checkmarkImage.SetAbsolutePosition(x, y);
                 checkmarkImage.ScaleToFit(10, 10); // Adjust the size of the image as needed
 
                 PdfContentByte cb = writer.DirectContent;
                 cb.AddImage(checkmarkImage);
                 Phrase phrase = new Phrase();
-                //Font zapfdingbats = new Font(Font.FontFamily.ZAPFDINGBATS);
-                //phrase.Add(new Chunk("\u0033", zapfdingbats));              
-                //PdfContentByte cb = writer.DirectContent;
+            
                 ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase, x, y, 0);
             }
             //else
@@ -4241,27 +4216,47 @@ namespace RE360.API.Common
             int fieldFlags = PdfAnnotation.FLAGS_READONLY;
             checkboxField.SetFieldFlags(fieldFlags);
             checkboxField.SetFieldFlags(PdfFormField.FF_READ_ONLY);
-            // checkboxField.MKBackgroundColor = new  BaseColor(232, 232, 232);
+          
             checkboxField.MKBorderColor = new BaseColor(135, 206, 235);
-            //43, 145, 175
+        
             writer.AddAnnotation(checkboxField);
 
 
 
         }
 
-        private void AddAggrementContent(Document doc, PdfWriter writer, string paragraphText, List<PriorAgencyMarketing> priorAgencyMarketings, List<Estimates> estimates, List<EstimatesDetail> estimatesDetails, List<MethodOfSale> methodOfSales, List<ClientDetail> clientDetails, List<ContractDetail> contractDetails, List<SignaturesOfClient> signature, int id, Execution execution)
+        private void AddAggrementContent(Document doc, PdfWriter writer, string paragraphText, List<PriorAgencyMarketing> priorAgencyMarketings, List<Estimates> estimates, List<EstimatesDetail> estimatesDetails, List<MethodOfSale> methodOfSales, List<ClientDetail> clientDetails, List<ContractDetail> contractDetails, List<SignaturesOfClient> signature, int id, Execution execution, CalculationOfCommission calculationOfCommission, List<ClientCommissionDetails> clientCommissionDetails)
         {
+            if (calculationOfCommission == null)
+            {
+                calculationOfCommission = new CalculationOfCommission();
+            }
+
             if (clientDetails == null || clientDetails.Count == 0)
             {
 
                 List<ClientDetail> obj = new List<ClientDetail>();
-                // ClientDetail obj = new ClientDetail();
                 clientDetails = obj;
             }
             else
             {
                 clientDetails = clientDetails;
+            }
+
+            if (clientCommissionDetails == null || clientCommissionDetails.Count == 0)
+            {
+
+                List<ClientCommissionDetails> obj = new List<ClientCommissionDetails>();
+                clientCommissionDetails = obj;
+            }
+            else
+            {
+                clientCommissionDetails = clientCommissionDetails;
+            }
+
+            if (execution == null)
+            {
+                execution = new Execution();
             }
             PdfPTable t1 = new PdfPTable(2);
             t1.DefaultCell.Border = 0;
@@ -4280,20 +4275,54 @@ namespace RE360.API.Common
             leftCell02.HorizontalAlignment = Element.ALIGN_RIGHT;
             leftCell02.Border = Rectangle.NO_BORDER;
             leftCell02.FixedHeight = 50f;
-            var filePath33 = _configuration["BlobStorageSettings:DocPath"] + "logopdf.png" + _configuration["BlobStorageSettings:DocToken"];
-            // string logoPath33 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "logopdf.png");
+            if (_user !=null && _user.CompanyName == "Company1")
+            {
+                var filePath33 = _configuration["BlobStorageSettings:DocPath"] + "Company1.png" + _configuration["BlobStorageSettings:DocToken"];
+
             iTextSharp.text.Image logo33 = iTextSharp.text.Image.GetInstance(filePath33);
-            //if (System.IO.File.Exists(filePath33))
-            //{
+
+      
             logo33.ScaleAbsolute(70f, 70f);
-            //logo33.SetAbsolutePosition(500, 725);
+
 
             leftCell02.PaddingLeft = 185f;
             leftCell02.PaddingBottom = 0f;
             leftCell02.PaddingTop = 0f;
             leftCell02.PaddingRight = 0f;
             leftCell02.AddElement(logo33);
-            //}
+            }
+            else if (_user != null && _user.CompanyName == "Company2")
+            {
+                var filePath33 = _configuration["BlobStorageSettings:DocPath"] + "Company2.png" + _configuration["BlobStorageSettings:DocToken"];
+                
+                iTextSharp.text.Image logo33 = iTextSharp.text.Image.GetInstance(filePath33);
+            
+                logo33.ScaleAbsolute(70f, 70f);
+        
+
+                leftCell02.PaddingLeft = 185f;
+                leftCell02.PaddingBottom = 0f;
+                leftCell02.PaddingTop = 0f;
+                leftCell02.PaddingRight = 0f;
+                leftCell02.AddElement(logo33);
+            }
+            else
+            {
+                
+                    var filePath33 = _configuration["BlobStorageSettings:DocPath"] + "Company3.png" + _configuration["BlobStorageSettings:DocToken"];
+                   
+                    iTextSharp.text.Image logo33 = iTextSharp.text.Image.GetInstance(filePath33);
+                  
+                    logo33.ScaleAbsolute(70f, 70f);
+                  
+
+                    leftCell02.PaddingLeft = 185f;
+                    leftCell02.PaddingBottom = 0f;
+                    leftCell02.PaddingTop = 0f;
+                    leftCell02.PaddingRight = 0f;
+                    leftCell02.AddElement(logo33);
+                
+            }
 
             t1.AddCell(leftCell02);
             doc.Add(t1);
@@ -4353,13 +4382,13 @@ namespace RE360.API.Common
             tf211.FontSize = 8;
             tf211.TextColor = BaseColor.BLACK;
             writer.AddAnnotation(tf211.GetTextField());
-            //AddTextFieldToPDF(writer, doc, "1.1.", str, 230, 700, 70, 725);
+
 
             TextField tf212 = new TextField(writer, new Rectangle(540, 700, 320, 725), "(Client) appoints");
             tf212.BorderColor = new BaseColor(232, 232, 232);
             tf212.BackgroundColor = new BaseColor(232, 232, 232);
             tf212.Options = TextField.READ_ONLY;
-            tf212.Text = _user.FirstName + " " + _user.LastName;
+            tf212.Text = _user != null ? _user.FirstName + " " + _user.LastName : "";
             tf212.FontSize = 8;
             tf212.TextColor = BaseColor.BLACK;
             writer.AddAnnotation(tf212.GetTextField());
@@ -4417,11 +4446,11 @@ namespace RE360.API.Common
 
             tf213.Text = isSoleSelected == true && contractDetails[0].AuthorityStartDate != null ? ((DateTime)contractDetails[0].AuthorityStartDate).ToString("dd-MM-yyyy") : string.Empty;
 
-            // tf213.Text = isSoleSelected == true ? ((DateTime)contractDetails[0].AuthorityStartDate).ToString("dd-MM-yyyy") : string.Empty;
+
             tf213.FontSize = 8;
             tf213.TextColor = BaseColor.BLACK;
             writer.AddAnnotation(tf213.GetTextField());
-            //AddTextFieldToPDF(writer, doc, "formattedContent4", "", 440, 593, 330, 610);
+
             Chunk Commented1Chunk = new Chunk("(Commencement Date)", boldFont);
             Chunk Commented2Chunk = new Chunk("and continues until midnight on ", contentFont);
 
@@ -4430,11 +4459,11 @@ namespace RE360.API.Common
             tf214.BackgroundColor = new BaseColor(232, 232, 232);
             tf214.Options = TextField.READ_ONLY;
             tf214.Text = isSoleSelected == true && contractDetails[0].AuthorityEndDate != null ? ((DateTime)contractDetails[0].AuthorityEndDate).ToString("dd-MM-yyyy") : string.Empty;
-            // tf214.Text = isSoleSelected == true ? ((DateTime)contractDetails[0].AuthorityEndDate).ToString("dd-MM-yyyy") : string.Empty;
+
             tf214.FontSize = 8;
             tf214.TextColor = BaseColor.BLACK;
             writer.AddAnnotation(tf214.GetTextField());
-            //AddTextFieldToPDF(writer, doc, "Commented2Chunk", "", 250, 578, 170, 591);
+
             Chunk Commented3Chunk = new Chunk("                             " +
                 "       or if no end date is provided," +
                 " ninety (90) days from the Commencement Date.", contentFont);
@@ -4471,25 +4500,23 @@ namespace RE360.API.Common
             tf215.BackgroundColor = new BaseColor(232, 232, 232);
             tf215.Options = TextField.READ_ONLY;
             tf215.Text = isGeneralSelected == true && contractDetails[0].AuthorityEndDate != null ? ((DateTime)contractDetails[0].AuthorityEndDate).ToString("dd-MM-yyyy") : string.Empty;
-            // tf215.Text = isGeneralSelected == true ? ((DateTime)contractDetails[0].AuthorityEndDate).ToString("dd-MM-yyyy") : string.Empty;
+
             tf215.FontSize = 8;
             tf215.TextColor = BaseColor.BLACK;
             writer.AddAnnotation(tf215.GetTextField());
 
-            //AddTextFieldToPDF(writer, doc, "c2", "", 400, 459, 340, 485);		
+
 
             TextField tf216 = new TextField(writer, new Rectangle(563, 465, 525, 480), "formattedContent4");
             tf216.BorderColor = new BaseColor(232, 232, 232);
             tf216.BackgroundColor = new BaseColor(232, 232, 232);
             tf216.Options = TextField.READ_ONLY;
             tf216.Text = isGeneralSelected == true && contractDetails[0].AuthorityEndDate != null ? ((DateTime)contractDetails[0].AuthorityEndDate).ToString("dd-MM-yyyy") : string.Empty;
-            // tf216.Text = isGeneralSelected == true ? ((DateTime)contractDetails[0].AuthorityEndDate).ToString("dd-MM-yyyy") : string.Empty;
+
             tf216.FontSize = 8;
             tf216.TextColor = BaseColor.BLACK;
             writer.AddAnnotation(tf216.GetTextField());
 
-            // AddTextFieldToPDF(writer, doc, "c2", "", 400, 464, 340, 482);
-            // AddTextFieldToPDF(writer, doc, "c3", "", 563, 464, 525, 482);
             Chunk c3 = new Chunk("                         " +
                 "and continues until midnight on" +
                 "             \r\n" +
@@ -4504,8 +4531,7 @@ namespace RE360.API.Common
 
             formattedContent7.Add(new Chunk("3. PRIOR AGENCY", titleFont));
             Chunk c4 = new Chunk(" (Delete clause 3.1 or 3.2 as applicable. If neither option is deleted then clause 3.1 applies.)\r\n", contentFont);
-            //AddTextFieldToPDF(writer, doc, "Commented2Chunk", "", 400, 481, 340, 500);
-            //AddTextFieldToPDF(writer, doc, "Commented2Chunk", "", 560, 481, 525, 500);
+
             Chunk c5 = new Chunk(" 3.1. ", colorFont);
             Chunk c6 = new Chunk("The Client has not appointed any other real estate agent to sell the Property prior to signing this Agreement; or\r\n", contentFont);
             Chunk c7 = new Chunk(" 3.2. ", colorFont);
@@ -4541,10 +4567,10 @@ namespace RE360.API.Common
             TextField tf055 = new TextField(writer, new Rectangle(520, 350, 330, 370), "field2");
             tf055.BorderColor = new BaseColor(232, 232, 232);
             tf055.BackgroundColor = new BaseColor(232, 232, 232);
-            //tf055.Text = priorAgencyMarketings[0].AgencyExpiredDate.ToString();
+
             if (priorAgencyMarketings.Count > 0)
             {
-                // tf055.Text = priorAgencyMarketings[0].AgencyExpiredDate.ToString();
+            
                 tf055.Text = priorAgencyMarketings[0].AgencyExpiredDate != null ? (DateTime.Parse(priorAgencyMarketings[0].AgencyExpiredDate)).ToString("dd-MM-yyyy") : " ";
             }
             else
@@ -4559,7 +4585,7 @@ namespace RE360.API.Common
             TextField tf056 = new TextField(writer, new Rectangle(250, 320, 110, 340), "field3");
             tf056.BorderColor = new BaseColor(232, 232, 232);
             tf056.BackgroundColor = new BaseColor(232, 232, 232);
-            //  tf056.Text = priorAgencyMarketings[0].AgencyName1;
+       
             if (priorAgencyMarketings.Count > 0)
             {
                 tf056.Text = priorAgencyMarketings[0].AgencyName1;
@@ -4577,10 +4603,10 @@ namespace RE360.API.Common
             TextField tf057 = new TextField(writer, new Rectangle(520, 320, 330, 340), "field4");
             tf057.BorderColor = new BaseColor(232, 232, 232);
             tf057.BackgroundColor = new BaseColor(232, 232, 232);
-            //  tf057.Text = priorAgencyMarketings[0].AgencyExpiredDate1.ToString();
+
             if (priorAgencyMarketings.Count > 0)
             {
-                //  tf057.Text = priorAgencyMarketings[0].AgencyExpiredDate1.ToString();
+               
                 tf057.Text = priorAgencyMarketings[0].AgencyExpiredDate1 != null ? (DateTime.Parse(priorAgencyMarketings[0].AgencyExpiredDate1)).ToString("dd-MM-yyyy") : " ";
 
             }
@@ -4593,10 +4619,7 @@ namespace RE360.API.Common
             tf057.Options = TextField.READ_ONLY | TextField.MULTILINE;
             writer.AddAnnotation(tf057.GetTextField());
 
-            //AddTextFieldToPDF(writer, doc, "Agency Name", priorAgencyMarketings[0].AgencyName, 250, 350, 110, 370);
-            //AddTextFieldToPDF(writer, doc, " Agency Period:", priorAgencyMarketings[0].AgencyExpiredDate, 520, 350, 330, 370);
-            //AddTextFieldToPDF(writer, doc, "Agency Name", priorAgencyMarketings[0].AgencyName1, 250, 320, 110, 340);
-            //AddTextFieldToPDF(writer, doc, " Agency Period:", priorAgencyMarketings[0].AgencyExpiredDate1, 520, 320, 330, 340);
+           
             formattedContent7.Add(c4);
             formattedContent7.Add(c5);
             formattedContent7.Add(c6);
@@ -4628,32 +4651,59 @@ namespace RE360.API.Common
 
             Chunk c15 = new Chunk("(4.1. Auction Authority)", colorFont);
             formattedContent9.Add(c15);
+            if (isAuctionSelected)
+            {
+                var filePathradio = _configuration["BlobStorageSettings:DocPath"] + "RadioChecked.png" + _configuration["BlobStorageSettings:DocToken"];
+            
+                iTextSharp.text.Image logoradio = iTextSharp.text.Image.GetInstance(filePathradio);
+               
+                logoradio.ScaleAbsolute(15f, 15f);
+                logoradio.SetAbsolutePosition(150, 113);
 
-            var filePathradio = _configuration["BlobStorageSettings:DocPath"] + "RadioChecked.png" + _configuration["BlobStorageSettings:DocToken"];
-            //  string logoPath1 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "RadioChecked.png");
-            iTextSharp.text.Image logoradio = iTextSharp.text.Image.GetInstance(filePathradio);
-            //if (System.IO.File.Exists(filePathradio))
-            //{
-            logoradio.ScaleAbsolute(15f, 15f);
-            logoradio.SetAbsolutePosition(150, 113);
+
+                doc.Add(logoradio);
+           
+            }
+            else
+            {
+                
+                string logoPath1 = _configuration["BlobStorageSettings:DocPath"] + "RadioUnChecked.png" + _configuration["BlobStorageSettings:DocToken"];
+                iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(logoPath1);
+               
+                    logo1.ScaleAbsolute(15f, 15f);
+                    logo1.SetAbsolutePosition(150, 113);
 
 
-            doc.Add(logoradio);
-            //}
+                    doc.Add(logo1);
+                
+            }
             Chunk c16 = new Chunk("                 Applicable", colorFont);
             formattedContent9.Add(c16);
 
-            var filePathunradio = _configuration["BlobStorageSettings:DocPath"] + "RadioUnChecked.png" + _configuration["BlobStorageSettings:DocToken"];
-            //   string logoPath2 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "RadioUnChecked.png");
-            iTextSharp.text.Image logounradio = iTextSharp.text.Image.GetInstance(filePathunradio);
-            //if (System.IO.File.Exists(filePathunradio))
-            //{
-            logounradio.ScaleAbsolute(15f, 15f);
-            logounradio.SetAbsolutePosition(240, 113);
+            if (!isAuctionSelected)
+            {
+                var filePathunradio = _configuration["BlobStorageSettings:DocPath"] + "RadioChecked.png" + _configuration["BlobStorageSettings:DocToken"];
+            
+                iTextSharp.text.Image logounradio = iTextSharp.text.Image.GetInstance(filePathunradio);
+                
+                logounradio.ScaleAbsolute(15f, 15f);
+                logounradio.SetAbsolutePosition(240, 113);
 
 
-            doc.Add(logounradio);
-            //}
+                doc.Add(logounradio);
+            }
+            else
+            {
+               
+                string logoPath2 = _configuration["BlobStorageSettings:DocPath"] + "RadioUnChecked.png" + _configuration["BlobStorageSettings:DocToken"];
+                iTextSharp.text.Image logo2 = iTextSharp.text.Image.GetInstance(logoPath2);
+               
+                    logo2.ScaleAbsolute(15f, 15f);
+                    logo2.SetAbsolutePosition(240, 113);
+                    doc.Add(logo2);
+               
+            }
+
             Chunk c17 = new Chunk("                  Not Applicable", colorFont);
             formattedContent9.Add(c17);
 
@@ -4678,18 +4728,15 @@ namespace RE360.API.Common
 
             Phrase formattedContent12 = new Phrase();
             Chunk c20 = new Chunk("Auction Date:                                    " + "  Auction Time:  " + "                                           am/pm" + "                                              On-Site", contentFont);
-            //AddTextFieldToPDF(writer, doc, "Auction Date:", "", 180, 720, 90, 700);
-
+           
             TextField tf060 = new TextField(writer, new Rectangle(180, 715, 90, 700), "field1");
             tf060.BorderColor = new BaseColor(232, 232, 232);
             tf060.BackgroundColor = new BaseColor(232, 232, 232);
-            //var dateTime = Convert.ToDateTime(methodOfSales[0].AuctionDate.ToString());
-            //var dateValue2 = methodOfSales[0].AuctionDate.ToString();
-            //  tf060.Text = ((DateTime)methodOfSales[0].AuctionDate).ToString("dd-MM-yyyy");
+         
 
             if (methodOfSales.Count > 0)
             {
-                tf060.Text = methodOfSales[0].AuctionDate != null ? ((DateTime)methodOfSales[0].AuctionDate).ToString("dd-MM-yyyy") : " ";
+                tf060.Text = isAuctionSelected == true ? methodOfSales[0].AuctionDate != null ? ((DateTime)methodOfSales[0].AuctionDate).ToString("dd-MM-yyyy") : " " : " ";
             }
             else
             {
@@ -4710,28 +4757,28 @@ namespace RE360.API.Common
             if (methodOfSales.Count > 0)
             {
 
-                tf061.Text = methodOfSales[0].AuctionTime != null ? (DateTimeOffset.Parse(methodOfSales[0].AuctionTime).ToString("hh:mm tt")) : " ";
+                tf061.Text = isAuctionSelected == true ? methodOfSales[0].AuctionTime != null ? (DateTimeOffset.Parse(methodOfSales[0].AuctionTime).ToString("hh:mm tt")) : " " : "";
             }
             else
             {
                 // Handle the case when othercommentList is empty
                 tf061.Text = ""; // Set a default value or handle it based on your requirements
             }
-            //  tf061.Text = DateTimeOffset.Parse(methodOfSales[0].AuctionTime).ToString("hh:mm tt");
+           
             tf061.FontSize = 8;
             tf061.Options = TextField.READ_ONLY | TextField.MULTILINE;
             writer.AddAnnotation(tf061.GetTextField());
 
-            //AddTextFieldToPDF(writer, doc, " Auction Time:", "", 240, 720, 350, 700);
+           
 
 
             TextField tf062 = new TextField(writer, new Rectangle(385, 715, 450, 700), "field1");
             tf062.BorderColor = new BaseColor(232, 232, 232);
             tf062.BackgroundColor = new BaseColor(232, 232, 232);
-            //tf062.Text = DateTimeOffset.Parse(methodOfSales[0].AuctionTime).ToString("tt");
+            
             if (methodOfSales.Count > 0)
             {
-                tf062.Text = methodOfSales[0].AuctionTime != null ? (DateTimeOffset.Parse(methodOfSales[0].AuctionTime).ToString("tt")) : " ";
+                tf062.Text = isAuctionSelected == true ? methodOfSales[0].AuctionTime != null ? (DateTimeOffset.Parse(methodOfSales[0].AuctionTime).ToString("tt")) : " " : " ";
             }
             else
             {
@@ -4742,9 +4789,8 @@ namespace RE360.API.Common
             tf062.Options = TextField.READ_ONLY | TextField.MULTILINE;
             writer.AddAnnotation(tf062.GetTextField());
 
-            //AddTextFieldToPDF(writer, doc, "am/pm", "", 385, 720, 450, 700);
-            // AddCheckboxField(doc, writer, "myCheckbox", new Rectangle(485, 720, 475, 705), true, 475, 705);
-            AddCheckboxField(doc, writer, "myCheckbox", new Rectangle(485, 715, 475, 705), true, 475, 705);
+           
+            AddCheckboxField(doc, writer, "myCheckbox", new Rectangle(485, 715, 475, 705), methodOfSales[0].IsAuctionOnSite, 475, 705);
             doc.Add(new Paragraph(formattedContent12));
 
 
@@ -4757,10 +4803,10 @@ namespace RE360.API.Common
             TextField tf063 = new TextField(writer, new Rectangle(80, 665, 230, 687), "field1");
             tf063.BorderColor = new BaseColor(232, 232, 232);
             tf063.BackgroundColor = new BaseColor(232, 232, 232);
-            // tf063.Text = methodOfSales[0].AuctionVenue.ToString();
+           
             if (methodOfSales.Count > 0)
             {
-                tf063.Text = methodOfSales[0].AuctionVenue.ToString();
+                tf063.Text = isAuctionSelected == true ? methodOfSales[0].AuctionVenue.ToString() : "";
             }
             else
             {
@@ -4772,15 +4818,56 @@ namespace RE360.API.Common
             writer.AddAnnotation(tf063.GetTextField());
 
 
-            //AddTextFieldToPDF(writer, doc, "Venue:", "", 80, 670, 230, 690);
+          
             doc.Add(new Paragraph(formattedContent13));
-            // doc.Add(new Paragraph(" "));
+            
             Phrase formattedContent14 = new Phrase();
             Chunk c21 = new Chunk(" \n 4.2. Tender Authority" + "                        Applicable" + "                    Not Applicable", colorFont);
             formattedContent14.Add(c21);
-            AddRadioField(doc, writer, "myRadio", new Rectangle(150, 640, 170, 655), true, 156, 645);
-            AddRadioField(doc, writer, "myRadio", new Rectangle(350, 640, 170, 655), false, 156, 645);
-            //AddRadioField(doc,writer, new Rectangle(100, 700, 120, 720), "radiogroup", "Yes");
+
+            if (isTenderSelected)
+            {
+                string logoPath1 = _configuration["BlobStorageSettings:DocPath"] + "RadioChecked.png" + _configuration["BlobStorageSettings:DocToken"];
+                iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(logoPath1);
+               
+                    logo1.ScaleAbsolute(15f, 15f);
+                    logo1.SetAbsolutePosition(156, 640);
+                    doc.Add(logo1);
+               
+            }
+            else
+            {
+                string logoPath1 = _configuration["BlobStorageSettings:DocPath"] + "RadioUnChecked.png" + _configuration["BlobStorageSettings:DocToken"];
+                iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(logoPath1);
+               
+                    logo1.ScaleAbsolute(15f, 15f);
+                    logo1.SetAbsolutePosition(156, 640);
+                    doc.Add(logo1);
+               
+
+            }
+           
+            if (!isTenderSelected)
+            {
+                string logoPath2 = _configuration["BlobStorageSettings:DocPath"] + "RadioChecked.png" + _configuration["BlobStorageSettings:DocToken"];
+                iTextSharp.text.Image logo2 = iTextSharp.text.Image.GetInstance(logoPath2);
+               
+                    logo2.ScaleAbsolute(15f, 15f);
+                    logo2.SetAbsolutePosition(240, 640);
+                    doc.Add(logo2);
+               
+            }
+            else
+            {
+                string logoPath2 = _configuration["BlobStorageSettings:DocPath"] + "RadioUnChecked.png" + _configuration["BlobStorageSettings:DocToken"];
+                iTextSharp.text.Image logo2 = iTextSharp.text.Image.GetInstance(logoPath2);
+                
+                    logo2.ScaleAbsolute(15f, 15f);
+                    logo2.SetAbsolutePosition(240, 640);
+                    doc.Add(logo2);
+              
+            }
+           
             doc.Add(new Paragraph(formattedContent14));
 
             Phrase formattedContent15 = new Phrase();
@@ -4795,19 +4882,18 @@ namespace RE360.API.Common
             tf064.BackgroundColor = new BaseColor(232, 232, 232);
             if (methodOfSales.Count > 0)
             {
-                tf064.Text = methodOfSales[0].TenderDate != null ? (((DateTime)methodOfSales[0].TenderDate).ToString("dd-MM-yyyy")) : " ";
+                tf064.Text = isTenderSelected == true ? methodOfSales[0].TenderDate != null ? (((DateTime)methodOfSales[0].TenderDate).ToString("dd-MM-yyyy")) : " " : " ";
             }
             else
             {
                 // Handle the case when othercommentList is empty
                 tf064.Text = ""; // Set a default value or handle it based on your requirements
             }
-            // tf064.Text = ((DateTime)methodOfSales[0].TenderDate).ToString("dd-MM-yyyy");
+        
             tf064.FontSize = 8;
             tf064.Options = TextField.READ_ONLY | TextField.MULTILINE;
             writer.AddAnnotation(tf064.GetTextField());
 
-            //AddTextFieldToPDF(writer, doc, " Tender closes on:", "", 115, 575, 190, 590);
 
             TextField tf065 = new TextField(writer, new Rectangle(260, 575, 360, 590), "field1");
             tf065.BorderColor = new BaseColor(232, 232, 232);
@@ -4815,18 +4901,17 @@ namespace RE360.API.Common
             if (methodOfSales.Count > 0)
             {
 
-                tf065.Text = methodOfSales[0].TenderDate != null ? (DateTimeOffset.Parse(methodOfSales[0].TenderTime).ToString("hh:mm tt")) : " ";
+                tf065.Text = isTenderSelected == true ? methodOfSales[0].TenderDate != null ? (DateTimeOffset.Parse(methodOfSales[0].TenderTime).ToString("hh:mm tt")) : " " : " ";
             }
             else
             {
                 // Handle the case when othercommentList is empty
                 tf065.Text = "";
             }
-            // tf065.Text = DateTimeOffset.Parse(methodOfSales[0].TenderTime).ToString("hh:mm tt");
+          
             tf065.FontSize = 8;
             tf065.Options = TextField.READ_ONLY | TextField.MULTILINE;
             writer.AddAnnotation(tf065.GetTextField());
-            //AddTextFieldToPDF(writer, doc, " Auction Time::", "", 260, 575, 360, 590);
 
             Chunk c25 = new Chunk("\n \n " + " Venue:  ", contentFont);
             formattedContent15.Add(c25);
@@ -4834,10 +4919,10 @@ namespace RE360.API.Common
             TextField tf066 = new TextField(writer, new Rectangle(80, 545, 230, 560), "field1");
             tf066.BorderColor = new BaseColor(232, 232, 232);
             tf066.BackgroundColor = new BaseColor(232, 232, 232);
-            // tf066.Text = methodOfSales[0].TenderVenue.ToString();
+        
             if (methodOfSales.Count > 0)
             {
-                tf066.Text = methodOfSales[0].TenderVenue.ToString();
+                tf066.Text = isTenderSelected == true ? methodOfSales[0].TenderVenue.ToString() : "";
             }
             else
             {
@@ -4848,8 +4933,6 @@ namespace RE360.API.Common
             tf066.Options = TextField.READ_ONLY | TextField.MULTILINE;
             writer.AddAnnotation(tf066.GetTextField());
 
-            // AddTextFieldToPDF(writer, doc, "Venue:", "", 80, 545, 230, 560);
-            //AddTextFieldToPDF(writer, doc, "am/pm 1", "", 385, 570, 570, 620);
             doc.Add(new Paragraph(formattedContent15));
 
 
@@ -4858,14 +4941,24 @@ namespace RE360.API.Common
             TextField tf067 = new TextField(writer, new Rectangle(40, 480, 560, 510), "Deadline Sale Authority:");
             tf067.BorderColor = new BaseColor(232, 232, 232);
             tf067.BackgroundColor = new BaseColor(232, 232, 232);
-            //tf067.Text = methodOfSales[0].TenderVenue.ToString();		
+            if (!isTenderSelected && !isAuctionSelected)
+            {
+
+                tf067.Text = (methodOfSales[0].DeadLineDate != null ? (((DateTime)methodOfSales[0].DeadLineDate).ToString("dd-MM-yyyy")) : "") + " " + (methodOfSales[0].DeadLineTime != null ? (DateTimeOffset.Parse(methodOfSales[0].DeadLineTime).ToString("hh:mm tt")) : "");
+            }
+            else
+            {
+                tf067.Text = "";
+
+            }
+           	
             tf067.FontSize = 8;
             tf067.Options = TextField.READ_ONLY | TextField.MULTILINE;
             writer.AddAnnotation(tf067.GetTextField());
-            //AddTextFieldToPDF(writer, doc, "Deadline Sale Authority:", "", 40, 480, 560, 510);
+          
             formattedContent16.Add(c26);
             doc.Add(new Paragraph(formattedContent16));
-            //doc.Add(new Paragraph(""));
+        
 
 
 
@@ -4899,7 +4992,7 @@ namespace RE360.API.Common
             TextField tf059 = new TextField(writer, new Rectangle(300, 383, 220, 398), "field1");
             tf059.BorderColor = new BaseColor(232, 232, 232);
             tf059.BackgroundColor = new BaseColor(232, 232, 232);
-            // tf059.Text = priorAgencyMarketings[0].AgencySum.ToString();
+          
             if (priorAgencyMarketings.Count > 0)
             {
                 tf059.Text = priorAgencyMarketings[0].AgencySum.ToString();
@@ -4912,7 +5005,7 @@ namespace RE360.API.Common
             tf059.FontSize = 8;
             tf059.Options = TextField.READ_ONLY | TextField.MULTILINE;
             writer.AddAnnotation(tf059.GetTextField());
-            //AddTextFieldToPDF(writer, doc, "c25", "", 300, 481, 340, 500);
+            
             Chunk c34 = new Chunk("                                    " + "including GST on advertising, marketing and promoting the                Property on the Client’s behalf; and", contentFont);
             formattedContent20.Add(c32);
             formattedContent20.Add(c33);
@@ -4977,7 +5070,7 @@ namespace RE360.API.Common
             formattedContent27.Add(c47);
             doc.Add(new Paragraph(formattedContent27));
 
-            //doc.Add(new Paragraph(" "));
+           
 
             doc.NewPage();
 
@@ -4988,6 +5081,53 @@ namespace RE360.API.Common
             Phrase formattedContent28 = new Phrase();
             Chunk c48 = new Chunk("7." + "      " + " CALCULATION OF COMMISSION", titleFont);
             formattedContent28.Add(c48);
+
+
+            if (calculationOfCommission.IsStandard)
+            {
+                string logoPath11 = _configuration["BlobStorageSettings:DocPath"] + "RadioChecked.png" + _configuration["BlobStorageSettings:DocToken"];
+                iTextSharp.text.Image logo11 = iTextSharp.text.Image.GetInstance(logoPath11);
+
+                logo11.ScaleAbsolute(15f, 15f);
+                logo11.SetAbsolutePosition(220, 735);
+                doc.Add(logo11);
+            }
+            else
+            {
+              
+                string logoPath11 = _configuration["BlobStorageSettings:DocPath"] + "RadioUnChecked.png" + _configuration["BlobStorageSettings:DocToken"];
+                iTextSharp.text.Image logo11 = iTextSharp.text.Image.GetInstance(logoPath11);
+               
+                logo11.ScaleAbsolute(15f, 15f);
+                logo11.SetAbsolutePosition(220, 735);
+                doc.Add(logo11);
+                
+            }
+            Chunk c1116 = new Chunk("                 Standard", colorFont);
+            formattedContent28.Add(c1116);
+
+            if (!calculationOfCommission.IsStandard)
+            {
+                string logoPath211 = _configuration["BlobStorageSettings:DocPath"] + "RadioChecked.png" + _configuration["BlobStorageSettings:DocToken"];
+                iTextSharp.text.Image logo211 = iTextSharp.text.Image.GetInstance(logoPath211);
+                
+                    logo211.ScaleAbsolute(15f, 15f);
+                    logo211.SetAbsolutePosition(310, 735);
+                    doc.Add(logo211);
+               
+            }
+            else
+            {
+                string logoPath211 = _configuration["BlobStorageSettings:DocPath"] + "RadioUnChecked.png" + _configuration["BlobStorageSettings:DocToken"];
+                iTextSharp.text.Image logo211 = iTextSharp.text.Image.GetInstance(logoPath211);
+                
+                    logo211.ScaleAbsolute(15f, 15f);
+                    logo211.SetAbsolutePosition(310, 735);
+                    doc.Add(logo211);
+               
+            }
+            Chunk c1711 = new Chunk("                  Non-Standard", colorFont);
+            formattedContent28.Add(c1711);
             doc.Add(new Paragraph(formattedContent28));
 
             //7.1
@@ -4998,55 +5138,65 @@ namespace RE360.API.Common
             formattedContent29.Add(c50);
             doc.Add(new Paragraph(formattedContent29));
 
+            if (!calculationOfCommission.IsCreateCustComTerm && !calculationOfCommission.IsStandard)
+            {
+                AddCalculaionOfNonStandardCommission(doc, writer, calculationOfCommission);
+            }
+            else
+            {
+                AddCalculaionOfCommission(doc, writer, calculationOfCommission, clientCommissionDetails);
+
+            }
+
             //7.1(a)
-            Phrase formattedContent30 = new Phrase();
-            Chunk c51 = new Chunk("        (a)", colorFont);
-            Chunk c52 = new Chunk("Firstly, a fee of $                                     ,", contentFont);
-            formattedContent30.Add(c51);
-            formattedContent30.Add(c52);
-            AddTextFieldToPDF(writer, doc, " Firstly", "", "", 220, 690, 140, 705);
-            doc.Add(new Paragraph(formattedContent30));
+            //Phrase formattedContent30 = new Phrase();
+            //Chunk c51 = new Chunk("        (a)", colorFont);
+            //Chunk c52 = new Chunk("Firstly, a fee of $                                     ,", contentFont);
+            //formattedContent30.Add(c51);
+            //formattedContent30.Add(c52);
+            //AddTextFieldToPDF(writer, doc, " Firstly", "", "", 220, 690, 140, 705);
+            //doc.Add(new Paragraph(formattedContent30));
 
-            Phrase formattedContent31 = new Phrase();
-            Chunk c53 = new Chunk("            secondly on the first $" + "                                   of the purchase price " + "                                      %, ", contentFont);
-            AddTextFieldToPDF(writer, doc, "secondly", "", "", 240, 670, 160, 685);
-            formattedContent31.Add(c53);
-            //formattedContent31.Add(c54);
-            AddTextFieldToPDF(writer, doc, "secondly1", "", "", 420, 670, 330, 685);
-            doc.Add(new Paragraph(formattedContent31));
+            //Phrase formattedContent31 = new Phrase();
+            //Chunk c53 = new Chunk("            secondly on the first $" + "                                   of the purchase price " + "                                      %, ", contentFont);
+            //AddTextFieldToPDF(writer, doc, "secondly", "", "", 240, 670, 160, 685);
+            //formattedContent31.Add(c53);
+            ////formattedContent31.Add(c54);
+            //AddTextFieldToPDF(writer, doc, "secondly1", "", "", 420, 670, 330, 685);
+            //doc.Add(new Paragraph(formattedContent31));
 
-            Phrase formattedContent32 = new Phrase();
-            Chunk c54 = new Chunk("            thirdly on the balance of the purchase price" + "                               % with a minimum commission of $" + "                                    ,", contentFont);
-            AddTextFieldToPDF(writer, doc, "thirdly", "", "", 310, 655, 240, 668);
-            formattedContent32.Add(c54);
-            //formattedContent31.Add(c54);
-            AddTextFieldToPDF(writer, doc, "secondly1", "", "", 550, 655, 460, 668);
-            doc.Add(new Paragraph(formattedContent32));
+            //Phrase formattedContent32 = new Phrase();
+            //Chunk c54 = new Chunk("            thirdly on the balance of the purchase price" + "                               % with a minimum commission of $" + "                                    ,", contentFont);
+            //AddTextFieldToPDF(writer, doc, "thirdly", "", "", 310, 655, 240, 668);
+            //formattedContent32.Add(c54);
+            ////formattedContent31.Add(c54);
+            //AddTextFieldToPDF(writer, doc, "secondly1", "", "", 550, 655, 460, 668);
+            //doc.Add(new Paragraph(formattedContent32));
 
 
-            Phrase formattedContent33 = new Phrase();
-            Chunk c55 = new Chunk("            fourthly in the case of leasehold property, a further one third of the total commission. \n            The Client shall pay the applicable GST.", contentFont);
-            formattedContent33.Add(c55);
-            doc.Add(new Paragraph(formattedContent33));
+            //Phrase formattedContent33 = new Phrase();
+            //Chunk c55 = new Chunk("            fourthly in the case of leasehold property, a further one third of the total commission. \n            The Client shall pay the applicable GST.", contentFont);
+            //formattedContent33.Add(c55);
+            //doc.Add(new Paragraph(formattedContent33));
 
             Phrase formattedContent34 = new Phrase();
             Chunk c56 = new Chunk("(7.2)", colorFont);
             Chunk c57 = new Chunk("    For example, based upon (tick one         ):", contentFont);
-            AddCheckboxField(doc, writer, "myCheckbox", new Rectangle(210, 610, 220, 620), true, 210, 610);
+            AddCheckboxField(doc, writer, "myCheckbox", new Rectangle(210, 560, 220, 550), true, 210, 550);
             formattedContent34.Add(c56);
             formattedContent34.Add(c57);
 
-            AddCheckboxField(doc, writer, "myCheckbox", new Rectangle(70, 605, 80, 595), true, 70, 595);
+            AddCheckboxField(doc, writer, "myCheckbox", new Rectangle(70, 545, 80, 535), calculationOfCommission.IsAppraisedValue, 70, 535);
             Chunk c58 = new Chunk("  \n                     the appraised value, or", contentFont);
             formattedContent34.Add(c58);
-            AddCheckboxField(doc, writer, "myCheckbox", new Rectangle(70, 590, 80, 580), true, 70, 580);
+            AddCheckboxField(doc, writer, "myCheckbox", new Rectangle(70, 530, 80, 520), calculationOfCommission.IsUnAppraisedClientAskingPrice, 70, 520);
             Chunk c59 = new Chunk("  \n                     the Client’s asking price (where an appraisal was not possible to be given),", contentFont);
             formattedContent34.Add(c59);
 
             Chunk c60 = new Chunk("  \n                     a sale price of $ " + "                           would mean an estimated commission of $" + "                          inclusive of GST.", contentFont);
             formattedContent34.Add(c60);
-            AddTextFieldToPDF(writer, doc, "sale", "", "", 160, 560, 220, 575);
-            AddTextFieldToPDF(writer, doc, "sale", "", "", 400, 560, 450, 575);
+            AddTextFieldToPDF(writer, doc, "sale", "", calculationOfCommission != null ? calculationOfCommission.SalePrice.ToString() : "", 160, 500, 220, 515);
+            AddTextFieldToPDF(writer, doc, "sale", "", calculationOfCommission != null ? calculationOfCommission.EstimatedCommissionIncGST.ToString() : "", 400, 500, 450, 515);
             doc.Add(new Paragraph(formattedContent34));
 
             doc.Add(new Paragraph(" "));
@@ -5140,9 +5290,7 @@ namespace RE360.API.Common
             formattedContent44.Add(Commented11Chunk);
             doc.Add(new Paragraph(formattedContent44));
 
-            doc.Add(new Paragraph(" "));
-            doc.Add(new Paragraph(" "));
-            doc.Add(new Paragraph(" "));
+          
             doc.NewPage();
             doc.Add(t1);
 
@@ -5207,13 +5355,13 @@ namespace RE360.API.Common
                     {
                         bool ischecked;
                         // select file name on basis of boolean value
-                        //string imageFileName = isSelected ? "RadioChecked.png" : "RadioUnchecked.png";
+                        
                         string value1 = "true";
                         if (i < estimates.Count)
                         {
                             Estimates estimate = estimates[i];
                             ischecked = estimate.TickHereIfEstimate.ToString().Contains("True") ? true : false;
-                            //ischecked
+                           
                         }
                         else
                         {
@@ -5222,9 +5370,9 @@ namespace RE360.API.Common
                         }
 
                         //replace image with file name;
-                        //string imagePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "imageFileName");
+             
                         var imagePath1 = _configuration["BlobStorageSettings:DocPath"] + (ischecked ? "checked.png" : "unchecked.png") + _configuration["BlobStorageSettings:DocToken"];
-                        //string imagePath1 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", ischecked ? "checked.png" : "unchecked.png");
+                       
                         Image checkboxImage = Image.GetInstance(imagePath1);
 
                         // Adjust the checkbox image size as needed
@@ -5276,10 +5424,7 @@ namespace RE360.API.Common
             //    }
             //}
             doc.Add(tableEstimates);
-            //AddCheckboxField(doc, writer, "myCheckbox0", new Rectangle(520, 700, 530, 690), true, 520, 690);
-            //AddCheckboxField(doc, writer, "myCheckbox1", new Rectangle(520, 670, 530, 660), true, 520, 660);
-            //AddCheckboxField(doc, writer, "myCheckbox2", new Rectangle(520, 640, 530, 630), true, 520, 630);
-            //AddCheckboxField(doc, writer, "myCheckbox3", new Rectangle(520, 610, 530, 600), true, 520, 600);
+            
             doc.Add(new Paragraph(" "));
 
             Phrase formattedContent45 = new Phrase();
@@ -5287,11 +5432,25 @@ namespace RE360.API.Common
             Chunk c85 = new Chunk("\n Note: Expenses means any sum or reimbursement for expenses or charges incurred in connection with services provided by an         agent in the capacity of agent.", contentFont);
             formattedContent45.Add(c84);
             formattedContent45.Add(c85);
-            AddTextFieldToPDF(writer, doc, "Date", "", "", 60, 505, 135, 490);
-            AddTextFieldToPDF(writer, doc, "Date", "", "", 270, 505, 215, 490);
-            doc.Add(new Paragraph(formattedContent45));
+            AddTextFieldToPDF(writer, doc, "Date", "", execution.AgentToSignHereDate != null ? ((DateTime)execution.AgentToSignHereDate).ToString("dd-MM-yyyy") : "", 60, 505, 135, 490);
+           
 
+
+            if (execution != null)
+            {
+                if (execution.AgentToSignHere != null)
+                {
+                    iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(execution.AgentToSignHere);
+                    logo1.ScaleToFit(25f, 25f);
+                    logo1.SetAbsolutePosition(225, 490);
+                    PdfContentByte contentByte = writer.DirectContent;
+                    contentByte.AddImage(logo1);
+                }
+
+            }
+            doc.Add(new Paragraph(formattedContent45));
             doc.Add(new Paragraph(" "));
+
             //11th point
             Phrase formattedContent46 = new Phrase();
             Chunk c86 = new Chunk("11." + "      " + " CLIENT WARRANTIES", titleFont);
@@ -5306,10 +5465,9 @@ namespace RE360.API.Common
             tableClientWarranties.WidthPercentage = 100;
 
 
-            // float[] widths1 = new float[] { 100f };
             tableClientWarranties.DefaultCell.BackgroundColor = new BaseColor(220, 220, 220);
             tableClientWarranties.DefaultCell.BorderColor = BaseColor.DARK_GRAY;
-            // tableClientWarranties.SetWidths(widths1);
+            
             BaseColor headerBackgroundColor1 = BaseColor.BLACK; // Light Gray
 
             // Add headers to the table with background color
@@ -5335,7 +5493,7 @@ namespace RE360.API.Common
 
 
 
-            //    var gstno = clientDetails[0].GSTNumber != null ? clientDetails[0].GSTNumber.ToString() : null;
+           
 
 
 
@@ -5379,9 +5537,7 @@ namespace RE360.API.Common
             AddCheckboxField(doc, writer, "myCheckbox", new Rectangle(480, 345, 490, 335), isNotregistered, 480, 335);
 
             doc.Add(t1);
-            //doc.Add(new Paragraph(" "));
-            //doc.Add(new Paragraph(" "));
-            //doc.Add(new Paragraph(" "));
+          
 
             AddTextFieldToPDF(writer, doc, "Propertyfield", "Property Address", propertyAddress, 570, 765, 120, 785);
 
@@ -5543,7 +5699,6 @@ namespace RE360.API.Common
             tf0054.Options = TextField.READ_ONLY | TextField.MULTILINE;
             writer.AddAnnotation(tf0054.GetTextField());
 
-            //AddTextFieldToPDF(writer, doc, "field", additionaldisclosure[0].AdditionalDisclosures, 40, 565, 555, 345);
 
 
             doc.Add(new Paragraph(" "));
@@ -5799,7 +5954,6 @@ namespace RE360.API.Common
             tableClientAcknowledgment.WidthPercentage = 100;
 
 
-            // float[] widths1 = new float[] { 100f };
             tableClientAcknowledgment.DefaultCell.BackgroundColor = new BaseColor(220, 220, 220);
             tableClientAcknowledgment.DefaultCell.BorderColor = BaseColor.DARK_GRAY;
             float[] widths2 = new float[] { 8f, 70f };
@@ -5895,38 +6049,20 @@ namespace RE360.API.Common
                 }
             }
 
-            //DownloadImage(doc, id);
-            // Phrase formattedContent80 = new Phrase();
-            // Chunk c194 = new Chunk("\nSignature of Client(s): " + "                                                                 Signature of Client(s):", contentFont);
-            if (execution == null)
-            {
-                execution = new Execution();
-            }
-
-
-
-            //AddTextFieldToPDF(writer, doc, "Propertyfield", "", items[0], 125, 720, 220, 733);
-            // AddTextFieldToPDF(writer, doc, "Propertyfield", "", items[1], 380, 720, 470, 733);
-            // Chunk c195 = new Chunk("\n Position: Owner/Director/Trustee/Attorney/" + "                                Position: Owner/Director/Trustee/Attorney/", contentFont);
-            //Chunk c196 = new Chunk("\n Authorised Signatory" + "                                                                  Authorised Signatory", contentFont);
-
 
             Phrase formattedContent80 = new Phrase();
             Chunk c194 = new Chunk("\nSignature of Client(s): " + "                                                                 Signature of Client(s):", contentFont);
 
             CreatePdfWithImageInsideTextField(doc, writer, signature[0].SignatureOfClientName != null ? signature[0].SignatureOfClientName : "", "signature1", 125, 705, 220, 733);
             CreatePdfWithImageInsideTextField(doc, writer, signature[1].SignatureOfClientName != null ? signature[1].SignatureOfClientName : "", "signature2", 380, 705, 470, 733);
-            //AddTextFieldToPDF(writer, doc, "Propertyfield", "", 125, 705, 220, 733);
-            //AddTextFieldToPDF(writer, doc, "Propertyfield", "", 380, 705, 470, 733);
-
-            Chunk c195 = new Chunk("\n\n Position: " + clientDetails[0].Position + "                                                                             Position: " + clientDetails[1].Position, contentFont);
-            Chunk c196 = new Chunk("\n " + clientDetails[0].FirstName + " " + clientDetails[0].SurName + "                                                                              " + clientDetails[1].FirstName + " " + clientDetails[1].SurName, contentFont);
-
+           
+            Chunk c195 = new Chunk("\n\nPosition: " + clientDetails[0].Position + "                                                                     Position: " + clientDetails[1].Position, contentFont);
+            Chunk c196 = new Chunk("\n" + clientDetails[0].FirstName + " " + clientDetails[0].SurName + "                                                                              " + clientDetails[1].FirstName + " " + clientDetails[1].SurName, contentFont);
 
             formattedContent80.Add(c194);
             formattedContent80.Add(c195);
             formattedContent80.Add(c196);
-            //formattedContent80.Add(c197);
+          
             doc.Add(new Paragraph(formattedContent80));
             doc.Add(new Paragraph(" "));
 
@@ -5938,11 +6074,8 @@ namespace RE360.API.Common
             CreatePdfWithImageInsideTextField(doc, writer, signature[2].SignatureOfClientName != null ? signature[2].SignatureOfClientName : "", "signature1", 125, 635, 220, 660);
             CreatePdfWithImageInsideTextField(doc, writer, signature[3].SignatureOfClientName != null ? signature[3].SignatureOfClientName : "", "signature2", 380, 635, 470, 660);
 
-            //AddTextFieldToPDF(writer, doc, "Propertyfield", "", "", 125, 635, 220, 660);
-            //AddTextFieldToPDF(writer, doc, "Propertyfield", "", "", 380, 635, 470, 660);
-            Chunk c198 = new Chunk("\n Position: " + clientDetails[2].Position + "                                                                                    Position: " + clientDetails[3].Position, contentFont);
-            Chunk c199 = new Chunk("\n " + clientDetails[2].FirstName + " " + clientDetails[0].SurName + "                                                                                " + clientDetails[3].FirstName + " " + clientDetails[3].SurName, contentFont);
-            formattedContent81.Add(c197);
+            Chunk c198 = new Chunk("\nPosition: " + clientDetails[2].Position + "                                                                                       Position: " + clientDetails[3].Position, contentFont);
+            Chunk c199 = new Chunk("\n" + clientDetails[2].FirstName + " " + clientDetails[0].SurName + "                                                                                " + clientDetails[3].FirstName + " " + clientDetails[3].SurName, contentFont); formattedContent81.Add(c197);
             formattedContent81.Add(c198);
             formattedContent81.Add(c199);
             doc.Add(new Paragraph(formattedContent81));
@@ -5960,7 +6093,7 @@ namespace RE360.API.Common
                 PdfContentByte contentByte = writer.DirectContent;
                 contentByte.AddImage(logo00);
             }
-            //AddTextFieldToPDF(writer, doc, "Propertyfield", "", "", 160, 545, 250, 520);
+           
             var executionDate = execution.AgentToSignHereDate != null ? ((DateTime)execution.AgentToSignHereDate).ToString("MM-yyyy") : "";
             var executionTIme = execution.AgentToSignHereDate != null ? (DateTimeOffset.Parse(execution.AgentToSignHereDate.ToString()).ToString("tt")) : "";
             AddTextFieldToPDF(writer, doc, "Propertyfield", "", executionDate, 280, 555, 360, 530);
@@ -6059,8 +6192,7 @@ namespace RE360.API.Common
         ;
 
                 // Add the radio button image based on the radio button state (selected or unselected)
-                //string imagesFolder = "Pictures";
-                //string imageFileName = isSelected ? "RadioChecked.png" : "RadioUnchecked.png";
+             
                 var imagePath = _configuration["BlobStorageSettings:DocPath"] + "RadioChecked.png" + _configuration["BlobStorageSettings:DocToken"];
 
                 //string imagePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "RadioChecked.png");
@@ -6140,7 +6272,7 @@ namespace RE360.API.Common
             if (listingAddresses == null)
             {
 
-                //List<ListingAddress> listings = new List<ListingAddress>();		
+             	
                 ListingAddress obj = new ListingAddress();
                 listingAddresses = obj;
             }
@@ -6241,11 +6373,7 @@ namespace RE360.API.Common
             textcell2.Border = 0;
             textcell2.BackgroundColor = backgroundColor;
             dataTable1.AddCell(textcell2);
-            //Phrase StreetPhrase2 = new Phrase();
-            //Chunk StreetChunk2 = new Chunk("__________");
-            //StreetChunk2.SetBackground(backgroundColor);
-            //var StreetParagraph2 = new Paragraph(StreetChunk2);
-            //dataTable1.AddCell(StreetParagraph2);
+            
 
 
             //ADDED FOR EMPTY SPACE BETWEEN TEXTBOX AND LABEL 
@@ -6301,7 +6429,7 @@ namespace RE360.API.Common
             AgentParagraph.Font.Size = 8;
             dataTable2.AddCell(AgentParagraph);
             PdfPCell textcell5 = new PdfPCell();
-            textcell5.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", user.FirstName + " " + user.LastName, baseF14, 7);
+            textcell5.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", user != null ? user.FirstName + " " + user.LastName : "", baseF14, 7);
             textcell5.Border = 0;
             textcell5.BackgroundColor = backgroundColor;
             dataTable2.AddCell(textcell5);
@@ -6355,8 +6483,7 @@ namespace RE360.API.Common
             headertable.AddCell(fieldsetTable);
             doc.Add(headertable);
 
-            //ADDED FOR ADDING SPACE AFTER TABE
-            //doc.Add(new Paragraph(" "));
+            
         }
 
         public void AddClientTables(Document doc, PdfWriter writer, List<ClientDetail> clientlist)
@@ -6895,7 +7022,7 @@ namespace RE360.API.Common
 
             fieldsetTable1.AddCell(legendCell1);
             headertable.AddCell(fieldsetTable1);
-            //table1.AddCell(fieldsetTable1);
+           
             table1.AddCell(headertable);
 
             // Add table 1 to the parent table cell
@@ -6936,7 +7063,7 @@ namespace RE360.API.Common
             clientParagraph2.Font.Color = blueColor;
             clientParagraph2.Font.SetStyle(Font.BOLD);
             clientParagraph2.Font.Size = 10;
-            //clientParagraph2.Font.BaseFont.FontType = Font.BOLD;
+            
             headertable1.AddCell(clientParagraph2);
 
             Phrase typePhrase2 = new Phrase();
@@ -7438,11 +7565,6 @@ namespace RE360.API.Common
             // Add the parent table to the document
             doc.Add(parentTable);
 
-
-            //doc.Add(new Paragraph(" "));
-
-
-
         }
 
 
@@ -7595,8 +7717,6 @@ namespace RE360.API.Common
             textcell5.BackgroundColor = backgroundColor;
             dataTable5.AddCell(textcell5);
 
-            // legendCell.AddElement(solicitorParagraph);
-            //legendCell.AddElement(solicitorPhrase);
             legendCell.AddElement(dataTable3);
             legendCell.AddElement(dataTableForRow1); //table for emply row
             legendCell.AddElement(dataTable4);
@@ -7607,8 +7727,7 @@ namespace RE360.API.Common
 
             headertable.AddCell(fieldsetTable);
             doc.Add(headertable);
-            //doc.Add(new Paragraph("\r\n"));
-            //doc.Add(fieldsetTable);
+           
         }
         public void AddContentToParticulars(Document doc, PdfWriter writer, List<ParticularDetail> particularDetail, List<PropertyAttributeTypeWithAllDataViewModel> data, List<LegalDetail> legalDetails, int id)
         {
@@ -8201,7 +8320,7 @@ namespace RE360.API.Common
             dataTable9.AddCell(landParagraph2);
             PdfPCell textcell13 = new PdfPCell();
             textcell13.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", legalDetails[0].LandArea, baseF14, 7);
-            // textcell13.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", (particularDetail[0]. == null ? " " : particularDetail[0].LandArea.ToString()), baseF14, 7);
+        
             textcell13.Border = 0;
             textcell13.Border = 0;
             textcell13.BackgroundColor = backgroundColor;
@@ -8306,7 +8425,7 @@ namespace RE360.API.Common
             emptydataTable6.DefaultCell.FixedHeight = 5f;
             emptydataTable6.AddCell(" ");
 
-            // legendCell.AddElement(typeParagraph);
+            
             legendCell.AddElement(typePhrase);
             legendCell.AddElement(typeParagraph1);
             legendCell.AddElement(typePhrase1);
@@ -8320,25 +8439,583 @@ namespace RE360.API.Common
             legendCell.AddElement(dataTable5);
             legendCell.AddElement(emptydataTable4);
             legendCell.AddElement(dataTable9);
-            // legendCell.AddElement(emptydataTable5);
+
             legendCell.AddElement(dataTable10);
             legendCell.AddElement(emptydataTable6);
 
 
             fieldsetTable.AddCell(legendCell);
 
-            //doc.Add(fieldsetTable);
             headertable.AddCell(fieldsetTable);
             doc.Add(headertable);
 
-            //// Add text fields to the PDF
-
-            // doc.Add(new Paragraph(" "));
+           
         }
+
+        public void AddCalculaionOfCommission(Document doc, PdfWriter writer, CalculationOfCommission commission, List<ClientCommissionDetails> clientCommissionDetails)
+        {
+            if (clientCommissionDetails.Count < 10)
+            {
+                for (int i = 0; i <= (10 - clientCommissionDetails.Count); i++)
+                {
+                    clientCommissionDetails.Add(new ClientCommissionDetails());
+
+                }
+            }
+            BaseFont baseF14 = BaseFont.CreateFont();
+
+            int red = 0;
+            int green = 128;
+            int blue = 255;
+            BaseColor fontColor = new BaseColor(red, green, blue);
+            Font contentFont = FontFactory.GetFont(FontFactory.HELVETICA, 9);
+            Font colorFont = FontFactory.GetFont(FontFactory.HELVETICA, 9, fontColor);
+            var blueColor = new BaseColor(43, 145, 175);
+            BaseColor backgroundColor = new BaseColor(232, 232, 232);
+
+
+
+
+            // Add the fieldset box with legend
+            PdfPTable fieldsetTable1 = new PdfPTable(1);
+            fieldsetTable1.WidthPercentage = 100f;
+
+            PdfPCell legendCell1 = new PdfPCell();
+           
+            legendCell1.Border = 0;
+            legendCell1.BorderWidth = 2;
+            legendCell1.Padding = 5;
+            legendCell1.BorderColor = BaseColor.DARK_GRAY;
+            legendCell1.BorderWidth = 1f;
+            
+            fieldsetTable1.AddCell(legendCell1);
+
+            PdfPTable dataTable0 = new PdfPTable(3);
+            dataTable0.WidthPercentage = 100f;
+            dataTable0.DefaultCell.Border = 0;
+
+            float[] arr0 = new float[] { 3f, 1.4f, 2.5f };
+            dataTable0.SetWidths(arr0);
+
+            Chunk homeChunk120 = new Chunk("  Create custom commission structure");
+            homeChunk120.Font.Size = 9f;
+            var homeParagraph120 = new Paragraph();
+
+
+            Image uncheckedImage3 = GetCheckboxImage(commission.IsCreateCustComTerm);
+            uncheckedImage3.ScaleAbsolute(8, 8);
+            homeParagraph120.Add(new Chunk(uncheckedImage3, 0, 0));
+
+
+            homeParagraph120.Add(homeChunk120);
+            homeParagraph120.Alignment = Element.ALIGN_TOP;
+            homeParagraph120.Font.Size = 8;
+            homeParagraph120.Font.Color = BaseColor.BLACK;
+
+            dataTable0.AddCell(homeParagraph120);
+            dataTable0.AddCell("");
+            dataTable0.AddCell("");
+
+            PdfPTable dataTable1 = new PdfPTable(7);
+            dataTable1.WidthPercentage = 100f;
+            dataTable1.DefaultCell.Border = 0;
+
+            float[] arr2 = new float[] { 3f, 3.4f, 2.5f, 0.2f, 2.2f, 6f, 0.2f };
+            dataTable1.SetWidths(arr2);
+
+
+
+
+            Chunk titleChunk1 = new Chunk("Base Amount");
+            var titleParagraph1 = new Paragraph(titleChunk1);
+            titleParagraph1.Alignment = Element.ALIGN_TOP;
+            titleParagraph1.Font.Size = 8;
+            titleParagraph1.Font.Color = BaseColor.BLACK;
+            dataTable1.AddCell(titleParagraph1);
+            PdfPCell textcell = new PdfPCell();
+            textcell.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", commission != null ? commission.BaseAmount.ToString() : "", baseF14, 7);
+            textcell.Border = 0;
+            textcell.BackgroundColor = backgroundColor;
+            dataTable1.AddCell(textcell);
+
+            dataTable1.AddCell("");
+            dataTable1.AddCell("");
+            dataTable1.AddCell("");
+            dataTable1.AddCell("");
+            dataTable1.AddCell("");
+
+            dataTable1.AddCell("");
+
+
+
+            dataTable1.AddCell("");
+
+            //ADDED EMPTY TABLE WITH EMPTY CELL TO GIVE SPACE BETWEEN TWO TABLES
+            PdfPTable emptydataTable1 = new PdfPTable(1);
+            emptydataTable1.WidthPercentage = 100f;
+            emptydataTable1.DefaultCell.Border = 0;
+            emptydataTable1.DefaultCell.FixedHeight = 4f;
+            emptydataTable1.AddCell(" ");
+
+
+            PdfPTable dataTable3 = new PdfPTable(3);
+            dataTable3.WidthPercentage = 100f;
+            dataTable3.DefaultCell.Border = 0;
+
+            float[] arr5 = new float[] { 1.5f, 3f, 5f };
+            dataTable3.SetWidths(arr5);
+
+            Chunk firChunk1 = new Chunk("% of Sale Price $");
+            var firParagraph1 = new Paragraph(firChunk1);
+            firParagraph1.Alignment = Element.ALIGN_TOP;
+            firParagraph1.Font.Size = 8;
+            firParagraph1.Font.Color = BaseColor.BLACK;
+            dataTable3.AddCell(firParagraph1);
+            PdfPCell textcell2 = new PdfPCell();
+            textcell2.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", commission != null ? commission.SalePricePercentage.ToString() : "", baseF14, 7);
+            textcell2.Border = 0;
+            textcell2.BackgroundColor = backgroundColor;
+            dataTable3.AddCell(textcell2);
+            dataTable3.AddCell("");
+            dataTable3.AddCell("");
+
+
+
+
+
+
+            //ADDED EMPTY TABLE WITH EMPTY CELL TO GIVE SPACE BETWEEN TWO TABLES
+            PdfPTable emptydataTable2 = new PdfPTable(1);
+            emptydataTable2.WidthPercentage = 100f;
+            emptydataTable2.DefaultCell.Border = 0;
+            emptydataTable2.DefaultCell.FixedHeight = 4f;
+            emptydataTable2.AddCell(" ");
+
+            PdfPTable dataTable4 = new PdfPTable(1);
+            dataTable4.WidthPercentage = 100f;
+            dataTable4.DefaultCell.Border = 0;
+
+            Chunk addChunk1 = new Chunk("Percent                   Upto Amount                             Percent                  Upto Amount                            Percent                 Upto Amount");
+            var addParagraph1 = new Paragraph(addChunk1);
+            addParagraph1.Alignment = Element.ALIGN_TOP;
+            addParagraph1.Font.Size = 8;
+            addParagraph1.Font.Color = BaseColor.BLACK;
+            dataTable4.AddCell(addParagraph1);
+
+
+            PdfPTable dataTable18 = new PdfPTable(12);
+            dataTable18.WidthPercentage = 100f;
+            dataTable18.DefaultCell.Border = 0;
+            dataTable18.DefaultCell.FixedHeight = 15f;
+
+            float[] arr15 = new float[] { 1.0f, 0.6f, 1.0f, 1.5f, 1.0f, 0.6f, 1.0f, 1.5f, 1.0f, 0.6f, 1.0f, 1f };
+            dataTable18.SetWidths(arr15);
+
+
+            PdfPCell textcell1 = new PdfPCell();
+            textcell1.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", clientCommissionDetails[0].Percent.ToString(), baseF14, 7);
+            textcell1.Border = 0;
+            textcell1.FixedHeight = 8f;
+            textcell1.BackgroundColor = backgroundColor;
+            dataTable18.AddCell(textcell1);
+
+            Chunk firChunk10 = new Chunk("Upto");
+            var firParagraph10 = new Paragraph(firChunk10);
+            firParagraph10.Alignment = Element.ALIGN_TOP;
+            firParagraph10.Font.Size = 7;
+            firParagraph10.Font.Color = BaseColor.BLACK;
+            dataTable18.AddCell(firParagraph10);
+
+            PdfPCell textcell21 = new PdfPCell();
+            textcell21.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", clientCommissionDetails[0].UpToAmount.ToString(), baseF14, 7);
+            textcell21.Border = 0;
+            textcell21.FixedHeight = 8f;
+            textcell21.BackgroundColor = backgroundColor;
+            dataTable18.AddCell(textcell21);
+
+            dataTable18.AddCell("");
+
+
+            PdfPCell textcell31 = new PdfPCell();
+            textcell31.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", clientCommissionDetails[1].Percent.ToString(), baseF14, 7);
+            textcell31.Border = 0;
+            textcell31.FixedHeight = 8f;
+            textcell31.BackgroundColor = backgroundColor;
+            dataTable18.AddCell(textcell31);
+
+            Chunk firChunk11 = new Chunk("Upto");
+            var firParagraph11 = new Paragraph(firChunk11);
+            firParagraph11.Alignment = Element.ALIGN_TOP;
+            firParagraph11.Font.Size = 7;
+            firParagraph11.Font.Color = BaseColor.BLACK;
+            dataTable18.AddCell(firParagraph11);
+
+
+            PdfPCell textcell3 = new PdfPCell();
+            textcell3.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", clientCommissionDetails[1].UpToAmount.ToString(), baseF14, 7);
+            textcell3.Border = 0;
+            textcell3.FixedHeight = 8f;
+            textcell3.BackgroundColor = backgroundColor;
+            dataTable18.AddCell(textcell3);
+
+            dataTable18.AddCell("");
+
+            PdfPCell textcell4 = new PdfPCell();
+            textcell4.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", clientCommissionDetails[2].Percent.ToString(), baseF14, 7);
+            textcell4.Border = 0;
+            textcell4.FixedHeight = 8f;
+            textcell4.BackgroundColor = backgroundColor;
+            dataTable18.AddCell(textcell4);
+
+            Chunk firChunk12 = new Chunk("Upto");
+            var firParagraph12 = new Paragraph(firChunk12);
+            firParagraph12.Alignment = Element.ALIGN_TOP;
+            firParagraph12.Font.Size = 7;
+            firParagraph12.Font.Color = BaseColor.BLACK;
+            dataTable18.AddCell(firParagraph12);
+
+
+            PdfPCell textcell5 = new PdfPCell();
+            textcell5.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", clientCommissionDetails[2].UpToAmount.ToString(), baseF14, 7);
+            textcell5.Border = 0;
+            textcell5.FixedHeight = 8f;
+            textcell5.BackgroundColor = backgroundColor;
+            dataTable18.AddCell(textcell5);
+
+            dataTable18.AddCell("");
+
+            //ADDED EMPTY TABLE WITH EMPTY CELL TO GIVE SPACE BETWEEN TWO TABLES
+            PdfPTable emptydataTable3 = new PdfPTable(1);
+            emptydataTable3.WidthPercentage = 100f;
+            emptydataTable3.DefaultCell.Border = 0;
+            emptydataTable3.DefaultCell.FixedHeight = 4f;
+            emptydataTable3.AddCell(" ");
+
+            PdfPTable dataTable51 = new PdfPTable(1);
+            dataTable51.WidthPercentage = 100f;
+            dataTable51.DefaultCell.Border = 0;
+
+            Chunk addChunk21 = new Chunk("Percent                   Upto Amount                             Percent                  Upto Amount                            Percent                 ");
+            var addParagraph21 = new Paragraph(addChunk21);
+            addParagraph21.Alignment = Element.ALIGN_TOP;
+            addParagraph21.Font.Size = 8;
+            addParagraph21.Font.Color = BaseColor.BLACK;
+            dataTable51.AddCell(addParagraph21);
+
+            PdfPTable dataTable20 = new PdfPTable(12);
+            dataTable20.WidthPercentage = 100f;
+            dataTable20.DefaultCell.Border = 0;
+            dataTable20.DefaultCell.FixedHeight = 15f;
+
+            float[] arr151 = new float[] { 1.0f, 0.6f, 1.0f, 1.5f, 1.0f, 0.6f, 1.0f, 1.5f, 1.0f, 0.6f, 1.0f, 1f };
+            dataTable20.SetWidths(arr151);
+
+
+            PdfPCell textcell111 = new PdfPCell();
+            textcell111.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", clientCommissionDetails[3].Percent.ToString(), baseF14, 7);
+            textcell111.Border = 0;
+            textcell111.FixedHeight = 8f;
+            textcell111.BackgroundColor = backgroundColor;
+            dataTable20.AddCell(textcell111);
+
+            Chunk firChunk13 = new Chunk("Upto");
+            var firParagraph13 = new Paragraph(firChunk13);
+            firParagraph13.Alignment = Element.ALIGN_TOP;
+            firParagraph13.Font.Size = 7;
+            firParagraph13.Font.Color = BaseColor.BLACK;
+            dataTable20.AddCell(firParagraph13);
+
+            PdfPCell textcell2111 = new PdfPCell();
+            textcell2111.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", clientCommissionDetails[3].UpToAmount.ToString(), baseF14, 7);
+            textcell2111.Border = 0;
+            textcell2111.FixedHeight = 8f;
+            textcell2111.BackgroundColor = backgroundColor;
+            dataTable20.AddCell(textcell2111);
+
+            dataTable20.AddCell("");
+
+
+            PdfPCell textcell3111 = new PdfPCell();
+            textcell3111.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", clientCommissionDetails[4].Percent.ToString(), baseF14, 7);
+            textcell3111.Border = 0;
+            textcell3111.FixedHeight = 8f;
+            textcell3111.BackgroundColor = backgroundColor;
+            dataTable20.AddCell(textcell3111);
+
+            Chunk firChunk14 = new Chunk("Upto");
+            var firParagraph14 = new Paragraph(firChunk13);
+            firParagraph14.Alignment = Element.ALIGN_TOP;
+            firParagraph14.Font.Size = 7;
+            firParagraph14.Font.Color = BaseColor.BLACK;
+            dataTable20.AddCell(firParagraph14);
+
+
+
+            PdfPCell textcell4111 = new PdfPCell();
+            textcell4111.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", clientCommissionDetails[4].UpToAmount.ToString(), baseF14, 7);
+            textcell4111.Border = 0;
+            textcell4111.FixedHeight = 8f;
+            textcell4111.BackgroundColor = backgroundColor;
+            dataTable20.AddCell(textcell4111);
+
+            dataTable20.AddCell("");
+
+            PdfPCell textcell511 = new PdfPCell();
+            textcell511.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", clientCommissionDetails[5].Percent.ToString(), baseF14, 7);
+            textcell511.Border = 0;
+            textcell511.FixedHeight = 8f;
+            textcell511.BackgroundColor = backgroundColor;
+            dataTable20.AddCell(textcell511);
+
+            dataTable20.AddCell("");
+
+
+            Chunk firChunk15 = new Chunk("There after");
+            var firParagraph15 = new Paragraph(firChunk15);
+            firParagraph15.Alignment = Element.ALIGN_TOP;
+            firParagraph15.Font.Size = 7;
+            firParagraph15.Font.Color = BaseColor.BLACK;
+            dataTable20.AddCell(firParagraph15);
+
+
+            dataTable20.AddCell("");
+
+            ////ADDED EMPTY TABLE WITH EMPTY CELL TO GIVE SPACE BETWEEN TWO TABLES
+            PdfPTable dataTable00 = new PdfPTable(3);
+            dataTable00.WidthPercentage = 100f;
+            dataTable00.DefaultCell.Border = 0;
+
+            float[] arr00 = new float[] { 9f, 3f, 1.5f };
+            dataTable00.SetWidths(arr00);
+
+            Chunk homeChunk1200 = new Chunk("  In the case of leasehold property, a further one third of the total commission");
+            homeChunk1200.Font.Size = 9f;
+            var homeParagraph1200 = new Paragraph();
+
+
+            Image uncheckedImage30 = GetCheckboxImage(commission.IsInCaseOfLessHoldTerm);
+            uncheckedImage30.ScaleAbsolute(8, 8);
+            homeParagraph1200.Add(new Chunk(uncheckedImage3, 0, 0));
+
+
+            homeParagraph1200.Add(homeChunk1200);
+            homeParagraph1200.Alignment = Element.ALIGN_TOP;
+            homeParagraph1200.Font.Size = 9;
+            homeParagraph1200.Font.Color = BaseColor.BLACK;
+
+            dataTable00.AddCell(homeParagraph1200);
+            dataTable00.AddCell("");
+            dataTable00.AddCell("");
+
+            PdfPTable dataTable31 = new PdfPTable(3);
+            dataTable31.WidthPercentage = 100f;
+            dataTable31.DefaultCell.Border = 0;
+
+            float[] arr51 = new float[] { 5f, 3f, 5f };
+            dataTable31.SetWidths(arr51);
+
+            Chunk firChunk111 = new Chunk("Minimum commission (excl.GST) (Optional)");
+            var firParagraph111 = new Paragraph(firChunk111);
+            firParagraph111.Alignment = Element.ALIGN_TOP;
+            firParagraph111.Font.Size = 9;
+            firParagraph111.Font.Color = BaseColor.BLACK;
+            dataTable31.AddCell(firParagraph111);
+            PdfPCell textcell211 = new PdfPCell();
+            textcell211.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", commission != null ? commission.EstimatedCommission.ToString() : "", baseF14, 7);
+            textcell211.Border = 0;
+            textcell211.BackgroundColor = backgroundColor;
+            dataTable31.AddCell(textcell211);
+            dataTable31.AddCell("");
+            dataTable31.AddCell("");
+
+
+            legendCell1.AddElement(dataTable0);
+            legendCell1.AddElement(dataTable1);
+            legendCell1.AddElement(emptydataTable1);
+            legendCell1.AddElement(dataTable3);
+            legendCell1.AddElement(emptydataTable2);
+            legendCell1.AddElement(dataTable4);
+            legendCell1.AddElement(dataTable18);
+            legendCell1.AddElement(emptydataTable3);
+            legendCell1.AddElement(dataTable51);
+            legendCell1.AddElement(dataTable20);
+            legendCell1.AddElement(dataTable00);
+            legendCell1.AddElement(dataTable31);
+
+            fieldsetTable1.AddCell(legendCell1);
+
+            doc.Add(fieldsetTable1);
+
+
+        }
+        public void AddCalculaionOfNonStandardCommission(Document doc, PdfWriter writer, CalculationOfCommission commission)
+        {
+
+            BaseFont baseF14 = BaseFont.CreateFont();
+
+            int red = 0;
+            int green = 128;
+            int blue = 255;
+            BaseColor fontColor = new BaseColor(red, green, blue);
+            Font contentFont = FontFactory.GetFont(FontFactory.HELVETICA, 9);
+            Font colorFont = FontFactory.GetFont(FontFactory.HELVETICA, 9, fontColor);
+            var blueColor = new BaseColor(43, 145, 175);
+            BaseColor backgroundColor = new BaseColor(232, 232, 232);
+
+            // Add the fieldset box with legend
+            PdfPTable fieldsetTable1 = new PdfPTable(1);
+            fieldsetTable1.WidthPercentage = 100f;
+
+            PdfPCell legendCell1 = new PdfPCell();
+            legendCell1.Border = iTextSharp.text.Rectangle.BOX;
+            legendCell1.Border = 0;
+            legendCell1.BorderWidth = 2;
+            legendCell1.Padding = 5;
+            legendCell1.BorderColor = BaseColor.DARK_GRAY;
+            legendCell1.BorderWidth = 1f;
+            fieldsetTable1.AddCell(legendCell1);
+
+
+            PdfPTable dataTable3 = new PdfPTable(5);
+            dataTable3.WidthPercentage = 100f;
+            dataTable3.DefaultCell.Border = 0;
+
+            float[] arr6 = new float[] { 8f, 1f, 1f, 1f, 1f };
+            dataTable3.SetWidths(arr6);
+
+
+
+            Chunk homeChunk120 = new Chunk("  Create custom commission structure");
+            homeChunk120.Font.Size = 9f;
+            var homeParagraph120 = new Paragraph();
+
+
+            Image uncheckedImage3 = GetCheckboxImage(commission.IsCreateCustComTerm);
+            uncheckedImage3.ScaleAbsolute(8, 8);
+            homeParagraph120.Add(new Chunk(uncheckedImage3, 0, 0));
+
+
+            homeParagraph120.Add(homeChunk120);
+            homeParagraph120.Alignment = Element.ALIGN_TOP;
+            homeParagraph120.Font.Size = 8;
+            homeParagraph120.Font.Color = BaseColor.BLACK;
+
+            dataTable3.AddCell(homeParagraph120);
+            dataTable3.AddCell("");
+            dataTable3.AddCell("");
+            dataTable3.AddCell("");
+            dataTable3.AddCell("");
+
+
+
+            //ADDED EMPTY TABLE WITH EMPTY CELL TO GIVE SPACE BETWEEN TWO TABLES
+            PdfPTable emptydataTable5 = new PdfPTable(1);
+            emptydataTable5.WidthPercentage = 100f;
+            emptydataTable5.DefaultCell.Border = 0;
+            emptydataTable5.DefaultCell.FixedHeight = 20f;
+            emptydataTable5.AddCell(" ");
+
+
+            PdfPTable dataTable5 = new PdfPTable(5);
+            dataTable5.WidthPercentage = 100f;
+            dataTable5.DefaultCell.Border = 0;
+            dataTable5.DefaultCell.FixedHeight = 25f;
+
+            float[] arr8 = new float[] { 0.5f, 2f, 0.5f, 4.5f, 5f };
+            dataTable5.SetWidths(arr8);
+
+
+            dataTable5.AddCell("");
+
+            PdfPCell textcell11 = new PdfPCell();
+            textcell11.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", commission != null ? commission.EstimatedCommission.ToString() : "", baseF14, 7);
+            textcell11.Border = 0;
+            textcell11.FixedHeight = 6f;
+
+            textcell11.BackgroundColor = backgroundColor;
+            dataTable5.AddCell(textcell11);
+
+            dataTable5.AddCell("");
+
+
+
+
+
+            Chunk verifiedChunk12 = new Chunk("  Percentage of the sale price");
+            verifiedChunk12.Font.Size = 9;
+            var verifiedParagraph12 = new Paragraph();
+
+
+            Image checkedImage12 = GetCheckboxImage(commission.IsPercentageOfTheSalePrice);
+            checkedImage12.ScaleAbsolute(8, 8);
+            verifiedParagraph12.Add(new Chunk(checkedImage12, 0, 0));
+
+
+            verifiedParagraph12.Add(verifiedChunk12);
+            verifiedParagraph12.Alignment = Element.ALIGN_TOP;
+            verifiedParagraph12.Font.Size = 9;
+            verifiedParagraph12.Font.Color = BaseColor.BLACK;
+
+            dataTable5.AddCell(verifiedParagraph12);
+
+
+            Chunk nonverifiedChunk12 = new Chunk("  Flat commission in $");
+            nonverifiedChunk12.Font.Size = 9;
+            var nonverifiedParagraph12 = new Paragraph();
+
+
+            Image checkedImageNonverified = GetCheckboxImage(commission.IsFlatCommission);
+            checkedImageNonverified.ScaleAbsolute(8, 8);
+            nonverifiedParagraph12.Add(new Chunk(checkedImageNonverified, 0, 0));
+
+
+            nonverifiedParagraph12.Add(nonverifiedChunk12);
+            nonverifiedParagraph12.Alignment = Element.ALIGN_TOP;
+            nonverifiedParagraph12.Font.Size = 9;
+            nonverifiedParagraph12.Font.Color = BaseColor.BLACK;
+
+            dataTable5.AddCell(nonverifiedParagraph12);
+
+
+
+
+            //ADDED EMPTY TABLE WITH EMPTY CELL TO GIVE SPACE BETWEEN TWO TABLES
+            PdfPTable emptydataTable6 = new PdfPTable(1);
+            emptydataTable6.WidthPercentage = 100f;
+            emptydataTable6.DefaultCell.Border = 0;
+            emptydataTable6.DefaultCell.FixedHeight = 20f;
+            emptydataTable6.AddCell(" ");
+            //ADDED EMPTY TABLE WITH EMPTY CELL TO GIVE SPACE BETWEEN TWO TABLES
+            PdfPTable emptydataTable7 = new PdfPTable(1);
+            emptydataTable7.WidthPercentage = 100f;
+            emptydataTable7.DefaultCell.Border = 0;
+            emptydataTable7.DefaultCell.FixedHeight = 20f;
+            emptydataTable7.AddCell(" ");
+
+            PdfPTable emptydataTable8 = new PdfPTable(1);
+            emptydataTable8.WidthPercentage = 100f;
+            emptydataTable8.DefaultCell.Border = 0;
+            emptydataTable8.DefaultCell.FixedHeight = 30f;
+            emptydataTable8.AddCell(" ");
+
+            legendCell1.AddElement(dataTable3);
+            legendCell1.AddElement(emptydataTable5);
+            legendCell1.AddElement(dataTable5);
+            legendCell1.AddElement(emptydataTable6);
+            legendCell1.AddElement(emptydataTable7);
+            legendCell1.AddElement(emptydataTable8);
+
+
+            fieldsetTable1.AddCell(legendCell1);
+            doc.Add(fieldsetTable1);
+
+
+        }
+
+
 
         private static Image GetCheckboxImage(bool isChecked)
         {
-            //string imagePath = isChecked ? "Pictures/checked.png" : "Pictures/unchecked.png";
 
             var imagePath = "https://re360devstoragev2.blob.core.windows.net/document/" + (isChecked ? "checked.png" : "unchecked.png") + "?si=docaccesspolicy&spr=https&sv=2022-11-02&sr=c&sig=XnHmncbGTgQNOYG89LWZakac17WFiqFBEYNcQwb6%2BX8%3D";
 
@@ -8347,9 +9024,7 @@ namespace RE360.API.Common
 
         private static Image GetClockImage(bool isChecked)
         {
-            var imagePath = "https://re360devstoragev2.blob.core.windows.net/document/"+(isChecked ? "Calender.png" : "Clock.png") +"?si=docaccesspolicy&spr=https&sv=2022-11-02&sr=c&sig=XnHmncbGTgQNOYG89LWZakac17WFiqFBEYNcQwb6%2BX8%3D";
-
-            //string imagePath = isChecked ? "Pictures/Calender.png" : "Pictures/Clock.png";
+            var imagePath = "https://re360devstoragev2.blob.core.windows.net/document/" + (isChecked ? "Calender.png" : "Clock.png") + "?si=docaccesspolicy&spr=https&sv=2022-11-02&sr=c&sig=XnHmncbGTgQNOYG89LWZakac17WFiqFBEYNcQwb6%2BX8%3D";
             return Image.GetInstance(imagePath);
         }
 
@@ -8453,7 +9128,7 @@ namespace RE360.API.Common
             private readonly float height;
             private readonly float positionX;
             private readonly float positionY;
-            //BaseColor.YELLOW, BaseColor.BLUE, "Hello, world!", 100f, 20f, 50f, 360f
+            
             public RectangleCellEvent(BaseColor fillColor, BaseColor textColor, string text, float positionX,
                               float height, float width, float positionY)
             {
@@ -8475,26 +9150,21 @@ namespace RE360.API.Common
 
 
                 float thickness = 0.5f;
-                //float x = 50;  // Adjust as needed
-                //float y = 360;   // Adjust as needed
-                //float width = 100;  // Adjust as needed
-                //float height = 20;  // Adjust as needed
+              
                 // Draw the rectangle
                 canvas.SaveState();
                 canvas.SetColorFill(BaseColor.WHITE);
-                //canvas.Rectangle(x, y, width, height);
+             
                 canvas.Rectangle(positionX, positionY, width, height);
 
                 canvas.Fill();
                 canvas.RestoreState();
-                //canvas.SetColorStroke(color);
+
                 canvas.SetLineWidth(thickness);
 
                 PdfContentByte canvasText = canvases[PdfPTable.TEXTCANVAS];
                 var blueColor = new BaseColor(43, 145, 175);
-                //ColumnText.ShowTextAligned(canvasText, Element.ALIGN_LEFT,
-                //    new Phrase(text, new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, blueColor)),
-                //    170 - 115, 357 + 20 / 2, 0);
+              
                 ColumnText.ShowTextAligned(canvasText, Element.ALIGN_LEFT,
                     new Phrase(text, new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, blueColor)),
                     positionX + width - 70, positionY + height - 10, 0);
@@ -8517,7 +9187,7 @@ namespace RE360.API.Common
             public override void OnEndPage(PdfWriter writer, Document document)
             {
 
-
+                string companyname = _user == null || _user.CompanyName == null ? "" : _user.CompanyName;
 
 
                 // Set the font and size for the footer
@@ -8525,8 +9195,9 @@ namespace RE360.API.Common
                 Font font = new Font(baseFont, 6, Font.NORMAL, BaseColor.BLACK);
 
                 // Create a Phrase with the footer content
-                Phrase footerText1 = new Phrase(_user.CompanyName + " Listing Agency Agreement NZ " + DateTime.Now.Year.ToString() + " - Page " + writer.PageNumber + " of " + writer.PageNumber, font);
-                Phrase footerText2 = new Phrase("© " + DateTime.Now.Year.ToString() + " " + _user.CompanyName, font);
+                Phrase footerText1 = new Phrase(companyname + " Listing Agency Agreement NZ " + DateTime.Now.Year.ToString() + " - Page " + writer.PageNumber + " of " + writer.PageNumber, font);
+                Phrase footerText2 = new Phrase("© " + DateTime.Now.Year.ToString() + " " + companyname, font);
+
 
                 // Get the PdfContentByte object to write to the PDF
                 PdfContentByte cb = writer.DirectContent;
@@ -8548,27 +9219,7 @@ namespace RE360.API.Common
                 float boxX = document.Right - boxWidth; // Adjust the 36 to set the distance from the right margin
                 float boxY = y1 - 10; // Adjust the 10 to set the vertical position of the signature box
 
-                ////iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(_execution.AgentToSignHere);
-                ////logo1.ScaleToFit(35f, 35f);
-                ////logo1.SetAbsolutePosition(boxX + 10, boxY + boxHeight - 20);
-                ////if (_execution != null)
-                ////{
-                ////    iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(_execution.AgentToSignHere);
-                ////    logo1.ScaleToFit(35f, 35f);
-                ////    logo1.SetAbsolutePosition(boxX + 10, boxY + boxHeight - 20);
-                ////}
-                ////PdfContentByte contentByte = writer.DirectContent;
-                ////contentByte.AddImage(logo1);
-                //// Set the background color of the signature box
-                ////BaseColor backgroundColor = new BaseColor(43, 145, 175); // Replace with your desired background color  
-                //BaseColor backgroundColor = new BaseColor(232, 232, 232); // Replace with your desired background color  
-                //PdfGState state = new PdfGState();
-                ////state.FillOpacity = 0.3f;
-                //cb.SetGState(state);
-                //cb.SetColorFill(backgroundColor);
-                ////cb.Rectangle(boxX, boxY, boxWidth, boxHeight);
-                //cb.AddImage(logo1);
-                //cb.Fill();
+               
                 if (_execution != null)
                 {
                     iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(_execution.AgentToSignHere);
@@ -8618,7 +9269,6 @@ namespace RE360.API.Common
                 this.Field = new TextField(writer, rect, fieldName);
                 this.Field.Text = text;
                 this.Field.Options = TextField.READ_ONLY;
-                //this.Field.Options = TextField.READ_ONLY;
                 if (null == font)
                 {
                     font = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.EMBEDDED);
