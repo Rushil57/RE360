@@ -222,24 +222,24 @@ namespace RE360.API.Common
             rightCell.HorizontalAlignment = Element.ALIGN_RIGHT;
             rightCell.Border = Rectangle.NO_BORDER;
             righttable.DefaultCell.Border = 0;
-            if(_user != null && _user.CompanyName == "Company1")
+            if (_user != null && _user.CompanyName == "Company1")
             {
                 var filePath = _configuration["BlobStorageSettings:DocPath"] + "Company1.png" + _configuration["BlobStorageSettings:DocToken"];
-            iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(filePath);
-            logo.ScaleAbsolute(70f, 70f);
-            rightCell.PaddingLeft = 80f;
-            rightCell.PaddingBottom = -75f;
-            rightCell.PaddingTop = 0f;
-            rightCell.PaddingRight = 0f;
+                iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(filePath);
+                logo.ScaleAbsolute(70f, 70f);
+                rightCell.PaddingLeft = 80f;
+                rightCell.PaddingBottom = -75f;
+                rightCell.PaddingTop = 0f;
+                rightCell.PaddingRight = 0f;
 
-            logo.SetAbsolutePosition(iTextSharp.text.PageSize.A4.Rotate().Width - 0, 20);
-            rightCell.AddElement(logo);
+                logo.SetAbsolutePosition(iTextSharp.text.PageSize.A4.Rotate().Width - 0, 20);
+                rightCell.AddElement(logo);
 
             }
             else if (_user != null && _user.CompanyName == "Company2")
             {
                 var filePath = _configuration["BlobStorageSettings:DocPath"] + "Company2.png" + _configuration["BlobStorageSettings:DocToken"];
-                iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(filePath);             
+                iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(filePath);
                 logo.ScaleAbsolute(70f, 70f);
                 rightCell.PaddingLeft = 80f;
                 rightCell.PaddingBottom = -75f;
@@ -884,7 +884,7 @@ namespace RE360.API.Common
                 // For example, you could set it to unchecked
                 AddCheckboxField(document, writer, "myCheckbox", new Rectangle(538, 543, 550, 530), false, 538, 530);
             }
-           
+
             PdfContentByte overContent79 = writer.DirectContent;
             BaseFont baseFont79 = BaseFont.CreateFont();
             overContent79.SetFontAndSize(baseFont79, 8);
@@ -939,7 +939,7 @@ namespace RE360.API.Common
             methodOfTable.SpacingBefore = 12f;
             methodOfTable.SpacingAfter = 10f;
             outercell21.CellEvent = new RectangleOverPdfPCellBorder("Method of Sale", 30f, 490f, 77f, 20f, 32f, 500f);
-           
+
             PdfPTable innerTable21 = new PdfPTable(2);
             innerTable21.DefaultCell.Border = 0;
             innerTable21.WidthPercentage = 100f;
@@ -3816,7 +3816,7 @@ namespace RE360.API.Common
                 // For example, you might want to provide a default value for the checkbox
                 AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 175, 23, 185), false, 23, 175);
             }
-          
+
             PdfContentByte content08 = writer.DirectContent;
             BaseFont baseF08 = BaseFont.CreateFont();
             content08.SetFontAndSize(baseF08, 8);
@@ -3837,7 +3837,7 @@ namespace RE360.API.Common
                 // For example, you might want to provide a default value for the checkbox
                 AddCheckboxField(document, writer, "myCheckbox", new Rectangle(90, 175, 80, 185), false, 80, 175);
             }
-         
+
             PdfContentByte content09 = writer.DirectContent;
             BaseFont baseF09 = BaseFont.CreateFont();
             content09.SetFontAndSize(baseF09, 8);
@@ -4173,7 +4173,7 @@ namespace RE360.API.Common
         {
             return FontFactory.GetFont(FontFactory.HELVETICA, 10, Font.BOLD);
         }
-      
+
 
         public static void AddCheckboxField(Document document, PdfWriter writer, string fieldName, Rectangle position, bool isChecked, int x, int y)
         {
@@ -4186,16 +4186,16 @@ namespace RE360.API.Common
             {
 
                 var checkmarkImagePath = "https://re360devstoragev2.blob.core.windows.net/document/Checked1.png?si=docaccesspolicy&spr=https&sv=2022-11-02&sr=c&sig=XnHmncbGTgQNOYG89LWZakac17WFiqFBEYNcQwb6%2BX8%3D";
-               
+
                 iTextSharp.text.Image checkmarkImage = iTextSharp.text.Image.GetInstance(checkmarkImagePath);
-             
+
                 checkmarkImage.SetAbsolutePosition(x, y);
                 checkmarkImage.ScaleToFit(10, 10); // Adjust the size of the image as needed
 
                 PdfContentByte cb = writer.DirectContent;
                 cb.AddImage(checkmarkImage);
                 Phrase phrase = new Phrase();
-            
+
                 ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase, x, y, 0);
             }
             //else
@@ -4216,9 +4216,9 @@ namespace RE360.API.Common
             int fieldFlags = PdfAnnotation.FLAGS_READONLY;
             checkboxField.SetFieldFlags(fieldFlags);
             checkboxField.SetFieldFlags(PdfFormField.FF_READ_ONLY);
-          
+
             checkboxField.MKBorderColor = new BaseColor(135, 206, 235);
-        
+
             writer.AddAnnotation(checkboxField);
 
 
@@ -4279,26 +4279,26 @@ namespace RE360.API.Common
             {
                 var filePath33 = _configuration["BlobStorageSettings:DocPath"] + "Company1.png" + _configuration["BlobStorageSettings:DocToken"];
 
-            iTextSharp.text.Image logo33 = iTextSharp.text.Image.GetInstance(filePath33);
-
-      
-            logo33.ScaleAbsolute(70f, 70f);
+                iTextSharp.text.Image logo33 = iTextSharp.text.Image.GetInstance(filePath33);
 
 
-            leftCell02.PaddingLeft = 185f;
-            leftCell02.PaddingBottom = 0f;
-            leftCell02.PaddingTop = 0f;
-            leftCell02.PaddingRight = 0f;
-            leftCell02.AddElement(logo33);
+                logo33.ScaleAbsolute(70f, 70f);
+
+
+                leftCell02.PaddingLeft = 185f;
+                leftCell02.PaddingBottom = 0f;
+                leftCell02.PaddingTop = 0f;
+                leftCell02.PaddingRight = 0f;
+                leftCell02.AddElement(logo33);
             }
             else if (_user != null && _user.CompanyName == "Company2")
             {
                 var filePath33 = _configuration["BlobStorageSettings:DocPath"] + "Company2.png" + _configuration["BlobStorageSettings:DocToken"];
-                
+
                 iTextSharp.text.Image logo33 = iTextSharp.text.Image.GetInstance(filePath33);
-            
+
                 logo33.ScaleAbsolute(70f, 70f);
-        
+
 
                 leftCell02.PaddingLeft = 185f;
                 leftCell02.PaddingBottom = 0f;
@@ -4308,20 +4308,20 @@ namespace RE360.API.Common
             }
             else
             {
-                
-                    var filePath33 = _configuration["BlobStorageSettings:DocPath"] + "Company3.png" + _configuration["BlobStorageSettings:DocToken"];
-                   
-                    iTextSharp.text.Image logo33 = iTextSharp.text.Image.GetInstance(filePath33);
-                  
-                    logo33.ScaleAbsolute(70f, 70f);
-                  
 
-                    leftCell02.PaddingLeft = 185f;
-                    leftCell02.PaddingBottom = 0f;
-                    leftCell02.PaddingTop = 0f;
-                    leftCell02.PaddingRight = 0f;
-                    leftCell02.AddElement(logo33);
-                
+                var filePath33 = _configuration["BlobStorageSettings:DocPath"] + "Company3.png" + _configuration["BlobStorageSettings:DocToken"];
+
+                iTextSharp.text.Image logo33 = iTextSharp.text.Image.GetInstance(filePath33);
+
+                logo33.ScaleAbsolute(70f, 70f);
+
+
+                leftCell02.PaddingLeft = 185f;
+                leftCell02.PaddingBottom = 0f;
+                leftCell02.PaddingTop = 0f;
+                leftCell02.PaddingRight = 0f;
+                leftCell02.AddElement(logo33);
+
             }
 
             t1.AddCell(leftCell02);
@@ -4570,7 +4570,7 @@ namespace RE360.API.Common
 
             if (priorAgencyMarketings.Count > 0)
             {
-            
+
                 tf055.Text = priorAgencyMarketings[0].AgencyExpiredDate != null ? (DateTime.Parse(priorAgencyMarketings[0].AgencyExpiredDate)).ToString("dd-MM-yyyy") : " ";
             }
             else
@@ -4585,7 +4585,7 @@ namespace RE360.API.Common
             TextField tf056 = new TextField(writer, new Rectangle(250, 320, 110, 340), "field3");
             tf056.BorderColor = new BaseColor(232, 232, 232);
             tf056.BackgroundColor = new BaseColor(232, 232, 232);
-       
+
             if (priorAgencyMarketings.Count > 0)
             {
                 tf056.Text = priorAgencyMarketings[0].AgencyName1;
@@ -4606,7 +4606,7 @@ namespace RE360.API.Common
 
             if (priorAgencyMarketings.Count > 0)
             {
-               
+
                 tf057.Text = priorAgencyMarketings[0].AgencyExpiredDate1 != null ? (DateTime.Parse(priorAgencyMarketings[0].AgencyExpiredDate1)).ToString("dd-MM-yyyy") : " ";
 
             }
@@ -4619,7 +4619,7 @@ namespace RE360.API.Common
             tf057.Options = TextField.READ_ONLY | TextField.MULTILINE;
             writer.AddAnnotation(tf057.GetTextField());
 
-           
+
             formattedContent7.Add(c4);
             formattedContent7.Add(c5);
             formattedContent7.Add(c6);
@@ -4654,28 +4654,28 @@ namespace RE360.API.Common
             if (isAuctionSelected)
             {
                 var filePathradio = _configuration["BlobStorageSettings:DocPath"] + "RadioChecked.png" + _configuration["BlobStorageSettings:DocToken"];
-            
+
                 iTextSharp.text.Image logoradio = iTextSharp.text.Image.GetInstance(filePathradio);
-               
+
                 logoradio.ScaleAbsolute(15f, 15f);
                 logoradio.SetAbsolutePosition(150, 113);
 
 
                 doc.Add(logoradio);
-           
+
             }
             else
             {
-                
+
                 string logoPath1 = _configuration["BlobStorageSettings:DocPath"] + "RadioUnChecked.png" + _configuration["BlobStorageSettings:DocToken"];
                 iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(logoPath1);
-               
-                    logo1.ScaleAbsolute(15f, 15f);
-                    logo1.SetAbsolutePosition(150, 113);
+
+                logo1.ScaleAbsolute(15f, 15f);
+                logo1.SetAbsolutePosition(150, 113);
 
 
-                    doc.Add(logo1);
-                
+                doc.Add(logo1);
+
             }
             Chunk c16 = new Chunk("                 Applicable", colorFont);
             formattedContent9.Add(c16);
@@ -4683,9 +4683,9 @@ namespace RE360.API.Common
             if (!isAuctionSelected)
             {
                 var filePathunradio = _configuration["BlobStorageSettings:DocPath"] + "RadioChecked.png" + _configuration["BlobStorageSettings:DocToken"];
-            
+
                 iTextSharp.text.Image logounradio = iTextSharp.text.Image.GetInstance(filePathunradio);
-                
+
                 logounradio.ScaleAbsolute(15f, 15f);
                 logounradio.SetAbsolutePosition(240, 113);
 
@@ -4694,14 +4694,14 @@ namespace RE360.API.Common
             }
             else
             {
-               
+
                 string logoPath2 = _configuration["BlobStorageSettings:DocPath"] + "RadioUnChecked.png" + _configuration["BlobStorageSettings:DocToken"];
                 iTextSharp.text.Image logo2 = iTextSharp.text.Image.GetInstance(logoPath2);
-               
-                    logo2.ScaleAbsolute(15f, 15f);
-                    logo2.SetAbsolutePosition(240, 113);
-                    doc.Add(logo2);
-               
+
+                logo2.ScaleAbsolute(15f, 15f);
+                logo2.SetAbsolutePosition(240, 113);
+                doc.Add(logo2);
+
             }
 
             Chunk c17 = new Chunk("                  Not Applicable", colorFont);
@@ -4728,11 +4728,11 @@ namespace RE360.API.Common
 
             Phrase formattedContent12 = new Phrase();
             Chunk c20 = new Chunk("Auction Date:                                    " + "  Auction Time:  " + "                                           am/pm" + "                                              On-Site", contentFont);
-           
+
             TextField tf060 = new TextField(writer, new Rectangle(180, 715, 90, 700), "field1");
             tf060.BorderColor = new BaseColor(232, 232, 232);
             tf060.BackgroundColor = new BaseColor(232, 232, 232);
-         
+
 
             if (methodOfSales.Count > 0)
             {
@@ -4764,18 +4764,18 @@ namespace RE360.API.Common
                 // Handle the case when othercommentList is empty
                 tf061.Text = ""; // Set a default value or handle it based on your requirements
             }
-           
+
             tf061.FontSize = 8;
             tf061.Options = TextField.READ_ONLY | TextField.MULTILINE;
             writer.AddAnnotation(tf061.GetTextField());
 
-           
+
 
 
             TextField tf062 = new TextField(writer, new Rectangle(385, 715, 450, 700), "field1");
             tf062.BorderColor = new BaseColor(232, 232, 232);
             tf062.BackgroundColor = new BaseColor(232, 232, 232);
-            
+
             if (methodOfSales.Count > 0)
             {
                 tf062.Text = isAuctionSelected == true ? methodOfSales[0].AuctionTime != null ? (DateTimeOffset.Parse(methodOfSales[0].AuctionTime).ToString("tt")) : " " : " ";
@@ -4789,8 +4789,8 @@ namespace RE360.API.Common
             tf062.Options = TextField.READ_ONLY | TextField.MULTILINE;
             writer.AddAnnotation(tf062.GetTextField());
 
-           
-            AddCheckboxField(doc, writer, "myCheckbox", new Rectangle(485, 715, 475, 705), methodOfSales[0].IsAuctionOnSite, 475, 705);
+
+            AddCheckboxField(doc, writer, "myCheckbox", new Rectangle(485, 715, 475, 705), methodOfSales.Count > 0 ? methodOfSales[0].IsAuctionOnSite : false, 475, 705);
             doc.Add(new Paragraph(formattedContent12));
 
 
@@ -4803,7 +4803,7 @@ namespace RE360.API.Common
             TextField tf063 = new TextField(writer, new Rectangle(80, 665, 230, 687), "field1");
             tf063.BorderColor = new BaseColor(232, 232, 232);
             tf063.BackgroundColor = new BaseColor(232, 232, 232);
-           
+
             if (methodOfSales.Count > 0)
             {
                 tf063.Text = isAuctionSelected == true ? methodOfSales[0].AuctionVenue.ToString() : "";
@@ -4818,9 +4818,9 @@ namespace RE360.API.Common
             writer.AddAnnotation(tf063.GetTextField());
 
 
-          
+
             doc.Add(new Paragraph(formattedContent13));
-            
+
             Phrase formattedContent14 = new Phrase();
             Chunk c21 = new Chunk(" \n 4.2. Tender Authority" + "                        Applicable" + "                    Not Applicable", colorFont);
             formattedContent14.Add(c21);
@@ -4829,45 +4829,45 @@ namespace RE360.API.Common
             {
                 string logoPath1 = _configuration["BlobStorageSettings:DocPath"] + "RadioChecked.png" + _configuration["BlobStorageSettings:DocToken"];
                 iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(logoPath1);
-               
-                    logo1.ScaleAbsolute(15f, 15f);
-                    logo1.SetAbsolutePosition(156, 640);
-                    doc.Add(logo1);
-               
+
+                logo1.ScaleAbsolute(15f, 15f);
+                logo1.SetAbsolutePosition(156, 640);
+                doc.Add(logo1);
+
             }
             else
             {
                 string logoPath1 = _configuration["BlobStorageSettings:DocPath"] + "RadioUnChecked.png" + _configuration["BlobStorageSettings:DocToken"];
                 iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(logoPath1);
-               
-                    logo1.ScaleAbsolute(15f, 15f);
-                    logo1.SetAbsolutePosition(156, 640);
-                    doc.Add(logo1);
-               
+
+                logo1.ScaleAbsolute(15f, 15f);
+                logo1.SetAbsolutePosition(156, 640);
+                doc.Add(logo1);
+
 
             }
-           
+
             if (!isTenderSelected)
             {
                 string logoPath2 = _configuration["BlobStorageSettings:DocPath"] + "RadioChecked.png" + _configuration["BlobStorageSettings:DocToken"];
                 iTextSharp.text.Image logo2 = iTextSharp.text.Image.GetInstance(logoPath2);
-               
-                    logo2.ScaleAbsolute(15f, 15f);
-                    logo2.SetAbsolutePosition(240, 640);
-                    doc.Add(logo2);
-               
+
+                logo2.ScaleAbsolute(15f, 15f);
+                logo2.SetAbsolutePosition(240, 640);
+                doc.Add(logo2);
+
             }
             else
             {
                 string logoPath2 = _configuration["BlobStorageSettings:DocPath"] + "RadioUnChecked.png" + _configuration["BlobStorageSettings:DocToken"];
                 iTextSharp.text.Image logo2 = iTextSharp.text.Image.GetInstance(logoPath2);
-                
-                    logo2.ScaleAbsolute(15f, 15f);
-                    logo2.SetAbsolutePosition(240, 640);
-                    doc.Add(logo2);
-              
+
+                logo2.ScaleAbsolute(15f, 15f);
+                logo2.SetAbsolutePosition(240, 640);
+                doc.Add(logo2);
+
             }
-           
+
             doc.Add(new Paragraph(formattedContent14));
 
             Phrase formattedContent15 = new Phrase();
@@ -4889,7 +4889,7 @@ namespace RE360.API.Common
                 // Handle the case when othercommentList is empty
                 tf064.Text = ""; // Set a default value or handle it based on your requirements
             }
-        
+
             tf064.FontSize = 8;
             tf064.Options = TextField.READ_ONLY | TextField.MULTILINE;
             writer.AddAnnotation(tf064.GetTextField());
@@ -4908,7 +4908,7 @@ namespace RE360.API.Common
                 // Handle the case when othercommentList is empty
                 tf065.Text = "";
             }
-          
+
             tf065.FontSize = 8;
             tf065.Options = TextField.READ_ONLY | TextField.MULTILINE;
             writer.AddAnnotation(tf065.GetTextField());
@@ -4919,7 +4919,7 @@ namespace RE360.API.Common
             TextField tf066 = new TextField(writer, new Rectangle(80, 545, 230, 560), "field1");
             tf066.BorderColor = new BaseColor(232, 232, 232);
             tf066.BackgroundColor = new BaseColor(232, 232, 232);
-        
+
             if (methodOfSales.Count > 0)
             {
                 tf066.Text = isTenderSelected == true ? methodOfSales[0].TenderVenue.ToString() : "";
@@ -4943,22 +4943,29 @@ namespace RE360.API.Common
             tf067.BackgroundColor = new BaseColor(232, 232, 232);
             if (!isTenderSelected && !isAuctionSelected)
             {
+                if (methodOfSales.Count > 0)
+                {
+                    tf067.Text = (methodOfSales[0].DeadLineDate != null ? (((DateTime)methodOfSales[0].DeadLineDate).ToString("dd-MM-yyyy")) : "") + " " + (methodOfSales[0].DeadLineTime != null ? (DateTimeOffset.Parse(methodOfSales[0].DeadLineTime).ToString("hh:mm tt")) : "");
 
-                tf067.Text = (methodOfSales[0].DeadLineDate != null ? (((DateTime)methodOfSales[0].DeadLineDate).ToString("dd-MM-yyyy")) : "") + " " + (methodOfSales[0].DeadLineTime != null ? (DateTimeOffset.Parse(methodOfSales[0].DeadLineTime).ToString("hh:mm tt")) : "");
+                }
+                else
+                {
+                    tf067.Text = "";
+                }
             }
             else
             {
                 tf067.Text = "";
 
             }
-           	
+
             tf067.FontSize = 8;
             tf067.Options = TextField.READ_ONLY | TextField.MULTILINE;
             writer.AddAnnotation(tf067.GetTextField());
-          
+
             formattedContent16.Add(c26);
             doc.Add(new Paragraph(formattedContent16));
-        
+
 
 
 
@@ -4992,7 +4999,7 @@ namespace RE360.API.Common
             TextField tf059 = new TextField(writer, new Rectangle(300, 383, 220, 398), "field1");
             tf059.BorderColor = new BaseColor(232, 232, 232);
             tf059.BackgroundColor = new BaseColor(232, 232, 232);
-          
+
             if (priorAgencyMarketings.Count > 0)
             {
                 tf059.Text = priorAgencyMarketings[0].AgencySum.ToString();
@@ -5005,7 +5012,7 @@ namespace RE360.API.Common
             tf059.FontSize = 8;
             tf059.Options = TextField.READ_ONLY | TextField.MULTILINE;
             writer.AddAnnotation(tf059.GetTextField());
-            
+
             Chunk c34 = new Chunk("                                    " + "including GST on advertising, marketing and promoting the                Property on the Client’s behalf; and", contentFont);
             formattedContent20.Add(c32);
             formattedContent20.Add(c33);
@@ -5070,7 +5077,7 @@ namespace RE360.API.Common
             formattedContent27.Add(c47);
             doc.Add(new Paragraph(formattedContent27));
 
-           
+
 
             doc.NewPage();
 
@@ -5094,14 +5101,14 @@ namespace RE360.API.Common
             }
             else
             {
-              
+
                 string logoPath11 = _configuration["BlobStorageSettings:DocPath"] + "RadioUnChecked.png" + _configuration["BlobStorageSettings:DocToken"];
                 iTextSharp.text.Image logo11 = iTextSharp.text.Image.GetInstance(logoPath11);
-               
+
                 logo11.ScaleAbsolute(15f, 15f);
                 logo11.SetAbsolutePosition(220, 735);
                 doc.Add(logo11);
-                
+
             }
             Chunk c1116 = new Chunk("                 Standard", colorFont);
             formattedContent28.Add(c1116);
@@ -5110,21 +5117,21 @@ namespace RE360.API.Common
             {
                 string logoPath211 = _configuration["BlobStorageSettings:DocPath"] + "RadioChecked.png" + _configuration["BlobStorageSettings:DocToken"];
                 iTextSharp.text.Image logo211 = iTextSharp.text.Image.GetInstance(logoPath211);
-                
-                    logo211.ScaleAbsolute(15f, 15f);
-                    logo211.SetAbsolutePosition(310, 735);
-                    doc.Add(logo211);
-               
+
+                logo211.ScaleAbsolute(15f, 15f);
+                logo211.SetAbsolutePosition(310, 735);
+                doc.Add(logo211);
+
             }
             else
             {
                 string logoPath211 = _configuration["BlobStorageSettings:DocPath"] + "RadioUnChecked.png" + _configuration["BlobStorageSettings:DocToken"];
                 iTextSharp.text.Image logo211 = iTextSharp.text.Image.GetInstance(logoPath211);
-                
-                    logo211.ScaleAbsolute(15f, 15f);
-                    logo211.SetAbsolutePosition(310, 735);
-                    doc.Add(logo211);
-               
+
+                logo211.ScaleAbsolute(15f, 15f);
+                logo211.SetAbsolutePosition(310, 735);
+                doc.Add(logo211);
+
             }
             Chunk c1711 = new Chunk("                  Non-Standard", colorFont);
             formattedContent28.Add(c1711);
@@ -5290,7 +5297,7 @@ namespace RE360.API.Common
             formattedContent44.Add(Commented11Chunk);
             doc.Add(new Paragraph(formattedContent44));
 
-          
+
             doc.NewPage();
             doc.Add(t1);
 
@@ -5355,13 +5362,13 @@ namespace RE360.API.Common
                     {
                         bool ischecked;
                         // select file name on basis of boolean value
-                        
+
                         string value1 = "true";
                         if (i < estimates.Count)
                         {
                             Estimates estimate = estimates[i];
                             ischecked = estimate.TickHereIfEstimate.ToString().Contains("True") ? true : false;
-                           
+
                         }
                         else
                         {
@@ -5370,9 +5377,9 @@ namespace RE360.API.Common
                         }
 
                         //replace image with file name;
-             
+
                         var imagePath1 = _configuration["BlobStorageSettings:DocPath"] + (ischecked ? "checked.png" : "unchecked.png") + _configuration["BlobStorageSettings:DocToken"];
-                       
+
                         Image checkboxImage = Image.GetInstance(imagePath1);
 
                         // Adjust the checkbox image size as needed
@@ -5424,7 +5431,7 @@ namespace RE360.API.Common
             //    }
             //}
             doc.Add(tableEstimates);
-            
+
             doc.Add(new Paragraph(" "));
 
             Phrase formattedContent45 = new Phrase();
@@ -5433,7 +5440,7 @@ namespace RE360.API.Common
             formattedContent45.Add(c84);
             formattedContent45.Add(c85);
             AddTextFieldToPDF(writer, doc, "Date", "", execution.AgentToSignHereDate != null ? ((DateTime)execution.AgentToSignHereDate).ToString("dd-MM-yyyy") : "", 60, 505, 135, 490);
-           
+
 
 
             if (execution != null)
@@ -5467,7 +5474,7 @@ namespace RE360.API.Common
 
             tableClientWarranties.DefaultCell.BackgroundColor = new BaseColor(220, 220, 220);
             tableClientWarranties.DefaultCell.BorderColor = BaseColor.DARK_GRAY;
-            
+
             BaseColor headerBackgroundColor1 = BaseColor.BLACK; // Light Gray
 
             // Add headers to the table with background color
@@ -5493,7 +5500,7 @@ namespace RE360.API.Common
 
 
 
-           
+
 
 
 
@@ -5537,7 +5544,7 @@ namespace RE360.API.Common
             AddCheckboxField(doc, writer, "myCheckbox", new Rectangle(480, 345, 490, 335), isNotregistered, 480, 335);
 
             doc.Add(t1);
-          
+
 
             AddTextFieldToPDF(writer, doc, "Propertyfield", "Property Address", propertyAddress, 570, 765, 120, 785);
 
@@ -6048,56 +6055,296 @@ namespace RE360.API.Common
 
                 }
             }
+            PdfPTable parentTable1 = new PdfPTable(3);
+            parentTable1.DefaultCell.Border = 0;
+            parentTable1.WidthPercentage = 108; // Set the width percentage of the parent table        
+            parentTable1.SpacingBefore = 10f;
+            parentTable1.SpacingAfter = 20f;
+
+            float[] testcolumnWidths = new float[] { 50f, 1f, 50f };
+            parentTable1.SetWidths(testcolumnWidths);
+
+            PdfPCell cell12 = new PdfPCell();
 
 
-            Phrase formattedContent80 = new Phrase();
-            Chunk c194 = new Chunk("\nSignature of Client(s): " + "                                                                 Signature of Client(s):", contentFont);
+            cell12.HorizontalAlignment = PdfPCell.ALIGN_CENTER;
+            cell12.VerticalAlignment = PdfPCell.ALIGN_MIDDLE;
+            cell12.PaddingTop = 53;
+            cell12.BorderColor = BaseColor.LIGHT_GRAY;
+            cell12.BorderWidth = 1f;
+            cell12.FixedHeight = 100f;
 
-            CreatePdfWithImageInsideTextField(doc, writer, signature[0].SignatureOfClientName != null ? signature[0].SignatureOfClientName : "", "signature1", 125, 705, 220, 733);
-            CreatePdfWithImageInsideTextField(doc, writer, signature[1].SignatureOfClientName != null ? signature[1].SignatureOfClientName : "", "signature2", 380, 705, 470, 733);
+            PdfContentByte overContent70 = writer.DirectContent;
+            BaseFont baseFont70 = BaseFont.CreateFont();
+            overContent70.SetFontAndSize(baseFont70, 9);
+            overContent70.BeginText();
+            overContent70.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Signature Of Client(s)", 110, 710, 0);
+            overContent70.EndText();
+
+
+            TextField tf71 = new TextField(writer, new Rectangle(115, 705, 280, 725), "Signature");
+            tf71.BorderColor = BaseColor.WHITE;
+            tf71.BackgroundColor = new BaseColor(232, 232, 232);
+            tf71.FontSize = 8;
+            tf71.Text =" " +clientDetails[0].FirstName + " " + clientDetails[0].SurName; 
+            tf71.Options = TextField.READ_ONLY;
+            writer.AddAnnotation(tf71.GetTextField());
+
+
+            CreatePdfWithImageInsideTextField(doc, writer, signature[0].SignatureOfClientName != null ? signature[0].SignatureOfClientName : "", "signature1", 125, 672, 220, 700);
            
-            Chunk c195 = new Chunk("\n\nPosition: " + clientDetails[0].Position + "                                                                     Position: " + clientDetails[1].Position, contentFont);
-            Chunk c196 = new Chunk("\n" + clientDetails[0].FirstName + " " + clientDetails[0].SurName + "                                                                              " + clientDetails[1].FirstName + " " + clientDetails[1].SurName, contentFont);
 
-            formattedContent80.Add(c194);
-            formattedContent80.Add(c195);
-            formattedContent80.Add(c196);
-          
-            doc.Add(new Paragraph(formattedContent80));
-            doc.Add(new Paragraph(" "));
+            PdfContentByte overContent71 = writer.DirectContent;
+            BaseFont baseFont71 = BaseFont.CreateFont();
+            overContent71.SetFontAndSize(baseFont70, 9);
+            overContent71.BeginText();
+            overContent71.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Position", 55, 615, 0);
+            overContent71.EndText();
 
 
+            TextField tf72 = new TextField(writer, new Rectangle(75, 608, 280, 625), "Position");
+            tf72.BorderColor = BaseColor.WHITE;
+            tf72.BackgroundColor = new BaseColor(232, 232, 232); ;
+            tf72.FontSize = 8;
+            tf72.Text = " " + clientDetails[0].Position;
+            tf72.Options = TextField.READ_ONLY;
+            writer.AddAnnotation(tf72.GetTextField());
 
-            Phrase formattedContent81 = new Phrase();
-            Chunk c197 = new Chunk("Signature of Client(s): " + "                                                                 Signature of Client(s):", contentFont);
+            parentTable1.AddCell(cell12);
 
-            CreatePdfWithImageInsideTextField(doc, writer, signature[2].SignatureOfClientName != null ? signature[2].SignatureOfClientName : "", "signature1", 125, 635, 220, 660);
-            CreatePdfWithImageInsideTextField(doc, writer, signature[3].SignatureOfClientName != null ? signature[3].SignatureOfClientName : "", "signature2", 380, 635, 470, 660);
+            //dummy cell created to have an empty space with width `0.1f` which was declared //above.
+            PdfPCell cell0222 = new PdfPCell(new Phrase(" "));
+            cell0222.Border = 0;
+            cell0222.FixedHeight = 100f;
+            parentTable1.AddCell(cell0222);
 
-            Chunk c198 = new Chunk("\nPosition: " + clientDetails[2].Position + "                                                                                       Position: " + clientDetails[3].Position, contentFont);
-            Chunk c199 = new Chunk("\n" + clientDetails[2].FirstName + " " + clientDetails[0].SurName + "                                                                                " + clientDetails[3].FirstName + " " + clientDetails[3].SurName, contentFont); formattedContent81.Add(c197);
-            formattedContent81.Add(c198);
-            formattedContent81.Add(c199);
-            doc.Add(new Paragraph(formattedContent81));
+
+            PdfPCell cell21 = new PdfPCell();
+
+            cell21.HorizontalAlignment = PdfPCell.ALIGN_CENTER;
+            cell21.VerticalAlignment = PdfPCell.ALIGN_MIDDLE;
+            cell21.BorderColor = BaseColor.LIGHT_GRAY;
+            cell21.BorderWidth = 1f;
+            cell21.FixedHeight = 100f;
+
+
+            PdfContentByte overContent73 = writer.DirectContent;
+            BaseFont baseFont73 = BaseFont.CreateFont();
+            overContent73.SetFontAndSize(baseFont70, 9);
+            overContent73.BeginText();
+            overContent73.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Signature Of Client(s)", 392, 710, 0);
+            overContent73.EndText();
+
+
+            TextField tf73 = new TextField(writer, new Rectangle(405, 705, 570, 725), "Signature");
+            tf73.BorderColor = BaseColor.WHITE; ;
+            tf73.BackgroundColor = new BaseColor(232, 232, 232);
+            tf73.FontSize = 8;
+            tf73.Text = " " + clientDetails[1].FirstName + " " + clientDetails[1].SurName;
+            tf73.Options = TextField.READ_ONLY;
+            writer.AddAnnotation(tf73.GetTextField());
+
+            CreatePdfWithImageInsideTextField(doc, writer, signature[1].SignatureOfClientName != null ? signature[1].SignatureOfClientName : "", "signature2", 380, 672, 470, 700);
+
+            PdfContentByte overContent74 = writer.DirectContent;
+            BaseFont baseFont74 = BaseFont.CreateFont();
+            overContent74.SetFontAndSize(baseFont70, 9);
+            overContent74.BeginText();
+            overContent74.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Position", 335, 615, 0);
+            overContent74.EndText();
+
+
+            TextField tf74 = new TextField(writer, new Rectangle(340, 608, 560, 625), "Position");
+            tf74.BorderColor = BaseColor.WHITE;
+            tf74.BackgroundColor = new BaseColor(232, 232, 232);
+            tf74.FontSize = 8;
+            tf74.Text = " " + clientDetails[1].Position;
+            tf74.Options = TextField.READ_ONLY;
+            writer.AddAnnotation(tf74.GetTextField());
+
+            parentTable1.AddCell(cell21);
+
+            PdfPTable mainTable1 = new PdfPTable(1);
+            mainTable1.DefaultCell.Border = 0;
+            mainTable1.WidthPercentage = 108; // Set the width percentage of the main table
+
+            // Add the parent table to the main table
+            mainTable1.AddCell(parentTable1);
+            mainTable1.DefaultCell.Border = 0;
+
+            // Add the main table to the document
+            doc.Add(mainTable1);
+
+
+            doc.Add(new Paragraph(""));
+
+
+            PdfPTable parentTable2 = new PdfPTable(3);
+            parentTable2.DefaultCell.Border = 0;
+            parentTable2.WidthPercentage = 108; // Set the width percentage of the parent table        
+            parentTable2.SpacingBefore = 10f;
+            parentTable2.SpacingAfter = 20f;
+
+            float[] testcolumnWidths1 = new float[] { 50f, 1f, 50f };
+            parentTable2.SetWidths(testcolumnWidths1);
+
+            PdfPCell cell012 = new PdfPCell();
+
+
+            cell012.HorizontalAlignment = PdfPCell.ALIGN_CENTER;
+            cell012.VerticalAlignment = PdfPCell.ALIGN_MIDDLE;
+            cell012.PaddingTop = 53;
+            cell012.BorderColor = BaseColor.LIGHT_GRAY;
+            cell012.BorderWidth = 1f;
+            cell012.FixedHeight = 100f;
+
+            PdfContentByte overContent070 = writer.DirectContent;
+            BaseFont baseFont070 = BaseFont.CreateFont();
+            overContent070.SetFontAndSize(baseFont070, 9);
+            overContent070.BeginText();
+            overContent070.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Signature Of Client(s)", 110, 575, 0);
+            overContent070.EndText();
+
+
+            TextField tf071 = new TextField(writer, new Rectangle(115, 570, 280, 590), "signature");
+            tf071.BorderColor = BaseColor.WHITE;
+            tf071.BackgroundColor = new BaseColor(232, 232, 232);
+            tf071.FontSize = 8;
+            tf071.Text = " " + clientDetails[2].FirstName + " " + clientDetails[2].SurName;
+            tf071.Options = TextField.READ_ONLY;
+            writer.AddAnnotation(tf071.GetTextField());
+
+            CreatePdfWithImageInsideTextField(doc, writer, signature[2].SignatureOfClientName != null ? signature[2].SignatureOfClientName : "", "signature1", 125, 545, 220, 570);
+
+            PdfContentByte overContent071 = writer.DirectContent;
+            BaseFont baseFont071 = BaseFont.CreateFont();
+            overContent071.SetFontAndSize(baseFont70, 9);
+            overContent071.BeginText();
+            overContent071.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Position", 55, 480, 0);
+            overContent071.EndText();
+
+
+            TextField tf072 = new TextField(writer, new Rectangle(75, 475, 280, 495), "Position");
+            tf072.BorderColor = BaseColor.WHITE;
+            tf072.BackgroundColor = new BaseColor(232, 232, 232); ;
+            tf072.FontSize = 8;
+            tf072.Text = " " + clientDetails[2].Position;
+            tf072.Options = TextField.READ_ONLY;
+            writer.AddAnnotation(tf072.GetTextField());
+
+            parentTable2.AddCell(cell12);
+
+            //dummy cell created to have an empty space with width `0.1f` which was declared //above.
+            PdfPCell cell00222 = new PdfPCell(new Phrase(" "));
+            cell00222.Border = 0;
+            cell00222.FixedHeight = 100f;
+            parentTable2.AddCell(cell00222);
+
+
+            PdfPCell cell021 = new PdfPCell();
+
+            cell021.HorizontalAlignment = PdfPCell.ALIGN_CENTER;
+            cell021.VerticalAlignment = PdfPCell.ALIGN_MIDDLE;
+            cell021.BorderColor = BaseColor.LIGHT_GRAY;
+            cell021.BorderWidth = 1f;
+            cell021.FixedHeight = 100f;
+
+
+            PdfContentByte overContent073 = writer.DirectContent;
+            BaseFont baseFont073 = BaseFont.CreateFont();
+            overContent073.SetFontAndSize(baseFont073, 9);
+            overContent073.BeginText();
+            overContent073.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Signature Of Client(s)", 392, 575, 0);
+            overContent073.EndText();
+
+
+            TextField tf073 = new TextField(writer, new Rectangle(405, 570, 560, 590), "Signature");
+            tf073.BorderColor = BaseColor.WHITE; ;
+            tf073.BackgroundColor = new BaseColor(232, 232, 232);
+            tf073.FontSize = 8;
+            tf073.Text = " " + clientDetails[3].FirstName + " " + clientDetails[3].SurName;
+            tf073.Options = TextField.READ_ONLY;
+            writer.AddAnnotation(tf073.GetTextField());
+
+            CreatePdfWithImageInsideTextField(doc, writer, signature[3].SignatureOfClientName != null ? signature[3].SignatureOfClientName : "", "signature2", 380, 545, 470, 570);
+
+            PdfContentByte overContent074 = writer.DirectContent;
+            BaseFont baseFont074 = BaseFont.CreateFont();
+            overContent074.SetFontAndSize(baseFont074, 9);
+            overContent074.BeginText();
+            overContent074.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Position", 335, 480, 0);
+            overContent074.EndText();
+
+
+            TextField tf074 = new TextField(writer, new Rectangle(340, 475, 560, 495), "Position");
+            tf074.BorderColor = BaseColor.WHITE;
+            tf074.BackgroundColor = new BaseColor(232, 232, 232);
+            tf074.FontSize = 8;
+            tf074.Text = " " + clientDetails[3].Position;
+            tf074.Options = TextField.READ_ONLY;
+            writer.AddAnnotation(tf074.GetTextField());
+
+            parentTable2.AddCell(cell21);
+
+            PdfPTable mainTable2 = new PdfPTable(1);
+            mainTable2.DefaultCell.Border = 0;
+            mainTable2.WidthPercentage = 108; // Set the width percentage of the main table
+
+            // Add the parent table to the main table
+            mainTable2.AddCell(parentTable2);
+            mainTable2.DefaultCell.Border = 0;
+
+            // Add the main table to the document
+            doc.Add(mainTable2);
+
+
+            //Phrase formattedContent80 = new Phrase();
+            //Chunk c194 = new Chunk("\nSignature of Client(s): " + "                                                                 Signature of Client(s):", contentFont);
+
+            //CreatePdfWithImageInsideTextField(doc, writer, signature[0].SignatureOfClientName != null ? signature[0].SignatureOfClientName : "", "signature1", 125, 705, 220, 733);
+            //CreatePdfWithImageInsideTextField(doc, writer, signature[1].SignatureOfClientName != null ? signature[1].SignatureOfClientName : "", "signature2", 380, 705, 470, 733);
+
+            //Chunk c195 = new Chunk("\n\nPosition: " + clientDetails[0].Position + "                                                                     Position: " + clientDetails[1].Position, contentFont);
+            //Chunk c196 = new Chunk("\n" + clientDetails[0].FirstName + " " + clientDetails[0].SurName + "                                                                              " + clientDetails[1].FirstName + " " + clientDetails[1].SurName, contentFont);
+
+            //formattedContent80.Add(c194);
+            //formattedContent80.Add(c195);
+            //formattedContent80.Add(c196);
+
+            //doc.Add(new Paragraph(formattedContent80));
+            //doc.Add(new Paragraph(" "));
+
+
+
+            //Phrase formattedContent81 = new Phrase();
+            //Chunk c197 = new Chunk("Signature of Client(s): " + "                                                                 Signature of Client(s):", contentFont);
+
+            
+
+            //Chunk c198 = new Chunk("\nPosition: " + clientDetails[2].Position + "                                                                                       Position: " + clientDetails[3].Position, contentFont);
+            //Chunk c199 = new Chunk("\n" + clientDetails[2].FirstName + " " + clientDetails[0].SurName + "                                                                                " + clientDetails[3].FirstName + " " + clientDetails[3].SurName, contentFont); formattedContent81.Add(c197);
+            //formattedContent81.Add(c198);
+            //formattedContent81.Add(c199);
+            //doc.Add(new Paragraph(formattedContent81));
             doc.Add(new Paragraph(" "));
 
             Phrase formattedContent82 = new Phrase();
             Chunk c200 = new Chunk("\n Signed on behalf of the Agent:" + "                                      Date:" + "                                   at" + "                                  am/pm", contentFont);
 
-            if (execution.AgentToSignHere != null)
+            if (execution.SignedOnBehalfOfTheAgent != null)
             {
-                iTextSharp.text.Image logo00 = iTextSharp.text.Image.GetInstance(execution.AgentToSignHere);
+                iTextSharp.text.Image logo00 = iTextSharp.text.Image.GetInstance(execution.SignedOnBehalfOfTheAgent);
                 logo00.ScaleToFit(35f, 35f);
-                logo00.SetAbsolutePosition(160, 530);
+                logo00.SetAbsolutePosition(160, 415);
 
                 PdfContentByte contentByte = writer.DirectContent;
                 contentByte.AddImage(logo00);
             }
-           
-            var executionDate = execution.AgentToSignHereDate != null ? ((DateTime)execution.AgentToSignHereDate).ToString("MM-yyyy") : "";
-            var executionTIme = execution.AgentToSignHereDate != null ? (DateTimeOffset.Parse(execution.AgentToSignHereDate.ToString()).ToString("tt")) : "";
-            AddTextFieldToPDF(writer, doc, "Propertyfield", "", executionDate, 280, 555, 360, 530);
-            AddTextFieldToPDF(writer, doc, "Propertyfield", "", executionTIme, 372, 555, 450, 530);
+
+            var executionDate = execution.SignedOnBehalfOfTheAgentDate != null ? ((DateTime)execution.SignedOnBehalfOfTheAgentDate).ToString("MM-yyyy") : "";
+            var executionTIme = execution.SignedOnBehalfOfTheAgentTime != null ? (DateTimeOffset.Parse(execution.SignedOnBehalfOfTheAgentTime.ToString()).ToString("hh:mm ")) : "";
+            AddTextFieldToPDF(writer, doc, "Propertyfield", "", executionDate, 280, 430, 360, 415);
+            AddTextFieldToPDF(writer, doc, "Propertyfield", "", executionTIme, 372, 430, 450, 415);
 
             formattedContent82.Add(c200);
             doc.Add(new Paragraph(formattedContent82));
@@ -6192,7 +6439,7 @@ namespace RE360.API.Common
         ;
 
                 // Add the radio button image based on the radio button state (selected or unselected)
-             
+
                 var imagePath = _configuration["BlobStorageSettings:DocPath"] + "RadioChecked.png" + _configuration["BlobStorageSettings:DocToken"];
 
                 //string imagePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Pictures", "RadioChecked.png");
@@ -6272,7 +6519,7 @@ namespace RE360.API.Common
             if (listingAddresses == null)
             {
 
-             	
+
                 ListingAddress obj = new ListingAddress();
                 listingAddresses = obj;
             }
@@ -6373,7 +6620,7 @@ namespace RE360.API.Common
             textcell2.Border = 0;
             textcell2.BackgroundColor = backgroundColor;
             dataTable1.AddCell(textcell2);
-            
+
 
 
             //ADDED FOR EMPTY SPACE BETWEEN TEXTBOX AND LABEL 
@@ -6483,7 +6730,7 @@ namespace RE360.API.Common
             headertable.AddCell(fieldsetTable);
             doc.Add(headertable);
 
-            
+
         }
 
         public void AddClientTables(Document doc, PdfWriter writer, List<ClientDetail> clientlist)
@@ -7022,7 +7269,7 @@ namespace RE360.API.Common
 
             fieldsetTable1.AddCell(legendCell1);
             headertable.AddCell(fieldsetTable1);
-           
+
             table1.AddCell(headertable);
 
             // Add table 1 to the parent table cell
@@ -7063,7 +7310,7 @@ namespace RE360.API.Common
             clientParagraph2.Font.Color = blueColor;
             clientParagraph2.Font.SetStyle(Font.BOLD);
             clientParagraph2.Font.Size = 10;
-            
+
             headertable1.AddCell(clientParagraph2);
 
             Phrase typePhrase2 = new Phrase();
@@ -7727,7 +7974,7 @@ namespace RE360.API.Common
 
             headertable.AddCell(fieldsetTable);
             doc.Add(headertable);
-           
+
         }
         public void AddContentToParticulars(Document doc, PdfWriter writer, List<ParticularDetail> particularDetail, List<PropertyAttributeTypeWithAllDataViewModel> data, List<LegalDetail> legalDetails, int id)
         {
@@ -8320,7 +8567,7 @@ namespace RE360.API.Common
             dataTable9.AddCell(landParagraph2);
             PdfPCell textcell13 = new PdfPCell();
             textcell13.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", legalDetails[0].LandArea, baseF14, 7);
-        
+
             textcell13.Border = 0;
             textcell13.Border = 0;
             textcell13.BackgroundColor = backgroundColor;
@@ -8425,7 +8672,7 @@ namespace RE360.API.Common
             emptydataTable6.DefaultCell.FixedHeight = 5f;
             emptydataTable6.AddCell(" ");
 
-            
+
             legendCell.AddElement(typePhrase);
             legendCell.AddElement(typeParagraph1);
             legendCell.AddElement(typePhrase1);
@@ -8449,19 +8696,47 @@ namespace RE360.API.Common
             headertable.AddCell(fieldsetTable);
             doc.Add(headertable);
 
-           
+
         }
 
         public void AddCalculaionOfCommission(Document doc, PdfWriter writer, CalculationOfCommission commission, List<ClientCommissionDetails> clientCommissionDetails)
         {
-            if (clientCommissionDetails.Count < 10)
+            
+            if (clientCommissionDetails.Count > 0)
             {
-                for (int i = 0; i <= (10 - clientCommissionDetails.Count); i++)
+               clientCommissionDetails = clientCommissionDetails.OrderBy(w => w.Sequence).ToList();
+            }
+            //
+            List<ClientCommissionDetails> finalList = new List<ClientCommissionDetails>();
+            var thereAfter = clientCommissionDetails.Count > 0 ? clientCommissionDetails.Last() : new ClientCommissionDetails();
+            if (clientCommissionDetails.Count > 0)
+            {
+                clientCommissionDetails.RemoveAt(clientCommissionDetails.Count - 1);
+            }
+
+            for (int i = 0; i < 5; i++)
+            {
+                if (clientCommissionDetails.Count <= i)
                 {
-                    clientCommissionDetails.Add(new ClientCommissionDetails());
+                    finalList.Add(new ClientCommissionDetails());
 
                 }
+                else
+                {
+                    finalList.Add(clientCommissionDetails[i]);
+                }
             }
+            finalList.Add(thereAfter);
+            clientCommissionDetails = finalList;
+            //
+            //if (clientCommissionDetails.Count < 6)
+            //{
+            //    for (int i = 0; i <= (6 - clientCommissionDetails.Count); i++)
+            //    {
+            //        clientCommissionDetails.Add(new ClientCommissionDetails());
+
+            //    }
+            //}
             BaseFont baseF14 = BaseFont.CreateFont();
 
             int red = 0;
@@ -8481,13 +8756,13 @@ namespace RE360.API.Common
             fieldsetTable1.WidthPercentage = 100f;
 
             PdfPCell legendCell1 = new PdfPCell();
-           
+
             legendCell1.Border = 0;
             legendCell1.BorderWidth = 2;
             legendCell1.Padding = 5;
             legendCell1.BorderColor = BaseColor.DARK_GRAY;
             legendCell1.BorderWidth = 1f;
-            
+
             fieldsetTable1.AddCell(legendCell1);
 
             PdfPTable dataTable0 = new PdfPTable(3);
@@ -8759,13 +9034,15 @@ namespace RE360.API.Common
             dataTable20.AddCell(textcell4111);
 
             dataTable20.AddCell("");
-
+            
             PdfPCell textcell511 = new PdfPCell();
             textcell511.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", clientCommissionDetails[5].Percent.ToString(), baseF14, 7);
             textcell511.Border = 0;
             textcell511.FixedHeight = 8f;
             textcell511.BackgroundColor = backgroundColor;
             dataTable20.AddCell(textcell511);
+            
+                
 
             dataTable20.AddCell("");
 
@@ -9128,7 +9405,7 @@ namespace RE360.API.Common
             private readonly float height;
             private readonly float positionX;
             private readonly float positionY;
-            
+
             public RectangleCellEvent(BaseColor fillColor, BaseColor textColor, string text, float positionX,
                               float height, float width, float positionY)
             {
@@ -9150,11 +9427,11 @@ namespace RE360.API.Common
 
 
                 float thickness = 0.5f;
-              
+
                 // Draw the rectangle
                 canvas.SaveState();
                 canvas.SetColorFill(BaseColor.WHITE);
-             
+
                 canvas.Rectangle(positionX, positionY, width, height);
 
                 canvas.Fill();
@@ -9164,7 +9441,7 @@ namespace RE360.API.Common
 
                 PdfContentByte canvasText = canvases[PdfPTable.TEXTCANVAS];
                 var blueColor = new BaseColor(43, 145, 175);
-              
+
                 ColumnText.ShowTextAligned(canvasText, Element.ALIGN_LEFT,
                     new Phrase(text, new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, blueColor)),
                     positionX + width - 70, positionY + height - 10, 0);
@@ -9219,7 +9496,7 @@ namespace RE360.API.Common
                 float boxX = document.Right - boxWidth; // Adjust the 36 to set the distance from the right margin
                 float boxY = y1 - 10; // Adjust the 10 to set the vertical position of the signature box
 
-               
+
                 if (_execution != null)
                 {
                     iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(_execution.AgentToSignHere);
