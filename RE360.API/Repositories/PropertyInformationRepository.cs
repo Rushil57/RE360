@@ -970,7 +970,7 @@ namespace RE360.API.Repositories
                     CloudBlobClient blobClient = cloudStorageAccount.CreateCloudBlobClient();
                     CloudBlobContainer container = blobClient.GetContainerReference(blobContainerName);
                     CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileName);
-
+                    blockBlob.Properties.ContentType = "application/pdf";
                     // Upload the file to Azure Blob Storage using the memoryStream content
                     using (var azureStream = new MemoryStream(memoryStream.ToArray()))
                     {

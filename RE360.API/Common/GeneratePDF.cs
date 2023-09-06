@@ -9072,7 +9072,7 @@ namespace RE360.API.Common
 
             Image uncheckedImage30 = GetCheckboxImage(commission.IsInCaseOfLessHoldTerm);
             uncheckedImage30.ScaleAbsolute(8, 8);
-            homeParagraph1200.Add(new Chunk(uncheckedImage3, 0, 0));
+            homeParagraph1200.Add(new Chunk(uncheckedImage30, 0, 0));
 
 
             homeParagraph1200.Add(homeChunk1200);
