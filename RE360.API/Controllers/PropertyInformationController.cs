@@ -10,7 +10,7 @@ namespace RE360.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   // [Authorize]
+    [Authorize]
     public class PropertyInformationController : ControllerBase
     {
         private readonly IPropertyInformationRepository _propertyInformationRepository;

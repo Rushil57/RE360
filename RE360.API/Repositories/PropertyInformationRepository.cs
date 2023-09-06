@@ -638,8 +638,12 @@ namespace RE360.API.Repositories
                                               StreetName = a.StreetName,
                                               clientName = cd.Title + " " + cd.SurName + " " + cd.FirstName,
                                               companyTrustName = cd.CompanyTrustName,
-                                              Date = exe.CreatedDate == null ? "In Progress" : exe.CreatedDate.ToString()
+                                              Date = exe.CreatedDate == null ? "In Progress" : exe.CreatedDate.ToString(),
+                                              PDFUrl = $"{_configuration["BlobStorageSettings:AgentDocPath"]}{a.ID}.pdf{_configuration["BlobStorageSettings:AgentDocToken"]}",
                                           }).GroupBy(m => new { m.Id }).Select(group => group.First()).ToList();
+
+
+
 
                 return new APIResponseModel { StatusCode = StatusCodes.Status200OK, Message = "Success", Result = listingAddressList.OrderByDescending(o => o.Id) };
             }
@@ -985,10 +989,6 @@ namespace RE360.API.Repositories
                 return new APIResponseModel { StatusCode = StatusCodes.Status403Forbidden, Message = ex.Message.ToString() };
             }
         }
-
-
-
-
 
         private async Task<string> UploadBlobPdf(MemoryStream memoryStream, string fileName, string blobContainerName)
         {
