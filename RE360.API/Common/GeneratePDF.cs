@@ -3621,26 +3621,52 @@ namespace RE360.API.Common
             tf09.BackgroundColor = new BaseColor(232, 232, 232);
             tf09.Options = TextField.READ_ONLY | TextField.MULTILINE;
 
+            //if (othercommentList.Count > 0)
+            //{
+            //    int maxlength = 60;
+            //    if (othercommentList[0].Comment.Length > 0)
+            //    {
+            //        var result = othercommentList[0].Comment.Substring(0, maxlength) + "...";
+            //        tf09.Text = result;
+            //    }
+            //    else
+            //    {
+            //        tf09.Text = othercommentList[0].Comment;
+            //    }
+
+
+            //}
+            //else
+            //{
+            //    // Handle the case when othercommentList is empty
+            //    tf09.Text = ""; // Set a default value or handle it based on your requirements
+            //}
             if (othercommentList.Count > 0)
             {
                 int maxlength = 60;
-                if (othercommentList[0].Comment.Length > 0)
+                if (!string.IsNullOrEmpty(othercommentList[0].Comment))
                 {
-                    var result = othercommentList[0].Comment.Substring(0, maxlength) + "...";
-                    tf09.Text = result;
+                    if (othercommentList[0].Comment.Length > maxlength)
+                    {
+                        var result = othercommentList[0].Comment.Substring(0, maxlength) + "...";
+                        tf09.Text = result;
+                    }
+                    else
+                    {
+                        tf09.Text = othercommentList[0].Comment;
+                    }
                 }
                 else
                 {
-                    tf09.Text = othercommentList[0].Comment;
+                    tf09.Text = ""; // Set a default value or handle it based on your requirements
                 }
-
-
             }
             else
             {
                 // Handle the case when othercommentList is empty
                 tf09.Text = ""; // Set a default value or handle it based on your requirements
             }
+
 
 
             tf09.TextColor = BaseColor.BLACK;
@@ -3658,17 +3684,41 @@ namespace RE360.API.Common
             tf010.BackgroundColor = new BaseColor(232, 232, 232);
             tf010.Options = TextField.READ_ONLY | TextField.MULTILINE;
 
+            //if (othercommentList.Count > 0)
+            //{
+            //    int maxlength = 50;
+            //    if (othercommentList[0].AdditionalFeature.Length > 0)
+            //    {
+
+            //        tf010.Text = othercommentList[0].AdditionalFeature.Length > 50 ? othercommentList[0].AdditionalFeature.Substring(0, maxlength) + "..." : othercommentList[0].AdditionalFeature;
+            //    }
+            //    else
+            //    {
+            //        tf010.Text = othercommentList[0].AdditionalFeature;
+            //    }
+            //}
+            //else
+            //{
+            //    // Handle the case when othercommentList is empty
+            //    tf010.Text = ""; // Set a default value or handle it based on your requirements
+            //}
             if (othercommentList.Count > 0)
             {
                 int maxlength = 50;
-                if (othercommentList[0].AdditionalFeature.Length > 0)
+                if (!string.IsNullOrEmpty(othercommentList[0].AdditionalFeature))
                 {
-
-                    tf010.Text = othercommentList[0].AdditionalFeature.Length > 50 ? othercommentList[0].AdditionalFeature.Substring(0, maxlength) + "..." : othercommentList[0].AdditionalFeature;
+                    if (othercommentList[0].AdditionalFeature.Length > maxlength)
+                    {
+                        tf010.Text = othercommentList[0].AdditionalFeature.Substring(0, maxlength) + "...";
+                    }
+                    else
+                    {
+                        tf010.Text = othercommentList[0].AdditionalFeature;
+                    }
                 }
                 else
                 {
-                    tf010.Text = othercommentList[0].AdditionalFeature;
+                    tf010.Text = ""; // Set a default value or handle it based on your requirements
                 }
             }
             else
@@ -3676,6 +3726,7 @@ namespace RE360.API.Common
                 // Handle the case when othercommentList is empty
                 tf010.Text = ""; // Set a default value or handle it based on your requirements
             }
+
             tf010.TextColor = BaseColor.BLACK;
             tf010.FontSize = 8;
             writer.AddAnnotation(tf010.GetTextField());
@@ -3691,17 +3742,41 @@ namespace RE360.API.Common
             tf011.BackgroundColor = new BaseColor(232, 232, 232);
             tf011.Options = TextField.READ_ONLY | TextField.MULTILINE;
 
+            //if (othercommentList.Count > 0)
+            //{
+            //    int maxlength = 60;
+            //    if (othercommentList[0].ExcludedChattels.Length > 0)
+            //    {
+            //        tf011.Text = othercommentList[0].ExcludedChattels.Length > 60 ? othercommentList[0].ExcludedChattels.Substring(0, maxlength) + "..." : othercommentList[0].ExcludedChattels;
+
+            //    }
+            //    else
+            //    {
+            //        tf011.Text = othercommentList[0].ExcludedChattels;
+            //    }
+            //}
+            //else
+            //{
+            //    // Handle the case when othercommentList is empty
+            //    tf011.Text = ""; // Set a default value or handle it based on your requirements
+            //}
             if (othercommentList.Count > 0)
             {
                 int maxlength = 60;
-                if (othercommentList[0].ExcludedChattels.Length > 0)
+                if (!string.IsNullOrEmpty(othercommentList[0].ExcludedChattels))
                 {
-                    tf011.Text = othercommentList[0].ExcludedChattels.Length > 60 ? othercommentList[0].ExcludedChattels.Substring(0, maxlength) + "..." : othercommentList[0].ExcludedChattels;
-
+                    if (othercommentList[0].ExcludedChattels.Length > maxlength)
+                    {
+                        tf011.Text = othercommentList[0].ExcludedChattels.Substring(0, maxlength) + "...";
+                    }
+                    else
+                    {
+                        tf011.Text = othercommentList[0].ExcludedChattels;
+                    }
                 }
                 else
                 {
-                    tf011.Text = othercommentList[0].ExcludedChattels;
+                    tf011.Text = ""; // Set a default value or handle it based on your requirements
                 }
             }
             else
@@ -3709,6 +3784,7 @@ namespace RE360.API.Common
                 // Handle the case when othercommentList is empty
                 tf011.Text = ""; // Set a default value or handle it based on your requirements
             }
+
             tf011.TextColor = BaseColor.BLACK;
             tf011.FontSize = 8;
             writer.AddAnnotation(tf011.GetTextField());
