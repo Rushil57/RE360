@@ -3807,17 +3807,41 @@ namespace RE360.API.Common
             tf012.BackgroundColor = new BaseColor(232, 232, 232);
             tf012.Options = TextField.READ_ONLY | TextField.MULTILINE;
 
+            //if (othercommentList.Count > 0)
+            //{
+            //    int maxlength = 230;
+            //    if (othercommentList[0].InternalRemark.Length > 0)
+            //    {
+
+            //        tf012.Text = othercommentList[0].InternalRemark.Length > 230 ? othercommentList[0].InternalRemark.Substring(0, maxlength) + "..." : othercommentList[0].InternalRemark;
+            //    }
+            //    else
+            //    {
+            //        tf012.Text = othercommentList[0].InternalRemark;
+            //    }
+            //}
+            //else
+            //{
+            //    // Handle the case when othercommentList is empty
+            //    tf012.Text = ""; // Set a default value or handle it based on your requirements
+            //}
             if (othercommentList.Count > 0)
             {
                 int maxlength = 230;
-                if (othercommentList[0].InternalRemark.Length > 0)
+                if (!string.IsNullOrEmpty(othercommentList[0].InternalRemark))
                 {
-
-                    tf012.Text = othercommentList[0].InternalRemark.Length > 230 ? othercommentList[0].InternalRemark.Substring(0, maxlength) + "..." : othercommentList[0].InternalRemark;
+                    if (othercommentList[0].InternalRemark.Length > maxlength)
+                    {
+                        tf012.Text = othercommentList[0].InternalRemark.Substring(0, maxlength) + "...";
+                    }
+                    else
+                    {
+                        tf012.Text = othercommentList[0].InternalRemark;
+                    }
                 }
                 else
                 {
-                    tf012.Text = othercommentList[0].InternalRemark;
+                    tf012.Text = ""; // Set a default value or handle it based on your requirements
                 }
             }
             else
@@ -3825,6 +3849,7 @@ namespace RE360.API.Common
                 // Handle the case when othercommentList is empty
                 tf012.Text = ""; // Set a default value or handle it based on your requirements
             }
+
             tf012.TextColor = BaseColor.BLACK;
             tf012.FontSize = 8;
             writer.AddAnnotation(tf012.GetTextField());
@@ -4091,25 +4116,49 @@ namespace RE360.API.Common
             tf019.FontSize = 8f;
             tf019.TextColor = BaseColor.BLACK;
 
+            //if (FinalList != null && FinalList.tenancyDetail != null && FinalList.tenancyDetail.TenancyDetails != null)
+            //{
+            //    int maxlength = 290;
+            //    if (FinalList.tenancyDetail.TenancyDetails.Length > 0)
+            //    {
+            //        string TenancyDetails = FinalList.tenancyDetail.TenancyDetails.Length > 290 ? FinalList.tenancyDetail.TenancyDetails.Substring(0, maxlength) + "..." : FinalList.tenancyDetail.TenancyDetails;
+            //        tf019.Text = TenancyDetails;
+
+            //    }
+            //    else
+            //    {
+            //        tf019.Text = FinalList.tenancyDetail.TenancyDetails;
+            //    }
+            //}
+            //else
+            //{
+            //    tf019.Text = " "; // Set a default value if the data is not available
+            //}
+
             if (FinalList != null && FinalList.tenancyDetail != null && FinalList.tenancyDetail.TenancyDetails != null)
             {
                 int maxlength = 290;
-                if (FinalList.tenancyDetail.TenancyDetails.Length > 0)
+                if (!string.IsNullOrEmpty(FinalList.tenancyDetail.TenancyDetails))
                 {
-                    string TenancyDetails = FinalList.tenancyDetail.TenancyDetails.Length > 290 ? FinalList.tenancyDetail.TenancyDetails.Substring(0, maxlength) + "..." : FinalList.tenancyDetail.TenancyDetails;
-                    tf019.Text = TenancyDetails;
-
+                    if (FinalList.tenancyDetail.TenancyDetails.Length > maxlength)
+                    {
+                        string TenancyDetails = FinalList.tenancyDetail.TenancyDetails.Substring(0, maxlength) + "...";
+                        tf019.Text = TenancyDetails;
+                    }
+                    else
+                    {
+                        tf019.Text = FinalList.tenancyDetail.TenancyDetails;
+                    }
                 }
                 else
                 {
-                    tf019.Text = FinalList.tenancyDetail.TenancyDetails;
+                    tf019.Text = ""; // Set a default value or handle it based on your requirements
                 }
             }
             else
             {
-                tf019.Text = " "; // Set a default value if the data is not available
+                tf019.Text = ""; // Set a default value or handle it based on your requirements
             }
-
             writer.AddAnnotation(tf019.GetTextField());
 
 
