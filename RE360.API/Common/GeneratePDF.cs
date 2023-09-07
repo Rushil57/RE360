@@ -4624,9 +4624,10 @@ namespace RE360.API.Common
             tf215.BorderColor = new BaseColor(232, 232, 232);
             tf215.BackgroundColor = new BaseColor(232, 232, 232);
             tf215.Options = TextField.READ_ONLY;
-            tf215.Text = isGeneralSelected == true && contractDetails[0].AuthorityEndDate != null ? ((DateTime)contractDetails[0].AuthorityEndDate).ToString("dd-MM-yyyy") : string.Empty;
+            
+            tf215.Text = isGeneralSelected == true && contractDetails[0].AuthorityStartDate != null ? ((DateTime)contractDetails[0].AuthorityStartDate).ToString("dd-MM-yyyy") : "";
 
-            tf215.FontSize = 8;
+            tf215.FontSize = 7;
             tf215.TextColor = BaseColor.BLACK;
             writer.AddAnnotation(tf215.GetTextField());
 
@@ -4636,9 +4637,9 @@ namespace RE360.API.Common
             tf216.BorderColor = new BaseColor(232, 232, 232);
             tf216.BackgroundColor = new BaseColor(232, 232, 232);
             tf216.Options = TextField.READ_ONLY;
-            tf216.Text = isGeneralSelected == true && contractDetails[0].AuthorityEndDate != null ? ((DateTime)contractDetails[0].AuthorityEndDate).ToString("dd-MM-yyyy") : string.Empty;
+            tf216.Text = isGeneralSelected == true && contractDetails[0].AuthorityEndDate != null ? ((DateTime)contractDetails[0].AuthorityEndDate).ToString("dd-MM-yyyy") : "";
 
-            tf216.FontSize = 8;
+            tf216.FontSize = 7;
             tf216.TextColor = BaseColor.BLACK;
             writer.AddAnnotation(tf216.GetTextField());
 
@@ -4882,7 +4883,7 @@ namespace RE360.API.Common
             if (methodOfSales.Count > 0)
             {
 
-                tf061.Text = isAuctionSelected == true ? methodOfSales[0].AuctionTime != null ? (DateTimeOffset.Parse(methodOfSales[0].AuctionTime).ToString("hh:mm tt")) : " " : "";
+                tf061.Text = isAuctionSelected == true ? methodOfSales[0].AuctionTime != null ? (DateTimeOffset.Parse(methodOfSales[0].AuctionTime).ToString("hh:mm ")) : " " : "";
             }
             else
             {
@@ -5026,7 +5027,7 @@ namespace RE360.API.Common
             if (methodOfSales.Count > 0)
             {
 
-                tf065.Text = isTenderSelected == true ? methodOfSales[0].TenderDate != null ? (DateTimeOffset.Parse(methodOfSales[0].TenderTime).ToString("hh:mm tt")) : " " : " ";
+                tf065.Text = isTenderSelected == true ? methodOfSales[0].TenderDate != null ? (DateTimeOffset.Parse(methodOfSales[0].TenderTime).ToString("hh:mm ")) : " " : " ";
             }
             else
             {
@@ -9223,7 +9224,7 @@ namespace RE360.API.Common
             firParagraph111.Font.Color = BaseColor.BLACK;
             dataTable31.AddCell(firParagraph111);
             PdfPCell textcell211 = new PdfPCell();
-            textcell211.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", commission != null ? commission.EstimatedCommission.ToString() : "", baseF14, 7);
+            textcell211.CellEvent = new SingleCellFieldPositioningEvent(writer, "cellTextBox", commission != null ? commission.WithMinimumCommission.ToString() : "", baseF14, 7);
             textcell211.Border = 0;
             textcell211.BackgroundColor = backgroundColor;
             dataTable31.AddCell(textcell211);
