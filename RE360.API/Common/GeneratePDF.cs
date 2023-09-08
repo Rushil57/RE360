@@ -6467,7 +6467,7 @@ namespace RE360.API.Common
                 contentByte.AddImage(logo00);
             }
 
-            var executionDate = execution.SignedOnBehalfOfTheAgentDate != null ? ((DateTime)execution.SignedOnBehalfOfTheAgentDate).ToString("MM-yyyy") : "";
+            var executionDate = execution.SignedOnBehalfOfTheAgentDate != null ? ((DateTime)execution.SignedOnBehalfOfTheAgentDate).ToString("dd-MM-yyyy") : "";
             var executionTIme = execution.SignedOnBehalfOfTheAgentTime != null ? (DateTimeOffset.Parse(execution.SignedOnBehalfOfTheAgentTime.ToString()).ToString("hh:mm ")) : "";
             AddTextFieldToPDF(writer, doc, "Propertyfield", "", executionDate, 280, 430, 360, 415);
             AddTextFieldToPDF(writer, doc, "Propertyfield", "", executionTIme, 372, 430, 450, 415);
