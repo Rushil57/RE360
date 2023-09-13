@@ -419,7 +419,7 @@ namespace RE360.API.Common
             BaseFont baseF15 = BaseFont.CreateFont();
             content43.SetFontAndSize(baseF15, 8);
             content43.BeginText();
-            content43.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForLegalDetails[1].PropertyAttributeName, 73, 705, 0);
+            content43.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForLegalDetails[1].PropertyAttributeName, 75, 705, 0);
             content43.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 700, 23, 690), chkboxlistForLegalDetails[2].Checkbox, 23, 690);
@@ -427,7 +427,7 @@ namespace RE360.API.Common
             BaseFont baseF16 = BaseFont.CreateFont();
             content44.SetFontAndSize(baseF16, 8);
             content44.BeginText();
-            content44.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForLegalDetails[2].PropertyAttributeName, 73, 692, 0);
+            content44.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForLegalDetails[2].PropertyAttributeName, 78, 692, 0);
             content44.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 685, 23, 675), chkboxlistForLegalDetails[3].Checkbox, 23, 675);
@@ -435,7 +435,7 @@ namespace RE360.API.Common
             BaseFont baseF17 = BaseFont.CreateFont();
             content45.SetFontAndSize(baseF17, 8);
             content45.BeginText();
-            content45.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForLegalDetails[3].PropertyAttributeName, 53, 678, 0);
+            content45.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForLegalDetails[3].PropertyAttributeName, 55, 678, 0);
             content45.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 670, 23, 660), chkboxlistForLegalDetails[4].Checkbox, 23, 660);
@@ -443,7 +443,7 @@ namespace RE360.API.Common
             BaseFont baseF18 = BaseFont.CreateFont();
             content46.SetFontAndSize(baseF18, 8);
             content46.BeginText();
-            content46.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForLegalDetails[4].PropertyAttributeName, 70, 663, 0);
+            content46.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForLegalDetails[4].PropertyAttributeName, 73, 663, 0);
             content46.EndText();
 
 
@@ -452,7 +452,7 @@ namespace RE360.API.Common
             BaseFont baseF19 = BaseFont.CreateFont();
             content47.SetFontAndSize(baseF19, 8);
             content47.BeginText();
-            content47.ShowTextAligned(PdfContentByte.ALIGN_CENTER, legalDetailsCheckboxList[5].PropertyAttributeName, 68, 648, 0);
+            content47.ShowTextAligned(PdfContentByte.ALIGN_CENTER, legalDetailsCheckboxList[5].PropertyAttributeName, 70, 648, 0);
             content47.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 640, 23, 630), chkboxlistForLegalDetails[6].Checkbox, 23, 630);
@@ -460,11 +460,11 @@ namespace RE360.API.Common
             BaseFont baseF20 = BaseFont.CreateFont();
             content48.SetFontAndSize(baseF20, 8);
             content48.BeginText();
-            content48.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForLegalDetails[6].PropertyAttributeName, 45, 633, 0);
+            content48.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chkboxlistForLegalDetails[6].PropertyAttributeName, 48, 633, 0);
             content48.EndText();
 
             ////ADDING MORE FIELDS IN CELL
-            TextField tf54 = new TextField(writer, new Rectangle(170, 745, 254, 730), legaldetailsList[0].LotNo);
+            TextField tf54 = new TextField(writer, new Rectangle(170, 745, 254, 727), "Lotno");
             tf54.BorderColor = new BaseColor(232, 232, 232);
             tf54.BackgroundColor = new BaseColor(232, 232, 232);
             tf54.Text = legaldetailsList[0].LotNo == null ? " " : legaldetailsList[0].LotNo.ToString();
@@ -480,7 +480,7 @@ namespace RE360.API.Common
             overContent58.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Lot", 160, 733, 0);
             overContent58.EndText();
 
-            TextField tf58 = new TextField(writer, new Rectangle(280, 745, 358, 730), "DP");
+            TextField tf58 = new TextField(writer, new Rectangle(280, 745, 358, 726), "DP");
             tf58.BorderColor = new BaseColor(232, 232, 232);
             tf58.BackgroundColor = new BaseColor(232, 232, 232);
             tf58.FontSize = 8;
@@ -494,7 +494,7 @@ namespace RE360.API.Common
             overContent59.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "DP", 270, 733, 0);
             overContent59.EndText();
 
-            TextField tf60 = new TextField(writer, new Rectangle(380, 745, 455, 730), "Title");
+            TextField tf60 = new TextField(writer, new Rectangle(380, 745, 455, 726), "Title");
             tf60.BorderColor = new BaseColor(232, 232, 232);
             tf60.BackgroundColor = new BaseColor(232, 232, 232);
             tf60.FontSize = 8;
@@ -547,7 +547,7 @@ namespace RE360.API.Common
             BaseFont baseFont64 = BaseFont.CreateFont();
             overContent64.SetFontAndSize(baseFont64, 8);
             overContent64.BeginText();
-            overContent64.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Additional details", 188, 670, 0);
+            overContent64.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Additional details", 188, 673, 0);
             overContent64.EndText();
 
             TextField tf65 = new TextField(writer, new Rectangle(460, 668, 560, 683), "Land value $");
@@ -561,7 +561,7 @@ namespace RE360.API.Common
             BaseFont baseFont65 = BaseFont.CreateFont();
             overContent65.SetFontAndSize(baseFont65, 8);
             overContent65.BeginText();
-            overContent65.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Land value $", 428, 670, 0);
+            overContent65.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Land value $", 428, 673, 0);
             overContent65.EndText();
 
             TextField tf66 = new TextField(writer, new Rectangle(232, 655, 290, 640), "Improvement");
@@ -1100,249 +1100,45 @@ namespace RE360.API.Common
             writer.AddAnnotation(tf87.GetTextField());
 
 
-            PdfContentByte cb23 = writer.DirectContent;
-            BaseFont bf23 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
-            string text23 = "Auction";
-            cb23.BeginText();
-            cb23.SetFontAndSize(bf23, 8);
-            // 3ut the alignment and coordinates here
-            cb23.ShowTextAligned(1, text23, 325, 482, 0);
-            cb23.EndText();
 
-            var filePath1 = _configuration["BlobStorageSettings:DocPath"] + "Calender.png" + _configuration["BlobStorageSettings:DocToken"];
-            iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(filePath1);
-
-            logo1.ScaleAbsolute(15f, 15f);
-            logo1.SetAbsolutePosition(308, 465);
-            document.Add(logo1);
-
-            TextField tf89 = new TextField(writer, new Rectangle(325, 478, 360, 465), "Auction Date");
-            tf89.BorderColor = new BaseColor(232, 232, 232);
-            tf89.BackgroundColor = new BaseColor(232, 232, 232);
-            if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.AuctionDate != null)
+            if (isAuctionSelected)
             {
-                string AuctionDate = isAuctionSelected == true ? ((DateTime)FinalList.methodOfSale.AuctionDate).ToString("dd-MM-yyyy") : " ";
-                tf89.Text = AuctionDate;
+
+                AddAuctionForMethodOfSale(document, writer, methodOfSaleList);
             }
-            else
+            if (isTenderSelected)
             {
-                tf89.Text = " "; // Set a default value if the data is not available
-            }
-            tf89.Options = TextField.READ_ONLY;
-            writer.AddAnnotation(tf89.GetTextField());
-
-            var filePath2 = _configuration["BlobStorageSettings:DocPath"] + "Clock.png" + _configuration["BlobStorageSettings:DocToken"];
-            iTextSharp.text.Image logo2 = iTextSharp.text.Image.GetInstance(filePath2);
-
-            logo2.ScaleAbsolute(15f, 15f);
-            logo2.SetAbsolutePosition(365, 465);
-
-
-            document.Add(logo2);
-
-
-            TextField tf90 = new TextField(writer, new Rectangle(385, 478, 420, 465), "Auction Time");
-            tf90.BorderColor = new BaseColor(232, 232, 232);
-            tf90.BackgroundColor = new BaseColor(232, 232, 232);
-
-            if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.AuctionTime != null)
-            {
-                string AuctionTime = isAuctionSelected == true ? DateTimeOffset.Parse(FinalList.methodOfSale.AuctionTime).ToString("hh:mm tt") : "";
-                tf90.Text = AuctionTime;
-            }
-            else
-            {
-                tf90.Text = " "; // Set a default value if the data is not available
-            }
-            tf90.Options = TextField.READ_ONLY;
-            writer.AddAnnotation(tf90.GetTextField());
-
-
-            TextField tf91 = new TextField(writer, new Rectangle(335, 455, 410, 435), "Venue");
-            tf91.BorderColor = new BaseColor(232, 232, 232);
-            tf91.BackgroundColor = new BaseColor(232, 232, 232);
-            if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.TenderVenue != null)
-            {
-                if (isAuctionSelected)
-                {
-                    string auctionVenue = isAuctionSelected == true ? FinalList.methodOfSale.AuctionVenue : "";
-                    tf91.Text = auctionVenue;
-                }
-                if (isTenderSelected)
-                {
-                    string TenderVenue = isTenderSelected == true ? FinalList.methodOfSale.TenderVenue : "";
-                    tf91.Text = TenderVenue;
-                }
+                AddTenderForMethodOfSale(document, writer, methodOfSaleList);
 
             }
-            else
+
+            if (isDeadlinesaleSelected)
             {
-                tf91.Text = " "; // Set a default value if the data is not available
+                AddDeadlineSaleForMethodOfSale(document, writer, methodOfSaleList);
+
             }
 
 
-            tf91.Options = TextField.READ_ONLY;
-            tf91.FontSize = 8;
-            writer.AddAnnotation(tf91.GetTextField());
-            PdfContentByte overContent91 = writer.DirectContent;
-            BaseFont baseFont91 = BaseFont.CreateFont();
-            overContent91.SetFontAndSize(baseFont91, 8);
-            overContent91.BeginText();
-            overContent91.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Venue", 330, 436, 0);
-            overContent91.EndText();
-
-            TextField tf92 = new TextField(writer, new Rectangle(350, 420, 425, 400), "Auctioneer Venue");
-            tf92.BorderColor = new BaseColor(232, 232, 232);
-            tf92.BackgroundColor = new BaseColor(232, 232, 232);
-            if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.Auctioneer != null)
-            {
-                string AuctionVenue = isAuctionSelected == true ? FinalList.methodOfSale.Auctioneer : "";
-                tf92.Text = AuctionVenue;
-            }
-            else
-            {
-                tf92.Text = " "; // Set a default value if the data is not available
-            }
-            tf92.FontSize = 8;
-            tf92.Options = TextField.READ_ONLY;
-            writer.AddAnnotation(tf92.GetTextField());
-            PdfContentByte overContent92 = writer.DirectContent;
-            BaseFont baseFont92 = BaseFont.CreateFont();
-            overContent92.SetFontAndSize(baseFont91, 8);
-            overContent92.BeginText();
-            overContent92.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Auctioneer", 348, 410, 0);
-            overContent92.EndText();
-
-            PdfContentByte cb24 = writer.DirectContent;
-            BaseFont bf24 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
-            string text24 = "Tender";
-            cb24.BeginText();
-            cb24.SetFontAndSize(bf24, 8);
-            // 4ut the alignment and coordinates here
-            cb24.ShowTextAligned(1, text24, 450, 482, 0);
-            cb24.EndText();
-
-            var filePath3 = _configuration["BlobStorageSettings:DocPath"] + "Calender.png" + _configuration["BlobStorageSettings:DocToken"];
-            iTextSharp.text.Image logo3 = iTextSharp.text.Image.GetInstance(filePath3);
-
-            logo3.ScaleAbsolute(15f, 15f);
-            logo3.SetAbsolutePosition(437, 465);
-            document.Add(logo3);
-
-            TextField tf94 = new TextField(writer, new Rectangle(455, 478, 490, 465), "Tender Date");
-            tf94.BorderColor = new BaseColor(232, 232, 232);
-            tf94.BackgroundColor = new BaseColor(232, 232, 232);
-            if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.TenderDate != null)
-            {
-                string TenderDate = isTenderSelected == true ? ((DateTime)FinalList.methodOfSale.TenderDate).ToString("dd-MM-yyyy") : "";
-                tf94.Text = TenderDate;
-            }
-            else
-            {
-                tf94.Text = " "; // Set a default value if the data is not available
-            }
-            tf94.Options = TextField.READ_ONLY;
-            writer.AddAnnotation(tf94.GetTextField());
-
-            var filePath4 = _configuration["BlobStorageSettings:DocPath"] + "Clock.png" + _configuration["BlobStorageSettings:DocToken"];
-
-            iTextSharp.text.Image logo4 = iTextSharp.text.Image.GetInstance(filePath4);
-
-            logo4.ScaleAbsolute(15f, 15f);
-            logo4.SetAbsolutePosition(500, 465);
-
-
-            document.Add(logo4);
-            TextField tf95 = new TextField(writer, new Rectangle(520, 478, 560, 465), "TenderTime");
-            tf95.BorderColor = new BaseColor(232, 232, 232);
-            tf95.BackgroundColor = new BaseColor(232, 232, 232);
-
-            if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.TenderTime != null)
-            {
-                string TenderTime = isTenderSelected == true ? DateTimeOffset.Parse(FinalList.methodOfSale.TenderTime).ToString("hh:mm tt") : "";
-                tf95.Text = TenderTime;
-            }
-            else
-            {
-                tf95.Text = " "; // Set a default value if the data is not available
-            }
-            tf95.Options = TextField.READ_ONLY;
-            writer.AddAnnotation(tf95.GetTextField());
-
-
-            PdfContentByte cb25 = writer.DirectContent;
-            BaseFont bf25 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
-            string text25 = "Deadline sale date";
-            cb25.BeginText();
-            cb25.SetFontAndSize(bf25, 8);
-            // 4ut the alignment and coordinates here
-            cb25.ShowTextAligned(1, text25, 480, 440, 0);
-            cb25.EndText();
-
-            var filePath5 = _configuration["BlobStorageSettings:DocPath"] + "Calender.png" + _configuration["BlobStorageSettings:DocToken"];
-            iTextSharp.text.Image logo5 = iTextSharp.text.Image.GetInstance(filePath5);
-            logo5.ScaleAbsolute(15f, 15f);
-            logo5.SetAbsolutePosition(437, 420);
-            document.Add(logo5);
-
-
-            TextField tf96 = new TextField(writer, new Rectangle(455, 435, 490, 420), "Deadline Date");
-            tf96.BorderColor = new BaseColor(232, 232, 232);
-            tf96.BackgroundColor = new BaseColor(232, 232, 232);
-            if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.DeadLineDate != null)
-            {
-                string DeadLineDate = isDeadlinesaleSelected == true ? ((DateTime)FinalList.methodOfSale.DeadLineDate).ToString("dd-MM-yyyy") : "";
-                tf96.Text = DeadLineDate;
-            }
-            else
-            {
-                tf96.Text = " "; // Set a default value if the data is not available
-            }
-            tf96.Options = TextField.READ_ONLY;
-            writer.AddAnnotation(tf96.GetTextField());
-
-            var filePath6 = _configuration["BlobStorageSettings:DocPath"] + "Clock.png" + _configuration["BlobStorageSettings:DocToken"];
-            iTextSharp.text.Image logo6 = iTextSharp.text.Image.GetInstance(filePath6);
-
-            logo6.ScaleAbsolute(15f, 15f);
-            logo6.SetAbsolutePosition(500, 420);
-            document.Add(logo6);
-
-
-            TextField tf97 = new TextField(writer, new Rectangle(520, 435, 560, 420), "Deadline Time");
-            tf97.BorderColor = new BaseColor(232, 232, 232);
-            tf97.BackgroundColor = new BaseColor(232, 232, 232);
-
-            if (FinalList != null && FinalList.methodOfSale != null && FinalList.methodOfSale.DeadLineTime != null)
-            {
-                string DeadLineTime = isDeadlinesaleSelected == true ? DateTimeOffset.Parse(FinalList.methodOfSale.DeadLineTime).ToString("hh:mm tt") : "";
-                tf97.Text = DeadLineTime;
-            }
-            else
-            {
-                tf97.Text = " "; // Set a default value if the data is not available
-            }
-            tf97.Options = TextField.READ_ONLY;
-            writer.AddAnnotation(tf97.GetTextField());
+        
 
             if (methodOfSaleList != null && methodOfSaleList.Count > 0)
             {
                 bool isMortgageeSale = methodOfSaleList[0].IsMortgageeSale;
 
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(437, 410, 448, 400), isMortgageeSale, 437, 400);
+                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(310,395,321,385), isMortgageeSale, 310, 385);
             }
             else
             {
                 // Handle the case when methodOfSaleList is null or empty
                 // For example, you might want to provide a default value for the checkbox
-                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(437, 410, 448, 400), false, 437, 400);
+                AddCheckboxField(document, writer, "myCheckbox", new Rectangle(310, 395, 321, 385), false, 310, 385);
             }
 
             PdfContentByte content59 = writer.DirectContent;
             BaseFont baseF59 = BaseFont.CreateFont();
             content59.SetFontAndSize(baseF59, 8);
             content59.BeginText();
-            content59.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Mortgagee sale", 480, 403, 0);
+            content59.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Mortgagee sale", 358, 389, 0);
             content59.EndText();
 
 
@@ -1459,7 +1255,7 @@ namespace RE360.API.Common
             BaseFont baseF213 = BaseFont.CreateFont();
             content213.SetFontAndSize(baseF213, 8);
             content213.BeginText();
-            content213.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[2].PropertyAttributeName, 49, 282, 0);
+            content213.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[2].PropertyAttributeName, 50, 282, 0);
             content213.EndText();
             TextField tf2160 = new TextField(writer, new Rectangle(110, 294, 130, 280), "Drapes");
             tf2160.BorderColor = new BaseColor(232, 232, 232);
@@ -1475,7 +1271,7 @@ namespace RE360.API.Common
             BaseFont baseF214 = BaseFont.CreateFont();
             content214.SetFontAndSize(baseF214, 8);
             content214.BeginText();
-            content214.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[3].PropertyAttributeName, 49, 267, 0);
+            content214.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[3].PropertyAttributeName, 52, 267, 0);
             content214.EndText();
             TextField tf216 = new TextField(writer, new Rectangle(110, 278, 130, 265), "Fixed");
             tf216.BorderColor = new BaseColor(232, 232, 232);
@@ -1492,7 +1288,7 @@ namespace RE360.API.Common
             BaseFont baseF215 = BaseFont.CreateFont();
             content215.SetFontAndSize(baseF215, 8);
             content215.BeginText();
-            content215.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[4].PropertyAttributeName, 59, 252, 0);
+            content215.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[4].PropertyAttributeName, 58, 252, 0);
             content215.EndText();
             TextField tf215 = new TextField(writer, new Rectangle(110, 263, 130, 250), "Dishwasher");
             tf215.BorderColor = new BaseColor(232, 232, 232);
@@ -1524,7 +1320,7 @@ namespace RE360.API.Common
             BaseFont baseF217 = BaseFont.CreateFont();
             content217.SetFontAndSize(baseF217, 8);
             content217.BeginText();
-            content217.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[6].PropertyAttributeName, 61, 222, 0);
+            content217.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[6].PropertyAttributeName, 60, 222, 0);
             content217.EndText();
             TextField tf214 = new TextField(writer, new Rectangle(110, 233, 130, 220), "Garden");
             tf214.BorderColor = new BaseColor(232, 232, 232);
@@ -1541,7 +1337,7 @@ namespace RE360.API.Common
             BaseFont baseF218 = BaseFont.CreateFont();
             content218.SetFontAndSize(baseF218, 8);
             content218.BeginText();
-            content218.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[7].PropertyAttributeName, 74, 207, 0);
+            content218.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[7].PropertyAttributeName, 73, 207, 0);
             content218.EndText();
             TextField tf218 = new TextField(writer, new Rectangle(110, 218, 130, 202), "Garage");
             tf218.BorderColor = new BaseColor(232, 232, 232);
@@ -1558,7 +1354,7 @@ namespace RE360.API.Common
             BaseFont baseF219 = BaseFont.CreateFont();
             content219.SetFontAndSize(baseF219, 8);
             content219.BeginText();
-            content219.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[8].PropertyAttributeName, 69, 192, 0);
+            content219.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[8].PropertyAttributeName, 68, 192, 0);
             content219.EndText();
             TextField tf219 = new TextField(writer, new Rectangle(110, 200, 130, 185), "Heated");
             tf219.BorderColor = new BaseColor(232, 232, 232);
@@ -1575,7 +1371,7 @@ namespace RE360.API.Common
             BaseFont baseF220 = BaseFont.CreateFont();
             content220.SetFontAndSize(baseF220, 8);
             content220.BeginText();
-            content220.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[9].PropertyAttributeName, 61, 177, 0);
+            content220.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[9].PropertyAttributeName, 60, 177, 0);
             content220.EndText();
             TextField tf2190 = new TextField(writer, new Rectangle(110, 184, 130, 170), "Heated");
             tf2190.BorderColor = new BaseColor(232, 232, 232);
@@ -1592,7 +1388,7 @@ namespace RE360.API.Common
             BaseFont baseF221 = BaseFont.CreateFont();
             content221.SetFontAndSize(baseF221, 8);
             content221.BeginText();
-            content221.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[10].PropertyAttributeName, 59, 162, 0);
+            content221.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[10].PropertyAttributeName, 58, 162, 0);
             content221.EndText();
             TextField tf221 = new TextField(writer, new Rectangle(110, 168, 130, 157), "Heated");
             tf221.BorderColor = new BaseColor(232, 232, 232);
@@ -1608,7 +1404,7 @@ namespace RE360.API.Common
             BaseFont baseF222 = BaseFont.CreateFont();
             content222.SetFontAndSize(baseF222, 8);
             content222.BeginText();
-            content222.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[11].PropertyAttributeName, 52, 147, 0);
+            content222.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[11].PropertyAttributeName, 55, 147, 0);
             content222.EndText();
             TextField tf222 = new TextField(writer, new Rectangle(110, 155, 130, 144), "Fireplace");
             tf222.BorderColor = new BaseColor(232, 232, 232);
@@ -1624,7 +1420,7 @@ namespace RE360.API.Common
             BaseFont baseF223 = BaseFont.CreateFont();
             content223.SetFontAndSize(baseF223, 8);
             content223.BeginText();
-            content223.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[12].PropertyAttributeName, 59, 132, 0);
+            content223.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[12].PropertyAttributeName, 58, 132, 0);
             content223.EndText();
             TextField tf223 = new TextField(writer, new Rectangle(110, 142, 130, 129), "Rangehood");
             tf223.BorderColor = new BaseColor(232, 232, 232);
@@ -1640,7 +1436,7 @@ namespace RE360.API.Common
             BaseFont baseF228 = BaseFont.CreateFont();
             content228.SetFontAndSize(baseF228, 8);
             content228.BeginText();
-            content228.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[13].PropertyAttributeName, 46, 117, 0);
+            content228.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[13].PropertyAttributeName, 49, 117, 0);
             content228.EndText();
             TextField tf228 = new TextField(writer, new Rectangle(110, 128, 130, 114), "Stove");
             tf228.BorderColor = new BaseColor(232, 232, 232);
@@ -1656,7 +1452,7 @@ namespace RE360.API.Common
             BaseFont baseF224 = BaseFont.CreateFont();
             content224.SetFontAndSize(baseF224, 8);
             content224.BeginText();
-            content224.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[14].PropertyAttributeName, 51, 102, 0);
+            content224.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[14].PropertyAttributeName, 56, 102, 0);
             content224.EndText();
             TextField tf224 = new TextField(writer, new Rectangle(110, 113, 130, 100), "TV");
             tf224.BorderColor = new BaseColor(232, 232, 232);
@@ -1672,7 +1468,7 @@ namespace RE360.API.Common
             BaseFont baseF225 = BaseFont.CreateFont();
             content225.SetFontAndSize(baseF225, 8);
             content225.BeginText();
-            content225.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[15].PropertyAttributeName, 67, 87, 0);
+            content225.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[15].PropertyAttributeName, 71, 87, 0);
             content225.EndText();
             TextField tf225 = new TextField(writer, new Rectangle(110, 98, 130, 84), "Waste");
             tf225.BorderColor = new BaseColor(232, 232, 232);
@@ -1688,7 +1484,7 @@ namespace RE360.API.Common
             BaseFont baseF226 = BaseFont.CreateFont();
             content226.SetFontAndSize(baseF226, 8);
             content226.BeginText();
-            content226.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[16].PropertyAttributeName, 49, 72, 0);
+            content226.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[16].PropertyAttributeName, 53, 72, 0);
             content226.EndText();
             TextField tf2270 = new TextField(writer, new Rectangle(110, 82, 130, 69), "Central");
             tf2270.BorderColor = new BaseColor(232, 232, 232);
@@ -1704,7 +1500,7 @@ namespace RE360.API.Common
             BaseFont baseF227 = BaseFont.CreateFont();
             content227.SetFontAndSize(baseF227, 8);
             content227.BeginText();
-            content227.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[17].PropertyAttributeName, 68, 57, 0);
+            content227.ShowTextAligned(PdfContentByte.ALIGN_CENTER, chattelslist[17].PropertyAttributeName, 71, 57, 0);
             content227.EndText();
             TextField tf227 = new TextField(writer, new Rectangle(110, 68, 130, 55), "Central");
             tf227.BorderColor = new BaseColor(232, 232, 232);
@@ -1727,7 +1523,7 @@ namespace RE360.API.Common
             PdfPCell cell211 = new PdfPCell(new Phrase());
             cell211.FixedHeight = 98f; // Set the height of the cell
             cell211.BorderColor = BaseColor.BLACK;
-            cell211.CellEvent = new RectangleOverPdfPCellBorder("Insulation", 165f, 344f, 50f, 20f, 168f, 358f);
+            cell211.CellEvent = new RectangleOverPdfPCellBorder("Insulation", 165f, 344f, 50f, 20f, 168f, 357f);
             col2Table.AddCell(cell211);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 330, 165, 340), insulationlist[0].Checkbox, 155, 330);
@@ -1786,14 +1582,14 @@ namespace RE360.API.Common
             PdfPCell cell212 = new PdfPCell(new Phrase());
             cell212.FixedHeight = 180f; // Set the height of the cell
             cell212.BorderColor = BaseColor.DARK_GRAY;
-            cell212.CellEvent = new RectangleOverPdfPCellBorder("Heating", 165f, 246f, 40f, 15f, 168f, 246f);
+            cell212.CellEvent = new RectangleOverPdfPCellBorder("Heating", 165f, 246f, 40f, 15f, 168f, 247f);
             col2Table.AddCell(cell212);
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 225, 165, 235), heatinglist[0].Checkbox, 155, 225);
             PdfContentByte content233 = writer.DirectContent;
             BaseFont baseF233 = BaseFont.CreateFont();
             content233.SetFontAndSize(baseF233, 8);
             content233.BeginText();
-            content233.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[0].PropertyAttributeName, 185, 225, 0);
+            content233.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[0].PropertyAttributeName, 186, 225, 0);
             content233.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 210, 165, 220), heatinglist[1].Checkbox, 155, 210);
@@ -1801,7 +1597,7 @@ namespace RE360.API.Common
             BaseFont baseF234 = BaseFont.CreateFont();
             content234.SetFontAndSize(baseF234, 8);
             content234.BeginText();
-            content234.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[1].PropertyAttributeName, 195, 210, 0);
+            content234.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[1].PropertyAttributeName, 198, 210, 0);
             content234.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 195, 165, 205), heatinglist[2].Checkbox, 155, 195);
@@ -1809,7 +1605,7 @@ namespace RE360.API.Common
             BaseFont baseF235 = BaseFont.CreateFont();
             content235.SetFontAndSize(baseF235, 8);
             content235.BeginText();
-            content235.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[2].PropertyAttributeName, 205, 195, 0);
+            content235.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[2].PropertyAttributeName, 209, 195, 0);
             content235.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 180, 165, 190), heatinglist[3].Checkbox, 155, 180);
@@ -1817,7 +1613,7 @@ namespace RE360.API.Common
             BaseFont baseF236 = BaseFont.CreateFont();
             content236.SetFontAndSize(baseF236, 8);
             content236.BeginText();
-            content236.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[3].PropertyAttributeName, 185, 180, 0);
+            content236.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[3].PropertyAttributeName, 189, 180, 0);
             content236.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 165, 165, 175), heatinglist[4].Checkbox, 155, 165);
@@ -1825,7 +1621,7 @@ namespace RE360.API.Common
             BaseFont baseF237 = BaseFont.CreateFont();
             content237.SetFontAndSize(baseF237, 8);
             content237.BeginText();
-            content237.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[4].PropertyAttributeName, 200, 165, 0);
+            content237.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[4].PropertyAttributeName, 203, 165, 0);
             content237.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 150, 165, 160), heatinglist[5].Checkbox, 155, 150);
@@ -1833,7 +1629,7 @@ namespace RE360.API.Common
             BaseFont baseF238 = BaseFont.CreateFont();
             content238.SetFontAndSize(baseF238, 8);
             content238.BeginText();
-            content238.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[5].PropertyAttributeName, 190, 150, 0);
+            content238.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[5].PropertyAttributeName, 189, 150, 0);
             content238.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 135, 165, 145), heatinglist[6].Checkbox, 155, 135);
@@ -1841,7 +1637,7 @@ namespace RE360.API.Common
             BaseFont baseF239 = BaseFont.CreateFont();
             content239.SetFontAndSize(baseF239, 8);
             content239.BeginText();
-            content239.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[6].PropertyAttributeName, 190, 135, 0);
+            content239.ShowTextAligned(PdfContentByte.ALIGN_CENTER, heatinglist[6].PropertyAttributeName, 191, 135, 0);
             content239.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(155, 120, 165, 130), heatinglist[7].Checkbox, 155, 120);
@@ -1903,7 +1699,7 @@ namespace RE360.API.Common
             BaseFont baseF245 = BaseFont.CreateFont();
             content245.SetFontAndSize(baseF245, 8);
             content245.BeginText();
-            content245.ShowTextAligned(PdfContentByte.ALIGN_CENTER, interiorConditionlist[0].PropertyAttributeName, 292, 330, 0);
+            content245.ShowTextAligned(PdfContentByte.ALIGN_CENTER, interiorConditionlist[0].PropertyAttributeName, 293, 330, 0);
             content245.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 315, 272, 325), interiorConditionlist[1].Checkbox, 262, 315);
@@ -1911,7 +1707,7 @@ namespace RE360.API.Common
             BaseFont baseF246 = BaseFont.CreateFont();
             content246.SetFontAndSize(baseF246, 8);
             content246.BeginText();
-            content246.ShowTextAligned(PdfContentByte.ALIGN_CENTER, interiorConditionlist[1].PropertyAttributeName, 292, 315, 0);
+            content246.ShowTextAligned(PdfContentByte.ALIGN_CENTER, interiorConditionlist[1].PropertyAttributeName, 294, 315, 0);
             content246.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 300, 272, 310), interiorConditionlist[2].Checkbox, 262, 300);
@@ -1927,7 +1723,7 @@ namespace RE360.API.Common
             BaseFont baseF248 = BaseFont.CreateFont();
             content248.SetFontAndSize(baseF248, 8);
             content248.BeginText();
-            content248.ShowTextAligned(PdfContentByte.ALIGN_CENTER, interiorConditionlist[3].PropertyAttributeName, 286, 285, 0);
+            content248.ShowTextAligned(PdfContentByte.ALIGN_CENTER, interiorConditionlist[3].PropertyAttributeName, 285, 285, 0);
             content248.EndText();
 
 
@@ -1951,13 +1747,13 @@ namespace RE360.API.Common
             BaseFont baseF249 = BaseFont.CreateFont();
             content249.SetFontAndSize(baseF249, 8);
             content249.BeginText();
-            content249.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[0].PropertyAttributeName, 309, 230, 0);
+            content249.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[0].PropertyAttributeName, 311, 230, 0);
             content249.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 225, 272, 215), exteriorList[1].Checkbox, 262, 215);
             PdfContentByte content250 = writer.DirectContent;
             BaseFont baseF250 = BaseFont.CreateFont();
-            content250.SetFontAndSize(baseF250, 8);
+            content250.SetFontAndSize(baseF250, 7);
             content250.BeginText();
             content250.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[1].PropertyAttributeName, 317, 215, 0);
             content250.EndText();
@@ -1967,7 +1763,7 @@ namespace RE360.API.Common
             BaseFont baseF251 = BaseFont.CreateFont();
             content251.SetFontAndSize(baseF251, 8);
             content251.BeginText();
-            content251.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[2].PropertyAttributeName, 312, 200, 0);
+            content251.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[2].PropertyAttributeName, 310, 200, 0);
             content251.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 195, 272, 185), exteriorList[3].Checkbox, 262, 185);
@@ -1975,7 +1771,7 @@ namespace RE360.API.Common
             BaseFont baseF252 = BaseFont.CreateFont();
             content252.SetFontAndSize(baseF252, 8);
             content252.BeginText();
-            content252.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[3].PropertyAttributeName, 304, 185, 0);
+            content252.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[3].PropertyAttributeName, 302, 185, 0);
             content252.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 180, 272, 170), exteriorList[4].Checkbox, 262, 170);
@@ -1983,7 +1779,7 @@ namespace RE360.API.Common
             BaseFont baseF253 = BaseFont.CreateFont();
             content253.SetFontAndSize(baseF253, 8);
             content253.BeginText();
-            content253.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[4].PropertyAttributeName, 314, 170, 0);
+            content253.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[4].PropertyAttributeName, 312, 170, 0);
             content253.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 165, 272, 155), exteriorList[5].Checkbox, 262, 155);
@@ -1991,7 +1787,7 @@ namespace RE360.API.Common
             BaseFont baseF254 = BaseFont.CreateFont();
             content254.SetFontAndSize(baseF254, 8);
             content254.BeginText();
-            content254.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[5].PropertyAttributeName, 302, 155, 0);
+            content254.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[5].PropertyAttributeName, 300, 155, 0);
             content254.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 150, 272, 140), exteriorList[6].Checkbox, 262, 140);
@@ -1999,7 +1795,7 @@ namespace RE360.API.Common
             BaseFont baseF255 = BaseFont.CreateFont();
             content255.SetFontAndSize(baseF255, 8);
             content255.BeginText();
-            content255.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[6].PropertyAttributeName, 299, 140, 0);
+            content255.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[6].PropertyAttributeName, 297, 140, 0);
             content255.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(262, 135, 272, 125), exteriorList[7].Checkbox, 262, 125);
@@ -2007,7 +1803,7 @@ namespace RE360.API.Common
             BaseFont baseF256 = BaseFont.CreateFont();
             content256.SetFontAndSize(baseF256, 8);
             content256.BeginText();
-            content256.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[7].PropertyAttributeName, 290, 125, 0);
+            content256.ShowTextAligned(PdfContentByte.ALIGN_CENTER, exteriorList[7].PropertyAttributeName, 288, 125, 0);
             content256.EndText();
 
             PdfContentByte cb221 = writer.DirectContent;
@@ -2039,14 +1835,14 @@ namespace RE360.API.Common
             PdfPCell cell41 = new PdfPCell(new Phrase());
             cell41.FixedHeight = 125f; // Set the height of the cell
             cell41.BorderColor = BaseColor.BLACK;
-            cell41.CellEvent = new RectangleOverPdfPCellBorder("Flooring", 370f, 343f, 44f, 20f, 372f, 358f);
+            cell41.CellEvent = new RectangleOverPdfPCellBorder("Flooring", 370f, 343f, 44f, 20f, 372f, 357f);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 330, 380, 340), flooringlist[0].Checkbox, 370, 330);
             PdfContentByte content257 = writer.DirectContent;
             BaseFont baseF257 = BaseFont.CreateFont();
             content257.SetFontAndSize(baseF257, 8);
             content257.BeginText();
-            content257.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[0].PropertyAttributeName, 393, 330, 0);
+            content257.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[0].PropertyAttributeName, 397, 330, 0);
             content257.EndText();
 
 
@@ -2055,7 +1851,7 @@ namespace RE360.API.Common
             BaseFont baseF258 = BaseFont.CreateFont();
             content258.SetFontAndSize(baseF258, 8);
             content258.BeginText();
-            content258.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[1].PropertyAttributeName, 396, 315, 0);
+            content258.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[1].PropertyAttributeName, 400, 315, 0);
             content258.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 300, 380, 310), flooringlist[2].Checkbox, 370, 300);
@@ -2063,7 +1859,7 @@ namespace RE360.API.Common
             BaseFont baseF259 = BaseFont.CreateFont();
             content259.SetFontAndSize(baseF259, 8);
             content259.BeginText();
-            content259.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[2].PropertyAttributeName, 390, 300, 0);
+            content259.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[2].PropertyAttributeName, 392, 300, 0);
             content259.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 285, 380, 295), flooringlist[3].Checkbox, 370, 285);
@@ -2071,7 +1867,7 @@ namespace RE360.API.Common
             BaseFont baseF260 = BaseFont.CreateFont();
             content260.SetFontAndSize(baseF260, 8);
             content260.BeginText();
-            content260.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[3].PropertyAttributeName, 393, 285, 0);
+            content260.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[3].PropertyAttributeName, 398, 285, 0);
             content260.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(370, 270, 380, 280), flooringlist[4].Checkbox, 370, 270);
@@ -2079,7 +1875,7 @@ namespace RE360.API.Common
             BaseFont baseF261 = BaseFont.CreateFont();
             content261.SetFontAndSize(baseF261, 8);
             content261.BeginText();
-            content261.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[4].PropertyAttributeName, 390, 270, 0);
+            content261.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[4].PropertyAttributeName, 394, 270, 0);
             content261.EndText();
 
 
@@ -2088,7 +1884,7 @@ namespace RE360.API.Common
             BaseFont baseF262 = BaseFont.CreateFont();
             content262.SetFontAndSize(baseF262, 8);
             content262.BeginText();
-            content262.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[5].PropertyAttributeName, 393, 255, 0);
+            content262.ShowTextAligned(PdfContentByte.ALIGN_CENTER, flooringlist[5].PropertyAttributeName, 397, 255, 0);
             content262.EndText();
 
             TextField tf232 = new TextField(writer, new Rectangle(370, 250, 450, 240), "Other");
@@ -2218,7 +2014,7 @@ namespace RE360.API.Common
             BaseFont baseF273 = BaseFont.CreateFont();
             content273.SetFontAndSize(baseF273, 8);
             content273.BeginText();
-            content273.ShowTextAligned(PdfContentByte.ALIGN_CENTER, waterlist[0].PropertyAttributeName, 502, 335, 0);
+            content273.ShowTextAligned(PdfContentByte.ALIGN_CENTER, waterlist[0].PropertyAttributeName, 504, 335, 0);
             content273.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 320, 490, 330), waterlist[1].Checkbox, 480, 320);
@@ -2226,7 +2022,7 @@ namespace RE360.API.Common
             BaseFont baseF274 = BaseFont.CreateFont();
             content274.SetFontAndSize(baseF274, 8);
             content274.BeginText();
-            content274.ShowTextAligned(PdfContentByte.ALIGN_CENTER, waterlist[1].PropertyAttributeName, 502, 320, 0);
+            content274.ShowTextAligned(PdfContentByte.ALIGN_CENTER, waterlist[1].PropertyAttributeName, 504, 320, 0);
             content274.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 305, 490, 315), waterlist[2].Checkbox, 480, 305);
@@ -2234,7 +2030,7 @@ namespace RE360.API.Common
             BaseFont baseF275 = BaseFont.CreateFont();
             content275.SetFontAndSize(baseF275, 8);
             content275.BeginText();
-            content275.ShowTextAligned(PdfContentByte.ALIGN_CENTER, waterlist[2].PropertyAttributeName, 502, 305, 0);
+            content275.ShowTextAligned(PdfContentByte.ALIGN_CENTER, waterlist[2].PropertyAttributeName, 504, 305, 0);
             content275.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 290, 490, 300), waterlist[3].Checkbox, 480, 290);
@@ -2242,7 +2038,7 @@ namespace RE360.API.Common
             BaseFont baseF276 = BaseFont.CreateFont();
             content276.SetFontAndSize(baseF276, 8);
             content276.BeginText();
-            content276.ShowTextAligned(PdfContentByte.ALIGN_CENTER, waterlist[3].PropertyAttributeName, 502, 290, 0);
+            content276.ShowTextAligned(PdfContentByte.ALIGN_CENTER, waterlist[3].PropertyAttributeName, 504, 290, 0);
             content276.EndText();
 
 
@@ -2280,7 +2076,7 @@ namespace RE360.API.Common
             BaseFont baseF277 = BaseFont.CreateFont();
             content277.SetFontAndSize(baseF277, 8);
             content277.BeginText();
-            content277.ShowTextAligned(PdfContentByte.ALIGN_CENTER, frontageList[0].PropertyAttributeName, 502, 235, 0);
+            content277.ShowTextAligned(PdfContentByte.ALIGN_CENTER, frontageList[0].PropertyAttributeName, 504, 235, 0);
             content277.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 220, 490, 230), frontageList[1].Checkbox, 480, 220);
@@ -2288,7 +2084,7 @@ namespace RE360.API.Common
             BaseFont baseF278 = BaseFont.CreateFont();
             content278.SetFontAndSize(baseF278, 8);
             content278.BeginText();
-            content278.ShowTextAligned(PdfContentByte.ALIGN_CENTER, frontageList[1].PropertyAttributeName, 502, 220, 0);
+            content278.ShowTextAligned(PdfContentByte.ALIGN_CENTER, frontageList[1].PropertyAttributeName, 504, 220, 0);
             content278.EndText();
 
             col5Table.AddCell(cell52);
@@ -2315,7 +2111,7 @@ namespace RE360.API.Common
             BaseFont baseF279 = BaseFont.CreateFont();
             content279.SetFontAndSize(baseF279, 8);
             content279.BeginText();
-            content279.ShowTextAligned(PdfContentByte.ALIGN_CENTER, levelsList[0].PropertyAttributeName, 518, 175, 0);
+            content279.ShowTextAligned(PdfContentByte.ALIGN_CENTER, levelsList[0].PropertyAttributeName, 520, 175, 0);
             content279.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 160, 490, 170), levelsList[1].Checkbox, 480, 160);
@@ -2323,7 +2119,7 @@ namespace RE360.API.Common
             BaseFont baseF280 = BaseFont.CreateFont();
             content280.SetFontAndSize(baseF280, 8);
             content280.BeginText();
-            content280.ShowTextAligned(PdfContentByte.ALIGN_CENTER, levelsList[1].PropertyAttributeName, 518, 160, 0);
+            content280.ShowTextAligned(PdfContentByte.ALIGN_CENTER, levelsList[1].PropertyAttributeName, 520, 160, 0);
             content280.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 145, 490, 155), levelsList[2].Checkbox, 480, 145);
@@ -2331,7 +2127,7 @@ namespace RE360.API.Common
             BaseFont baseF281 = BaseFont.CreateFont();
             content281.SetFontAndSize(baseF281, 8);
             content281.BeginText();
-            content281.ShowTextAligned(PdfContentByte.ALIGN_CENTER, levelsList[2].PropertyAttributeName, 518, 145, 0);
+            content281.ShowTextAligned(PdfContentByte.ALIGN_CENTER, levelsList[2].PropertyAttributeName, 520, 145, 0);
             content281.EndText();
 
 
@@ -2342,7 +2138,7 @@ namespace RE360.API.Common
             PdfPCell cell54 = new PdfPCell(new Phrase());
             cell54.FixedHeight = 30f; // Set the height of the cell
             cell54.BorderColor = BaseColor.BLACK;
-            cell54.CellEvent = new RectangleOverPdfPCellBorder("Amenities", 485f, 120f, 40f, 20f, 485f, 120f);
+            cell54.CellEvent = new RectangleOverPdfPCellBorder("Amenities", 485f, 120f, 50f, 20f, 485f, 128f);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 100, 490, 110), amenitiesList[0].Checkbox, 480, 100);
             PdfContentByte content282 = writer.DirectContent;
@@ -2357,7 +2153,7 @@ namespace RE360.API.Common
             BaseFont baseF283 = BaseFont.CreateFont();
             content283.SetFontAndSize(baseF283, 8);
             content283.BeginText();
-            content283.ShowTextAligned(PdfContentByte.ALIGN_CENTER, amenitiesList[1].PropertyAttributeName, 522, 85, 0);
+            content283.ShowTextAligned(PdfContentByte.ALIGN_CENTER, amenitiesList[1].PropertyAttributeName, 524, 85, 0);
             content283.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(480, 70, 490, 80), amenitiesList[2].Checkbox, 480, 70);
@@ -2373,7 +2169,7 @@ namespace RE360.API.Common
             BaseFont baseF285 = BaseFont.CreateFont();
             content285.SetFontAndSize(baseF283, 8);
             content285.BeginText();
-            content285.ShowTextAligned(PdfContentByte.ALIGN_CENTER, amenitiesList[3].PropertyAttributeName, 521, 55, 0);
+            content285.ShowTextAligned(PdfContentByte.ALIGN_CENTER, amenitiesList[3].PropertyAttributeName, 523, 55, 0);
             content285.EndText();
 
             col5Table.AddCell(cell53);
@@ -2570,7 +2366,7 @@ namespace RE360.API.Common
             BaseFont baseF311 = BaseFont.CreateFont();
             content311.SetFontAndSize(baseF311, 8);
             content311.BeginText();
-            content311.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[5].PropertyAttributeName, 56, 525, 0);
+            content311.ShowTextAligned(PdfContentByte.ALIGN_CENTER, otherrroomslist[5].PropertyAttributeName, 62, 525, 0);
             content311.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(33, 520, 23, 510), otherrroomslist[6].Checkbox, 23, 510);
@@ -2643,7 +2439,7 @@ namespace RE360.API.Common
             BaseFont baseF286 = BaseFont.CreateFont();
             content286.SetFontAndSize(baseF286, 8);
             content286.BeginText();
-            content286.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Double", 33, 390, 0);
+            content286.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Double", 33, 385, 0);
             content286.EndText();
             TextField tf03 = new TextField(writer, new Rectangle(53, 395, 130, 380), "Double");
             tf03.BorderColor = new BaseColor(232, 232, 232);
@@ -2809,13 +2605,14 @@ namespace RE360.API.Common
             cell311.BorderColor = BaseColor.BLACK;
             cell311.CellEvent = new RectangleOverPdfPCellBorder("Kitchen", 155f, 665f, 40f, 15f, 158f, 667f);
             col2Table2.AddCell(cell311);
+            col2Table.AddCell("");
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 645, 158, 655), kitchenlist[0].Checkbox, 148, 645);
             PdfContentByte content323 = writer.DirectContent;
             BaseFont baseF323 = BaseFont.CreateFont();
             content323.SetFontAndSize(baseF323, 8);
             content323.BeginText();
-            content323.ShowTextAligned(PdfContentByte.ALIGN_CENTER, kitchenlist[0].PropertyAttributeName, 177, 645, 0);
+            content323.ShowTextAligned(PdfContentByte.ALIGN_CENTER, kitchenlist[0].PropertyAttributeName, 178, 645, 0);
             content323.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 630, 158, 640), kitchenlist[1].Checkbox, 148, 630);
@@ -2831,7 +2628,7 @@ namespace RE360.API.Common
             BaseFont baseF325 = BaseFont.CreateFont();
             content325.SetFontAndSize(baseF325, 8);
             content325.BeginText();
-            content325.ShowTextAligned(PdfContentByte.ALIGN_CENTER, kitchenlist[2].PropertyAttributeName, 177, 615, 0);
+            content325.ShowTextAligned(PdfContentByte.ALIGN_CENTER, kitchenlist[2].PropertyAttributeName, 178, 615, 0);
             content325.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 600, 158, 610), kitchenlist[3].Checkbox, 148, 600);
@@ -2865,7 +2662,7 @@ namespace RE360.API.Common
             BaseFont baseF327 = BaseFont.CreateFont();
             content327.SetFontAndSize(baseF327, 8);
             content327.BeginText();
-            content327.ShowTextAligned(PdfContentByte.ALIGN_CENTER, dininglist[0].PropertyAttributeName, 191, 545, 0);
+            content327.ShowTextAligned(PdfContentByte.ALIGN_CENTER, dininglist[0].PropertyAttributeName, 183, 545, 0);
             content327.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 530, 158, 540), dininglist[1].Checkbox, 148, 530);
@@ -2873,7 +2670,7 @@ namespace RE360.API.Common
             BaseFont baseF328 = BaseFont.CreateFont();
             content328.SetFontAndSize(baseF328, 8);
             content328.BeginText();
-            content328.ShowTextAligned(PdfContentByte.ALIGN_CENTER, dininglist[1].PropertyAttributeName, 189, 530, 0);
+            content328.ShowTextAligned(PdfContentByte.ALIGN_CENTER, dininglist[1].PropertyAttributeName, 181, 530, 0);
             content328.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 515, 158, 525), dininglist[2].Checkbox, 148, 515);
@@ -2881,7 +2678,7 @@ namespace RE360.API.Common
             BaseFont baseF329 = BaseFont.CreateFont();
             content329.SetFontAndSize(baseF329, 8);
             content329.BeginText();
-            content329.ShowTextAligned(PdfContentByte.ALIGN_CENTER, dininglist[2].PropertyAttributeName, 192, 515, 0);
+            content329.ShowTextAligned(PdfContentByte.ALIGN_CENTER, dininglist[2].PropertyAttributeName, 186, 515, 0);
             content329.EndText();
 
             PdfPCell blankCell2 = new PdfPCell(new Phrase(Chunk.NEWLINE));
@@ -2894,7 +2691,7 @@ namespace RE360.API.Common
             var bathroomlist = data.Where(w => w.Name == "Bathroom Toilets").ToList();
 
             PdfPCell cell313 = new PdfPCell(new Phrase());
-            cell313.FixedHeight = 97f; // Set the height of the cell
+            cell313.FixedHeight = 102f; // Set the height of the cell
             cell313.BorderColor = BaseColor.BLACK;
             cell313.CellEvent = new RectangleOverPdfPCellBorder("Bathroom/toilet", 155f, 495f, 78f, 15f, 158f, 498f);
             col2Table2.AddCell(cell313);
@@ -2904,7 +2701,7 @@ namespace RE360.API.Common
             BaseFont baseF330 = BaseFont.CreateFont();
             content330.SetFontAndSize(baseF330, 8);
             content330.BeginText();
-            content330.ShowTextAligned(PdfContentByte.ALIGN_CENTER, bathroomlist[0].PropertyAttributeName, 196, 470, 0);
+            content330.ShowTextAligned(PdfContentByte.ALIGN_CENTER, bathroomlist[0].PropertyAttributeName, 195, 470, 0);
             content330.EndText();
 
             TextField tf330 = new TextField(writer, new Rectangle(235, 480, 255, 468), "Separate bathrooms");//(33, 445, 23, 435)
@@ -2921,7 +2718,7 @@ namespace RE360.API.Common
             BaseFont baseF331 = BaseFont.CreateFont();
             content331.SetFontAndSize(baseF331, 8);
             content331.BeginText();
-            content331.ShowTextAligned(PdfContentByte.ALIGN_CENTER, bathroomlist[1].PropertyAttributeName, 189, 455, 0);
+            content331.ShowTextAligned(PdfContentByte.ALIGN_CENTER, bathroomlist[1].PropertyAttributeName, 191, 455, 0);
             content331.EndText();
 
             TextField tf331 = new TextField(writer, new Rectangle(235, 465, 255, 453), "Separate WCs");//(33, 445, 23, 435)
@@ -2938,7 +2735,7 @@ namespace RE360.API.Common
             BaseFont baseF332 = BaseFont.CreateFont();
             content332.SetFontAndSize(baseF330, 8);
             content332.BeginText();
-            content332.ShowTextAligned(PdfContentByte.ALIGN_CENTER, bathroomlist[2].PropertyAttributeName, 190, 440, 0);
+            content332.ShowTextAligned(PdfContentByte.ALIGN_CENTER, bathroomlist[2].PropertyAttributeName, 194, 440, 0);
             content332.EndText();
 
             TextField tf332 = new TextField(writer, new Rectangle(235, 450, 255, 438), "Separate shower");//(33, 445, 23, 435)
@@ -2995,9 +2792,9 @@ namespace RE360.API.Common
             var loungelist = data.Where(w => w.Name == "Lounge").ToList();
 
             PdfPCell cell314 = new PdfPCell(new Phrase());
-            cell314.FixedHeight = 60f; // Set the height of the cell
+            cell314.FixedHeight = 55f; // Set the height of the cell
             cell314.BorderColor = BaseColor.BLACK;
-            cell314.CellEvent = new RectangleOverPdfPCellBorder("Lounge", 158f, 393f, 40f, 14f, 160f, 396f);
+            cell314.CellEvent = new RectangleOverPdfPCellBorder("Lounge", 158f, 385f, 40f, 16f, 160f, 391f);
             col2Table2.AddCell(cell314);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 365, 158, 375), loungelist[0].Checkbox, 148, 365);
@@ -3005,7 +2802,7 @@ namespace RE360.API.Common
             BaseFont baseF335 = BaseFont.CreateFont();
             content335.SetFontAndSize(baseF335, 8);
             content335.BeginText();
-            content335.ShowTextAligned(PdfContentByte.ALIGN_CENTER, loungelist[0].PropertyAttributeName, 204, 365, 0);
+            content335.ShowTextAligned(PdfContentByte.ALIGN_CENTER, loungelist[0].PropertyAttributeName, 206, 365, 0);
             content335.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 350, 158, 360), loungelist[1].Checkbox, 148, 350);
@@ -3013,7 +2810,7 @@ namespace RE360.API.Common
             BaseFont baseF336 = BaseFont.CreateFont();
             content336.SetFontAndSize(baseF336, 8);
             content336.BeginText();
-            content336.ShowTextAligned(PdfContentByte.ALIGN_CENTER, loungelist[1].PropertyAttributeName, 176, 350, 0);
+            content336.ShowTextAligned(PdfContentByte.ALIGN_CENTER, loungelist[1].PropertyAttributeName, 178, 350, 0);
             content336.EndText();
 
             PdfPCell blankCell = new PdfPCell(new Phrase(Chunk.NEWLINE));
@@ -3029,7 +2826,7 @@ namespace RE360.API.Common
             PdfPCell cell315 = new PdfPCell(new Phrase());
             cell315.FixedHeight = 30f; // Set the height of the cell
             cell315.BorderColor = BaseColor.BLACK;
-            cell315.CellEvent = new RectangleOverPdfPCellBorder("Stove", 158f, 322f, 30f, 14f, 158f, 325f);
+            cell315.CellEvent = new RectangleOverPdfPCellBorder("Stove", 158f, 322f, 30f, 14f, 158f, 327f);
             col2Table2.AddCell(cell315);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 310, 158, 320), stovelist[0].Checkbox, 148, 310);
@@ -3045,7 +2842,7 @@ namespace RE360.API.Common
             BaseFont baseF338 = BaseFont.CreateFont();
             content338.SetFontAndSize(baseF338, 8);
             content338.BeginText();
-            content338.ShowTextAligned(PdfContentByte.ALIGN_CENTER, stovelist[1].PropertyAttributeName, 179, 295, 0);
+            content338.ShowTextAligned(PdfContentByte.ALIGN_CENTER, stovelist[1].PropertyAttributeName, 181, 295, 0);
             content338.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(148, 280, 158, 290), stovelist[2].Checkbox, 148, 280);
@@ -3053,7 +2850,7 @@ namespace RE360.API.Common
             BaseFont baseF339 = BaseFont.CreateFont();
             content339.SetFontAndSize(baseF339, 8);
             content339.BeginText();
-            content339.ShowTextAligned(PdfContentByte.ALIGN_CENTER, stovelist[2].PropertyAttributeName, 182, 280, 0);
+            content339.ShowTextAligned(PdfContentByte.ALIGN_CENTER, stovelist[2].PropertyAttributeName, 184, 280, 0);
             content339.EndText();
 
             multipleMainTable1.AddCell(col2Table2);
@@ -3067,7 +2864,7 @@ namespace RE360.API.Common
             PdfPCell cell44 = new PdfPCell(new Phrase());
             cell44.FixedHeight = 70f; // Set the height of the cell
             cell44.BorderColor = BaseColor.BLACK;
-            cell44.CellEvent = new RectangleOverPdfPCellBorder("Exterior condition", 272f, 733f, 85f, 15f, 273f, 735f);
+            cell44.CellEvent = new RectangleOverPdfPCellBorder("Exterior condition", 272f, 733f, 85f, 15f, 273f, 737f);
             col3Table3.AddCell(cell44);
 
 
@@ -3116,7 +2913,7 @@ namespace RE360.API.Common
             PdfPCell cell45 = new PdfPCell(new Phrase());
             cell45.FixedHeight = 105f; // Set the height of the cell
             cell45.BorderColor = BaseColor.BLACK;
-            cell45.CellEvent = new RectangleOverPdfPCellBorder("Swimming pool", 272f, 650f, 85f, 15f, 273f, 655f);
+            cell45.CellEvent = new RectangleOverPdfPCellBorder("Swimming pool", 272f, 650f, 85f, 15f, 273f, 657f);
             col3Table3.AddCell(cell45);
 
 
@@ -3183,7 +2980,7 @@ namespace RE360.API.Common
             PdfPCell cell46 = new PdfPCell(new Phrase());
             cell46.FixedHeight = 115f; // Set the height of the cell
             cell46.BorderColor = BaseColor.BLACK;
-            cell46.CellEvent = new RectangleOverPdfPCellBorder("General", 278f, 535f, 45f, 15f, 280f, 538f);
+            cell46.CellEvent = new RectangleOverPdfPCellBorder("General", 278f, 535f, 45f, 15f, 280f, 540f);
             col3Table3.AddCell(cell46);
 
 
@@ -3251,7 +3048,7 @@ namespace RE360.API.Common
             PdfPCell cell47 = new PdfPCell(new Phrase());
             cell47.FixedHeight = 95f; // Set the height of the cell
             cell47.BorderColor = BaseColor.BLACK;
-            cell47.CellEvent = new RectangleOverPdfPCellBorder("Roof", 278f, 415f, 25f, 15f, 278f, 415f);
+            cell47.CellEvent = new RectangleOverPdfPCellBorder("Roof", 278f, 415f, 25f, 15f, 278f, 417f);
             col3Table3.AddCell(cell47);
 
 
@@ -3268,7 +3065,7 @@ namespace RE360.API.Common
             BaseFont baseF357 = BaseFont.CreateFont();
             content357.SetFontAndSize(baseF357, 8);
             content357.BeginText();
-            content357.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[1].PropertyAttributeName, 312, 370, 0);
+            content357.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[1].PropertyAttributeName, 313, 370, 0);
             content357.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 355, 285, 365), rooflist[2].Checkbox, 275, 355);
@@ -3308,7 +3105,7 @@ namespace RE360.API.Common
             BaseFont baseF362 = BaseFont.CreateFont();
             content362.SetFontAndSize(baseF362, 8);
             content362.BeginText();
-            content362.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[6].PropertyAttributeName, 308, 295, 0);
+            content362.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[6].PropertyAttributeName, 307, 295, 0);
             content362.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 280, 285, 290), rooflist[7].Checkbox, 275, 280);
@@ -3316,7 +3113,7 @@ namespace RE360.API.Common
             BaseFont baseF363 = BaseFont.CreateFont();
             content363.SetFontAndSize(baseF363, 8);
             content363.BeginText();
-            content363.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[7].PropertyAttributeName, 310, 280, 0);
+            content363.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[7].PropertyAttributeName, 309, 280, 0);
             content363.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(275, 264, 285, 275), rooflist[8].Checkbox, 275, 264);
@@ -3332,7 +3129,7 @@ namespace RE360.API.Common
             BaseFont baseF365 = BaseFont.CreateFont();
             content365.SetFontAndSize(baseF365, 8);
             content365.BeginText();
-            content365.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[9].PropertyAttributeName, 306, 250, 0);
+            content365.ShowTextAligned(PdfContentByte.ALIGN_CENTER, rooflist[9].PropertyAttributeName, 303, 250, 0);
             content365.EndText();
 
             TextField tf07 = new TextField(writer, new Rectangle(275, 230, 350, 245), "Central");
@@ -3364,7 +3161,7 @@ namespace RE360.API.Common
             BaseFont baseF366 = BaseFont.CreateFont();
             content366.SetFontAndSize(baseF366, 8);
             content366.BeginText();
-            content366.ShowTextAligned(PdfContentByte.ALIGN_CENTER, fencingList[0].PropertyAttributeName, 415, 715, 0);
+            content366.ShowTextAligned(PdfContentByte.ALIGN_CENTER, fencingList[0].PropertyAttributeName, 417, 715, 0);
             content366.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 710, 390, 700), fencingList[1].Checkbox, 380, 700);
@@ -3372,7 +3169,7 @@ namespace RE360.API.Common
             BaseFont baseF367 = BaseFont.CreateFont();
             content367.SetFontAndSize(baseF367, 8);
             content367.BeginText();
-            content367.ShowTextAligned(PdfContentByte.ALIGN_CENTER, fencingList[1].PropertyAttributeName, 421, 700, 0);
+            content367.ShowTextAligned(PdfContentByte.ALIGN_CENTER, fencingList[1].PropertyAttributeName, 423, 700, 0);
             content367.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 695, 390, 685), fencingList[2].Checkbox, 380, 685);
@@ -3380,7 +3177,7 @@ namespace RE360.API.Common
             BaseFont baseF368 = BaseFont.CreateFont();
             content368.SetFontAndSize(baseF368, 8);
             content368.BeginText();
-            content368.ShowTextAligned(PdfContentByte.ALIGN_CENTER, fencingList[1].PropertyAttributeName, 420, 685, 0);
+            content368.ShowTextAligned(PdfContentByte.ALIGN_CENTER, fencingList[1].PropertyAttributeName, 422, 685, 0);
             content368.EndText();
 
             PdfPCell blankCell11 = new PdfPCell(new Phrase(Chunk.NEWLINE));
@@ -3447,7 +3244,7 @@ namespace RE360.API.Common
             PdfPCell cell7 = new PdfPCell(new Phrase());
             cell7.FixedHeight = 190f; // Set the height of the cell
             cell7.BorderColor = BaseColor.BLACK;
-            cell7.CellEvent = new RectangleOverPdfPCellBorder("Views", 378f, 563f, 30f, 15f, 378f, 565f);
+            cell7.CellEvent = new RectangleOverPdfPCellBorder("Views", 378f, 563f, 30f, 15f, 378f, 568f);
             col4Table4.AddCell(cell7);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 535, 390, 545), viewsList[0].Checkbox, 380, 535);
@@ -3511,7 +3308,7 @@ namespace RE360.API.Common
             BaseFont baseF380 = BaseFont.CreateFont();
             content380.SetFontAndSize(baseF380, 8);
             content380.BeginText();
-            content380.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[7].PropertyAttributeName, 405, 430, 0);
+            content380.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[7].PropertyAttributeName, 410, 430, 0);
             content380.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 415, 390, 425), viewsList[8].Checkbox, 380, 415);
@@ -3519,7 +3316,7 @@ namespace RE360.API.Common
             BaseFont baseF381 = BaseFont.CreateFont();
             content381.SetFontAndSize(baseF381, 8);
             content381.BeginText();
-            content381.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[8].PropertyAttributeName, 415, 415, 0);
+            content381.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[8].PropertyAttributeName, 416, 415, 0);
             content381.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 400, 390, 410), viewsList[9].Checkbox, 380, 400);
@@ -3527,7 +3324,7 @@ namespace RE360.API.Common
             BaseFont baseF382 = BaseFont.CreateFont();
             content382.SetFontAndSize(baseF382, 8);
             content382.BeginText();
-            content382.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[9].PropertyAttributeName, 412, 400, 0);
+            content382.ShowTextAligned(PdfContentByte.ALIGN_CENTER, viewsList[9].PropertyAttributeName, 411, 400, 0);
             content382.EndText();
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 385, 390, 395), viewsList[10].Checkbox, 380, 385);
@@ -3535,7 +3332,7 @@ namespace RE360.API.Common
             BaseFont baseF383 = BaseFont.CreateFont();
             content383.SetFontAndSize(baseF383, 8);
             content383.BeginText();
-            content383.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Other", 412, 385, 0);
+            content383.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Other", 411, 385, 0);
             content383.EndText();
 
             PdfPCell blankCell12 = new PdfPCell(new Phrase(Chunk.NEWLINE));
@@ -3555,7 +3352,7 @@ namespace RE360.API.Common
             PdfPCell cell71 = new PdfPCell(new Phrase());
             cell71.FixedHeight = 100f; // Set the height of the cell
             cell71.BorderColor = BaseColor.BLACK;
-            cell71.CellEvent = new RectangleOverPdfPCellBorder("Sewage system", 378f, 363f, 75f, 15f, 378f, 365f);
+            cell71.CellEvent = new RectangleOverPdfPCellBorder("Sewage system", 378f, 363f, 75f, 15f, 378f, 369f);
             col4Table4.AddCell(cell71);
 
             AddCheckboxField(document, writer, "myCheckbox", new Rectangle(380, 350, 390, 360), sewageList[0].Checkbox, 380, 350);
@@ -3607,7 +3404,7 @@ namespace RE360.API.Common
             PdfPCell cell8 = new PdfPCell(new Phrase());
             cell8.FixedHeight = 215f; // Set the height of the cell
             cell8.BorderColor = BaseColor.BLACK;
-            cell8.CellEvent = new RectangleOverPdfPCellBorder("Other", 480f, 740f, 40f, 15f, 482f, 740f);
+            cell8.CellEvent = new RectangleOverPdfPCellBorder("Other", 480f, 740f, 40f, 15f, 485f, 740f);
             col5Table5.AddCell(cell8);
 
             PdfContentByte content01 = writer.DirectContent;
@@ -3877,7 +3674,7 @@ namespace RE360.API.Common
             tenancyTable.SpacingBefore = 12f;
             tenancyTable.SpacingAfter = 10f;
 
-            tenancyoutercell21.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Tenancy details", 33f, 20f, 80f, 200f);
+            tenancyoutercell21.CellEvent = new RectangleCellEvent(BaseColor.YELLOW, BaseColor.BLUE, "Tenancy details", 33f, 20f, 70f, 200f);
 
 
             PdfPTable tenancyinnerTable21 = new PdfPTable(2);
@@ -3950,14 +3747,14 @@ namespace RE360.API.Common
             BaseFont baseF010 = BaseFont.CreateFont();
             content010.SetFontAndSize(baseF010, 8);
             content010.BeginText();
-            content010.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Start", 33, 150, 0);
+            content010.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "Start", 33, 156, 0);
             content010.EndText();
             var filePath11 = _configuration["BlobStorageSettings:DocPath"] + "Calender.png" + _configuration["BlobStorageSettings:DocToken"];
 
             iTextSharp.text.Image logo11 = iTextSharp.text.Image.GetInstance(filePath11);
 
             logo11.ScaleAbsolute(15f, 15f);
-            logo11.SetAbsolutePosition(43, 150);
+            logo11.SetAbsolutePosition(43, 152);
 
 
             document.Add(logo11);
@@ -3990,14 +3787,14 @@ namespace RE360.API.Common
             BaseFont baseF011 = BaseFont.CreateFont();
             content011.SetFontAndSize(baseF011, 8);
             content011.BeginText();
-            content011.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "End", 33, 115, 0);
+            content011.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "End", 33, 126, 0);
             content011.EndText();
             var filePath12 = _configuration["BlobStorageSettings:DocPath"] + "Calender.png" + _configuration["BlobStorageSettings:DocToken"];
 
             iTextSharp.text.Image logo22 = iTextSharp.text.Image.GetInstance(filePath12);
 
             logo22.ScaleAbsolute(15f, 15f);
-            logo22.SetAbsolutePosition(43, 115);
+            logo22.SetAbsolutePosition(43, 122);
 
 
             document.Add(logo22);
@@ -4024,7 +3821,7 @@ namespace RE360.API.Common
             cb016.BeginText();
             cb016.SetFontAndSize(bf016, 8);
             //016ut the alignment and coordinates here
-            cb016.ShowTextAligned(1, text016, 230, 195, 0);
+            cb016.ShowTextAligned(1, text016, 235, 195, 0);
             cb016.EndText();
 
             PdfContentByte content012 = writer.DirectContent;
@@ -4107,9 +3904,9 @@ namespace RE360.API.Common
             cb017.BeginText();
             cb017.SetFontAndSize(bf017, 8);
             //017ut the alignment and coordinates here
-            cb017.ShowTextAligned(1, text017, 400, 195, 0);
+            cb017.ShowTextAligned(1, text017, 392, 195, 0);
             cb017.EndText();
-            TextField tf019 = new TextField(writer, new Rectangle(360, 190, 550, 120), "Tenancy details");
+            TextField tf019 = new TextField(writer, new Rectangle(360, 190, 550, 140), "Tenancy details");
             tf019.BorderColor = new BaseColor(232, 232, 232);
             tf019.BackgroundColor = new BaseColor(232, 232, 232);
             tf019.Options = TextField.READ_ONLY | TextField.MULTILINE;
@@ -4452,7 +4249,7 @@ namespace RE360.API.Common
             t1.AddCell(leftCell02);
             doc.Add(t1);
 
-            AddTextFieldToPDF(writer, doc, "Propertyfield", "Property Address", propertyAddress, 570, 765, 120, 785);
+            AddTextFieldToPDF(writer, doc, "Propertyfield", "Property Address", propertyAddress, 570, 764, 120, 785);
 
 
             // Create a font for the section titles
@@ -4558,10 +4355,20 @@ namespace RE360.API.Common
 
             Phrase formattedContent3 = new Phrase();
 
+            if (!isSoleSelected)
+            {
+                formattedContent3.Font.SetStyle(Font.STRIKETHRU);
+
+            }
             formattedContent3.Add(new Chunk("2.1  Sole Agency", colorFont));
 
 
             Phrase formattedContent4 = new Phrase();
+            if (!isSoleSelected)
+            {
+                formattedContent4.Font.SetStyle(Font.STRIKETHRU);
+
+            }
             formattedContent4.Add(new Chunk("The Client appoints the Agent as sole agent. The agency commences on", contentFont));
             Chunk CommentedChunk = new Chunk("                                                 ", boldFont);
             TextField tf213 = new TextField(writer, new Rectangle(440, 590, 330, 610), "formattedContent4");
@@ -4594,6 +4401,11 @@ namespace RE360.API.Common
                 " ninety (90) days from the Commencement Date.", contentFont);
             Chunk Commented4Chunk = new Chunk("This sole agency may be terminated by the Client, by written notice to the Agent by 5pm on the first working day after the day on which a copy of this Agreement is given to the Client.", contentFont);
 
+            if (!isSoleSelected)
+            {
+                formattedContent4.Font.SetStyle(Font.STRIKETHRU);
+            }
+
             formattedContent4.Add(CommentedChunk);
             formattedContent4.Add(Commented1Chunk);
             formattedContent4.Add(Commented2Chunk);
@@ -4610,12 +4422,18 @@ namespace RE360.API.Common
                 "period of ninety (90) days after the Agreement is signed by the client, cancel the Agreement" +
                 " by written notice to the other party or parties.", contentFont);
 
-
+            if (!isSoleSelected)
+            {
+                formattedContent5.Font.SetStyle(Font.STRIKETHRU);
+            }
             formattedContent5.Add(c1);
 
 
             Phrase formattedContent6 = new Phrase();
-
+            if (!isGeneralSelected)
+            {
+                formattedContent6.Font.SetStyle(Font.STRIKETHRU);
+            }
             formattedContent6.Add(new Chunk("2.2.   General Agency \r\n", colorFont));
             Chunk c2 = new Chunk("The Client appoints the Agent as general agent. The agency commences on", contentFont);
 
@@ -4648,6 +4466,10 @@ namespace RE360.API.Common
                 "             \r\n" +
                 "unless otherwise cancelled prior by either party giving seven (7) days’ written notice to the other party; or, if no end date is provided, until cancelled by either party giving seven (7) days’ written notice to the other party.", contentFont);
 
+            if (!isGeneralSelected)
+            {
+                formattedContent6.Font.SetStyle(Font.STRIKETHRU);
+            }
             formattedContent6.Add(c2);
             formattedContent6.Add(c3);
 
@@ -4672,10 +4494,10 @@ namespace RE360.API.Common
             Chunk c11 = new Chunk("Note:", boldFont);
             Chunk c12 = new Chunk(" If a sale is effected under a general agency agreement, by or through the instrumentality of any other real estate agent authorised by the Client, then the Client may be liable to pay full commission to more than one agent. If the Client is entering into a sole agency under this Agreement, and there is a prior general agency still in effect, the Client should ensure that the prior general agency agreement is cancelled and provide written confirmation to the Agent that this has been done, or should give written authority to the Agent to do so on the Client’s behalf.\r\n\r\n", contentFont);
 
-            TextField tf054 = new TextField(writer, new Rectangle(250, 350, 110, 370), "field1");
+            TextField tf054 = new TextField(writer, new Rectangle(250, 353, 110, 373), "field1");
             tf054.BorderColor = new BaseColor(232, 232, 232);
             tf054.BackgroundColor = new BaseColor(232, 232, 232);
-
+            tf054.SetExtraMargin(0, 5);
             if (priorAgencyMarketings.Count > 0)
             {
                 tf054.Text = priorAgencyMarketings[0].AgencyName;
@@ -4690,10 +4512,10 @@ namespace RE360.API.Common
             tf054.Options = TextField.READ_ONLY | TextField.MULTILINE;
             writer.AddAnnotation(tf054.GetTextField());
 
-            TextField tf055 = new TextField(writer, new Rectangle(520, 350, 330, 370), "field2");
+            TextField tf055 = new TextField(writer, new Rectangle(520, 353, 330, 373), "field2");
             tf055.BorderColor = new BaseColor(232, 232, 232);
             tf055.BackgroundColor = new BaseColor(232, 232, 232);
-
+            tf055.SetExtraMargin(0, 5);
             if (priorAgencyMarketings.Count > 0)
             {
 
@@ -4708,10 +4530,10 @@ namespace RE360.API.Common
             tf055.Options = TextField.READ_ONLY | TextField.MULTILINE;
             writer.AddAnnotation(tf055.GetTextField());
 
-            TextField tf056 = new TextField(writer, new Rectangle(250, 320, 110, 340), "field3");
+            TextField tf056 = new TextField(writer, new Rectangle(250, 322, 110, 342), "field3");
             tf056.BorderColor = new BaseColor(232, 232, 232);
             tf056.BackgroundColor = new BaseColor(232, 232, 232);
-
+            tf056.SetExtraMargin(0, 5);
             if (priorAgencyMarketings.Count > 0)
             {
                 tf056.Text = priorAgencyMarketings[0].AgencyName1;
@@ -4726,10 +4548,10 @@ namespace RE360.API.Common
             tf056.Options = TextField.READ_ONLY | TextField.MULTILINE;
             writer.AddAnnotation(tf056.GetTextField());
 
-            TextField tf057 = new TextField(writer, new Rectangle(520, 320, 330, 340), "field4");
+            TextField tf057 = new TextField(writer, new Rectangle(520, 322, 330, 342), "field4");
             tf057.BorderColor = new BaseColor(232, 232, 232);
             tf057.BackgroundColor = new BaseColor(232, 232, 232);
-
+            tf057.SetExtraMargin(0, 5);
             if (priorAgencyMarketings.Count > 0)
             {
 
@@ -4774,8 +4596,12 @@ namespace RE360.API.Common
             doc.Add(new Paragraph(formattedContent8));
 
             Phrase formattedContent9 = new Phrase();
-
+            if (!isAuctionSelected)
+            {
+                formattedContent9.Font.SetStyle(Font.STRIKETHRU);
+            }
             Chunk c15 = new Chunk("(4.1. Auction Authority)", colorFont);
+
             formattedContent9.Add(c15);
             if (isAuctionSelected)
             {
@@ -4838,6 +4664,11 @@ namespace RE360.API.Common
             Phrase formattedContent10 = new Phrase();
 
             Chunk c18 = new Chunk("The Client instructs the Agent to offer the Property for sale by public auction on the Auction Date specified below or as otherwise agreed. If the Property for sale by auction is subject to a reserve price, this must be notified to the Agent in writing prior to the auction. The auction of the Property shall be conducted on the terms and conditions contained in the Agent’s standard Particulars and Conditions of Sale of Real Estate by Auction as updated or amended. If the Property is sold at auction the Client authorises the", contentFont);
+            if (!isAuctionSelected)
+            {
+                formattedContent10.Font.SetStyle(Font.STRIKETHRU);
+            }
+
             formattedContent10.Add(c18);
             doc.Add(new Paragraph(formattedContent10));
             doc.Add(new Paragraph(""));
@@ -4846,16 +4677,26 @@ namespace RE360.API.Common
             doc.NewPage();
             doc.Add(t1);
 
-            AddTextFieldToPDF(writer, doc, "Propertyfield", "Property Address", propertyAddress, 570, 765, 120, 785);
+            AddTextFieldToPDF(writer, doc, "Propertyfield", "Property Address", propertyAddress, 570, 764, 120, 785);
             Chunk c19 = new Chunk("Agent to sign on the Client’s behalf the agreement which forms part of the Agent’s standard Particulars and Conditions of Sale of Real Estate by Auction.", contentFont);
             Phrase formattedContent11 = new Phrase();
+            if (!isAuctionSelected)
+            {
+                formattedContent11.Font.SetStyle(Font.STRIKETHRU);
+            }
             formattedContent11.Add(c19);
+
             doc.Add(new Paragraph(formattedContent11));
 
             Phrase formattedContent12 = new Phrase();
+
+            if (!isAuctionSelected)
+            {
+                formattedContent12.Font.SetStyle(Font.STRIKETHRU);
+            }
             Chunk c20 = new Chunk("Auction Date:                                    " + "  Auction Time:  " + "                                           am/pm" + "                                              On-Site", contentFont);
 
-            TextField tf060 = new TextField(writer, new Rectangle(180, 715, 90, 700), "field1");
+            TextField tf060 = new TextField(writer, new Rectangle(180, 717, 90, 700), "field1");
             tf060.BorderColor = new BaseColor(232, 232, 232);
             tf060.BackgroundColor = new BaseColor(232, 232, 232);
 
@@ -4877,7 +4718,7 @@ namespace RE360.API.Common
             formattedContent12.Add(c20);
 
 
-            TextField tf061 = new TextField(writer, new Rectangle(240, 715, 350, 700), "field1");
+            TextField tf061 = new TextField(writer, new Rectangle(240, 717, 350, 700), "field1");
             tf061.BorderColor = new BaseColor(232, 232, 232);
             tf061.BackgroundColor = new BaseColor(232, 232, 232);
             if (methodOfSales.Count > 0)
@@ -4898,7 +4739,7 @@ namespace RE360.API.Common
 
 
 
-            TextField tf062 = new TextField(writer, new Rectangle(385, 715, 450, 700), "field1");
+            TextField tf062 = new TextField(writer, new Rectangle(385, 717, 450, 700), "field1");
             tf062.BorderColor = new BaseColor(232, 232, 232);
             tf062.BackgroundColor = new BaseColor(232, 232, 232);
 
@@ -4922,6 +4763,10 @@ namespace RE360.API.Common
 
 
             Phrase formattedContent13 = new Phrase();
+            if (!isAuctionSelected)
+            {
+                formattedContent13.Font.SetStyle(Font.STRIKETHRU);
+            }
             Chunk c22 = new Chunk("\n" + "Venue:  ", contentFont);
             formattedContent13.Add(c22);
 
@@ -4933,6 +4778,7 @@ namespace RE360.API.Common
             if (methodOfSales.Count > 0)
             {
                 tf063.Text = isAuctionSelected == true ? methodOfSales[0].AuctionVenue.ToString() : "";
+                tf063.SetExtraMargin(0, 2);
             }
             else
             {
@@ -4948,6 +4794,10 @@ namespace RE360.API.Common
             doc.Add(new Paragraph(formattedContent13));
 
             Phrase formattedContent14 = new Phrase();
+            if (!isTenderSelected)
+            {
+                formattedContent14.Font.SetStyle(Font.STRIKETHRU);
+            }
             Chunk c21 = new Chunk(" \n 4.2. Tender Authority" + "                        Applicable" + "                    Not Applicable", colorFont);
             formattedContent14.Add(c21);
 
@@ -4997,6 +4847,10 @@ namespace RE360.API.Common
             doc.Add(new Paragraph(formattedContent14));
 
             Phrase formattedContent15 = new Phrase();
+            if (!isTenderSelected)
+            {
+                formattedContent15.Font.SetStyle(Font.STRIKETHRU);
+            }
             Chunk c23 = new Chunk("The Client instructs the Agent to offer the Property for sale by public tender with the public tender closing on the Tender Date specified below or as otherwise agreed. The terms and conditions of offer for sale by tender shall be contained in the Agent’s standard Particulars and Conditions of Sale by Tender as updated or amended.", contentFont);
             formattedContent15.Add(c23);
 
@@ -5129,6 +4983,7 @@ namespace RE360.API.Common
             if (priorAgencyMarketings.Count > 0)
             {
                 tf059.Text = priorAgencyMarketings[0].AgencySum.ToString();
+                tf059.SetExtraMargin(0, 2);
             }
             else
             {
@@ -5208,7 +5063,7 @@ namespace RE360.API.Common
             doc.NewPage();
 
             doc.Add(t1);
-            AddTextFieldToPDF(writer, doc, "Propertyfield", "Property Address", propertyAddress, 570, 765, 120, 785);
+            AddTextFieldToPDF(writer, doc, "Propertyfield", "Property Address", propertyAddress, 570, 764, 120, 785);
 
             //7th point
             Phrase formattedContent28 = new Phrase();
@@ -5429,7 +5284,7 @@ namespace RE360.API.Common
 
             doc.Add(new Paragraph(" "));
 
-            AddTextFieldToPDF(writer, doc, "Propertyfield", "Property Address", propertyAddress, 570, 765, 120, 785);
+            AddTextFieldToPDF(writer, doc, "Propertyfield", "Property Address", propertyAddress, 570, 764, 120, 785);
 
             PdfPTable tableEstimates = new PdfPTable(4);
             tableEstimates.WidthPercentage = 100;
@@ -5672,7 +5527,7 @@ namespace RE360.API.Common
             doc.Add(t1);
 
 
-            AddTextFieldToPDF(writer, doc, "Propertyfield", "Property Address", propertyAddress, 570, 765, 120, 785);
+            AddTextFieldToPDF(writer, doc, "Propertyfield", "Property Address", propertyAddress, 570, 764, 120, 785); 
 
             //12th point
             Phrase formattedContent47 = new Phrase();
@@ -5790,7 +5645,7 @@ namespace RE360.API.Common
 
             doc.Add(new Paragraph(" "));
             doc.Add(t1);
-            AddTextFieldToPDF(writer, doc, "Propertyfield", "Property Address", propertyAddress, 570, 765, 120, 785);
+            AddTextFieldToPDF(writer, doc, "Propertyfield", "Property Address", propertyAddress, 570, 764, 120, 785);
             doc.Add(new Paragraph(" "));
 
             Phrase formattedContent58 = new Phrase();
@@ -5900,7 +5755,7 @@ namespace RE360.API.Common
             doc.NewPage();
             doc.Add(t1);
             doc.Add(new Paragraph(" "));
-            AddTextFieldToPDF(writer, doc, "Propertyfield", "Property Address", propertyAddress, 570, 765, 120, 785);
+            AddTextFieldToPDF(writer, doc, "Propertyfield", "Property Address", propertyAddress, 570, 764, 120, 785);
 
 
             //18th point
@@ -6052,7 +5907,7 @@ namespace RE360.API.Common
             doc.NewPage();
             doc.Add(t1);
             doc.Add(new Paragraph(" "));
-            AddTextFieldToPDF(writer, doc, "Propertyfield", "Property Address", propertyAddress, 570, 765, 120, 785);
+            AddTextFieldToPDF(writer, doc, "Propertyfield", "Property Address", propertyAddress, 570, 764, 120, 785);
 
             //22nd point
             Phrase formattedContent76 = new Phrase();
@@ -6161,7 +6016,7 @@ namespace RE360.API.Common
             doc.NewPage();
 
             doc.Add(t1);
-            AddTextFieldToPDF(writer, doc, "Propertyfield", "Property Address", propertyAddress, 570, 765, 120, 785);
+            AddTextFieldToPDF(writer, doc, "Propertyfield", "Property Address", propertyAddress, 570, 764, 120, 785);
 
             doc.Add(new Paragraph(" "));
             if (signature.Count < 6)
@@ -6352,7 +6207,7 @@ namespace RE360.API.Common
 
             TextField tf072 = new TextField(writer, new Rectangle(75, 475, 280, 495), "Position");
             tf072.BorderColor = BaseColor.WHITE;
-            tf072.BackgroundColor = new BaseColor(232, 232, 232); ;
+            tf072.BackgroundColor = new BaseColor(232, 232, 232); 
             tf072.FontSize = 8;
             tf072.Text = " " + clientDetails[2].Position;
             tf072.Options = TextField.READ_ONLY;
@@ -8173,12 +8028,12 @@ namespace RE360.API.Common
             dataTable1.WidthPercentage = 100f;
             dataTable1.DefaultCell.Border = 0;
 
-            float[] arr4 = new float[] { 0.3f, 3.2f, 4.7f, 1.2f, 2f, 0.5f, 1.3f, 2.3f, 0.5f, 2.1f, 2.2f, 0.5f, 1.6f, 2.1f, 0.5f, 2.9f, 2.4f, 0.1f };
+            float[] arr4 = new float[] { 0.3f, 3.6f, 4.7f, 1.2f, 2f, 0.5f, 1.3f, 2.3f, 0.5f, 2.1f, 2.2f, 0.5f, 1.6f, 2.1f, 0.5f, 2.9f, 2.4f, 0.1f };
             dataTable1.SetWidths(arr4);
 
             dataTable1.AddCell(" ");
 
-            Chunk noChunk1 = new Chunk(chkboxlistForParticularsDetails[0].PropertyAttributeName);
+            Chunk noChunk1 = new Chunk("  "+chkboxlistForParticularsDetails[0].PropertyAttributeName);
             noChunk1.Font.Size = 8;
             var noParagraph1 = new Paragraph();
 
@@ -8197,7 +8052,7 @@ namespace RE360.API.Common
             dataTable1.AddCell(noParagraph1);
 
 
-            Chunk yesChunk1 = new Chunk(chkboxlistForParticularsDetails[7].PropertyAttributeName);
+            Chunk yesChunk1 = new Chunk("  " + chkboxlistForParticularsDetails[7].PropertyAttributeName);
             yesChunk1.Font.Size = 8;
             var yesParagraph1 = new Paragraph();
 
@@ -8306,7 +8161,7 @@ namespace RE360.API.Common
             dataTable2.SetWidths(arr5);
 
             dataTable2.AddCell(" ");
-            Chunk noChunk12 = new Chunk(chkboxlistForParticularsDetails[1].PropertyAttributeName);
+            Chunk noChunk12 = new Chunk("  " + chkboxlistForParticularsDetails[1].PropertyAttributeName);
             noChunk12.Font.Size = 8;
             var noParagraph12 = new Paragraph();
 
@@ -8324,7 +8179,7 @@ namespace RE360.API.Common
             dataTable2.AddCell(noParagraph12);
 
             // Home & income section
-            Chunk yesChunk12 = new Chunk(chkboxlistForParticularsDetails[8].PropertyAttributeName);
+            Chunk yesChunk12 = new Chunk("  " + chkboxlistForParticularsDetails[8].PropertyAttributeName);
             yesChunk12.Font.Size = 8;
             var yesParagraph12 = new Paragraph();
 
@@ -8433,7 +8288,7 @@ namespace RE360.API.Common
 
             dataTable3.AddCell(" ");
 
-            Chunk noChunk120 = new Chunk(chkboxlistForParticularsDetails[2].PropertyAttributeName);
+            Chunk noChunk120 = new Chunk("  " + chkboxlistForParticularsDetails[2].PropertyAttributeName);
             noChunk120.Font.Size = 8;
             var noParagraph120 = new Paragraph();
 
@@ -8454,7 +8309,7 @@ namespace RE360.API.Common
 
 
 
-            Chunk yesChunk120 = new Chunk(chkboxlistForParticularsDetails[9].PropertyAttributeName);
+            Chunk yesChunk120 = new Chunk("  " + chkboxlistForParticularsDetails[9].PropertyAttributeName);
             yesChunk120.Font.Size = 8;
             var yesParagraph120 = new Paragraph();
 
@@ -8524,7 +8379,7 @@ namespace RE360.API.Common
             dataTable4.SetWidths(arr7);
 
             dataTable4.AddCell(" ");
-            Chunk multipleChunk120 = new Chunk(chkboxlistForParticularsDetails[3].PropertyAttributeName);
+            Chunk multipleChunk120 = new Chunk("  " + chkboxlistForParticularsDetails[3].PropertyAttributeName);
             multipleChunk120.Font.Size = 8;
             var multipleParagraph120 = new Paragraph();
 
@@ -8545,11 +8400,11 @@ namespace RE360.API.Common
             dataTable5.WidthPercentage = 100f;
             dataTable5.DefaultCell.Border = 0;
 
-            float[] arr8 = new float[] { 0.28f, 7.7f, 3.5f, 3f, 1.2f, 2.5f, 3.5f, 3.4f, 2.6f, 0.1f };
+            float[] arr8 = new float[] { 0.3f, 7.7f, 3.5f, 3f, 1.2f, 2.5f, 3.5f, 3.4f, 2.6f, 0.1f };
             dataTable5.SetWidths(arr8);
             dataTable5.AddCell(" ");
 
-            Chunk reChunk12 = new Chunk(chkboxlistForParticularsDetails[4].PropertyAttributeName);
+            Chunk reChunk12 = new Chunk("  " + chkboxlistForParticularsDetails[4].PropertyAttributeName);
             reChunk12.Font.Size = 8;
             var reParagraph12 = new Paragraph();
 
@@ -8656,7 +8511,7 @@ namespace RE360.API.Common
             dataTable9.AddCell(" ");
 
 
-            Chunk multipleChunk = new Chunk(chkboxlistForParticularsDetails[5].PropertyAttributeName);
+            Chunk multipleChunk = new Chunk("  " + chkboxlistForParticularsDetails[5].PropertyAttributeName);
             multipleChunk.Font.Size = 8;
             var multipleParagraph = new Paragraph();
 
@@ -8672,7 +8527,7 @@ namespace RE360.API.Common
             multipleParagraph.Font.Color = BaseColor.BLACK;
             dataTable9.AddCell(multipleParagraph);
 
-            Chunk studioChunk = new Chunk(chkboxlistForParticularsDetails[10].PropertyAttributeName);
+            Chunk studioChunk = new Chunk("  " + chkboxlistForParticularsDetails[10].PropertyAttributeName);
             studioChunk.Font.Size = 8;
             var studioParagraph = new Paragraph();
             Image uncheckedImagestudio = GetCheckboxImage(chkboxlistForParticularsDetails[10].Checkbox);
@@ -8763,7 +8618,7 @@ namespace RE360.API.Common
 
             dataTable10.AddCell(" ");
 
-            Chunk townhouseChunk = new Chunk(chkboxlistForParticularsDetails[6].PropertyAttributeName);
+            Chunk townhouseChunk = new Chunk("  " + chkboxlistForParticularsDetails[6].PropertyAttributeName);
             townhouseChunk.Font.Size = 8;
             var townhouseParagraph = new Paragraph();
 
@@ -8777,7 +8632,7 @@ namespace RE360.API.Common
             townhouseParagraph.Font.Color = BaseColor.BLACK;
             dataTable10.AddCell(townhouseParagraph);
 
-            Chunk unitChunk101 = new Chunk(chkboxlistForParticularsDetails[11].PropertyAttributeName);
+            Chunk unitChunk101 = new Chunk("  " + chkboxlistForParticularsDetails[11].PropertyAttributeName);
             unitChunk101.Font.Size = 8;
             var unitParagraph101 = new Paragraph();
 
@@ -8996,7 +8851,7 @@ namespace RE360.API.Common
             dataTable4.WidthPercentage = 100f;
             dataTable4.DefaultCell.Border = 0;
 
-            Chunk addChunk1 = new Chunk("Percent                   Upto Amount                             Percent                  Upto Amount                            Percent                 Upto Amount");
+            Chunk addChunk1 = new Chunk("Percent                  Upto Amount                            Percent                   Upto Amount                            Percent                 Upto Amount");
             var addParagraph1 = new Paragraph(addChunk1);
             addParagraph1.Alignment = Element.ALIGN_TOP;
             addParagraph1.Font.Size = 8;
@@ -9096,7 +8951,7 @@ namespace RE360.API.Common
             dataTable51.WidthPercentage = 100f;
             dataTable51.DefaultCell.Border = 0;
 
-            Chunk addChunk21 = new Chunk("Percent                   Upto Amount                             Percent                  Upto Amount                            Percent                 ");
+            Chunk addChunk21 = new Chunk("Percent                  Upto Amount                            Percent                   Upto Amount                            Percent                 ");
             var addParagraph21 = new Paragraph(addChunk21);
             addParagraph21.Alignment = Element.ALIGN_TOP;
             addParagraph21.Font.Size = 8;
@@ -9415,7 +9270,261 @@ namespace RE360.API.Common
 
         }
 
+        public void AddAuctionForMethodOfSale(Document document, PdfWriter writer, List<MethodOfSale> methodOfSaleList)
+        {
+            PdfContentByte cb23 = writer.DirectContent;
+            BaseFont bf23 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
+            string text23 = "Auction";
+            cb23.BeginText();
+            cb23.SetFontAndSize(bf23, 8);
+            // 3ut the alignment and coordinates here
+            cb23.ShowTextAligned(1, text23, 325, 482, 0);
+            cb23.EndText();
 
+            var filePath1 = _configuration["BlobStorageSettings:DocPath"] + "Calender.png" + _configuration["BlobStorageSettings:DocToken"];
+            iTextSharp.text.Image logo1 = iTextSharp.text.Image.GetInstance(filePath1);
+
+            logo1.ScaleAbsolute(15f, 15f);
+            logo1.SetAbsolutePosition(308, 465);
+            document.Add(logo1);
+
+            TextField tf89 = new TextField(writer, new Rectangle(325, 478, 360, 465), "Auction Date");
+            tf89.BorderColor = new BaseColor(232, 232, 232);
+            tf89.BackgroundColor = new BaseColor(232, 232, 232);
+            if (methodOfSaleList != null && methodOfSaleList != null && methodOfSaleList[0].AuctionDate != null)
+            {
+                string AuctionDate = isAuctionSelected == true ? ((DateTime)methodOfSaleList[0].AuctionDate).ToString("dd-MM-yyyy") : " ";
+                tf89.Text = AuctionDate;
+            }
+            else
+            {
+                tf89.Text = " "; // Set a default value if the data is not available
+            }
+            tf89.Options = TextField.READ_ONLY;
+            writer.AddAnnotation(tf89.GetTextField());
+
+            var filePath2 = _configuration["BlobStorageSettings:DocPath"] + "Clock.png" + _configuration["BlobStorageSettings:DocToken"];
+            iTextSharp.text.Image logo2 = iTextSharp.text.Image.GetInstance(filePath2);
+
+            logo2.ScaleAbsolute(15f, 15f);
+            logo2.SetAbsolutePosition(365, 465);
+
+
+            document.Add(logo2);
+
+
+            TextField tf90 = new TextField(writer, new Rectangle(385, 478, 420, 465), "Auction Time");
+            tf90.BorderColor = new BaseColor(232, 232, 232);
+            tf90.BackgroundColor = new BaseColor(232, 232, 232);
+
+            if (methodOfSaleList != null && methodOfSaleList != null && methodOfSaleList[0].AuctionTime != null)
+            {
+                string AuctionTime = isAuctionSelected == true ? DateTimeOffset.Parse(methodOfSaleList[0].AuctionTime).ToString("hh:mm tt") : "";
+                tf90.Text = AuctionTime;
+            }
+            else
+            {
+                tf90.Text = " "; // Set a default value if the data is not available
+            }
+            tf90.Options = TextField.READ_ONLY;
+            writer.AddAnnotation(tf90.GetTextField());
+
+
+            TextField tf91 = new TextField(writer, new Rectangle(338, 455, 410, 440), "Venue");
+            tf91.BorderColor = new BaseColor(232, 232, 232);
+            tf91.BackgroundColor = new BaseColor(232, 232, 232);
+            if (methodOfSaleList != null && methodOfSaleList != null && methodOfSaleList[0].TenderVenue != null)
+            {
+                if (isAuctionSelected)
+                {
+                    string auctionVenue = isAuctionSelected == true ? methodOfSaleList[0].AuctionVenue : "";
+                    tf91.Text = auctionVenue;
+                }
+
+
+            }
+            else
+            {
+                tf91.Text = " "; // Set a default value if the data is not available
+            }
+
+
+            tf91.Options = TextField.READ_ONLY;
+            tf91.FontSize = 8;
+            writer.AddAnnotation(tf91.GetTextField());
+            PdfContentByte overContent91 = writer.DirectContent;
+            BaseFont baseFont91 = BaseFont.CreateFont();
+            overContent91.SetFontAndSize(baseFont91, 8);
+            overContent91.BeginText();
+            overContent91.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Venue", 335, 445, 0);
+            overContent91.EndText();
+
+            TextField tf92 = new TextField(writer, new Rectangle(350, 430, 425, 415), "Auctioneer Venue");
+            tf92.BorderColor = new BaseColor(232, 232, 232);
+            tf92.BackgroundColor = new BaseColor(232, 232, 232);
+            if (methodOfSaleList != null && methodOfSaleList != null && methodOfSaleList[0].Auctioneer != null)
+            {
+                string AuctionVenue = isAuctionSelected == true ? methodOfSaleList[0].Auctioneer : "";
+                tf92.Text = AuctionVenue;
+            }
+            else
+            {
+                tf92.Text = " "; // Set a default value if the data is not available
+            }
+            tf92.FontSize = 8;
+            tf92.Options = TextField.READ_ONLY;
+            writer.AddAnnotation(tf92.GetTextField());
+            PdfContentByte overContent92 = writer.DirectContent;
+            BaseFont baseFont92 = BaseFont.CreateFont();
+            overContent92.SetFontAndSize(baseFont91, 8);
+            overContent92.BeginText();
+            overContent92.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Auctioneer", 348, 420, 0);
+            overContent92.EndText();
+
+        }
+
+        public void AddTenderForMethodOfSale(Document document, PdfWriter writer, List<MethodOfSale> methodOfSaleList)
+        {
+            PdfContentByte cb24 = writer.DirectContent;
+            BaseFont bf24 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
+            string text24 = "Tender";
+            cb24.BeginText();
+            cb24.SetFontAndSize(bf24, 8);
+            // 4ut the alignment and coordinates here
+            cb24.ShowTextAligned(1, text24, 325, 482, 0);
+            cb24.EndText();
+
+            var filePath3 = _configuration["BlobStorageSettings:DocPath"] + "Calender.png" + _configuration["BlobStorageSettings:DocToken"];
+            iTextSharp.text.Image logo3 = iTextSharp.text.Image.GetInstance(filePath3);
+
+            logo3.ScaleAbsolute(15f, 15f);
+            logo3.SetAbsolutePosition(308, 465);
+            document.Add(logo3);
+
+            TextField tf94 = new TextField(writer, new Rectangle(325, 478, 360, 465), "Tender Date");
+            tf94.BorderColor = new BaseColor(232, 232, 232);
+            tf94.BackgroundColor = new BaseColor(232, 232, 232);
+            if (methodOfSaleList != null && methodOfSaleList != null && methodOfSaleList[0].TenderDate != null)
+            {
+                string TenderDate = isTenderSelected == true ? ((DateTime)methodOfSaleList[0].TenderDate).ToString("dd-MM-yyyy") : "";
+                tf94.Text = TenderDate;
+            }
+            else
+            {
+                tf94.Text = " "; // Set a default value if the data is not available
+            }
+            tf94.Options = TextField.READ_ONLY;
+            writer.AddAnnotation(tf94.GetTextField());
+
+            var filePath4 = _configuration["BlobStorageSettings:DocPath"] + "Clock.png" + _configuration["BlobStorageSettings:DocToken"];
+
+            iTextSharp.text.Image logo4 = iTextSharp.text.Image.GetInstance(filePath4);
+
+            logo4.ScaleAbsolute(15f, 15f);
+            logo4.SetAbsolutePosition(365, 465);
+
+
+            document.Add(logo4);
+            TextField tf95 = new TextField(writer, new Rectangle(385, 478, 410, 465), "TenderTime");
+            tf95.BorderColor = new BaseColor(232, 232, 232);
+            tf95.BackgroundColor = new BaseColor(232, 232, 232);
+
+            if (methodOfSaleList != null && methodOfSaleList != null && methodOfSaleList[0].TenderTime != null)
+            {
+                string TenderTime = isTenderSelected == true ? DateTimeOffset.Parse(methodOfSaleList[0].TenderTime).ToString("hh:mm tt") : "";
+                tf95.Text = TenderTime;
+            }
+            else
+            {
+                tf95.Text = " "; // Set a default value if the data is not available
+            }
+            tf95.FontSize = 8;
+            tf95.Options = TextField.READ_ONLY;
+            writer.AddAnnotation(tf95.GetTextField());
+
+            TextField tf910 = new TextField(writer, new Rectangle(338, 455, 410, 440), "tenderVenue");
+            tf910.BorderColor = new BaseColor(232, 232, 232);
+            if (methodOfSaleList != null && methodOfSaleList != null && methodOfSaleList[0].TenderVenue != null)
+            {
+                string TenderVenue = isTenderSelected == true ? methodOfSaleList[0].TenderVenue : "";
+                tf910.Text = TenderVenue;
+            }
+            else
+            {
+                tf910.Text = " "; // Set a default value if the data is not available
+            }
+            tf910.FontSize = 8;
+            tf910.BackgroundColor = new BaseColor(232, 232, 232);
+            tf910.Options = TextField.READ_ONLY;
+            writer.AddAnnotation(tf910.GetTextField());
+
+
+            PdfContentByte overContent910 = writer.DirectContent;
+            BaseFont baseFont910 = BaseFont.CreateFont();
+            overContent910.SetFontAndSize(baseFont910, 8);
+            overContent910.BeginText();
+            overContent910.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, "Venue", 335, 445, 0);
+            overContent910.EndText();
+        }
+
+        public void AddDeadlineSaleForMethodOfSale(Document document, PdfWriter writer, List<MethodOfSale> methodOfSaleList)
+        {
+            PdfContentByte cb25 = writer.DirectContent;
+            BaseFont bf25 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.EMBEDDED);
+            string text25 = "Deadline sale date";
+            cb25.BeginText();
+            cb25.SetFontAndSize(bf25, 8);
+            // 4ut the alignment and coordinates here
+            cb25.ShowTextAligned(1, text25, 355, 482, 0);
+            cb25.EndText();
+
+            var filePath5 = _configuration["BlobStorageSettings:DocPath"] + "Calender.png" + _configuration["BlobStorageSettings:DocToken"];
+            iTextSharp.text.Image logo5 = iTextSharp.text.Image.GetInstance(filePath5);
+            logo5.ScaleAbsolute(15f, 15f);
+            logo5.SetAbsolutePosition(308, 465);
+            document.Add(logo5);
+
+
+            TextField tf96 = new TextField(writer, new Rectangle(328, 478, 363, 465), "Deadline Date");
+            tf96.BorderColor = new BaseColor(232, 232, 232);
+            tf96.BackgroundColor = new BaseColor(232, 232, 232);
+            if (methodOfSaleList != null && methodOfSaleList != null && methodOfSaleList[0].DeadLineDate != null)
+            {
+                string DeadLineDate = isDeadlinesaleSelected == true ? ((DateTime)methodOfSaleList[0].DeadLineDate).ToString("dd-MM-yyyy") : "";
+                tf96.Text = DeadLineDate;
+            }
+            else
+            {
+                tf96.Text = " "; // Set a default value if the data is not available
+            }
+            tf96.Options = TextField.READ_ONLY;
+            writer.AddAnnotation(tf96.GetTextField());
+
+            var filePath6 = _configuration["BlobStorageSettings:DocPath"] + "Clock.png" + _configuration["BlobStorageSettings:DocToken"];
+            iTextSharp.text.Image logo6 = iTextSharp.text.Image.GetInstance(filePath6);
+
+            logo6.ScaleAbsolute(15f, 15f);
+            logo6.SetAbsolutePosition(365, 465);
+            document.Add(logo6);
+
+
+            TextField tf97 = new TextField(writer, new Rectangle(390, 478, 425, 465), "Deadline Time");
+            tf97.BorderColor = new BaseColor(232, 232, 232);
+            tf97.BackgroundColor = new BaseColor(232, 232, 232);
+
+            if (methodOfSaleList != null && methodOfSaleList != null && methodOfSaleList[0].DeadLineTime != null)
+            {
+                string DeadLineTime = isDeadlinesaleSelected == true ? DateTimeOffset.Parse(methodOfSaleList[0].DeadLineTime).ToString("hh:mm tt") : "";
+                tf97.Text = DeadLineTime;
+            }
+            else
+            {
+                tf97.Text = " "; // Set a default value if the data is not available
+            }
+            tf97.Options = TextField.READ_ONLY;
+            writer.AddAnnotation(tf97.GetTextField());
+
+        }
 
         private static Image GetCheckboxImage(bool isChecked)
         {
